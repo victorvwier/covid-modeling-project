@@ -27,7 +27,7 @@ lint:
 
 build:
   stage: build
-  script: npm run build
+  script: npm run deploy
   artifacts:
     paths:
       - dist/
