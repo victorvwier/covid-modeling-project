@@ -30,4 +30,4 @@ build:
   script: npm run deploy
   artifacts:
     paths:
-      - dist/
+      - app/dist/
