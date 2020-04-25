@@ -3,14 +3,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   target: 'web',
-  entry: ['./src/index', './src/style/style.css'],
+  entry: ['./src/index.js', './src/style/style.css'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-  },
-  devServer: {
-    host: '0.0.0.0',
-    publicPath: '/dist/',
   },
   resolve: {
     modules: ['node_modules', 'src'],

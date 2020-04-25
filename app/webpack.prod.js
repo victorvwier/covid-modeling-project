@@ -1,0 +1,14 @@
+const merge = require('webpack-merge')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const webpackBaseConfig = require('./webpack.common.js')
+
+module.exports = merge(webpackBaseConfig, {
+  mode: 'production',
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin(),
+      new OptimizeCSSAssetsPlugin()
+    ]
+  }
+})
