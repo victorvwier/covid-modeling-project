@@ -1,2 +1,18 @@
-include:
-  - local: '/app/.gitlab-ci.yml'
+image: node:latest
+
+before_script:
+  - cd app
+  - npm install
+
+cache:
+  paths:
+    - node_modules/
+
+test:node:latest:
+  script:
+    - npm run build
+    - npm run test
+
+test:lint:
+  script:
+    - npm run lint
