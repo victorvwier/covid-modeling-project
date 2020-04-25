@@ -1,18 +1,31 @@
+# Use latest node docker image
 image: node:latest
 
-before_script:
-  - cd app
-  - npm install
-
+# Cache the downloaded node modules for next time
 cache:
   paths:
     - app/node_modules/
 
-test:node:latest:
-  script:
-    - npm run build
-    - npm run test
+# This is run before every job
+before_script:
+  - cd app
+  - npm install
 
-test:lint:
-  script:
-    - npm run lint
+# The different stages of our pipeline
+stage:
+  - lint
+  - build
+  - test
+
+# Jobs are defined below
+lint:
+  stage: lint
+  script: npm run lint
+
+build:
+  stage: build
+  script: npm run build
+
+test:
+  stage: test
+  script: npm run test
