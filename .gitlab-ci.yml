@@ -6,6 +6,9 @@ cache:
   paths:
     - app/node_modules/
 
+before-script:
+  - cd app
+
 # The different stages of our pipeline
 stages:
   - setup
