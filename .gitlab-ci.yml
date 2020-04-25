@@ -6,22 +6,17 @@ cache:
   paths:
     - app/node_modules/
 
+# This is run before every job
 before_script:
-  - cd app
-
-# The different stages of our pipeline
-stages:
-  - setup
-  - test
-  - build
-  
-# Jobs are defined below
-setup:
-  stage: setup
-  script:
   - cd app
   - npm install
 
+# The different stages of our pipeline
+stages:
+  - test
+  - build
+
+# Jobs are defined below
 test:
   stage: test
   script: npm run test
