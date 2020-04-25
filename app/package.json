@@ -6,9 +6,17 @@
     "deploy": "webpack --config webpack.prod.js",
     "build": "npm run test && npm run lint && webpack --config webpack.prod.js",
     "watch": "webpack-dev-server --config webpack.dev.js --open",
-    "test": "jest --collect-coverage",
+    "test": "jest",
     "test:watch": "jest --watchAll",
     "lint": "eslint ."
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 75
+      }
+    }
   },
   "license": "MIT",
   "devDependencies": {
