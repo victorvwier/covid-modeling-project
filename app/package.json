@@ -10,6 +10,14 @@
     "test:watch": "jest --watchAll",
     "lint": "eslint ."
   },
+  "jest": {
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 75
+      }
+    }
+  },
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.9.0",
