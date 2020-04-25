@@ -6,7 +6,7 @@ before_script:
 
 cache:
   paths:
-    - node_modules/
+    - app/node_modules/
 
 test:node:latest:
   script:
