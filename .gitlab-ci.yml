@@ -12,7 +12,7 @@ before_script:
   - npm install
 
 # The different stages of our pipeline
-stage:
+stages:
   - lint
   - build
   - test
