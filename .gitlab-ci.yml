@@ -6,28 +6,30 @@ cache:
   paths:
     - app/node_modules/
 
-# This is run before every job
-before_script:
+# The different stages of our pipeline
+stages:
+  - setup
+  - test
+  - build
+  
+# Jobs are defined below
+setup:
+  stage: setup
+  script:
   - cd app
   - npm install
 
-# The different stages of our pipeline
-stages:
-  - test
-  - lint
-  - build
-  
-
-# Jobs are defined below
 test:
   stage: test
   script: npm run test
 
 lint:
-  stage: lint
+  stage: test
   script: npm run lint
 
 build:
   stage: build
-  script: webpack --config webpack.prod.js
-
+  script: npm run build
+  artifacts:
+    paths:
+      - dist/
