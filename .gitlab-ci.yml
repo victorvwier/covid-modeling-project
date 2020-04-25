@@ -20,6 +20,9 @@ stages:
 test:
   stage: test
   script: npm run test
+  artifacts:
+    paths:
+      - app/coverage/
 
 lint:
   stage: test
