@@ -18,7 +18,7 @@ export default class Person {
     this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
     this.accX = 0;
     this.accY = 0;
-    this.removed = false;
+    this.dead = false;
     this.asymptomaticTime = 0;
     this.symptomaticTime = 0;
 
@@ -95,5 +95,17 @@ export default class Person {
       this.x + this.radius,
       this.y + this.radius,
     ];
+  }
+
+  developSymptoms() {
+    this.type = TYPES.INFECTED;
+    this.color = COLORS.INFECTED;
+  }
+
+  canInfect(p) {
+    return (
+      (this.type == TYPES.INFECTED || this.type == TYPES.ASYMPTOMATIC) &&
+      p.type == TYPES.SUSCEPTIBLE
+    );
   }
 }
