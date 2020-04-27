@@ -6,11 +6,6 @@ cache:
   paths:
     - app/node_modules/
 
-# This is run before every job
-before_script:
-  - cd app
-  - npm install
-
 # The different stages of our pipeline
 stages:
   - test
@@ -19,18 +14,36 @@ stages:
 # Jobs are defined below
 test:
   stage: test
-  script: npm run test
+  script: 
+    - cd app
+    - npm install
+    - npm run test
   artifacts:
     paths:
       - app/coverage/
 
 lint:
   stage: test
-  script: npm run lint
+  script: 
+    - cd app
+    - npm install
+    - npm run lint
 
 build:
   stage: build
-  script: npm run deploy
+  script: 
+    - cd app
+    - npm install
+    - npm run deploy
   artifacts:
     paths:
       - app/dist/
+
+buildLatex:
+  image: blang/latex
+  script:
+    - cd ./doc/assignments
+    - latexmk -pdf
+  artifacts:
+    paths:
+      - doc/assignments/*.pdf
