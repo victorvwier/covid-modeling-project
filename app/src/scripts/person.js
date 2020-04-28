@@ -48,7 +48,7 @@ export default class Person {
   }
 
   move(width, height) {
-    if (this.type != TYPES.DEAD) {
+    if (this.type !== TYPES.DEAD) {
       this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
       this.speedX += this.accX;
       this.speedY += this.accY;
