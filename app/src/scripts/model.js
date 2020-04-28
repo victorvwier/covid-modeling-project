@@ -30,7 +30,7 @@ export default class Model {
     this.numSusceptible = numSusceptible;
     this.numInfected = numInfected;
     this.numImmune = numImmune;
-    this.numImmune = numImmune;
+    this.numDead = numDead;
     this.numAsymptomatic = numAsymptomatic;
     this.asymptomaticProb = ASYMPTOMATIC_PROB;
     this.timeUntilSymptoms = TIME_UNTIL_SYMPTOMS;
@@ -89,16 +89,17 @@ export default class Model {
 
   drawPopulation() {
     for (let i = 0; i < this.totalPopulation; i++) {
-      // TODO: Maybe?
-      this.population[i].draw();
+      if (!this.population[i].dead) {
+        this.population[i].draw();
+      }
     }
   }
 
   updatePopulation() {
     for (let i = 0; i < this.totalPopulation; i++) {
-      if (!this.population[i].removed) {
+      if (!this.population[i].dead) {
         this.population[i].maxSpeed = POPULATION_SPEED;
-        this.population[i].move();
+        this.population[i].move(this.width, this.height);
       }
     }
   }
@@ -173,14 +174,14 @@ export default class Model {
         person.dead = true;
         person.color = COLORS.DEAD;
         this.numInfected -= 1;
-        this.numRemoved += 1;
+        this.numDead += 1;
       } else {
         person.symptomaticTime += 1;
         if (person.symptomaticTime === this.timeUntilDetection) {
           person.type = TYPES.IMMUNE;
           person.color = COLORS.IMMUNE;
           this.numInfected -= 1;
-          this.numRemoved += 1;
+          this.numImmune += 1;
         }
       }
     }

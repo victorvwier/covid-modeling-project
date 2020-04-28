@@ -14,11 +14,11 @@ export const TIME_UNTIL_DETECTION = 3;
 export const ASYMPTOMATIC_PROB = 0.3;
 
 export const COLORS = {
-  SUSCEPTIBLE: 'blue',
-  ASYMPTOMATIC: 'yellow',
-  INFECTED: 'red',
+  SUSCEPTIBLE: '#05befc',
+  ASYMPTOMATIC: '#c9e265',
+  INFECTED: '#fd7e65',
   DEAD: 'black',
-  IMMUNE: 'green',
+  IMMUNE: '#a6a6a6',
 };
 
 export const TYPES = {

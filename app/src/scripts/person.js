@@ -33,7 +33,7 @@ export default class Person {
     this.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
     this.context.fillStyle = this.color;
     this.context.fill();
-    this.context.strokeStyle = '#000000';
+    this.context.strokeStyle = this.color;
 
     this.context.stroke();
     this.context.beginPath();
@@ -45,7 +45,7 @@ export default class Person {
       2 * Math.PI,
       false
     );
-    this.context.strokeStyle = 'red';
+    this.context.strokeStyle = 'white';
 
     this.context.stroke();
   }
@@ -62,16 +62,16 @@ export default class Person {
       this.speedY += this.accY;
 
       if (this.x > width - 2 * this.radius || this.x < 2 * this.radius) {
-        this.speedX *= -1;
         if (this.x > width - 2 * this.radius) this.x = width - 2 * this.radius;
         else if (this.x < 2 * this.radius) this.x = 2 * this.radius;
+        this.speedX *= -1;
       }
 
       if (this.y > height - 2 * this.radius || this.y < 2 * this.radius) {
-        this.speedY *= -1;
         if (this.y > height - 2 * this.radius)
           this.y = height - 2 * this.radius;
         else if (this.y < 2 * this.radius) this.y = 2 * this.radius;
+        this.speedY *= -1;
       }
 
       if (Math.abs(this.speedX) > this.maxSpeed)

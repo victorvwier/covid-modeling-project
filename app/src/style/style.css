@@ -1,6 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;900&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+}
+
 * {
   margin: 0;
-  padding: 0;
+  padding-left: 0;
+}
+
+h1 {
+  padding-left: 50px;
+  padding-top: 30px;
+  font-size: 3em;
+  color: #666666;
+}
+
+button {
+  color: white;
+  text-align: center;
+  background-color: #666666;
 }
 
 #canvas-container {
@@ -12,18 +32,36 @@
 }
 
 #canvas {
-  background:pink;
-  border: black 1px solid;
-   position: absolute; right:30px;
+  background: #d9d9d9;
+  border: white 4px solid;
+  position: absolute;
+  right: 30px;
 }
 
 #sliderDIV {
-  position: absolute; top:100px; left:25px;
-  background-color:lightgreen;
-  width:600px;
-  height:500px;
+  position: absolute;
+  top: 150px;
+  left: 25px;
+  background-color: white;
+  color: black;
+  padding: 20px;
+  width: 500px;
+  height: 400px;
 }
 
 #mainPage {
-  background-color: rgb(169, 172, 37);
+  background-color: #d9d9d9;
+  color: white;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: #05befc;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.3s;
+  transition: opacity 0.3s;
 }
