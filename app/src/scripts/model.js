@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import Person from './person';
 import { getRandom } from './util';
 import {
@@ -54,7 +55,7 @@ export default class Model {
   }
 
   populateCanvas(type, count) {
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i +=1) {
       const x = getRandom(PERSON_RADIUS, this.width - PERSON_RADIUS);
       const y = getRandom(PERSON_RADIUS, this.height - PERSON_RADIUS);
       this.population.push(new Person(type, x, y, this.context));
@@ -62,14 +63,14 @@ export default class Model {
   }
 
   drawPopulation() {
-    for (let i = 0; i < this.totalPopulation; i++) {
+    for (let i = 0; i < this.totalPopulation; i+=1) {
       // TODO: Maybe?
       this.population[i].draw();
     }
   }
 
   updatePopulation() {
-    for (let i = 0; i < this.totalPopulation; i++) {
+    for (let i = 0; i < this.totalPopulation; i+=1) {
       if (!this.population[i].removed) {
         this.population[i].maxSpeed = POPULATION_SPEED;
         this.population[i].move();
@@ -90,17 +91,16 @@ export default class Model {
   }
 
   interactPopulation() {
-    for (let i = 0; i < this.totalPopulation; i++) {
-      for (let j = 0; j < this.totalPopulation; j++) {
+    for (let i = 0; i < this.totalPopulation; i+=1) {
+      for (let j = 0; j < this.totalPopulation; j+=1) {
         if (i !== j) {
           if (
             this.population[i].metWith(this.population[j], this.infectionRadius)
           ) {
-            //console.log('Two people collided');
-            if (this.population[i].canInfect(this.population[j])) {
-              this.population[i].hasInfectedCount += 1;
-              this.infect(this.population[j]);
-            }
+              if (this.population[i].canInfect(this.population[j])) {
+                this.population[i].hasInfectedCount += 1;
+                this.infect(this.population[j]);
+              }
           }
         }
       }
@@ -111,24 +111,23 @@ export default class Model {
     if (Math.random() < this.asymptomaticProb) {
       person.type = TYPES.ASYMPTOMATIC;
       person.color = COLORS.ASYMPTOMATIC;
-      this.numAsymptomatic++;
-      this.numSusceptible--;
+      this.numAsymptomatic+=1;
+      this.numSusceptible-=1;
     } else {
       person.type = TYPES.INFECTED;
       person.color = COLORS.INFECTED;
-      this.numInfected++;
-      this.numSusceptible--;
+      this.numInfected+=1;
+      this.numSusceptible-=1;
     }
   }
 
   setup() {
-    //console.log('anything');
+    
     setInterval(
       function () {
-        //console.log('interval ' + this.totalPopulation);
-        for (let i = 0; i < this.totalPopulation; i++) {
+        for (let i = 0; i < this.totalPopulation; i+=1) {
           if (!this.population[i].dead) {
-            //console.log('update');
+            
             this.update(this.population[i]);
           }
         }
@@ -141,13 +140,13 @@ export default class Model {
   update(person) {
     if (person.type === TYPES.ASYMPTOMATIC) {
       person.asymptomaticTime += 1;
-      if (person.asymptomaticTime == this.timeUntilSymptoms) {
+      if (person.asymptomaticTime === this.timeUntilSymptoms) {
         person.developSymptoms();
         this.numAsymptomatic -= 1;
         this.numInfected += 1;
       }
     }
-    if (person.type == TYPES.INFECTED) {
+    if (person.type === TYPES.INFECTED) {
       // TODO: this is where we will split removed into dead and recovered + immune
       if (Math.random() < MORTALITY_RATE) {
         person.dead = true;
