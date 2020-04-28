@@ -12,6 +12,18 @@
 }
 
 #canvas {
-  background: white;
+  background:pink;
   border: black 1px solid;
+   position: absolute; right:30px;
+}
+
+#sliderDIV {
+  position: absolute; top:100px; left:25px;
+  background-color:lightgreen;
+  width:600px;
+  height:500px;
+}
+
+#mainPage {
+  background-color: rgb(169, 172, 37);
 }
