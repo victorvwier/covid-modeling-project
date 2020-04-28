@@ -1,37 +1,32 @@
 import Model from './scripts/model';
-import { TYPES } from './scripts/CONSTANTS';
-import { sliderValues } from './scripts/parameters';
+import {
+  TYPES,
+  INITIAL_SUSCEPTABLE,
+  INITIAL_INFECTED,
+  INITAL_ASYMPTOMATIC,
+  INITIAL_IMMUNE,
+  INITIAL_DEAD,
+} from './scripts/CONSTANTS';
+import { wireSlidersToHandlers } from './scripts/parameters';
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
-
-const susceptable = 99;
-const infected = 3;
-const asymptomatic = 0;
-const immune = 0;
-const dead = 0;
 
 const model = new Model(
   context,
   canvas.width,
   canvas.height,
-  susceptable,
-  infected,
-  asymptomatic,
-  immune,
-  dead
+  INITIAL_SUSCEPTABLE,
+  INITIAL_INFECTED,
+  INITAL_ASYMPTOMATIC,
+  INITIAL_IMMUNE,
+  INITIAL_DEAD
 );
 
-sliderValues(model);
+wireSlidersToHandlers(model);
 
-model.populateCanvas(TYPES.SUSCEPTIBLE, susceptable);
-model.populateCanvas(TYPES.INFECTED, infected);
-model.populateCanvas(TYPES.DEAD, dead);
-model.populateCanvas(TYPES.IMMUNE, immune);
-model.populateCanvas(TYPES.ASYMPTOMATIC, asymptomatic);
+model.populateCanvas();
 model.drawPopulation();
-
-console.log(model.population);
 
 model.setup();
 model.loop();

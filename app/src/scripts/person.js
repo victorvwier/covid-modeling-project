@@ -11,6 +11,7 @@ export default class Person {
     this.context = context;
     this.type = type;
     this.radius = PERSON_RADIUS;
+    this.infectionRadius = INFECTION_RADIUS;
     this.x = x;
     this.y = y;
     this.maxSpeed = POPULATION_SPEED;
@@ -36,7 +37,14 @@ export default class Person {
 
     this.context.stroke();
     this.context.beginPath();
-    this.context.arc(this.x, this.y, INFECTION_RADIUS, 0, 2 * Math.PI, false);
+    this.context.arc(
+      this.x,
+      this.y,
+      this.infectionRadius,
+      0,
+      2 * Math.PI,
+      false
+    );
     this.context.strokeStyle = 'red';
 
     this.context.stroke();
@@ -48,7 +56,7 @@ export default class Person {
   }
 
   move(width, height) {
-    if (this.type != TYPES.DEAD) {
+    if (this.type !== TYPES.DEAD) {
       this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
       this.speedX += this.accX;
       this.speedY += this.accY;
@@ -107,8 +115,8 @@ export default class Person {
 
   canInfect(p) {
     return (
-      (this.type == TYPES.INFECTED || this.type == TYPES.ASYMPTOMATIC) &&
-      p.type == TYPES.SUSCEPTIBLE
+      (this.type === TYPES.INFECTED || this.type === TYPES.ASYMPTOMATIC) &&
+      p.type === TYPES.SUSCEPTIBLE
     );
   }
 }

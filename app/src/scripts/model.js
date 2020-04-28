@@ -37,12 +37,12 @@ export default class Model {
     this.timeUntilSymptoms = TIME_UNTIL_SYMPTOMS;
     this.timeUntilDetection = TIME_UNTIL_DETECTION;
     this.infectionRadius = INFECTION_RADIUS;
+    this.personRadius = PERSON_RADIUS;
     this.totalPopulation =
       numSusceptible + numInfected + numDead + numImmune + numAsymptomatic;
   }
 
   set setTimeUntilSymptoms(newValue) {
-    // console.log('call time till symptoms');
     this.timeUntilSymptoms = newValue;
   }
 
@@ -52,12 +52,38 @@ export default class Model {
 
   set setInfectionRadius(newValue) {
     this.infectionRadius = newValue;
+    this.updateInfectionRadius(newValue);
   }
 
-  populateCanvas(type, count) {
-    for (let i = 0; i < count; i +=1) {
-      const x = getRandom(PERSON_RADIUS, this.width - PERSON_RADIUS);
-      const y = getRandom(PERSON_RADIUS, this.height - PERSON_RADIUS);
+  set setPersonRadius(newValue) {
+    this.personRadius = newValue;
+    this.updateRadius(newValue);
+  }
+
+  updateRadius(newValue) {
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].radius = newValue;
+    }
+  }
+
+  updateInfectionRadius(newValue) {
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].infectionRadius = newValue;
+    }
+  }
+
+  populateCanvas() {
+    this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
+    this.populateCanvasWithType(TYPES.INFECTED, this.numInfected);
+    this.populateCanvasWithType(TYPES.DEAD, this.numDead);
+    this.populateCanvasWithType(TYPES.IMMUNE, this.numImmune);
+    this.populateCanvasWithType(TYPES.ASYMPTOMATIC, this.numAsymptomatic);
+  }
+
+  populateCanvasWithType(type, count) {
+    for (let i = 0; i < count; i++) {
+      const x = getRandom(this.personRadius, this.width - this.personRadius);
+      const y = getRandom(this.personRadius, this.height - this.personRadius);
       this.population.push(new Person(type, x, y, this.context));
     }
   }
@@ -79,11 +105,9 @@ export default class Model {
   }
 
   loop() {
-    const callback = this.loop.bind(this);
-    requestAnimationFrame(callback);
+    requestAnimationFrame(this.loop.bind(this));
     this.context.clearRect(0, 0, this.width, this.height);
 
-    // setValues();
     // applyForces();
     this.updatePopulation();
     this.interactPopulation();
@@ -97,10 +121,10 @@ export default class Model {
           if (
             this.population[i].metWith(this.population[j], this.infectionRadius)
           ) {
-              if (this.population[i].canInfect(this.population[j])) {
-                this.population[i].hasInfectedCount += 1;
-                this.infect(this.population[j]);
-              }
+            if (this.population[i].canInfect(this.population[j])) {
+              this.population[i].hasInfectedCount += 1;
+              this.infect(this.population[j]);
+            }
           }
         }
       }
@@ -122,18 +146,16 @@ export default class Model {
   }
 
   setup() {
-    
-    setInterval(
-      function () {
-        for (let i = 0; i < this.totalPopulation; i+=1) {
-          if (!this.population[i].dead) {
-            
-            this.update(this.population[i]);
-          }
+    const intervalFunc = () => {
+      for (let i = 0; i < this.totalPopulation; i++) {
+        if (!this.population[i].dead) {
+          this.update(this.population[i]);
         }
-      }.bind(this),
-      2000
-    );
+      }
+    };
+
+    // Bind this so that it can access this instace variables
+    setInterval(intervalFunc.bind(this), 2000);
   }
 
   // Decided to implement this in model, but could move to person
@@ -155,7 +177,7 @@ export default class Model {
         this.numRemoved += 1;
       } else {
         person.symptomaticTime += 1;
-        if (person.symptomaticTime == this.timeUntilDetection) {
+        if (person.symptomaticTime === this.timeUntilDetection) {
           person.type = TYPES.IMMUNE;
           person.color = COLORS.IMMUNE;
           this.numInfected -= 1;
@@ -163,5 +185,9 @@ export default class Model {
         }
       }
     }
+  }
+
+  resetModel() {
+    console.log('clicked');
   }
 }

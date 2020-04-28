@@ -19,6 +19,11 @@
     "no-unused-vars": "warn",
     "func-names": "off",
     "object-shorthand": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "no-param-reassign": "warn",
+    "import/prefer-default-export": "off",
+    "no-return-assign": "off",
+    "no-plusplus": "off",
+    "no-underscore-dangle": "off"
   }
 }

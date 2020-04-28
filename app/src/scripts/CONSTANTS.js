@@ -1,8 +1,12 @@
+export const INITIAL_SUSCEPTABLE = 99;
+export const INITIAL_INFECTED = 3;
+export const INITAL_ASYMPTOMATIC = 0;
+export const INITIAL_IMMUNE = 0;
+export const INITIAL_DEAD = 0;
+
 export const PERSON_RADIUS = 10;
 export const POPULATION_SPEED = 2;
 export const INFECTION_RADIUS = PERSON_RADIUS + PERSON_RADIUS / 3;
-
-export const INITIAL_INFECTED = 5;
 
 export const TIME_UNTIL_SYMPTOMS = 2;
 export const MORTALITY_RATE = 0.07;

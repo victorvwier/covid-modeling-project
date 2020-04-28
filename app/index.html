@@ -17,14 +17,6 @@
 
 <div class="row">
     <div class="col-sm">
-        <p>Probability that a person showing symptoms will get quarantined<sup>*</sup></p>
-        <input type="range" min="0" max="1" value="0.5" step="0.1" class="slider" id="quarantinePercentage">
-        <output id="quarantinePercentageOut" for="quarantinePercentage">50%</output>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm">
         <p>Time to develop symptoms (how long you can stay asymptomatic)<sup>*</sup></p>
         <input type="range" min="7" max="14" value="10" class="slider" id="timeToSymptoms">
         <output id="timeToSymptomsOut" for="timeToSymptoms">10 days</output>
@@ -46,6 +38,14 @@
         <p>Probability that an infected person will be asymptomatic<sup>*</sup></p>
         <input type="range" min="0" max="1" value="0.5" step="0.1" class="slider" id="asymptomaticProbability">
         <output id="asymptomaticProbabilityOut" for="asymptomaticProbability">50%</output>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm">
+        <p>Size of agents<sup>*</sup></p>
+        <input type="range" min="0" max="6" value="2" step="0.1" class="slider" id="agentRadius">
+        <output id="agentRadiusOut" for="agentRadius">2</output>
     </div>
 </div>
 
