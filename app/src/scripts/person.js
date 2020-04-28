@@ -107,8 +107,8 @@ export default class Person {
 
   canInfect(p) {
     return (
-      (this.type == TYPES.INFECTED || this.type == TYPES.ASYMPTOMATIC) &&
-      p.type == TYPES.SUSCEPTIBLE
+      (this.type === TYPES.INFECTED || this.type === TYPES.ASYMPTOMATIC) &&
+      p.type === TYPES.SUSCEPTIBLE
     );
   }
 }

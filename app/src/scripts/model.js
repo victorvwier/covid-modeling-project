@@ -41,7 +41,6 @@ export default class Model {
   }
 
   set setTimeUntilSymptoms(newValue) {
-    // console.log('call time till symptoms');
     this.timeUntilSymptoms = newValue;
   }
 
@@ -53,7 +52,15 @@ export default class Model {
     this.infectionRadius = newValue;
   }
 
-  populateCanvas(type, count) {
+  populateCanvas() {
+    this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
+    this.populateCanvasWithType(TYPES.INFECTED, this.numInfected);
+    this.populateCanvasWithType(TYPES.DEAD, this.numDead);
+    this.populateCanvasWithType(TYPES.IMMUNE, this.numImmune);
+    this.populateCanvasWithType(TYPES.ASYMPTOMATIC, this.numAsymptomatic);
+  }
+
+  populateCanvasWithType(type, count) {
     for (let i = 0; i < count; i++) {
       const x = getRandom(PERSON_RADIUS, this.width - PERSON_RADIUS);
       const y = getRandom(PERSON_RADIUS, this.height - PERSON_RADIUS);
@@ -78,11 +85,9 @@ export default class Model {
   }
 
   loop() {
-    const callback = this.loop.bind(this);
-    requestAnimationFrame(callback);
+    requestAnimationFrame(this.loop.bind(this));
     this.context.clearRect(0, 0, this.width, this.height);
 
-    // setValues();
     // applyForces();
     this.updatePopulation();
     this.interactPopulation();
@@ -96,7 +101,6 @@ export default class Model {
           if (
             this.population[i].metWith(this.population[j], this.infectionRadius)
           ) {
-            //console.log('Two people collided');
             if (this.population[i].canInfect(this.population[j])) {
               this.population[i].hasInfectedCount += 1;
               this.infect(this.population[j]);
@@ -122,32 +126,29 @@ export default class Model {
   }
 
   setup() {
-    //console.log('anything');
-    setInterval(
-      function () {
-        //console.log('interval ' + this.totalPopulation);
-        for (let i = 0; i < this.totalPopulation; i++) {
-          if (!this.population[i].dead) {
-            //console.log('update');
-            this.update(this.population[i]);
-          }
+    const intervalFunc = () => {
+      for (let i = 0; i < this.totalPopulation; i++) {
+        if (!this.population[i].dead) {
+          this.update(this.population[i]);
         }
-      }.bind(this),
-      2000
-    );
+      }
+    };
+
+    // Bind this so that it can access this instace variables
+    setInterval(intervalFunc.bind(this), 2000);
   }
 
   // Decided to implement this in model, but could move to person
   update(person) {
     if (person.type === TYPES.ASYMPTOMATIC) {
       person.asymptomaticTime += 1;
-      if (person.asymptomaticTime == this.timeUntilSymptoms) {
+      if (person.asymptomaticTime === this.timeUntilSymptoms) {
         person.developSymptoms();
         this.numAsymptomatic -= 1;
         this.numInfected += 1;
       }
     }
-    if (person.type == TYPES.INFECTED) {
+    if (person.type === TYPES.INFECTED) {
       // TODO: this is where we will split removed into dead and recovered + immune
       if (Math.random() < MORTALITY_RATE) {
         person.dead = true;
@@ -156,7 +157,7 @@ export default class Model {
         this.numRemoved += 1;
       } else {
         person.symptomaticTime += 1;
-        if (person.symptomaticTime == this.timeUntilDetection) {
+        if (person.symptomaticTime === this.timeUntilDetection) {
           person.type = TYPES.IMMUNE;
           person.color = COLORS.IMMUNE;
           this.numInfected -= 1;
@@ -164,5 +165,9 @@ export default class Model {
         }
       }
     }
+  }
+
+  resetModel() {
+    console.log('clicked');
   }
 }
