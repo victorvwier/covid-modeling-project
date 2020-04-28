@@ -48,37 +48,40 @@ export default class Person {
   }
 
   move(width, height) {
-    this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
-    this.speedX += this.accX;
-    this.speedY += this.accY;
+    if (this.type != TYPES.DEAD) {
+      this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
+      this.speedX += this.accX;
+      this.speedY += this.accY;
 
-    if (this.x > width - 2 * this.radius || this.x < 2 * this.radius) {
-      this.speedX *= -1;
-      if (this.x > width - 2 * this.radius) this.x = width - 2 * this.radius;
-      else if (this.x < 2 * this.radius) this.x = 2 * this.radius;
+      if (this.x > width - 2 * this.radius || this.x < 2 * this.radius) {
+        this.speedX *= -1;
+        if (this.x > width - 2 * this.radius) this.x = width - 2 * this.radius;
+        else if (this.x < 2 * this.radius) this.x = 2 * this.radius;
+      }
+
+      if (this.y > height - 2 * this.radius || this.y < 2 * this.radius) {
+        this.speedY *= -1;
+        if (this.y > height - 2 * this.radius)
+          this.y = height - 2 * this.radius;
+        else if (this.y < 2 * this.radius) this.y = 2 * this.radius;
+      }
+
+      if (Math.abs(this.speedX) > this.maxSpeed)
+        this.speedX = Math.sign(this.speedX) * this.maxSpeed;
+
+      if (Math.abs(this.speedY) > this.maxSpeed)
+        this.speedY = Math.sign(this.speedY) * this.maxSpeed;
+      // if (this.practicesSocialDistance && enableSocialDistancing == true) {
+      //   this.speed_x *= 0.4;
+      //   this.speed_y *= 0.4;
+      // }
+
+      this.x += this.speedX;
+      this.y += this.speedY;
+
+      this.accX *= 0;
+      this.accY *= 0;
     }
-
-    if (this.y > height - 2 * this.radius || this.y < 2 * this.radius) {
-      this.speedY *= -1;
-      if (this.y > height - 2 * this.radius) this.y = height - 2 * this.radius;
-      else if (this.y < 2 * this.radius) this.y = 2 * this.radius;
-    }
-
-    if (Math.abs(this.speedX) > this.maxSpeed)
-      this.speedX = Math.sign(this.speedX) * this.maxSpeed;
-
-    if (Math.abs(this.speedY) > this.maxSpeed)
-      this.speedY = Math.sign(this.speedY) * this.maxSpeed;
-    // if (this.practicesSocialDistance && enableSocialDistancing == true) {
-    //   this.speed_x *= 0.4;
-    //   this.speed_y *= 0.4;
-    // }
-
-    this.x += this.speedX;
-    this.y += this.speedY;
-
-    this.accX *= 0;
-    this.accY *= 0;
   }
 
   metWith(p, threshold) {
