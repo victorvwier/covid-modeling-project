@@ -11,6 +11,7 @@ export default class Person {
     this.context = context;
     this.type = type;
     this.radius = PERSON_RADIUS;
+    this.infectionRadius = INFECTION_RADIUS;
     this.x = x;
     this.y = y;
     this.maxSpeed = POPULATION_SPEED;
@@ -36,7 +37,14 @@ export default class Person {
 
     this.context.stroke();
     this.context.beginPath();
-    this.context.arc(this.x, this.y, INFECTION_RADIUS, 0, 2 * Math.PI, false);
+    this.context.arc(
+      this.x,
+      this.y,
+      this.infectionRadius,
+      0,
+      2 * Math.PI,
+      false
+    );
     this.context.strokeStyle = 'red';
 
     this.context.stroke();

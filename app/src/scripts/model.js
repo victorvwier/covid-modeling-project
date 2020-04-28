@@ -36,6 +36,7 @@ export default class Model {
     this.timeUntilSymptoms = TIME_UNTIL_SYMPTOMS;
     this.timeUntilDetection = TIME_UNTIL_DETECTION;
     this.infectionRadius = INFECTION_RADIUS;
+    this.personRadius = PERSON_RADIUS;
     this.totalPopulation =
       numSusceptible + numInfected + numDead + numImmune + numAsymptomatic;
   }
@@ -50,6 +51,24 @@ export default class Model {
 
   set setInfectionRadius(newValue) {
     this.infectionRadius = newValue;
+    this.updateInfectionRadius(newValue);
+  }
+
+  set setPersonRadius(newValue) {
+    this.personRadius = newValue;
+    this.updateRadius(newValue);
+  }
+
+  updateRadius(newValue) {
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].radius = newValue;
+    }
+  }
+
+  updateInfectionRadius(newValue) {
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].infectionRadius = newValue;
+    }
   }
 
   populateCanvas() {
@@ -62,8 +81,8 @@ export default class Model {
 
   populateCanvasWithType(type, count) {
     for (let i = 0; i < count; i++) {
-      const x = getRandom(PERSON_RADIUS, this.width - PERSON_RADIUS);
-      const y = getRandom(PERSON_RADIUS, this.height - PERSON_RADIUS);
+      const x = getRandom(this.personRadius, this.width - this.personRadius);
+      const y = getRandom(this.personRadius, this.height - this.personRadius);
       this.population.push(new Person(type, x, y, this.context));
     }
   }

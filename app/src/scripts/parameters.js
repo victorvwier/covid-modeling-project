@@ -3,6 +3,7 @@ import {
   TIME_UNTIL_DETECTION,
   INFECTION_RADIUS,
   ASYMPTOMATIC_PROB,
+  PERSON_RADIUS,
 } from './CONSTANTS';
 
 export function wireSlidersToHandlers(model) {
@@ -46,6 +47,24 @@ export function wireSlidersToHandlers(model) {
         'change',
         (event) => (model.setAsymptomaticProb = event.target.value)
       );
+
+      // agentRadius
+      const agentRadiusHTML = document.getElementById('agentRadius');
+      agentRadiusHTML.value = PERSON_RADIUS;
+      agentRadiusHTML.addEventListener(
+        'change',
+        (event) => (model.setPersonRadius = event.target.value)
+      );
+
+      // number of susceptibles
+      // const initSusceptibleCountHTML = document.getElementById(
+      //   'initSusceptibleCount'
+      // );
+      // initSusceptibleCountHTML.value = INITIAL_SUSCEPTABLE;
+      // initSusceptibleCountHTML.addEventListener(
+      //   'change',
+      //   (event) => (model.setInitialSusceptable = event.target.value)
+      // );
 
       // Reset button
       document
