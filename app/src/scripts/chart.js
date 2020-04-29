@@ -43,8 +43,10 @@ export default class Chart {
             pointBackgroundColor: COLORS.SUSCEPTIBLE,
             borderColor: COLORS.SUSCEPTIBLE,
             pointHighlightStroke: COLORS.SUSCEPTIBLE,
-            borderCapStyle: 'round',
+            borderCapStyle: 'square',
+            lineCap: 'square',
             data: this.susceptable,
+            pointStyle: 'line',
           },
           {
             label: 'Asymptomatic',
@@ -53,7 +55,9 @@ export default class Chart {
             pointBackgroundColor: COLORS.ASYMPTOMATIC,
             borderColor: COLORS.ASYMPTOMATIC,
             pointHighlightStroke: COLORS.ASYMPTOMATIC,
-            borderCapStyle: 'round',
+            borderCapStyle: 'square',
+            lineCap: 'square',
+            pointStyle: 'line',
             data: this.asymptomatic,
           },
           {
@@ -63,7 +67,9 @@ export default class Chart {
             pointBackgroundColor: COLORS.INFECTED,
             borderColor: COLORS.INFECTED,
             pointHighlightStroke: COLORS.INFECTED,
-            borderCapStyle: 'round',
+            borderCapStyle: 'square',
+            lineCap: 'square',
+            pointStyle: 'line',
             data: this.infected,
           },
           {
@@ -73,8 +79,9 @@ export default class Chart {
             pointBackgroundColor: COLORS.IMMUNE,
             borderColor: COLORS.IMMUNE,
             pointHighlightStroke: COLORS.IMMUNE,
-            borderCapStyle: 'round',
-
+            borderCapStyle: 'square',
+            lineCap: 'square',
+            pointStyle: 'line',
             data: this.immune,
           },
           {
@@ -84,8 +91,9 @@ export default class Chart {
             pointBackgroundColor: COLORS.DEAD,
             borderColor: COLORS.DEAD,
             pointHighlightStroke: COLORS.DEAD,
-            borderCapStyle: 'round',
-
+            borderCapStyle: 'square',
+            lineCap: 'square',
+            pointStyle: 'line',
             data: this.dead,
           },
         ],

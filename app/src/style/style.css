@@ -11,9 +11,8 @@ body {
 
 h1 {
   padding-left: 50px;
-  padding-top: 30px;
   font-size: 3em;
-  color: #666666;
+  color: black;
   background-color: white;
 }
 
@@ -27,7 +26,8 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 45vw;
+  width: 55vw;
+  height: 80vh;
 }
 
 #canvas {
@@ -37,13 +37,14 @@ button {
 }
 
 #sliderDIV {
-  top: 150px;
-  left: 25px;
+  /* top: 150px;
+  left: 25px; */
+  margin-top: 30px;
   background-color: white;
   color: black;
-  padding: 20px;
-  width: 500px;
-  height: 400px;
+  padding: 10px;
+  width: 580px;
+  margin-bottom: 30px;
 }
 
 .slider {

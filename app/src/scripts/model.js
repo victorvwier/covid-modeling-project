@@ -28,7 +28,6 @@ export default class Model {
   ) {
     // REMOVE THIS (This should be handled differently)
     this.chart = chart;
-
     this._intervalFun = null;
     this._animationFrame = null;
     this.context = context;
@@ -165,7 +164,7 @@ export default class Model {
           this.numDead
         ),
 
-      100
+      500
     );
   }
 
