@@ -4,6 +4,8 @@ import {
   INFECTION_RADIUS,
   ASYMPTOMATIC_PROB,
   PERSON_RADIUS,
+  INITIAL_SUSCEPTABLE,
+  INITIAL_INFECTED,
 } from './CONSTANTS';
 
 export function wireSlidersToHandlers(model) {
@@ -80,15 +82,31 @@ export function wireSlidersToHandlers(model) {
         agentRadiusOutHTML.value = newVal;
       });
 
-      // number of susceptibles
-      // const initSusceptibleCountHTML = document.getElementById(
-      //   'initSusceptibleCount'
-      // );
-      // initSusceptibleCountHTML.value = INITIAL_SUSCEPTABLE;
-      // initSusceptibleCountHTML.addEventListener(
-      //   'change',
-      //   (event) => (model.setInitialSusceptable = event.target.value)
-      // );
+      // initial number of susceptibles
+      const initSusceptibleHTML = document.getElementById('initSusceptable');
+      const initSusceptibleOutputHTML = document.getElementById(
+        'initSusceptableCount'
+      );
+      initSusceptibleHTML.value = INITIAL_SUSCEPTABLE;
+      initSusceptibleOutputHTML.value = INITIAL_SUSCEPTABLE;
+      initSusceptibleHTML.addEventListener('change', (e) => {
+        const newVal = e.target.value;
+        model.setInitialSusceptable = newVal;
+        initSusceptibleOutputHTML.value = newVal;
+      });
+
+      // initial number of infected
+      const initInfectedHTML = document.getElementById('initInfected');
+      const initInfectedOutputHTML = document.getElementById(
+        'initInfectedCount'
+      );
+      initInfectedHTML.value = INITIAL_INFECTED;
+      initInfectedOutputHTML.value = INITIAL_INFECTED;
+      initInfectedHTML.addEventListener('change', (e) => {
+        const newVal = e.target.value;
+        model.setInitialInfected = newVal;
+        initInfectedOutputHTML.value = newVal;
+      });
 
       // Reset button
       document
@@ -99,4 +117,10 @@ export function wireSlidersToHandlers(model) {
   );
 }
 
-export const a = 1;
+export function getInitialNumSusceptable() {
+  return parseInt(document.getElementById('initSusceptableCount').value, 10);
+}
+
+export function getInitialNumInfected() {
+  return parseInt(document.getElementById('initInfectedCount').value, 10);
+}

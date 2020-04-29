@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import Person from './person';
 import { getRandom } from './util';
+import { getInitialNumInfected, getInitialNumSusceptable } from './parameters';
 import {
   PERSON_RADIUS,
   POPULATION_SPEED,
@@ -24,13 +25,14 @@ export default class Model {
     numDead,
     numImmune
   ) {
+    this._intervalFun = null;
+    this._animationFrame = null;
     this.context = context;
     this.width = width;
     this.height = height;
     this.population = [];
     this.numSusceptible = numSusceptible;
     this.numInfected = numInfected;
-    this.numImmune = numImmune;
     this.numImmune = numImmune;
     this.numAsymptomatic = numAsymptomatic;
     this.asymptomaticProb = ASYMPTOMATIC_PROB;
@@ -89,14 +91,14 @@ export default class Model {
   }
 
   drawPopulation() {
-    for (let i = 0; i < this.totalPopulation; i+=1) {
+    for (let i = 0; i < this.totalPopulation; i++) {
       // TODO: Maybe?
       this.population[i].draw();
     }
   }
 
   updatePopulation() {
-    for (let i = 0; i < this.totalPopulation; i+=1) {
+    for (let i = 0; i < this.totalPopulation; i += 1) {
       if (!this.population[i].removed) {
         this.population[i].maxSpeed = POPULATION_SPEED;
         this.population[i].move();
@@ -105,7 +107,7 @@ export default class Model {
   }
 
   loop() {
-    requestAnimationFrame(this.loop.bind(this));
+    this._animationFrame = requestAnimationFrame(this.loop.bind(this));
     this.context.clearRect(0, 0, this.width, this.height);
 
     // applyForces();
@@ -115,8 +117,8 @@ export default class Model {
   }
 
   interactPopulation() {
-    for (let i = 0; i < this.totalPopulation; i+=1) {
-      for (let j = 0; j < this.totalPopulation; j+=1) {
+    for (let i = 0; i < this.totalPopulation; i += 1) {
+      for (let j = 0; j < this.totalPopulation; j += 1) {
         if (i !== j) {
           if (
             this.population[i].metWith(this.population[j], this.infectionRadius)
@@ -135,13 +137,13 @@ export default class Model {
     if (Math.random() < this.asymptomaticProb) {
       person.type = TYPES.ASYMPTOMATIC;
       person.color = COLORS.ASYMPTOMATIC;
-      this.numAsymptomatic+=1;
-      this.numSusceptible-=1;
+      this.numAsymptomatic += 1;
+      this.numSusceptible -= 1;
     } else {
       person.type = TYPES.INFECTED;
       person.color = COLORS.INFECTED;
-      this.numInfected+=1;
-      this.numSusceptible-=1;
+      this.numInfected += 1;
+      this.numSusceptible -= 1;
     }
   }
 
@@ -155,7 +157,7 @@ export default class Model {
     };
 
     // Bind this so that it can access this instace variables
-    setInterval(intervalFunc.bind(this), 2000);
+    this._intervalFun = setInterval(intervalFunc.bind(this), 2000);
   }
 
   // Decided to implement this in model, but could move to person
@@ -188,6 +190,33 @@ export default class Model {
   }
 
   resetModel() {
-    console.log('clicked');
+    // Get values for new run
+    const newInitSusceptable = getInitialNumSusceptable();
+    const newInitInfected = getInitialNumInfected();
+
+    console.log(
+      `New Values: sus: ${newInitSusceptable}, inf: ${newInitInfected}`
+    );
+
+    // clear the current running interval
+    clearInterval(this._intervalFun);
+    cancelAnimationFrame(this._animationFrame);
+
+    // Set new values and reset to init
+    this.population = [];
+    this.numSusceptible = newInitSusceptable;
+    this.numInfected = newInitInfected;
+    this.numImmune = 0;
+    this.numAsymptomatic = 0;
+    this.totalPopulation = newInitSusceptable + newInitInfected;
+
+    // clear the canvas
+    this.context.clearRect(0, 0, this.width, this.height);
+
+    // start the loop again
+    this.populateCanvas();
+    this.drawPopulation();
+    this.setup();
+    this.loop();
   }
 }
