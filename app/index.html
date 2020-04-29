@@ -20,7 +20,7 @@
 <div class="row">
     <div class="col-sm">
         <p>Time to develop symptoms</p>
-        <input type="range" min="7" max="14" value="10" class="slider" id="timeToSymptoms">
+        <input type="range" min="1" max="14" value="10" class="slider" id="timeToSymptoms">
         <output id="timeToSymptomsOut" for="timeToSymptoms">10 days</output>
     </div>
     <div class="col-sm">
@@ -30,8 +30,8 @@
     </div>
     <div class="col-sm">
         <p>Circle of infection (how many people one person can infect at once)</p>
-        <input type="range" min="5" max="20" value="5" class="slider" id="infectionCircleRadius">
-        <output id="InfectionRadiusOut" for="infectionCircleRadius">5</output>
+        <input type="range" min="1" max="20" value="5" class="slider" id="infectionCircleRadius">
+        <output id="infectionRadiusOut" for="infectionCircleRadius">5</output>
     </div>
 </div>
 
@@ -53,12 +53,16 @@
 
 <div class="row">
     <div class="col-sm">
-        <label for="initSusceptibleCount">Initial number of susceptibles: </label>
-        <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100">
+        <p>Initial number of susceptibles: </p>
+        <input type="range" min="50" max="1000" value="100" step="20" class="slider" id="initSusceptable">
+        <output id="initSusceptableCount" for="initSusceptable">50</output>
+        <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
     </div>
     <div class="col-sm">
-        <label for="initInfectedCount">Initial number of infected: </label>
-        <input type="number" id="initInfectedCount" name="initInfectedCount" min="1" max="20" value="1">
+        <p>Initial number of infected: </p>
+        <input type="range" min="1" max="200" value="3" step="5" class="slider" id="initInfected">
+        <output id="initInfectedCount" for="initInfected">3</output>
+        <!-- <input type="number" id="initInfectedCount" name="initInfectedCount" min="1" max="20" value="1"> -->
     </div>
 </div>
 

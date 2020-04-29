@@ -6,7 +6,7 @@ export const INITIAL_DEAD = 0;
 
 export const PERSON_RADIUS = 10;
 export const POPULATION_SPEED = 2;
-export const INFECTION_RADIUS = PERSON_RADIUS + PERSON_RADIUS / 3;
+export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 
 export const TIME_UNTIL_SYMPTOMS = 2;
 export const MORTALITY_RATE = 0.07;
