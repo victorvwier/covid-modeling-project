@@ -3,9 +3,8 @@
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 1em;
-}
-
-* {
+  background-color: #d9d9d9;
+  color: white;
   margin: 0;
   padding-left: 0;
 }
@@ -25,22 +24,19 @@ button {
 }
 
 #canvas-container {
-  width: 100vw;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 45vw;
 }
 
 #canvas {
   background: #d9d9d9;
   border: white 4px solid;
-  position: absolute;
   right: 30px;
 }
 
 #sliderDIV {
-  position: absolute;
   top: 150px;
   left: 25px;
   background-color: white;
@@ -48,11 +44,6 @@ button {
   padding: 20px;
   width: 500px;
   height: 400px;
-}
-
-#mainPage {
-  background-color: #d9d9d9;
-  color: white;
 }
 
 .slider {
@@ -65,4 +56,21 @@ button {
   opacity: 0.7;
   -webkit-transition: 0.3s;
   transition: opacity 0.3s;
+}
+
+.outputContainer {
+  text-align: right;
+}
+
+#main {
+  display: flex;
+  flex-direction: row;
+}
+
+#left-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 45vw;
 }

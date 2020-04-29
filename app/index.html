@@ -6,76 +6,167 @@
     <title>MVP</title>
   </head>
 
-  <body id= "mainPage"> <h1>COVID-19 AGENT BASED SIMULATION MODEL</h1>
-    <div id="canvas-container">
-      <canvas id="canvas" width="600px" height="600px" ></canvas>
-    </div>
+  <body id="mainPage">
+    <h1>COVID-19 AGENT BASED SIMULATION MODEL</h1>
+
+    <main id="main">
+      <div id="left-panel">
+        <div id="chart-container">
+          <canvas id="chart-canvas" width="600px" height="300px"></canvas>
+        </div>
+        <div id="sliderDIV">
+          <div class="row">
+            <div class="col-sm">
+              <p>Time to develop symptoms</p>
+              <input
+                type="range"
+                min="1"
+                max="14"
+                value="10"
+                class="slider"
+                id="timeToSymptoms"
+              />
+              <div class="outputContainer">
+                <output id="timeToSymptomsOut" for="timeToSymptoms"
+                  >10 days</output
+                >
+              </div>
+            </div>
+            <div class="col-sm">
+              <p>Time until detection</p>
+              <input
+                type="range"
+                min="1"
+                max="14"
+                value="3"
+                class="slider"
+                id="timeUntilDetection"
+              />
+              <div class="outputContainer">
+                <output id="timeUntilDetectionOut" for="timeUntilDetection"
+                  >3 days</output
+                >
+              </div>
+            </div>
+            <div class="col-sm">
+              <p>
+                Circle of infection (how many people one person can infect at
+                once)
+              </p>
+              <input
+                type="range"
+                min="1"
+                max="20"
+                value="5"
+                class="slider"
+                id="infectionCircleRadius"
+              />
+              <div class="outputContainer">
+                <output id="infectionRadiusOut" for="infectionCircleRadius"
+                  >5</output
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>Probability that an infected person will be asymptomatic</p>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                value="0.5"
+                step="0.1"
+                class="slider"
+                id="asymptomaticProbability"
+              />
+              <div class="outputContainer">
+                <output
+                  id="asymptomaticProbabilityOut"
+                  for="asymptomaticProbability"
+                  >50%</output
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>Size of agents</p>
+              <input
+                type="range"
+                min="0"
+                max="6"
+                value="2"
+                step="0.1"
+                class="slider"
+                id="agentRadius"
+              />
+              <div class="outputContainer">
+                <output id="agentRadiusOut" for="agentRadius">2</output>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>Initial number of susceptibles:</p>
+              <input
+                type="range"
+                min="50"
+                max="1000"
+                value="100"
+                step="20"
+                class="slider"
+                id="initSusceptable"
+              />
+              <div class="outputContainer">
+                <output id="initSusceptableCount" for="initSusceptable"
+                  >50</output
+                >
+              </div>
+              <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
+            </div>
+            <div class="col-sm">
+              <p>Initial number of infected:</p>
+              <input
+                type="range"
+                min="1"
+                max="200"
+                value="3"
+                step="5"
+                class="slider"
+                id="initInfected"
+              />
+              <div class="outputContainer">
+                <div class="outputContainer">
+                  <output id="initInfectedCount" for="initInfected">3</output>
+                </div>
+              </div>
+              <!-- <input type="number" id="initInfectedCount" name="initInfectedCount" min="1" max="20" value="1"> -->
+            </div>
+          </div>
+
+          <div class="row p-3">
+            <div class="col-sm">
+              <button
+                type="button"
+                id="startSimulation"
+                class="btn btn-primary"
+              >
+                Start simulation
+              </button>
+              <button type="button" id="reload" class="btn btn-secondary">
+                Reload
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="canvas-container">
+        <canvas id="canvas" width="600px" height="600px"></canvas>
+      </div>
+    </main>
   </body>
-<body style="padding-bottom: 50px;">
-
-
-
-<div id = "sliderDIV"> 
-
-<div class="row">
-    <div class="col-sm">
-        <p>Time to develop symptoms</p>
-        <input type="range" min="1" max="14" value="10" class="slider" id="timeToSymptoms">
-        <output id="timeToSymptomsOut" for="timeToSymptoms">10 days</output>
-    </div>
-    <div class="col-sm">
-        <p>Time until detection</p>
-        <input type="range" min="1" max="14" value="3" class="slider" id="timeUntilDetection">
-        <output id="timeUntilDetectionOut" for="timeUntilDetection">3 days</output>
-    </div>
-    <div class="col-sm">
-        <p>Circle of infection (how many people one person can infect at once)</p>
-        <input type="range" min="1" max="20" value="5" class="slider" id="infectionCircleRadius">
-        <output id="infectionRadiusOut" for="infectionCircleRadius">5</output>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm">
-        <p>Probability that an infected person will be asymptomatic</p>
-        <input type="range" min="0" max="1" value="0.5" step="0.1" class="slider" id="asymptomaticProbability">
-        <output id="asymptomaticProbabilityOut" for="asymptomaticProbability">50%</output>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm">
-        <p>Size of agents</p>
-        <input type="range" min="0" max="6" value="2" step="0.1" class="slider" id="agentRadius">
-        <output id="agentRadiusOut" for="agentRadius">2</output>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm">
-        <p>Initial number of susceptibles: </p>
-        <input type="range" min="50" max="1000" value="100" step="20" class="slider" id="initSusceptable">
-        <output id="initSusceptableCount" for="initSusceptable">50</output>
-        <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
-    </div>
-    <div class="col-sm">
-        <p>Initial number of infected: </p>
-        <input type="range" min="1" max="200" value="3" step="5" class="slider" id="initInfected">
-        <output id="initInfectedCount" for="initInfected">3</output>
-        <!-- <input type="number" id="initInfectedCount" name="initInfectedCount" min="1" max="20" value="1"> -->
-    </div>
-</div>
-
-<div class="row p-3">
-    <div class="col-sm">
-        <button type="button" id="startSimulation" class="btn btn-primary">Start simulation</button>
-        <button type="button" id="reload" class="btn btn-secondary">Reload</button>
-    </div>
-</div>
-
-
-</div>
-
-
-
 </html>

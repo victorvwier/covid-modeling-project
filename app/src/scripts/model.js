@@ -23,8 +23,12 @@ export default class Model {
     numInfected,
     numAsymptomatic,
     numDead,
-    numImmune
+    numImmune,
+    chart
   ) {
+    // REMOVE THIS (This should be handled differently)
+    this.chart = chart;
+
     this._intervalFun = null;
     this._animationFrame = null;
     this.context = context;
@@ -108,16 +112,6 @@ export default class Model {
     }
   }
 
-  loop() {
-    this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-    this.context.clearRect(0, 0, this.width, this.height);
-
-    // applyForces();
-    this.updatePopulation();
-    this.interactPopulation();
-    this.drawPopulation();
-  }
-
   interactPopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       for (let j = 0; j < this.totalPopulation; j += 1) {
@@ -160,6 +154,19 @@ export default class Model {
 
     // Bind this so that it can access this instace variables
     this._intervalFun = setInterval(intervalFunc.bind(this), 2000);
+
+    setInterval(
+      () =>
+        this.chart.updateValues(
+          this.numSusceptible,
+          this.numAsymptomatic,
+          this.numInfected,
+          this.numImmune,
+          this.numDead
+        ),
+
+      100
+    );
   }
 
   // Decided to implement this in model, but could move to person
@@ -189,6 +196,27 @@ export default class Model {
         }
       }
     }
+  }
+
+  loop() {
+    this._animationFrame = requestAnimationFrame(this.loop.bind(this));
+    this.context.clearRect(0, 0, this.width, this.height);
+
+    // applyForces();
+    this.updatePopulation();
+    this.interactPopulation();
+    this.drawPopulation();
+  }
+
+  // CONTINUE
+  currentValues() {
+    return [
+      this.numSusceptible,
+      this.numAsymptomatic,
+      this.numInfected,
+      this.numImmune,
+      this.dead,
+    ];
   }
 
   resetModel() {
