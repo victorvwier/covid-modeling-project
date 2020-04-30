@@ -24,7 +24,7 @@ export default class Person {
     this.symptomaticTime = 0;
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
-    else if (type === TYPES.INFECTED) this.color = COLORS.INFECTED;
+    else if (type === TYPES.SYMPTOMATIC) this.color = COLORS.SYMPTOMATIC;
     else if (type === TYPES.ASYMPTOMATIC) this.color = COLORS.ASYMPTOMATIC;
   }
 
@@ -109,13 +109,13 @@ export default class Person {
   }
 
   developSymptoms() {
-    this.type = TYPES.INFECTED;
-    this.color = COLORS.INFECTED;
+    this.type = TYPES.SYMPTOMATIC;
+    this.color = COLORS.SYMPTOMATIC;
   }
 
   canInfect(p) {
     return (
-      (this.type === TYPES.INFECTED || this.type === TYPES.ASYMPTOMATIC) &&
+      (this.type === TYPES.SYMPTOMATIC || this.type === TYPES.ASYMPTOMATIC) &&
       p.type === TYPES.SUSCEPTIBLE
     );
   }

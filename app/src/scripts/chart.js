@@ -8,19 +8,25 @@ export default class Chart {
     this.chart = null;
     this.susceptable = [];
     this.asymptomatic = [];
-    this.infected = [];
+    this.symptomatic = [];
     this.immune = [];
     this.dead = [];
     this.xValues = [];
   }
 
-  updateValues(newSusceptable, newAsymptotic, newInfected, newImmune, newDead) {
+  updateValues(
+    newSusceptable,
+    newAsymptotic,
+    newSymptomatic,
+    newImmune,
+    newDead
+  ) {
     this.chart.data.datasets[0].data.push(newSusceptable);
     this.susceptable.push(newSusceptable);
     this.chart.data.datasets[1].data.push(newAsymptotic);
     this.asymptomatic.push(newAsymptotic);
-    this.chart.data.datasets[2].data.push(newInfected);
-    this.infected.push(newInfected);
+    this.chart.data.datasets[2].data.push(newSymptomatic);
+    this.symptomatic.push(newSymptomatic);
     this.chart.data.datasets[3].data.push(newImmune);
     this.immune.push(newImmune);
     this.chart.data.datasets[4].data.push(newDead);
@@ -61,16 +67,16 @@ export default class Chart {
             data: this.asymptomatic,
           },
           {
-            label: 'Infected',
+            label: 'Symptomatic',
             fill: true,
-            backgroundColor: COLORS.INFECTED,
-            pointBackgroundColor: COLORS.INFECTED,
-            borderColor: COLORS.INFECTED,
-            pointHighlightStroke: COLORS.INFECTED,
+            backgroundColor: COLORS.SYMPTOMATIC,
+            pointBackgroundColor: COLORS.SYMPTOMATIC,
+            borderColor: COLORS.SYMPTOMATIC,
+            pointHighlightStroke: COLORS.SYMPTOMATIC,
             borderCapStyle: 'square',
             lineCap: 'square',
             pointStyle: 'line',
-            data: this.infected,
+            data: this.symptomatic,
           },
           {
             label: 'Immune',

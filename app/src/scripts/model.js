@@ -1,6 +1,9 @@
 import Person from './person';
 import { getRandom } from './util';
-import { getInitialNumInfected, getInitialNumSusceptable } from './parameters';
+import {
+  getInitialNumSymptomatic,
+  getInitialNumSusceptable,
+} from './parameters';
 import {
   PERSON_RADIUS,
   POPULATION_SPEED,
@@ -19,7 +22,7 @@ export default class Model {
     width,
     height,
     numSusceptible,
-    numInfected,
+    numSymptomatic,
     numAsymptomatic,
     numDead,
     numImmune,
@@ -34,7 +37,7 @@ export default class Model {
     this.height = height;
     this.population = [];
     this.numSusceptible = numSusceptible;
-    this.numInfected = numInfected;
+    this.numSymptomatic = numSymptomatic;
     this.numImmune = numImmune;
     this.numDead = numDead;
     this.numAsymptomatic = numAsymptomatic;
@@ -44,7 +47,7 @@ export default class Model {
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
     this.totalPopulation =
-      numSusceptible + numInfected + numDead + numImmune + numAsymptomatic;
+      numSusceptible + numSymptomatic + numDead + numImmune + numAsymptomatic;
   }
 
   set setTimeUntilSymptoms(newValue) {
@@ -79,7 +82,7 @@ export default class Model {
 
   populateCanvas() {
     this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
-    this.populateCanvasWithType(TYPES.INFECTED, this.numInfected);
+    this.populateCanvasWithType(TYPES.SYMPTOMATIC, this.numSymptomatic);
     this.populateCanvasWithType(TYPES.DEAD, this.numDead);
     this.populateCanvasWithType(TYPES.IMMUNE, this.numImmune);
     this.populateCanvasWithType(TYPES.ASYMPTOMATIC, this.numAsymptomatic);
@@ -118,7 +121,7 @@ export default class Model {
             this.population[i].metWith(this.population[j], this.infectionRadius)
           ) {
             if (this.population[i].canInfect(this.population[j])) {
-              this.population[i].hasInfectedCount += 1;
+              this.population[i].hasSymptomaticCount += 1;
               this.infect(this.population[j]);
             }
           }
@@ -134,9 +137,9 @@ export default class Model {
       this.numAsymptomatic += 1;
       this.numSusceptible -= 1;
     } else {
-      person.type = TYPES.INFECTED;
-      person.color = COLORS.INFECTED;
-      this.numInfected += 1;
+      person.type = TYPES.SYMPTOMATIC;
+      person.color = COLORS.SYMPTOMATIC;
+      this.numSymptomatic += 1;
       this.numSusceptible -= 1;
     }
   }
@@ -158,7 +161,7 @@ export default class Model {
         this.chart.updateValues(
           this.numSusceptible,
           this.numAsymptomatic,
-          this.numInfected,
+          this.numSymptomatic,
           this.numImmune,
           this.numDead
         ),
@@ -174,22 +177,22 @@ export default class Model {
       if (person.asymptomaticTime === this.timeUntilSymptoms) {
         person.developSymptoms();
         this.numAsymptomatic -= 1;
-        this.numInfected += 1;
+        this.numSymptomatic += 1;
       }
     }
-    if (person.type === TYPES.INFECTED) {
+    if (person.type === TYPES.SYMPTOMATIC) {
       // TODO: this is where we will split removed into dead and recovered + immune
       if (Math.random() < MORTALITY_RATE) {
         person.dead = true;
         person.color = COLORS.DEAD;
-        this.numInfected -= 1;
+        this.numSymptomatic -= 1;
         this.numDead += 1;
       } else {
         person.symptomaticTime += 1;
         if (person.symptomaticTime === this.timeUntilImmune) {
           person.type = TYPES.IMMUNE;
           person.color = COLORS.IMMUNE;
-          this.numInfected -= 1;
+          this.numSymptomatic -= 1;
           this.numImmune += 1;
         }
       }
@@ -211,7 +214,7 @@ export default class Model {
     return [
       this.numSusceptible,
       this.numAsymptomatic,
-      this.numInfected,
+      this.numSymptomatic,
       this.numImmune,
       this.dead,
     ];
@@ -220,10 +223,10 @@ export default class Model {
   resetModel() {
     // Get values for new run
     const newInitSusceptable = getInitialNumSusceptable();
-    const newInitInfected = getInitialNumInfected();
+    const newInitSymptomatic = getInitialNumSymptomatic();
 
     console.log(
-      `New Values: sus: ${newInitSusceptable}, inf: ${newInitInfected}`
+      `New Values: sus: ${newInitSusceptable}, inf: ${newInitSymptomatic}`
     );
 
     // clear the current running interval
@@ -233,10 +236,10 @@ export default class Model {
     // Set new values and reset to init
     this.population = [];
     this.numSusceptible = newInitSusceptable;
-    this.numInfected = newInitInfected;
+    this.numSymptomatic = newInitSymptomatic;
     this.numImmune = 0;
     this.numAsymptomatic = 0;
-    this.totalPopulation = newInitSusceptable + newInitInfected;
+    this.totalPopulation = newInitSusceptable + newInitSymptomatic;
 
     // clear the canvas
     this.context.clearRect(0, 0, this.width, this.height);

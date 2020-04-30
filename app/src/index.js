@@ -2,7 +2,7 @@ import Model from './scripts/model';
 import Chart from './scripts/chart';
 import {
   INITIAL_SUSCEPTABLE,
-  INITIAL_INFECTED,
+  INITIAL_SYMPTOMATIC,
   INITAL_ASYMPTOMATIC,
   INITIAL_IMMUNE,
   INITIAL_DEAD,
@@ -23,7 +23,7 @@ window.onload = function () {
     canvas.width,
     canvas.height,
     INITIAL_SUSCEPTABLE,
-    INITIAL_INFECTED,
+    INITIAL_SYMPTOMATIC,
     INITAL_ASYMPTOMATIC,
     INITIAL_IMMUNE,
     INITIAL_DEAD,
