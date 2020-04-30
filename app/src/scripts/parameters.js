@@ -1,6 +1,6 @@
 import {
   TIME_UNTIL_SYMPTOMS,
-  TIME_UNTIL_DETECTION,
+  TIME_UNTIL_IMMUNE,
   INFECTION_RADIUS,
   ASYMPTOMATIC_PROB,
   PERSON_RADIUS,
@@ -23,16 +23,16 @@ export function wireSlidersToHandlers(model) {
   });
 
   // timeUntilDetection
-  const timeUntilDetectionHTML = document.getElementById('timeUntilDetection');
-  const timeUntilDetectionOutputHTML = document.getElementById(
-    'timeUntilDetectionOut'
+  const timeUntilImmuneHTML = document.getElementById('timeUntilImmune');
+  const timeUntilImmuneOutputHTML = document.getElementById(
+    'timeUntilImmuneOut'
   );
-  timeUntilDetectionHTML.value = TIME_UNTIL_DETECTION;
-  timeUntilDetectionOutputHTML.value = `${TIME_UNTIL_DETECTION} days`;
-  timeUntilDetectionHTML.addEventListener('change', (e) => {
+  timeUntilImmuneHTML.value = TIME_UNTIL_IMMUNE;
+  timeUntilImmuneOutputHTML.value = `${TIME_UNTIL_IMMUNE} days`;
+  timeUntilImmuneHTML.addEventListener('change', (e) => {
     const newVal = e.target.value;
     model.setTimeUntilDetection = newVal;
-    timeUntilDetectionOutputHTML.value = `${newVal} days`;
+    timeUntilImmuneOutputHTML.value = `${newVal} days`;
   });
 
   // infectionCircleRadius
