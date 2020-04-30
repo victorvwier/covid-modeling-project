@@ -77,7 +77,9 @@ export default class Model {
   }
 
   updateInfectionRadius(newValue) {
+    console.log(`updating infectionRadius ${this.totalPopulation}`);
     for (let i = 0; i < this.totalPopulation; i++) {
+      console.log('in');
       this.population[i].infectionRadius = newValue;
     }
   }
@@ -237,6 +239,8 @@ export default class Model {
 
     // start the loop again
     this.populateCanvas();
+    this.updateInfectionRadius(this.infectionRadius);
+    this.updateRadius(this.personRadius);
     this.drawPopulation();
 
     this.setup();
