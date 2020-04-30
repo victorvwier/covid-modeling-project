@@ -52,6 +52,10 @@ export default class Model {
       numSusceptible + numSymptomatic + numDead + numImmune + numAsymptomatic;
   }
 
+  set setAsymptomaticProb(newValue) {
+    this.asymptomaticProb = newValue;
+  }
+
   set setTimeUntilSymptoms(newValue) {
     this.timeUntilSymptoms = newValue;
   }

@@ -31,7 +31,6 @@ export default function (model) {
   timeUntilImmuneOutputHTML.value = `${TIME_UNTIL_IMMUNE} days`;
   timeUntilImmuneHTML.addEventListener('change', (e) => {
     const newVal = parseFloat(e.target.value);
-    console.log(`New val ${newVal}`);
     model.setTimeUntilImmune = newVal;
     timeUntilImmuneOutputHTML.value = `${newVal} days`;
   });
