@@ -14,6 +14,19 @@ export default class Chart {
     this.xValues = [];
   }
 
+  resetChart(newInitSusceptable, newInitSymptomatic) {
+    this.x = 1;
+    this.susceptable = [newInitSusceptable];
+    this.asymptomatic = [];
+    this.symptomatic = [newInitSymptomatic];
+    this.immune = [];
+    this.dead = [];
+    this.xValues = [];
+    this.chart.update();
+    this.chart.destroy();
+    this.drawChart();
+  }
+
   updateValues(
     newSusceptable,
     newAsymptotic,
@@ -110,6 +123,13 @@ export default class Chart {
         scales: {
           yAxes: [
             {
+              display: true,
+              ticks: {
+                beginAtZero: true,
+                steps: 10,
+                stepValue: 5,
+                max: 100,
+              },
               stacked: true,
             },
           ],

@@ -30,7 +30,9 @@ export default class Model {
   ) {
     // REMOVE THIS (This should be handled differently)
     this.chart = chart;
-    this._intervalFun = null;
+    this._chartInterval = null;
+    //
+    this._updatePopulationFunction = null;
     this._animationFrame = null;
     this.context = context;
     this.width = width;
@@ -154,9 +156,9 @@ export default class Model {
     };
 
     // Bind this so that it can access this instace variables
-    this._intervalFun = setInterval(intervalFunc.bind(this), 2000);
+    this._updatePopulationFunction = setInterval(intervalFunc.bind(this), 2000);
 
-    setInterval(
+    this._chartInterval = setInterval(
       () =>
         this.chart.updateValues(
           this.numSusceptible,
@@ -209,17 +211,6 @@ export default class Model {
     this.drawPopulation();
   }
 
-  // CONTINUE
-  currentValues() {
-    return [
-      this.numSusceptible,
-      this.numAsymptomatic,
-      this.numSymptomatic,
-      this.numImmune,
-      this.dead,
-    ];
-  }
-
   resetModel() {
     // Get values for new run
     const newInitSusceptable = getInitialNumSusceptable();
@@ -230,8 +221,12 @@ export default class Model {
     );
 
     // clear the current running interval
-    clearInterval(this._intervalFun);
+    clearInterval(this._updatePopulationFunction);
+    clearInterval(this._chartInterval);
     cancelAnimationFrame(this._animationFrame);
+
+    // reset chart
+    this.chart.resetChart(newInitSusceptable, newInitSymptomatic);
 
     // Set new values and reset to init
     this.population = [];
@@ -247,6 +242,7 @@ export default class Model {
     // start the loop again
     this.populateCanvas();
     this.drawPopulation();
+
     this.setup();
     this.loop();
   }
