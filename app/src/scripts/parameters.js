@@ -1,11 +1,11 @@
 import {
   TIME_UNTIL_SYMPTOMS,
-  TIME_UNTIL_DETECTION,
+  TIME_UNTIL_IMMUNE,
   INFECTION_RADIUS,
   ASYMPTOMATIC_PROB,
   PERSON_RADIUS,
   INITIAL_SUSCEPTABLE,
-  INITIAL_INFECTED,
+  INITIAL_SYMPTOMATIC,
 } from './CONSTANTS';
 
 export function wireSlidersToHandlers(model) {
@@ -22,17 +22,17 @@ export function wireSlidersToHandlers(model) {
     timeUntilSymptomsOutputHTML.value = `${newVal} days`;
   });
 
-  // timeUntilDetection
-  const timeUntilDetectionHTML = document.getElementById('timeUntilDetection');
-  const timeUntilDetectionOutputHTML = document.getElementById(
-    'timeUntilDetectionOut'
+  // timeUntilImmune
+  const timeUntilImmuneHTML = document.getElementById('timeUntilImmune');
+  const timeUntilImmuneOutputHTML = document.getElementById(
+    'timeUntilImmuneOut'
   );
-  timeUntilDetectionHTML.value = TIME_UNTIL_DETECTION;
-  timeUntilDetectionOutputHTML.value = `${TIME_UNTIL_DETECTION} days`;
-  timeUntilDetectionHTML.addEventListener('change', (e) => {
+  timeUntilImmuneHTML.value = TIME_UNTIL_IMMUNE;
+  timeUntilImmuneOutputHTML.value = `${TIME_UNTIL_IMMUNE} days`;
+  timeUntilImmuneHTML.addEventListener('change', (e) => {
     const newVal = e.target.value;
-    model.setTimeUntilDetection = newVal;
-    timeUntilDetectionOutputHTML.value = `${newVal} days`;
+    model.setTimeUntilImmune = newVal;
+    timeUntilImmuneOutputHTML.value = `${newVal} days`;
   });
 
   // infectionCircleRadius
@@ -91,14 +91,16 @@ export function wireSlidersToHandlers(model) {
   });
 
   // initial number of infected
-  const initInfectedHTML = document.getElementById('initInfected');
-  const initInfectedOutputHTML = document.getElementById('initInfectedCount');
-  initInfectedHTML.value = INITIAL_INFECTED;
-  initInfectedOutputHTML.value = INITIAL_INFECTED;
-  initInfectedHTML.addEventListener('change', (e) => {
+  const initSymptomaticHTML = document.getElementById('initSymptomatic');
+  const initSymptomaticOutputHTML = document.getElementById(
+    'initSymptomaticCount'
+  );
+  initSymptomaticHTML.value = INITIAL_SYMPTOMATIC;
+  initSymptomaticOutputHTML.value = INITIAL_SYMPTOMATIC;
+  initSymptomaticHTML.addEventListener('change', (e) => {
     const newVal = e.target.value;
-    model.setInitialInfected = newVal;
-    initInfectedOutputHTML.value = newVal;
+    model.setInitialSymptomatic = newVal;
+    initSymptomaticOutputHTML.value = newVal;
   });
 
   // Reset button
@@ -111,6 +113,6 @@ export function getInitialNumSusceptable() {
   return parseInt(document.getElementById('initSusceptableCount').value, 10);
 }
 
-export function getInitialNumInfected() {
-  return parseInt(document.getElementById('initInfectedCount').value, 10);
+export function getInitialNumSymptomatic() {
+  return parseInt(document.getElementById('initSymptomaticCount').value, 10);
 }

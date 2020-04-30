@@ -71,7 +71,7 @@
 
           <div class="row">
             <div class="col-sm">
-              <p>Probability that an infected person will be asymptomatic</p>
+              <p>Probability that an symptomatic person will be asymptomatic</p>
               <input
                 type="range"
                 min="0"
@@ -97,8 +97,8 @@
               <input
                 type="range"
                 min="0"
-                max="6"
-                value="1.5"
+                max="10"
+                value="5"
                 step="0.1"
                 class="slider"
                 id="agentRadius"
@@ -129,7 +129,7 @@
               <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
             </div>
             <div class="col-sm">
-              <p>Initial number of infected:</p>
+              <p>Initial number of symptomatic:</p>
               <input
                 type="range"
                 min="1"
@@ -137,14 +137,16 @@
                 value="1"
                 step="5"
                 class="slider"
-                id="initInfected"
+                id="initSymptomatic"
               />
               <div class="outputContainer">
                 <div class="outputContainer">
-                  <output id="initInfectedCount" for="initInfected">3</output>
+                  <output id="initSymptomaticCount" for="initSymptomatic"
+                    >3</output
+                  >
                 </div>
               </div>
-              <!-- <input type="number" id="initInfectedCount" name="initInfectedCount" min="1" max="20" value="1"> -->
+              <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
             </div>
           </div>
 
