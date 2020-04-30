@@ -81,9 +81,7 @@ export default class Model {
   }
 
   updateInfectionRadius(newValue) {
-    console.log(`updating infectionRadius ${this.totalPopulation}`);
     for (let i = 0; i < this.totalPopulation; i++) {
-      console.log('in');
       this.population[i].infectionRadius = newValue;
     }
   }
