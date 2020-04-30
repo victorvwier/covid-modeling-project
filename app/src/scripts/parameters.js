@@ -17,7 +17,7 @@ export function wireSlidersToHandlers(model) {
   timeUntilSymptomsHTML.value = TIME_UNTIL_SYMPTOMS;
   timeUntilSymptomsOutputHTML.value = `${TIME_UNTIL_SYMPTOMS} days`;
   timeUntilSymptomsHTML.addEventListener('change', (e) => {
-    const newVal = e.target.value;
+    const newVal = parseFloat(e.target.value);
     model.setTimeUntilSymptoms = newVal;
     timeUntilSymptomsOutputHTML.value = `${newVal} days`;
   });
@@ -30,7 +30,7 @@ export function wireSlidersToHandlers(model) {
   timeUntilImmuneHTML.value = TIME_UNTIL_IMMUNE;
   timeUntilImmuneOutputHTML.value = `${TIME_UNTIL_IMMUNE} days`;
   timeUntilImmuneHTML.addEventListener('change', (e) => {
-    const newVal = e.target.value;
+    const newVal = parseFloat(e.target.value);
     model.setTimeUntilDetection = newVal;
     timeUntilImmuneOutputHTML.value = `${newVal} days`;
   });
@@ -46,7 +46,7 @@ export function wireSlidersToHandlers(model) {
   infectionRadiusOutoputHTML.value = `${INFECTION_RADIUS} people`;
 
   infectionCircleRadiusHTML.addEventListener('change', (e) => {
-    const newVal = e.target.value;
+    const newVal = parseFloat(e.target.value);
     model.setInfectionRadius = newVal;
     infectionRadiusOutoputHTML.value = newVal;
   });
@@ -61,7 +61,7 @@ export function wireSlidersToHandlers(model) {
   asymptomaticProbabilityHTML.value = ASYMPTOMATIC_PROB;
   asymptomaticProbabilityOutputHTML.value = `${ASYMPTOMATIC_PROB * 100}%`;
   asymptomaticProbabilityHTML.addEventListener('change', (e) => {
-    const newVal = e.target.value;
+    const newVal = parseFloat(e.target.value);
     model.setAsymptomaticProb = newVal;
     asymptomaticProbabilityOutputHTML.value = `${newVal * 100}%`;
   });
@@ -72,7 +72,7 @@ export function wireSlidersToHandlers(model) {
   agentRadiusHTML.value = PERSON_RADIUS;
   agentRadiusOutHTML.value = PERSON_RADIUS;
   agentRadiusHTML.addEventListener('change', (e) => {
-    const newVal = e.target.value;
+    const newVal = parseFloat(e.target.value);
     model.setPersonRadius = newVal;
     agentRadiusOutHTML.value = newVal;
   });
@@ -85,7 +85,7 @@ export function wireSlidersToHandlers(model) {
   initSusceptibleHTML.value = INITIAL_SUSCEPTABLE;
   initSusceptibleOutputHTML.value = INITIAL_SUSCEPTABLE;
   initSusceptibleHTML.addEventListener('change', (e) => {
-    const newVal = e.target.value;
+    const newVal = parseFloat(e.target.value);
     model.setInitialSusceptable = newVal;
     initSusceptibleOutputHTML.value = newVal;
   });
@@ -96,7 +96,7 @@ export function wireSlidersToHandlers(model) {
   initInfectedHTML.value = INITIAL_INFECTED;
   initInfectedOutputHTML.value = INITIAL_INFECTED;
   initInfectedHTML.addEventListener('change', (e) => {
-    const newVal = e.target.value;
+    const newVal = parseFloat(e.target.value);
     model.setInitialInfected = newVal;
     initInfectedOutputHTML.value = newVal;
   });
