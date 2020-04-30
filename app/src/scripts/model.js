@@ -6,7 +6,7 @@ import {
   PERSON_RADIUS,
   POPULATION_SPEED,
   INFECTION_RADIUS,
-  TIME_UNTIL_DETECTION,
+  TIME_UNTIL_IMMUNE,
   TIME_UNTIL_SYMPTOMS,
   MORTALITY_RATE,
   TYPES,
@@ -41,7 +41,7 @@ export default class Model {
     this.numAsymptomatic = numAsymptomatic;
     this.asymptomaticProb = ASYMPTOMATIC_PROB;
     this.timeUntilSymptoms = TIME_UNTIL_SYMPTOMS;
-    this.timeUntilDetection = TIME_UNTIL_DETECTION;
+    this.timeUntilImmune = TIME_UNTIL_IMMUNE;
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
     this.totalPopulation =
@@ -52,8 +52,8 @@ export default class Model {
     this.timeUntilSymptoms = newValue;
   }
 
-  set setTimeUntilDetection(newValue) {
-    this.timeUntilDetection = newValue;
+  set setTimeUntilImmune(newValue) {
+    this.timeUntilImmune = newValue;
   }
 
   set setInfectionRadius(newValue) {
@@ -187,7 +187,7 @@ export default class Model {
         this.numDead += 1;
       } else {
         person.symptomaticTime += 1;
-        if (person.symptomaticTime === this.timeUntilDetection) {
+        if (person.symptomaticTime === this.timeUntilImmune) {
           person.type = TYPES.IMMUNE;
           person.color = COLORS.IMMUNE;
           this.numInfected -= 1;

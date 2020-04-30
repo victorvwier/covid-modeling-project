@@ -20,7 +20,7 @@
               <p>Time to develop symptoms</p>
               <input
                 type="range"
-                min="1"
+                min="7"
                 max="14"
                 value="10"
                 class="slider"
@@ -33,17 +33,17 @@
               </div>
             </div>
             <div class="col-sm">
-              <p>Time until detection</p>
+              <p>Time until immune</p>
               <input
                 type="range"
-                min="1"
-                max="14"
-                value="3"
+                min="5"
+                max="10"
+                value="7"
                 class="slider"
-                id="timeUntilDetection"
+                id="timeUntilImmune"
               />
               <div class="outputContainer">
-                <output id="timeUntilDetectionOut" for="timeUntilDetection"
+                <output id="timeUntilImmuneOut" for="timeUntilImmune"
                   >3 days</output
                 >
               </div>
@@ -57,7 +57,7 @@
                 type="range"
                 min="1"
                 max="20"
-                value="5"
+                value="2"
                 class="slider"
                 id="infectionCircleRadius"
               />
@@ -98,7 +98,7 @@
                 type="range"
                 min="0"
                 max="6"
-                value="2"
+                value="1.5"
                 step="0.1"
                 class="slider"
                 id="agentRadius"
@@ -134,7 +134,7 @@
                 type="range"
                 min="1"
                 max="200"
-                value="3"
+                value="1"
                 step="5"
                 class="slider"
                 id="initInfected"
