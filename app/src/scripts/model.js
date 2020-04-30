@@ -3,7 +3,7 @@ import { getRandom } from './util';
 import {
   getInitialNumSymptomatic,
   getInitialNumSusceptable,
-} from './parameters';
+} from './DOM/domValues';
 import {
   PERSON_RADIUS,
   POPULATION_SPEED,
@@ -215,10 +215,6 @@ export default class Model {
     // Get values for new run
     const newInitSusceptable = getInitialNumSusceptable();
     const newInitSymptomatic = getInitialNumSymptomatic();
-
-    console.log(
-      `New Values: sus: ${newInitSusceptable}, inf: ${newInitSymptomatic}`
-    );
 
     // clear the current running interval
     clearInterval(this._updatePopulationFunction);

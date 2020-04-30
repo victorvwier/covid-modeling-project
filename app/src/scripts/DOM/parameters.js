@@ -6,9 +6,9 @@ import {
   PERSON_RADIUS,
   INITIAL_SUSCEPTABLE,
   INITIAL_SYMPTOMATIC,
-} from './CONSTANTS';
+} from '../CONSTANTS';
 
-export function wireSlidersToHandlers(model) {
+export default function (model) {
   // TimeToSymptoms
   const timeUntilSymptomsHTML = document.getElementById('timeToSymptoms');
   const timeUntilSymptomsOutputHTML = document.getElementById(
@@ -31,7 +31,8 @@ export function wireSlidersToHandlers(model) {
   timeUntilImmuneOutputHTML.value = `${TIME_UNTIL_IMMUNE} days`;
   timeUntilImmuneHTML.addEventListener('change', (e) => {
     const newVal = parseFloat(e.target.value);
-    model.setTimeUntilDetection = newVal;
+    console.log(`New val ${newVal}`);
+    model.setTimeUntilImmune = newVal;
     timeUntilImmuneOutputHTML.value = `${newVal} days`;
   });
 
@@ -107,12 +108,4 @@ export function wireSlidersToHandlers(model) {
   document
     .getElementById('reload')
     .addEventListener('click', () => model.resetModel());
-}
-
-export function getInitialNumSusceptable() {
-  return parseInt(document.getElementById('initSusceptableCount').value, 10);
-}
-
-export function getInitialNumSymptomatic() {
-  return parseInt(document.getElementById('initSymptomaticCount').value, 10);
 }

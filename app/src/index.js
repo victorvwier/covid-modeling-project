@@ -7,7 +7,7 @@ import {
   INITIAL_IMMUNE,
   INITIAL_DEAD,
 } from './scripts/CONSTANTS';
-import { wireSlidersToHandlers } from './scripts/parameters';
+import wireSlidersToHandlers from './scripts/DOM/parameters';
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
@@ -37,4 +37,8 @@ window.onload = function () {
   model.loop();
 
   wireSlidersToHandlers(model);
+
+  // DEBUG PURPOSES
+  window.model = model;
+  window.chart = chart;
 };
