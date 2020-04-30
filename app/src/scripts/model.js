@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import Person from './person';
 import { getRandom } from './util';
 import { getInitialNumInfected, getInitialNumSusceptable } from './parameters';
