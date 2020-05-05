@@ -102,9 +102,11 @@ export default function (model) {
     model.setInitialSymptomatic = newVal;
     initSymptomaticOutputHTML.value = newVal;
   });
+}
 
+export function wireReloadButtonToMain(main) {
   // Reset button
   document
     .getElementById('reload')
-    .addEventListener('click', () => model.resetModel());
+    .addEventListener('click', () => main.reset());
 }
