@@ -1,10 +1,19 @@
 import ChartJS from 'chart.js';
-import { COLORS } from './CONSTANTS';
+import {
+  COLORS,
+  INITIAL_SUSCEPTABLE,
+  INITIAL_SYMPTOMATIC,
+  INITAL_ASYMPTOMATIC,
+  INITIAL_IMMUNE,
+  INITIAL_DEAD,
+} from './CONSTANTS';
 
 export default class Chart {
-  constructor(ctx) {
-    this.x = 1;
+  constructor(ctx, getStats) {
     this.ctx = ctx;
+    this.getStats = getStats;
+
+    this.x = 1; // TODO use a timescale instead at some point
     this.chart = null;
     this.susceptable = [];
     this.asymptomatic = [];
@@ -12,6 +21,10 @@ export default class Chart {
     this.immune = [];
     this.dead = [];
     this.xValues = [];
+  }
+
+  getTotalPopulation() {
+    return this.getStats().sum();
   }
 
   resetChart(newInitSusceptable, newInitSymptomatic) {
@@ -121,9 +134,11 @@ export default class Chart {
               display: true,
               ticks: {
                 beginAtZero: true,
-                steps: 10,
+                steps: this.getTotalPopulation() / 10, // Check if this is still nice
                 stepValue: 5,
-                max: 100,
+                // Get the grand total so that the chart is accurate
+                // Round to the closest 50 so that the chart is elegant
+                max: Math.round(this.getTotalPopulation() / 50) * 50,
               },
               stacked: true,
             },

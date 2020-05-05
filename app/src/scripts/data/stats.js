@@ -6,4 +6,14 @@ export default class Stats {
     this.dead = dead;
     this.immune = immune;
   }
+
+  sum() {
+    return (
+      this.susceptible +
+      this.symptomatic +
+      this.asymptomatic +
+      this.dead +
+      this.immune
+    );
+  }
 }

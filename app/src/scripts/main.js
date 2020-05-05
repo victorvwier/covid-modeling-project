@@ -35,7 +35,10 @@ export default class Main {
     this.numAsymptomatic = numAsymptomatic;
 
     // Create chart and model (setup)
-    this.chart = new Chart(this.chartContext);
+    this.chart = new Chart(
+      this.chartContext,
+      this.createCurrentStats.bind(this)
+    );
     this.model = null;
     this.setupModel();
 
