@@ -47,24 +47,24 @@ export default class Model {
       this.numAsymptomatic;
   }
 
-  set setAsymptomaticProb(newValue) {
+  setAsymptomaticProb(newValue) {
     this.asymptomaticProb = newValue;
   }
 
-  set setTimeUntilSymptoms(newValue) {
+  setTimeUntilSymptoms(newValue) {
     this.timeUntilSymptoms = newValue;
   }
 
-  set setTimeUntilImmune(newValue) {
+  setTimeUntilImmune(newValue) {
     this.timeUntilImmune = newValue;
   }
 
-  set setInfectionRadius(newValue) {
+  setInfectionRadius(newValue) {
     this.infectionRadius = newValue;
     this.updateInfectionRadius(newValue);
   }
 
-  set setPersonRadius(newValue) {
+  setPersonRadius(newValue) {
     this.personRadius = newValue;
     this.updateRadius(newValue);
   }
