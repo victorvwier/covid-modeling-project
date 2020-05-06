@@ -30,7 +30,21 @@ button {
   height: 80vh;
 }
 
+#glcanvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 55vw;
+  height: 80vh;
+}
+
 #canvas {
+  background: #d9d9d9;
+  border: white 4px solid;
+  right: 30px;
+}
+
+#glcanvas {
   background: #d9d9d9;
   border: white 4px solid;
   right: 30px;

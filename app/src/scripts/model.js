@@ -19,6 +19,7 @@ import {
 export default class Model {
   constructor(
     context,
+    webglchart,
     width,
     height,
     numSusceptible,
@@ -31,7 +32,7 @@ export default class Model {
     // REMOVE THIS (This should be handled differently)
     this.chart = chart;
     this._chartInterval = null;
-    //
+    this.webglchart = webglchart;
     this._updatePopulationFunction = null;
     this._animationFrame = null;
     this.context = context;
@@ -103,11 +104,26 @@ export default class Model {
   }
 
   drawPopulation() {
+    let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
       if (!this.population[i].dead) {
         this.population[i].draw();
+        count++;
       }
     }
+    this.webglchart.draw(this.getPopulationPositions(), count);
+    //this.webglchart.draw([1.0,1.0, -1.0, -1.0], 2);
+  }
+
+  getPopulationPositions() {
+    let res = [];
+    for (let i = 0; i < this.totalPopulation; i++) {
+      if (!this.population[i].dead) {
+        res.push(this.population[i].x);
+        res.push(this.population[i].y);
+      }
+    }
+    return res;
   }
 
   updatePopulation() {
