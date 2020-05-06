@@ -1,8 +1,7 @@
-import 'gl-matrix';
 import { mat4 } from 'gl-matrix';
 
 // Vector shader source code
-const vsSource = `
+const vSource = `
     attribute vec4 aVertexColor;
     attribute vec4 aVertexPosition;
     uniform mat4 uModelViewMatrix;
@@ -18,12 +17,49 @@ const vsSource = `
   `;
 
 // Fragment shader source code
-const fsSource = `
+const fSource = `
   varying lowp vec4 vColor;
   void main() {
     gl_FragColor = vColor;
   }
 `;
+
+// Creates, loads and compiles a shader with a given type
+function loadShader(gl, type, source) {
+  const shader = gl.createShader(type);   // Create empty shader of the given type 
+  gl.shaderSource(shader, source);        // Load the source into the shader
+  gl.compileShader(shader);               // Compile the shader program
+  
+  // See if it compiled successfully
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { 
+    alert(`Error compiling shaders: ${gl.getShaderInfoLog(shader)}`);
+    gl.deleteShader(shader);
+    return null;
+  }
+
+  return shader;                          // Return the compiled shader
+}
+
+// This function loads the shader program, the program incorporates both shaders.
+function initShaderProgram(gl, vsSource, fsSource) {
+  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+  // Create the shader program
+  const shaderProgram = gl.createProgram();
+  gl.attachShader(shaderProgram, vertexShader);
+  gl.attachShader(shaderProgram, fragmentShader);
+  gl.linkProgram(shaderProgram);
+
+  // If creating the shader program failed, alert
+  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+    alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`);
+    gl.deleteProgram(shaderProgram);
+    return null;
+  }
+
+  return shaderProgram;
+}
 
 // Represents the webgl canvas we'll use to draw the agents.
 export default class AgentChart {
@@ -31,7 +67,7 @@ export default class AgentChart {
     this.gl = gl;
 
     // Load and compile the shader program from source
-    const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+    const shaderProgram = initShaderProgram(gl, vSource, fSource);
 
     // Collect all the info needed to use the shader program.
     // Obtains references to the different locations of the attributes in the program.
@@ -60,7 +96,7 @@ export default class AgentChart {
   // Expects positions as an array like this: [X0, Y0, X1, Y1..... Xn, Yn].
   // Expects colors in the same fashion: [R0, G0, B0, A0, R1, G1, B1, A1... Rn, Gn, Bn, An].
   draw(drawinfo){
-    const buffers = this.initBuffers(drawinfo.pos, drawinfo.col);
+    const buffers = this.initBuffers(drawinfo.positions, drawinfo.colors);
     this.drawScene(buffers, drawinfo.count, drawinfo.size);
   }
 
@@ -125,32 +161,28 @@ export default class AgentChart {
   
     // In the next bit we're binding the buffers to where they should be bound.
     // Positions
-    {
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.position);
-      this.gl.vertexAttribPointer(
-        this.programInfo.attribLocations.vertexPosition,
-        2,                // Pull out 2 values per iteration
-        this.gl.FLOAT,    // The data in the buffer is 32bit floats
-        false,            // Do not normalize the data
-        0,                // how many bytes to get from one set of values to the next (stride)
-        0                 // how many bytes inside the buffer to start from (offset)
-      );
-      this.gl.enableVertexAttribArray(this.programInfo.attribLocations.vertexPosition);
-    }
-
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.position);
+    this.gl.vertexAttribPointer(
+      this.programInfo.attribLocations.vertexPosition,
+      2,                // Pull out 2 values per iteration
+      this.gl.FLOAT,    // The data in the buffer is 32bit floats
+      false,            // Do not normalize the data
+      0,                // how many bytes to get from one set of values to the next (stride)
+      0                 // how many bytes inside the buffer to start from (offset)
+    );
+    this.gl.enableVertexAttribArray(this.programInfo.attribLocations.vertexPosition);
+    
     // Color
-    {
-      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.color);
-      this.gl.vertexAttribPointer(
-        this.programInfo.attribLocations.vertexColor,
-        4,                // Pull out 4 values per iteration
-        this.gl.FLOAT,    // The data in the buffer is 32bit floats
-        false,            // Do not normalize the data
-        0,                // how many bytes to get from one set of values to the next (stride)
-        0                 // how many bytes inside the buffer to start from (offset)
-      );
-      this.gl.enableVertexAttribArray(this.programInfo.attribLocations.vertexColor);
-    }
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.color);
+    this.gl.vertexAttribPointer(
+      this.programInfo.attribLocations.vertexColor,
+      4,                // Pull out 4 values per iteration
+      this.gl.FLOAT,    // The data in the buffer is 32bit floats
+      false,            // Do not normalize the data
+      0,                // how many bytes to get from one set of values to the next (stride)
+      0                 // how many bytes inside the buffer to start from (offset)
+    );
+    this.gl.enableVertexAttribArray(this.programInfo.attribLocations.vertexColor);
   
     // Tell WebGL to use our program when drawing
     this.gl.useProgram(this.programInfo.program);
@@ -180,39 +212,5 @@ export default class AgentChart {
   }
 }
 
-// This function loads the shader program, the program incorporates both shaders.
-function initShaderProgram(gl, vsSource, fsSource) {
-  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
-  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
-  // Create the shader program
-  const shaderProgram = gl.createProgram();
-  gl.attachShader(shaderProgram, vertexShader);
-  gl.attachShader(shaderProgram, fragmentShader);
-  gl.linkProgram(shaderProgram);
 
-  // If creating the shader program failed, alert
-  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
-    gl.deleteProgram(shaderProgram);
-    return null;
-  }
-
-  return shaderProgram;
-}
-
-// Creates, loads and compiles a shader with a given type
-function loadShader(gl, type, source) {
-  const shader = gl.createShader(type);   // Create empty shader of the given type 
-  gl.shaderSource(shader, source);        // Load the source into the shader
-  gl.compileShader(shader);               // Compile the shader program
-  
-  // See if it compiled successfully
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { 
-    alert('Error compiling shaders: ' + gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
-
-  return shader;                          // Return the compiled shader
-}
