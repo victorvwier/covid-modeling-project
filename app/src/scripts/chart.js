@@ -2,9 +2,11 @@ import ChartJS from 'chart.js';
 import { COLORS } from './CONSTANTS';
 
 export default class Chart {
-  constructor(ctx) {
-    this.x = 1;
+  constructor(ctx, getStats) {
     this.ctx = ctx;
+    this.getStats = getStats;
+
+    this.x = 1; // TODO use a timescale instead at some point
     this.chart = null;
     this.susceptable = [];
     this.asymptomatic = [];
@@ -12,6 +14,10 @@ export default class Chart {
     this.immune = [];
     this.dead = [];
     this.xValues = [];
+  }
+
+  getTotalPopulation() {
+    return this.getStats().sum();
   }
 
   resetChart(newInitSusceptable, newInitSymptomatic) {
@@ -27,23 +33,18 @@ export default class Chart {
     this.drawChart();
   }
 
-  updateValues(
-    newSusceptable,
-    newAsymptotic,
-    newSymptomatic,
-    newImmune,
-    newDead
-  ) {
-    this.chart.data.datasets[0].data.push(newSusceptable);
-    this.susceptable.push(newSusceptable);
-    this.chart.data.datasets[1].data.push(newAsymptotic);
-    this.asymptomatic.push(newAsymptotic);
-    this.chart.data.datasets[2].data.push(newSymptomatic);
-    this.symptomatic.push(newSymptomatic);
-    this.chart.data.datasets[3].data.push(newImmune);
-    this.immune.push(newImmune);
-    this.chart.data.datasets[4].data.push(newDead);
-    this.dead.push(newDead);
+  updateValues(stats) {
+    this.chart.data.datasets[0].data.push(stats.susceptible);
+    this.susceptable.push(stats.susceptible);
+    this.chart.data.datasets[1].data.push(stats.asymptomatic);
+    this.asymptomatic.push(stats.asymptomatic);
+    this.chart.data.datasets[2].data.push(stats.symptomatic);
+    this.symptomatic.push(stats.symptomatic);
+    this.chart.data.datasets[3].data.push(stats.immune);
+    this.immune.push(stats.immune);
+    this.chart.data.datasets[4].data.push(stats.dead);
+    this.dead.push(stats.dead);
+    // What is x?
     this.chart.data.labels.push(this.x++);
     this.xValues.push(this.x - 1);
     this.chart.update();
@@ -126,9 +127,11 @@ export default class Chart {
               display: true,
               ticks: {
                 beginAtZero: true,
-                steps: 10,
+                steps: this.getTotalPopulation() / 10, // Check if this is still nice
                 stepValue: 5,
-                max: 100,
+                // Get the grand total so that the chart is accurate
+                // Round to the closest 50 so that the chart is elegant
+                max: Math.round(this.getTotalPopulation() / 50) * 50,
               },
               stacked: true,
             },
