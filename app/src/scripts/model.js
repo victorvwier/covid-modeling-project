@@ -115,18 +115,17 @@ export default class Model {
     let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
       if (!this.population[i].dead) {
-        //this.population[i].draw();
         count++;
       }
     }
     let drawInfo = this.getDrawInfo();
-
-    this.agentView.draw(drawInfo.pos, drawInfo.col, count);
+    this.agentView.draw(drawInfo);
   }
 
   getDrawInfo() {
     let positions = [];
     let colors = [];
+    let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
       if (!this.population[i].dead) {
         positions.push(this.population[i].x);
@@ -135,11 +134,14 @@ export default class Model {
         colors.push(parseInt(this.population[i].color.slice(3,5), 16)/ 255.0);
         colors.push(parseInt(this.population[i].color.slice(5,7), 16)/ 255.0);
         colors.push(1);
+        count++;
       }
     }
     return { 
       pos : positions,
       col : colors,
+      size: this.personRadius,
+      count: count
     };
   }
 

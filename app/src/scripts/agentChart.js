@@ -7,12 +7,12 @@ const vsSource = `
     attribute vec4 aVertexPosition;
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
-
+    uniform float uPointSize;
     varying lowp vec4 vColor;
 
     void main() {
       gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-      gl_PointSize = 8.;
+      gl_PointSize = uPointSize;
       vColor = aVertexColor;
     }
   `;
@@ -50,14 +50,18 @@ export default class AgentChart {
           shaderProgram,
           'uModelViewMatrix'
         ),
+        pointSize: gl.getUniformLocation(
+          shaderProgram,
+          'uPointSize'
+        )
       },
     };
   }
 
-  draw(populationPos, colors, count){
+  draw(drawinfo){
     debugger;
-    const buffers = this.initBuffers(populationPos, colors);
-    this.drawScene(buffers, count);
+    const buffers = this.initBuffers(drawinfo.pos, drawinfo.col);
+    this.drawScene(buffers, drawinfo.count, drawinfo.size);
   }
 
   // expects positions as an array like this: [X0, Y0, X1, Y1..... Xn, Yn]
@@ -94,7 +98,7 @@ export default class AgentChart {
     };
   }
 
-  drawScene(buffers, count) {
+  drawScene(buffers, count, pointSize) {
     this.gl.clearColor(0.8, 0.8, 0.8, 1.0); // Clear to black, fully opaque
     this.gl.clearDepth(1.0); // Clear everything
     this.gl.enable(this.gl.DEPTH_TEST); // Enable depth testing
@@ -125,7 +129,6 @@ export default class AgentChart {
   
     // Now move the drawing position a bit to where we want to
     // start drawing the square.
-  
     mat4.translate(
       modelViewMatrix, // destination matrix
       modelViewMatrix, // matrix to translate
@@ -185,7 +188,10 @@ export default class AgentChart {
       false,
       modelViewMatrix
     );
-  
+    this.gl.uniform1f(
+      this.programInfo.uniformLocations.pointSize,
+      pointSize
+    );
     {
       const offset = 0;
       const vertexCount = count;
