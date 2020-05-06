@@ -112,12 +112,6 @@ export default class Model {
   }
 
   drawPopulation() {
-    let count = 0;
-    for (let i = 0; i < this.totalPopulation; i++) {
-      if (!this.population[i].dead) {
-        count++;
-      }
-    }
     let drawInfo = this.getDrawInfo();
     this.agentView.draw(drawInfo);
   }
@@ -138,8 +132,8 @@ export default class Model {
       }
     }
     return { 
-      pos : positions,
-      col : colors,
+      positions : positions,
+      colors : colors,
       size: this.personRadius,
       count: count
     };
@@ -194,7 +188,7 @@ export default class Model {
       }
     };
 
-    // Bind this so that it can access this instace variables
+    // Bind this so that it can access this instance variables
     this._updatePopulationInterval = setInterval(intervalFunc.bind(this), 2000);
 
     // Bind this so that updates can proagate to chart via main
