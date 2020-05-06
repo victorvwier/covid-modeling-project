@@ -18,7 +18,6 @@ import {
 
 export default class Model {
   constructor(
-    context,
     webglchart,
     width,
     height,
@@ -35,7 +34,6 @@ export default class Model {
     this.webglchart = webglchart;
     this._updatePopulationFunction = null;
     this._animationFrame = null;
-    this.context = context;
     this.width = width;
     this.height = height;
     this.population = [];
@@ -107,14 +105,13 @@ export default class Model {
     let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
       if (!this.population[i].dead) {
-        this.population[i].draw();
+        //this.population[i].draw();
         count++;
       }
     }
     let drawInfo = this.getDrawInfo();
 
     this.webglchart.draw(drawInfo.pos, drawInfo.col, count);
-    //this.webglchart.draw([1.0,1.0, -1.0, -1.0], 2);
   }
 
   getDrawInfo() {
@@ -233,7 +230,7 @@ export default class Model {
 
   loop() {
     this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-    this.context.clearRect(0, 0, this.width, this.height);
+    //this.context.clearRect(0, 0, this.width, this.height);
 
     // applyForces();
     this.updatePopulation();
@@ -263,7 +260,7 @@ export default class Model {
     this.totalPopulation = newInitSusceptable + newInitSymptomatic;
 
     // clear the canvas
-    this.context.clearRect(0, 0, this.width, this.height);
+    //this.context.clearRect(0, 0, this.width, this.height);
 
     // start the loop again
     this.populateCanvas();

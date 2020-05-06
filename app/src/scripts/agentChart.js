@@ -12,7 +12,7 @@ const vsSource = `
 
     void main() {
       gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-      gl_PointSize = 5.;
+      gl_PointSize = 8.;
       vColor = aVertexColor;
     }
   `;
@@ -95,7 +95,7 @@ export default class AgentChart {
   }
 
   drawScene(buffers, count) {
-    this.gl.clearColor(0.5, 0.5, 0.5, 1.0); // Clear to black, fully opaque
+    this.gl.clearColor(0.8, 0.8, 0.8, 1.0); // Clear to black, fully opaque
     this.gl.clearDepth(1.0); // Clear everything
     this.gl.enable(this.gl.DEPTH_TEST); // Enable depth testing
     this.gl.depthFunc(this.gl.LEQUAL); // Near things obscure far things
