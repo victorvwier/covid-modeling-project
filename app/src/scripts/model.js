@@ -111,19 +111,30 @@ export default class Model {
         count++;
       }
     }
-    this.webglchart.draw(this.getPopulationPositions(), count);
+    let drawInfo = this.getDrawInfo();
+
+    this.webglchart.draw(drawInfo.pos, drawInfo.col, count);
     //this.webglchart.draw([1.0,1.0, -1.0, -1.0], 2);
   }
 
-  getPopulationPositions() {
-    let res = [];
+  getDrawInfo() {
+    let positions = [];
+    let colors = [];
     for (let i = 0; i < this.totalPopulation; i++) {
       if (!this.population[i].dead) {
-        res.push(this.population[i].x);
-        res.push(this.population[i].y);
+        positions.push(this.population[i].x);
+        positions.push(this.population[i].y);
+        debugger;
+        colors.push(parseInt(this.population[i].color.slice(1,3), 16)/ 255.0);
+        colors.push(parseInt(this.population[i].color.slice(3,5), 16)/ 255.0);
+        colors.push(parseInt(this.population[i].color.slice(5,7), 16)/ 255.0);
+        colors.push(1);
       }
     }
-    return res;
+    return { 
+      pos : positions,
+      col : colors,
+    };
   }
 
   updatePopulation() {

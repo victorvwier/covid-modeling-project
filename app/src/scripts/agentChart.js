@@ -3,19 +3,25 @@ import { mat4 } from 'gl-matrix';
 
 // Vector shader source code
 const vsSource = `
+    attribute vec4 aVertexColor;
     attribute vec4 aVertexPosition;
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
+
+    varying lowp vec4 vColor;
+
     void main() {
       gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
       gl_PointSize = 5.;
+      vColor = aVertexColor;
     }
   `;
 
 // Fragment shader source code
 const fsSource = `
+  varying lowp vec4 vColor;
   void main() {
-    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    gl_FragColor = vColor;
   }
 `;
 
@@ -33,6 +39,7 @@ export default class AgentChart {
       program: shaderProgram,
       attribLocations: {
         vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+        vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
       },
       uniformLocations: {
         projectionMatrix: gl.getUniformLocation(
@@ -45,16 +52,16 @@ export default class AgentChart {
         ),
       },
     };
-    this.draw();
   }
 
-  draw(populationPos, count){
-    const buffers = this.initBuffers(populationPos);
+  draw(populationPos, colors, count){
+    debugger;
+    const buffers = this.initBuffers(populationPos, colors);
     this.drawScene(buffers, count);
   }
 
   // expects positions as an array like this: [X0, Y0, X1, Y1..... Xn, Yn]
-  initBuffers(positions) {
+  initBuffers(positions, colors) {
     // Create a buffer for the square's positions.
     const positionBuffer = this.gl.createBuffer();
 
@@ -71,8 +78,19 @@ export default class AgentChart {
       this.gl.STATIC_DRAW
     );
 
+    // Now do the same for the colors.
+    const colorBuffer = this.gl.createBuffer();
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
+
+    this.gl.bufferData(
+      this.gl.ARRAY_BUFFER,
+      new Float32Array(colors),
+      this.gl.STATIC_DRAW
+    );
+
     return {
       position: positionBuffer,
+      color: colorBuffer,
     };
   }
 
@@ -133,6 +151,24 @@ export default class AgentChart {
         offset
       );
       this.gl.enableVertexAttribArray(this.programInfo.attribLocations.vertexPosition);
+    }
+
+    {
+      const numComponents = 4;
+      const type = this.gl.FLOAT;
+      const normalize = false;
+      const stride = 0;
+      const offset = 0;
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.color);
+      this.gl.vertexAttribPointer(
+        this.programInfo.attribLocations.vertexColor,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset
+      );
+      this.gl.enableVertexAttribArray(this.programInfo.attribLocations.vertexColor);
     }
   
     // Tell WebGL to use our program when drawing
@@ -201,5 +237,3 @@ function loadShader(gl, type, source) {
 
   return shader;
 }
-
-
