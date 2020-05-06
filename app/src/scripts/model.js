@@ -112,13 +112,13 @@ export default class Model {
   }
 
   drawPopulation() {
-    let drawInfo = this.getDrawInfo();
+    const drawInfo = this.getDrawInfo();
     this.agentView.draw(drawInfo);
   }
 
   getDrawInfo() {
-    let positions = [];
-    let colors = [];
+    const positions = [];
+    const colors = [];
     let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
       if (!this.population[i].dead) {
@@ -226,7 +226,7 @@ export default class Model {
 
   loop() {
     this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-    //this.context.clearRect(0, 0, this.width, this.height);
+    // this.context.clearRect(0, 0, this.width, this.height);
 
     // applyForces();
     this.updatePopulation();
@@ -249,7 +249,7 @@ export default class Model {
     this.totalPopulation = stats.susceptible + stats.symptomatic;
 
     // clear the canvas
-    //this.context.clearRect(0, 0, this.width, this.height);
+    // this.context.clearRect(0, 0, this.width, this.height);
 
     // start the loop again
     this.populateCanvas();
