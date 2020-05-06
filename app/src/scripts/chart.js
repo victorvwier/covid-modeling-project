@@ -1,12 +1,5 @@
 import ChartJS from 'chart.js';
-import {
-  COLORS,
-  INITIAL_SUSCEPTABLE,
-  INITIAL_SYMPTOMATIC,
-  INITAL_ASYMPTOMATIC,
-  INITIAL_IMMUNE,
-  INITIAL_DEAD,
-} from './CONSTANTS';
+import { COLORS } from './CONSTANTS';
 
 export default class Chart {
   constructor(ctx, getStats) {
