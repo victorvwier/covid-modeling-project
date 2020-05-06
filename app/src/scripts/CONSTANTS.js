@@ -10,7 +10,6 @@ export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 
 export const TIME_UNTIL_SYMPTOMS = 10;
 export const MORTALITY_RATE = 0.116;
-export const ASYMPTOMATIC_PROB = 0.25;
 export const TRANSMISSION_PROB = 0.9;
 export const INCUBATION_PERIOD = 5;
 export const NONIN_TO_IMMUNE_PROB = 0.1;

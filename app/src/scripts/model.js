@@ -8,7 +8,6 @@ import {
   TIME_UNTIL_IMMUNE,
   MORTALITY_RATE,
   TYPES,
-  ASYMPTOMATIC_PROB,
   INCUBATION_PERIOD,
   NONIN_TO_IMMUNE_PROB,
   COLORS,
@@ -38,9 +37,7 @@ export default class Model {
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
     this.incubationPeriod = INCUBATION_PERIOD;
-    this.asymptomaticProb = ASYMPTOMATIC_PROB;
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
-    //this.timeUntilSymptoms = TIME_UNTIL_SYMPTOMS;
     this.timeUntilImmune = TIME_UNTIL_IMMUNE;
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
@@ -146,7 +143,6 @@ export default class Model {
               this.population[i].canInfect(this.population[j]) &&
               Math.random() <= this.transmissionProb
             ) {
-              //this.population[i].hasSymptomaticCount += 1;
               this.population[j].startIncubation();
               this.numNonInfectious += 1;
               this.numSusceptible -= 1;
@@ -156,13 +152,6 @@ export default class Model {
       }
     }
   }
-
-  // infect(person) {
-  //   person.type = TYPES.NONINFECTIOUS;
-  //   person.color = COLORS.NONINFECTIOUS;
-  //   this.numNonInfectious += 1;
-  //   this.numSusceptible -= 1;
-  // }
 
   setup() {
     const intervalFunc = () => {
