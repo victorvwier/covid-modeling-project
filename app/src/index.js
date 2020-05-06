@@ -6,23 +6,22 @@ import {
   INITIAL_DEAD,
 } from './scripts/CONSTANTS';
 import wireSlidersToHandlers from './scripts/DOM/parameters';
-import AgentChart from './scripts/agentChart';
 import Main from './scripts/main';
 
 window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
-  const gl = glCanvas.getContext("webgl");
+  const context = glCanvas.getContext("webgl");
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
   
-  if(gl === null) {
+  if(context === null) {
     this.alert("Please enable webGl support");
     return;
   }
 
-  const agentView = new AgentChart(gl);
   
+
   const main = new Main(
-    agentView,
+    context,
     chartCtx,
     glCanvas.width,
     glCanvas.height,

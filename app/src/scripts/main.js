@@ -1,6 +1,7 @@
 import Stats from './data/stats';
 import Model from './model';
 import Chart from './chart';
+import AgentChart from './agentChart';
 import wireSlidersToHandlers, {
   wireReloadButtonToMain,
 } from './DOM/parameters';
@@ -12,7 +13,7 @@ import {
 // Creates chart and graph internally
 export default class Main {
   constructor(
-    agentView,
+    context,
     chartContext,
     width,
     height,
@@ -23,7 +24,6 @@ export default class Main {
     numImmune
   ) {
     // Canvas contexts of the graph and chart
-    this.agentView = agentView;
     this.chartContext = chartContext;
 
     this.width = width;
@@ -39,6 +39,7 @@ export default class Main {
       this.chartContext,
       this.createCurrentStats.bind(this)
     );
+    this.agentView = new AgentChart(context);
     this.model = null;
     this.setupModel();
 

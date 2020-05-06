@@ -29,12 +29,12 @@ const fsSource = `
 export default class AgentChart {
   constructor(gl) {
     this.gl = gl;
-    // Compile the shader programs using the helper functions below
+
+    // Load and compile the shader program from source
     const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
     // Collect all the info needed to use the shader program.
-    // Look up which attribute our shader program is using
-    // for aVertexPosition and look up uniform locations.
+    // Obtains references to the different locations of the attributes in the program.
     this.programInfo = {
       program: shaderProgram,
       attribLocations: {
@@ -43,66 +43,54 @@ export default class AgentChart {
       },
       uniformLocations: {
         projectionMatrix: gl.getUniformLocation(
-          shaderProgram,
-          'uProjectionMatrix'
+          shaderProgram, 'uProjectionMatrix'
         ),
         modelViewMatrix: gl.getUniformLocation(
-          shaderProgram,
-          'uModelViewMatrix'
+          shaderProgram, 'uModelViewMatrix'
         ),
         pointSize: gl.getUniformLocation(
-          shaderProgram,
-          'uPointSize'
+          shaderProgram, 'uPointSize'
         )
       },
     };
   }
 
+  // This function draws the agents based on the drawInfo that is included.
+  // For n agents:
+  // Expects positions as an array like this: [X0, Y0, X1, Y1..... Xn, Yn].
+  // Expects colors in the same fashion: [R0, G0, B0, A0, R1, G1, B1, A1... Rn, Gn, Bn, An].
   draw(drawinfo){
-    debugger;
     const buffers = this.initBuffers(drawinfo.pos, drawinfo.col);
     this.drawScene(buffers, drawinfo.count, drawinfo.size);
   }
 
-  // expects positions as an array like this: [X0, Y0, X1, Y1..... Xn, Yn]
+  // This function is responsible for binding the incoming data to the actual gl buffers used for drawing.
   initBuffers(positions, colors) {
-    // Create a buffer for the square's positions.
-    const positionBuffer = this.gl.createBuffer();
-
-    // Select the positionBuffer as the one to apply buffer
-    // operations to from here out.
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
-
-    // Now pass the list of positions into WebGL to build the
-    // shape. We do this by creating a Float32Array from the
-    // JavaScript array, then use it to fill the current buffer.
-    this.gl.bufferData(
-      this.gl.ARRAY_BUFFER,
-      new Float32Array(positions),
-      this.gl.STATIC_DRAW
-    );
-
-    // Now do the same for the colors.
-    const colorBuffer = this.gl.createBuffer();
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
-
-    this.gl.bufferData(
-      this.gl.ARRAY_BUFFER,
-      new Float32Array(colors),
-      this.gl.STATIC_DRAW
-    );
-
+    const positionBuffer =  this.initGlBuffer(positions); // Get a gl buffer for the positions
+    const colorBuffer =     this.initGlBuffer(colors);    // Get a gl buffer for the colors
     return {
       position: positionBuffer,
       color: colorBuffer,
     };
   }
+  
+  initGlBuffer(data) {
+    const buffer = this.gl.createBuffer();
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+    this.gl.bufferData(
+      this.gl.ARRAY_BUFFER,
+      new Float32Array(data),
+      this.gl.STATIC_DRAW
+    );
+    return buffer;
+  }
 
+  // This function is responsible for drawing the scene using the buffers.
   drawScene(buffers, count, pointSize) {
-    this.gl.clearColor(0.8, 0.8, 0.8, 1.0); // Clear to black, fully opaque
-    this.gl.clearDepth(1.0); // Clear everything
-    this.gl.enable(this.gl.DEPTH_TEST); // Enable depth testing
-    this.gl.depthFunc(this.gl.LEQUAL); // Near things obscure far things
+    this.gl.clearColor(0.8, 0.8, 0.8, 1.0);   // Set background color
+    this.gl.clearDepth(1.0);                  // Clear everything
+    this.gl.enable(this.gl.DEPTH_TEST);       // Enable depth testing
+    this.gl.depthFunc(this.gl.LEQUAL);        // Near things obscure far things
   
     // Clear the canvas before we start drawing on it
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -112,11 +100,11 @@ export default class AgentChart {
     // Our field of view is 45 degrees, with a width/height
     // ratio that matches the display size of the canvas
     // and we only want to see objects between 0.1 units
-    // and 100 units away from the camera.
+    // and 1000 units away from the camera.
     const fieldOfView = (45 * Math.PI) / 180; // in radians
     const aspect = this.gl.canvas.clientWidth / this.gl.canvas.clientHeight;
     const zNear = 0.1;
-    const zFar = 10000.0;
+    const zFar = 1000.0;
     const projectionMatrix = mat4.create();
   
     // note: glmatrix.js always has the first argument
@@ -127,49 +115,39 @@ export default class AgentChart {
     // the center of the scene.
     const modelViewMatrix = mat4.create();
   
-    // Now move the drawing position a bit to where we want to
-    // start drawing the square.
+    // Make sure we actually do center the thing or we wont see what's happening.
     mat4.translate(
       modelViewMatrix, // destination matrix
       modelViewMatrix, // matrix to translate
-      [-300.0, -300.0, -800.0]
-    ); // amount to translate
+      [-this.gl.canvas.clientWidth/2, -this.gl.canvas.clientHeight/2, -750.0] 
+      // The -750 is a magic number, it controls the amount of zooming. Not sure what to base it on.
+    );
   
-    // Tell WebGL how to pull out the positions from the position
-    // buffer into the vertexPosition attribute.
+    // In the next bit we're binding the buffers to where they should be bound.
+    // Positions
     {
-      const numComponents = 2; // pull out 2 values per iteration
-      const type = this.gl.FLOAT; // the data in the buffer is 32bit floats
-      const normalize = false; // don't normalize
-      const stride = 0; // how many bytes to get from one set of values to the next
-      // 0 = use type and numComponents above
-      const offset = 0; // how many bytes inside the buffer to start from
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.position);
       this.gl.vertexAttribPointer(
         this.programInfo.attribLocations.vertexPosition,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset
+        2,                // Pull out 2 values per iteration
+        this.gl.FLOAT,    // The data in the buffer is 32bit floats
+        false,            // Do not normalize the data
+        0,                // how many bytes to get from one set of values to the next (stride)
+        0                 // how many bytes inside the buffer to start from (offset)
       );
       this.gl.enableVertexAttribArray(this.programInfo.attribLocations.vertexPosition);
     }
 
+    // Color
     {
-      const numComponents = 4;
-      const type = this.gl.FLOAT;
-      const normalize = false;
-      const stride = 0;
-      const offset = 0;
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers.color);
       this.gl.vertexAttribPointer(
         this.programInfo.attribLocations.vertexColor,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset
+        4,                // Pull out 4 values per iteration
+        this.gl.FLOAT,    // The data in the buffer is 32bit floats
+        false,            // Do not normalize the data
+        0,                // how many bytes to get from one set of values to the next (stride)
+        0                 // how many bytes inside the buffer to start from (offset)
       );
       this.gl.enableVertexAttribArray(this.programInfo.attribLocations.vertexColor);
     }
@@ -192,6 +170,8 @@ export default class AgentChart {
       this.programInfo.uniformLocations.pointSize,
       pointSize
     );
+
+    // Then finally do the actual drawing
     {
       const offset = 0;
       const vertexCount = count;
@@ -200,7 +180,7 @@ export default class AgentChart {
   }
 }
 
-// Initialize a shader program, so WebGL knows how to draw our data
+// This function loads the shader program, the program incorporates both shaders.
 function initShaderProgram(gl, vsSource, fsSource) {
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
@@ -213,33 +193,26 @@ function initShaderProgram(gl, vsSource, fsSource) {
 
   // If creating the shader program failed, alert
   if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    alert(
-      'Unable to initialize the shader program: ' +
-        gl.getProgramInfoLog(shaderProgram)
-    );
+    alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+    gl.deleteProgram(shaderProgram);
     return null;
   }
+
   return shaderProgram;
 }
 
-// creates a shader of the given type, uploads the source and compiles it.
+// Creates, loads and compiles a shader with a given type
 function loadShader(gl, type, source) {
-  const shader = gl.createShader(type);
-
-  // Send the source to the shader object
-  gl.shaderSource(shader, source);
-
-  // Compile the shader program
-  gl.compileShader(shader);
-
+  const shader = gl.createShader(type);   // Create empty shader of the given type 
+  gl.shaderSource(shader, source);        // Load the source into the shader
+  gl.compileShader(shader);               // Compile the shader program
+  
   // See if it compiled successfully
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    alert(
-      'An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader)
-    );
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { 
+    alert('Error compiling shaders: ' + gl.getShaderInfoLog(shader));
     gl.deleteShader(shader);
     return null;
   }
 
-  return shader;
+  return shader;                          // Return the compiled shader
 }
