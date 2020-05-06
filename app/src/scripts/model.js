@@ -6,11 +6,14 @@ import {
   POPULATION_SPEED,
   INFECTION_RADIUS,
   TIME_UNTIL_IMMUNE,
-  TIME_UNTIL_SYMPTOMS,
   MORTALITY_RATE,
   TYPES,
   ASYMPTOMATIC_PROB,
+  INCUBATION_PERIOD,
+  NONIN_TO_IMMUNE_PROB,
   COLORS,
+  TRANSMISSION_PROB,
+  TIME_UNTIL_DEAD,
 } from './CONSTANTS';
 import Stats from './data/stats';
 
@@ -30,21 +33,25 @@ export default class Model {
     this.height = height;
     this.population = [];
     this.numSusceptible = stats.susceptible;
-    this.numSymptomatic = stats.symptomatic;
-    this.numAsymptomatic = stats.asymptomatic;
+    this.numInfectious = stats.infectious;
+    this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.incubationPeriod = INCUBATION_PERIOD;
     this.asymptomaticProb = ASYMPTOMATIC_PROB;
-    this.timeUntilSymptoms = TIME_UNTIL_SYMPTOMS;
+    this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
+    //this.timeUntilSymptoms = TIME_UNTIL_SYMPTOMS;
     this.timeUntilImmune = TIME_UNTIL_IMMUNE;
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
+    this.transmissionProb = TRANSMISSION_PROB;
+    this.timeUntilDead = TIME_UNTIL_DEAD;
     this.totalPopulation =
       this.numSusceptible +
-      this.numSymptomatic +
+      this.numInfectious +
       this.numDead +
       this.numImmune +
-      this.numAsymptomatic;
+      this.numNonInfectious;
   }
 
   setAsymptomaticProb(newValue) {
@@ -75,8 +82,8 @@ export default class Model {
   handleStateChange() {
     const stats = new Stats(
       this.numSusceptible,
-      this.numSymptomatic,
-      this.numAsymptomatic,
+      this.numNonInfectious,
+      this.numInfectious,
       this.numDead,
       this.numImmune
     );
@@ -97,10 +104,10 @@ export default class Model {
 
   populateCanvas() {
     this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
-    this.populateCanvasWithType(TYPES.SYMPTOMATIC, this.numSymptomatic);
+    this.populateCanvasWithType(TYPES.INFECTIOUS, this.numInfectious);
     this.populateCanvasWithType(TYPES.DEAD, this.numDead);
     this.populateCanvasWithType(TYPES.IMMUNE, this.numImmune);
-    this.populateCanvasWithType(TYPES.ASYMPTOMATIC, this.numAsymptomatic);
+    this.populateCanvasWithType(TYPES.NONINFECTIOUS, this.numNonInfectious);
   }
 
   populateCanvasWithType(type, count) {
@@ -135,9 +142,14 @@ export default class Model {
           if (
             this.population[i].metWith(this.population[j], this.infectionRadius)
           ) {
-            if (this.population[i].canInfect(this.population[j])) {
-              this.population[i].hasSymptomaticCount += 1;
-              this.infect(this.population[j]);
+            if (
+              this.population[i].canInfect(this.population[j]) &&
+              Math.random() <= this.transmissionProb
+            ) {
+              //this.population[i].hasSymptomaticCount += 1;
+              this.population[j].startIncubation();
+              this.numNonInfectious += 1;
+              this.numSusceptible -= 1;
             }
           }
         }
@@ -145,19 +157,12 @@ export default class Model {
     }
   }
 
-  infect(person) {
-    if (Math.random() < this.asymptomaticProb) {
-      person.type = TYPES.ASYMPTOMATIC;
-      person.color = COLORS.ASYMPTOMATIC;
-      this.numAsymptomatic += 1;
-      this.numSusceptible -= 1;
-    } else {
-      person.type = TYPES.SYMPTOMATIC;
-      person.color = COLORS.SYMPTOMATIC;
-      this.numSymptomatic += 1;
-      this.numSusceptible -= 1;
-    }
-  }
+  // infect(person) {
+  //   person.type = TYPES.NONINFECTIOUS;
+  //   person.color = COLORS.NONINFECTIOUS;
+  //   this.numNonInfectious += 1;
+  //   this.numSusceptible -= 1;
+  // }
 
   setup() {
     const intervalFunc = () => {
@@ -177,28 +182,47 @@ export default class Model {
 
   // Decided to implement this in model, but could move to person
   update(person) {
-    if (person.type === TYPES.ASYMPTOMATIC) {
-      person.asymptomaticTime += 1;
-      if (person.asymptomaticTime === this.timeUntilSymptoms) {
-        person.developSymptoms();
-        this.numAsymptomatic -= 1;
-        this.numSymptomatic += 1;
+    if (person.type === TYPES.NONINFECTIOUS) {
+      person.incubationTime += 1;
+      if (person.incubationTime === this.incubationPeriod) {
+        if (Math.random() < this.nonInfectiousToImmuneProb) {
+          person.becomesImmune();
+          this.numNonInfectious -= 1;
+          this.numImmune += 1;
+        } else {
+          person.becomesInfectious();
+          this.numNonInfectious -= 1;
+          this.numInfectious += 1;
+        }
       }
     }
-    if (person.type === TYPES.SYMPTOMATIC) {
+    if (person.type === TYPES.INFECTIOUS) {
       // TODO: this is where we will split removed into dead and recovered + immune
-      if (Math.random() < MORTALITY_RATE) {
-        person.dead = true;
-        person.color = COLORS.DEAD;
-        this.numSymptomatic -= 1;
-        this.numDead += 1;
-      } else {
-        person.symptomaticTime += 1;
-        if (person.symptomaticTime === this.timeUntilImmune) {
+
+      if (person.destinyDead === false && person.destinyImmune === false) {
+        if (Math.random() < MORTALITY_RATE) {
+          person.destinyDead = true;
+        } else {
+          person.destinyImmune = true;
+        }
+      }
+
+      if (person.destinyImmune) {
+        person.infectiousTime += 1;
+        if (person.infectiousTime === TIME_UNTIL_IMMUNE) {
           person.type = TYPES.IMMUNE;
           person.color = COLORS.IMMUNE;
-          this.numSymptomatic -= 1;
+          this.numInfectious -= 1;
           this.numImmune += 1;
+        }
+      } else {
+        person.infectiousTime += 1;
+        if (person.infectiousTime === TIME_UNTIL_DEAD) {
+          person.dead = true;
+          person.type = TYPES.DEAD;
+          person.color = COLORS.DEAD;
+          this.numInfectious -= 1;
+          this.numDead += 1;
         }
       }
     }
@@ -223,10 +247,10 @@ export default class Model {
     // Set new values and reset to init
     this.population = [];
     this.numSusceptible = stats.susceptible;
-    this.numSymptomatic = stats.symptomatic;
+    this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
-    this.numAsymptomatic = stats.asymptomatic;
-    this.totalPopulation = stats.susceptible + stats.symptomatic;
+    this.numNonInfectious = stats.noninfectious;
+    this.totalPopulation = stats.susceptible + stats.infectious;
 
     // clear the canvas
     this.context.clearRect(0, 0, this.width, this.height);

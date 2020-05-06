@@ -17,8 +17,8 @@ export default class Main {
     width,
     height,
     numSusceptible,
-    numSymptomatic,
-    numAsymptomatic,
+    numNonInfectious,
+    numInfectious,
     numDead,
     numImmune
   ) {
@@ -29,10 +29,10 @@ export default class Main {
     this.width = width;
     this.height = height;
     this.numSusceptible = numSusceptible;
-    this.numSymptomatic = numSymptomatic;
+    this.numInfectious = numInfectious;
     this.numImmune = numImmune;
     this.numDead = numDead;
-    this.numAsymptomatic = numAsymptomatic;
+    this.numNonInfectious = numNonInfectious;
 
     // Create chart and model (setup)
     this.chart = new Chart(
@@ -53,8 +53,8 @@ export default class Main {
   createCurrentStats() {
     return new Stats(
       this.numSusceptible,
-      this.numSymptomatic,
-      this.numAsymptomatic,
+      this.numNonInfectious,
+      this.numInfectious,
       this.numDead,
       this.numImmune
     );
@@ -63,8 +63,8 @@ export default class Main {
   // Assume only model calls this one so update chart
   receiveNewStatsAndUpdateChart(stats) {
     this.numSusceptible = stats.susceptible;
-    this.numSymptomatic = stats.symptomatic;
-    this.numAsymptomatic = stats.asymptomatic;
+    this.numNonInfectious = stats.noninfectious;
+    this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
 
@@ -97,12 +97,12 @@ export default class Main {
 
   reset() {
     this.numSusceptible = getInitialNumSusceptable();
-    this.numSymptomatic = getInitialNumSymptomatic();
-    this.numAsymptomatic = 0;
+    this.numInfectious = getInitialNumSymptomatic();
+    this.numNonInfectious = 0;
     this.numImmune = 0;
     this.numDead = 0;
 
-    this.chart.resetChart(this.numSusceptible, this.numSymptomatic);
+    this.chart.resetChart(this.numSusceptible, this.numInfectious);
     this.model.resetModel(this.createCurrentStats());
   }
 }

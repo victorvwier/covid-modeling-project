@@ -22,10 +22,14 @@ export default class Person {
     this.dead = false;
     this.asymptomaticTime = 0;
     this.symptomaticTime = 0;
+    this.incubationTime = 0;
+    this.infectiousTime = 0;
+    this.destinyDead = false;
+    this.destinyImmune = false;
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
-    else if (type === TYPES.SYMPTOMATIC) this.color = COLORS.SYMPTOMATIC;
-    else if (type === TYPES.ASYMPTOMATIC) this.color = COLORS.ASYMPTOMATIC;
+    else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
+    else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
   }
 
   draw() {
@@ -108,14 +112,24 @@ export default class Person {
     ];
   }
 
-  developSymptoms() {
-    this.type = TYPES.SYMPTOMATIC;
-    this.color = COLORS.SYMPTOMATIC;
+  startIncubation() {
+    this.type = TYPES.NONINFECTIOUS;
+    this.color = COLORS.NONINFECTIOUS;
+  }
+
+  becomesImmune() {
+    this.type = TYPES.IMMUNE;
+    this.color = COLORS.IMMUNE;
+  }
+
+  becomesInfectious() {
+    this.type = TYPES.INFECTIOUS;
+    this.color = COLORS.INFECTIOUS;
   }
 
   canInfect(p) {
     return (
-      (this.type === TYPES.SYMPTOMATIC || this.type === TYPES.ASYMPTOMATIC) &&
+      (this.type === TYPES.INFECTIOUS || this.type === TYPES.NONINFECTIOUS) &&
       p.type === TYPES.SUSCEPTIBLE
     );
   }
