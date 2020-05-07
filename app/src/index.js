@@ -1,5 +1,3 @@
-import Model from './scripts/model';
-import Chart from './scripts/chart';
 import {
   INITIAL_SUSCEPTABLE,
   INITIAL_SYMPTOMATIC,
@@ -8,37 +6,31 @@ import {
   INITIAL_DEAD,
 } from './scripts/CONSTANTS';
 import wireSlidersToHandlers from './scripts/DOM/parameters';
+import Main from './scripts/main';
 
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-const chartCtx = document.getElementById('chart-canvas').getContext('2d');
-
-// chartCreator();
 window.onload = function () {
-  const chart = new Chart(chartCtx);
-  chart.drawChart();
+  const glCanvas = document.getElementById('glCanvas');
+  const context = glCanvas.getContext("webgl");
+  const chartCtx = document.getElementById('chart-canvas').getContext('2d');
+  
+  if(context === null) {
+    this.alert("Please enable webGl support");
+    return;
+  }
 
-  const model = new Model(
+  
+
+  const main = new Main(
     context,
-    canvas.width,
-    canvas.height,
+    chartCtx,
+    glCanvas.width,
+    glCanvas.height,
     INITIAL_SUSCEPTABLE,
     INITIAL_SYMPTOMATIC,
     INITAL_ASYMPTOMATIC,
-    INITIAL_IMMUNE,
     INITIAL_DEAD,
-    chart
+    INITIAL_IMMUNE
   );
 
-  model.populateCanvas();
-  model.drawPopulation();
-
-  model.setup();
-  model.loop();
-
-  wireSlidersToHandlers(model);
-
-  // DEBUG PURPOSES
-  window.model = model;
-  window.chart = chart;
+  main.run();
 };

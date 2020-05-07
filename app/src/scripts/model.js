@@ -1,9 +1,6 @@
 import Person from './person';
 import { getRandom } from './util';
-import {
-  getInitialNumSymptomatic,
-  getInitialNumSusceptable,
-} from './DOM/domValues';
+
 import {
   PERSON_RADIUS,
   POPULATION_SPEED,
@@ -15,63 +12,75 @@ import {
   ASYMPTOMATIC_PROB,
   COLORS,
 } from './CONSTANTS';
+import Stats from './data/stats';
 
 export default class Model {
-  constructor(
-    context,
-    width,
-    height,
-    numSusceptible,
-    numSymptomatic,
-    numAsymptomatic,
-    numDead,
-    numImmune,
-    chart
-  ) {
-    // REMOVE THIS (This should be handled differently)
-    this.chart = chart;
+  constructor(agentView, width, height, stats, getStats, updateStats) {
+    // Intervals + animationFrame
     this._chartInterval = null;
-    //
-    this._updatePopulationFunction = null;
+    this._updatePopulationInterval = null;
     this._animationFrame = null;
-    this.context = context;
+
+    // state methods from main
+    this.getStats = getStats;
+    this.updateStats = updateStats;
+
+    this.agentView = agentView;
     this.width = width;
     this.height = height;
     this.population = [];
-    this.numSusceptible = numSusceptible;
-    this.numSymptomatic = numSymptomatic;
-    this.numImmune = numImmune;
-    this.numDead = numDead;
-    this.numAsymptomatic = numAsymptomatic;
+    this.numSusceptible = stats.susceptible;
+    this.numSymptomatic = stats.symptomatic;
+    this.numAsymptomatic = stats.asymptomatic;
+    this.numImmune = stats.immune;
+    this.numDead = stats.dead;
     this.asymptomaticProb = ASYMPTOMATIC_PROB;
     this.timeUntilSymptoms = TIME_UNTIL_SYMPTOMS;
     this.timeUntilImmune = TIME_UNTIL_IMMUNE;
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
     this.totalPopulation =
-      numSusceptible + numSymptomatic + numDead + numImmune + numAsymptomatic;
+      this.numSusceptible +
+      this.numSymptomatic +
+      this.numDead +
+      this.numImmune +
+      this.numAsymptomatic;
   }
 
-  set setAsymptomaticProb(newValue) {
+  setAsymptomaticProb(newValue) {
     this.asymptomaticProb = newValue;
   }
 
-  set setTimeUntilSymptoms(newValue) {
+  setTimeUntilSymptoms(newValue) {
     this.timeUntilSymptoms = newValue;
   }
 
-  set setTimeUntilImmune(newValue) {
+  setTimeUntilImmune(newValue) {
     this.timeUntilImmune = newValue;
   }
 
-  set setInfectionRadius(newValue) {
+  setInfectionRadius(newValue) {
     this.infectionRadius = newValue;
     this.updateInfectionRadius(newValue);
   }
 
-  set setPersonRadius(newValue) {
+  setPersonRadius(newValue) {
     this.personRadius = newValue;
     this.updateRadius(newValue);
+  }
+
+  /**
+   * Method used to update the stats in main
+   */
+  handleStateChange() {
+    const stats = new Stats(
+      this.numSusceptible,
+      this.numSymptomatic,
+      this.numAsymptomatic,
+      this.numDead,
+      this.numImmune
+    );
+    this.updateStats(stats);
   }
 
   updateRadius(newValue) {
@@ -103,11 +112,31 @@ export default class Model {
   }
 
   drawPopulation() {
+    const drawInfo = this.getDrawInfo();
+    this.agentView.draw(drawInfo);
+  }
+
+  getDrawInfo() {
+    const positions = [];
+    const colors = [];
+    let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
       if (!this.population[i].dead) {
-        this.population[i].draw();
+        positions.push(this.population[i].x);
+        positions.push(this.population[i].y);
+        colors.push(parseInt(this.population[i].color.slice(1,3), 16)/ 255.0);
+        colors.push(parseInt(this.population[i].color.slice(3,5), 16)/ 255.0);
+        colors.push(parseInt(this.population[i].color.slice(5,7), 16)/ 255.0);
+        colors.push(1);
+        count++;
       }
     }
+    return { 
+      positions : positions,
+      colors : colors,
+      size: this.personRadius,
+      count: count
+    };
   }
 
   updatePopulation() {
@@ -159,21 +188,11 @@ export default class Model {
       }
     };
 
-    // Bind this so that it can access this instace variables
-    this._updatePopulationFunction = setInterval(intervalFunc.bind(this), 2000);
+    // Bind this so that it can access this instance variables
+    this._updatePopulationInterval = setInterval(intervalFunc.bind(this), 2000);
 
-    this._chartInterval = setInterval(
-      () =>
-        this.chart.updateValues(
-          this.numSusceptible,
-          this.numAsymptomatic,
-          this.numSymptomatic,
-          this.numImmune,
-          this.numDead
-        ),
-
-      500
-    );
+    // Bind this so that updates can proagate to chart via main
+    this._chartInterval = setInterval(this.handleStateChange.bind(this), 500);
   }
 
   // Decided to implement this in model, but could move to person
@@ -207,7 +226,7 @@ export default class Model {
 
   loop() {
     this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-    this.context.clearRect(0, 0, this.width, this.height);
+    // this.context.clearRect(0, 0, this.width, this.height);
 
     // applyForces();
     this.updatePopulation();
@@ -215,29 +234,22 @@ export default class Model {
     this.drawPopulation();
   }
 
-  resetModel() {
-    // Get values for new run
-    const newInitSusceptable = getInitialNumSusceptable();
-    const newInitSymptomatic = getInitialNumSymptomatic();
-
+  resetModel(stats) {
     // clear the current running interval
-    clearInterval(this._updatePopulationFunction);
+    clearInterval(this._updatePopulationInterval);
     clearInterval(this._chartInterval);
     cancelAnimationFrame(this._animationFrame);
 
-    // reset chart
-    this.chart.resetChart(newInitSusceptable, newInitSymptomatic);
-
     // Set new values and reset to init
     this.population = [];
-    this.numSusceptible = newInitSusceptable;
-    this.numSymptomatic = newInitSymptomatic;
-    this.numImmune = 0;
-    this.numAsymptomatic = 0;
-    this.totalPopulation = newInitSusceptable + newInitSymptomatic;
+    this.numSusceptible = stats.susceptible;
+    this.numSymptomatic = stats.symptomatic;
+    this.numImmune = stats.immune;
+    this.numAsymptomatic = stats.asymptomatic;
+    this.totalPopulation = stats.susceptible + stats.symptomatic;
 
     // clear the canvas
-    this.context.clearRect(0, 0, this.width, this.height);
+    // this.context.clearRect(0, 0, this.width, this.height);
 
     // start the loop again
     this.populateCanvas();
