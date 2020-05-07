@@ -12,6 +12,11 @@
   },
   "jest": {
     "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/src/**/*.js",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 75
