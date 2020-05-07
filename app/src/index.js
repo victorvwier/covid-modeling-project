@@ -18,8 +18,6 @@ window.onload = function () {
     return;
   }
 
-  
-
   const main = new Main(
     context,
     chartCtx,
