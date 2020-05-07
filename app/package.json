@@ -13,7 +13,7 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/src/**/*.js",
+      "**/src/scripts/**/*.js",
       "!**/node_modules/**",
       "!**/vendor/**"
     ],
