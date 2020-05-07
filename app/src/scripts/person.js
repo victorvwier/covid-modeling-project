@@ -28,28 +28,6 @@ export default class Person {
     else if (type === TYPES.ASYMPTOMATIC) this.color = COLORS.ASYMPTOMATIC;
   }
 
-  draw() {
-    this.context.beginPath();
-    this.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-    this.context.fillStyle = this.color;
-    this.context.fill();
-    this.context.strokeStyle = this.color;
-
-    this.context.stroke();
-    this.context.beginPath();
-    this.context.arc(
-      this.x,
-      this.y,
-      this.infectionRadius,
-      0,
-      2 * Math.PI,
-      false
-    );
-    this.context.strokeStyle = 'white';
-
-    this.context.stroke();
-  }
-
   applyForce(forceX, forceY) {
     this.accX += forceX;
     this.accY += forceY;
