@@ -26,6 +26,8 @@ export default class Person {
     this.infectiousTime = 0;
     this.destinyDead = false;
     this.destinyImmune = false;
+    this.incubationPeriod = 0;
+    this.infectiousPeriod = 0;
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
@@ -115,6 +117,14 @@ export default class Person {
   startIncubation() {
     this.type = TYPES.NONINFECTIOUS;
     this.color = COLORS.NONINFECTIOUS;
+  }
+
+  setIncubationPeriod(val) {
+    this.incubationPeriod = val;
+  }
+
+  setInfectiousPeriod(val) {
+    this.infectiousPeriod = val;
   }
 
   becomesImmune() {

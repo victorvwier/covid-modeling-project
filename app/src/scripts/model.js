@@ -26,7 +26,7 @@ export default class Model {
     // state methods from main
     this.getStats = getStats;
     this.updateStats = updateStats;
-
+    this.spareRandom = null;
     this.context = context;
     this.width = width;
     this.height = height;
@@ -36,7 +36,7 @@ export default class Model {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
-    this.incubationPeriod = INCUBATION_PERIOD;
+    // this.incubationPeriod = INCUBATION_PERIOD;
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
     this.timeUntilImmune = TIME_UNTIL_IMMUNE;
     this.infectionRadius = INFECTION_RADIUS;
@@ -144,6 +144,10 @@ export default class Model {
               Math.random() <= this.transmissionProb
             ) {
               this.population[j].startIncubation();
+              this.population[j].setIncubationPeriod(
+                this.gaussianRandom(7, 14)
+              );
+              // console.log(this.population[j].incubationPeriod);
               this.numNonInfectious += 1;
               this.numSusceptible -= 1;
             }
@@ -173,7 +177,7 @@ export default class Model {
   update(person) {
     if (person.type === TYPES.NONINFECTIOUS) {
       person.incubationTime += 1;
-      if (person.incubationTime === this.incubationPeriod) {
+      if (person.incubationTime === person.incubationPeriod) {
         if (Math.random() < this.nonInfectiousToImmuneProb) {
           person.becomesImmune();
           this.numNonInfectious -= 1;
@@ -191,14 +195,18 @@ export default class Model {
       if (person.destinyDead === false && person.destinyImmune === false) {
         if (Math.random() < MORTALITY_RATE) {
           person.destinyDead = true;
+          person.setInfectiousPeriod(this.gaussianRandom(5, 10));
         } else {
           person.destinyImmune = true;
+          person.setInfectiousPeriod(this.gaussianRandom(15, 30));
         }
       }
 
+      console.log(person.infectiousPeriod);
+
       if (person.destinyImmune) {
         person.infectiousTime += 1;
-        if (person.infectiousTime === TIME_UNTIL_IMMUNE) {
+        if (person.infectiousTime === person.infectiousPeriod) {
           person.type = TYPES.IMMUNE;
           person.color = COLORS.IMMUNE;
           this.numInfectious -= 1;
@@ -206,7 +214,7 @@ export default class Model {
         }
       } else {
         person.infectiousTime += 1;
-        if (person.infectiousTime === TIME_UNTIL_DEAD) {
+        if (person.infectiousTime === person.infectiousPeriod) {
           person.dead = true;
           person.type = TYPES.DEAD;
           person.color = COLORS.DEAD;
@@ -252,5 +260,19 @@ export default class Model {
 
     this.setup();
     this.loop();
+  }
+
+  // Normal Distribution Function (min, max, 0)
+
+  gaussianRand() {
+    let rand = 0;
+    for (let i = 0; i < 6; i += 1) {
+      rand += Math.random();
+    }
+    return rand / 6;
+  }
+
+  gaussianRandom(min, max) {
+    return Math.floor(min + this.gaussianRand() * (max - min + 1));
   }
 }
