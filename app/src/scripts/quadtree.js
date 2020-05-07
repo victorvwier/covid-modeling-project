@@ -1,3 +1,5 @@
+import Person from './person';
+
 /**
  * Abstract class Tree
  */
@@ -20,13 +22,21 @@ export default class Tree {
         if((maxX - minX) <= radius || (maxY - minY) <= radius) {
             return new Leaf(maxX, maxY, minX, minY, []);
         }
-        midX = minX + (maxX - minX);
-        midY = minY + (maxY - minY);
+        midX = minX + (maxX - minX) / 2;
+        midY = minY + (maxY - minY) / 2;
         nwChild = this.createTree(minX, midX, midY, maxY, radius);
         swChild = this.createTree(minX, midX, minY, midY, radius);
         seChild = this.createTree(midX, maxX, minY, midY, radius);
         neChild = this.createTree(midX, maxX, midY, maxY, radius);
         return Node(nwChild, swChild, seChild, neChild, maxX, maxY, minX, minY);
+    }
+
+    /**
+     * Method that inserts the given person in the quadtree
+     * @param {Person} person 
+     */
+    insert(person) {
+        throw new Error("Method insert must be implemented.");
     }
 }
 
@@ -46,6 +56,23 @@ class Node extends Tree {
         this.minX = minX;
         this.minY = minY;
     }
+
+    insert(person) {
+        if(person.x < minX || person.x > maxX || person.y < minY || person.y > maxY) {
+            throw new Error("Person must be within borders to be inserted.");
+        }
+        midX = minX + (maxX - minX) / 2;
+        midY = minY + (maxY - minY) / 2;
+        if(person.x <= midX || person.y > midY) {
+            nwChild.insert(person);
+        } else if(person.x <= midX || person.y <= midY) {
+            swChild.insert(person);
+        } else if(person.x > midX || person.y <= midY) {
+            seChild.insert(person);
+        } else {
+            neChild.insert(person);
+        }
+    }
 }
 
 /**
@@ -60,5 +87,9 @@ class Leaf extends Tree {
         this.minX = minX;
         this.minY = minY;
         this.people = people;
+    }
+
+    insert(person) {
+        this.people.push(person);
     }
 }
