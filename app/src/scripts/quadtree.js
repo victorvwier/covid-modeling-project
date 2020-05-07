@@ -1,34 +1,11 @@
-import Person from './person';
-
 /**
  * Abstract class Tree
  */
-export default class Tree {
+export class Tree {
     constructor() {
         if(this.constructor === Tree) {
             throw new Error("This is an abstract class and cannot be instantiated");
         }
-    }
-
-    /**
-     * Method to create an empty tree over an area
-     * @param {Int} minX 
-     * @param {Int} maxX 
-     * @param {Int} minY 
-     * @param {Int} maxY
-     * @param {Float} radius
-     */
-    static createTree(minX, maxX, minY, maxY, radius) {
-        if((maxX - minX) <= radius || (maxY - minY) <= radius) {
-            return new Leaf(maxX, maxY, minX, minY, []);
-        }
-        midX = minX + (maxX - minX) / 2;
-        midY = minY + (maxY - minY) / 2;
-        nwChild = this.createTree(minX, midX, midY, maxY, radius);
-        swChild = this.createTree(minX, midX, minY, midY, radius);
-        seChild = this.createTree(midX, maxX, minY, midY, radius);
-        neChild = this.createTree(midX, maxX, midY, maxY, radius);
-        return Node(nwChild, swChild, seChild, neChild, maxX, maxY, minX, minY);
     }
 
     /**
@@ -41,12 +18,33 @@ export default class Tree {
 }
 
 /**
+ * Class Leaf extending Tree.
+ * Represents all external nodes of the tree.
+ * Must have two defining points and an array of people contained within those.
+ */
+export class Leaf extends Tree {
+    constructor(maxX, maxY, minX, minY, people) {
+        super();
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.minX = minX;
+        this.minY = minY;
+        this.people = people;
+    }
+
+    insert(person) {
+        this.people.push(person);
+    }
+}
+
+/**
  * Class Node extending Tree.
  * Represents all inner nodes of the tree.
  * Must have 4 children and two defining points
  */
-class Node extends Tree {
+export class Node extends Tree {
     constructor(nwChild, swChild, seChild, neChild, maxX, maxY, minX, minY) {
+        super();
         this.nwChild = nwChild;
         this.swChild = swChild;
         this.seChild = seChild;
@@ -58,38 +56,40 @@ class Node extends Tree {
     }
 
     insert(person) {
-        if(person.x < minX || person.x > maxX || person.y < minY || person.y > maxY) {
+        if(person.x < this.minX || person.x > this.maxX || person.y < this.minY || person.y > this.maxY) {
             throw new Error("Person must be within borders to be inserted.");
         }
-        midX = minX + (maxX - minX) / 2;
-        midY = minY + (maxY - minY) / 2;
+        const midX = this.minX + (this.maxX - this.minX) / 2;
+        const midY = this.minY + (this.maxY - this.minY) / 2;
         if(person.x <= midX || person.y > midY) {
-            nwChild.insert(person);
+            this.nwChild.insert(person);
         } else if(person.x <= midX || person.y <= midY) {
-            swChild.insert(person);
+            this.swChild.insert(person);
         } else if(person.x > midX || person.y <= midY) {
-            seChild.insert(person);
+            this.seChild.insert(person);
         } else {
-            neChild.insert(person);
+            this.neChild.insert(person);
         }
     }
 }
 
 /**
- * Class Leaf extending Tree.
- * Represents all external nodes of the tree.
- * Must have two defining points and an array of people contained within those.
+ * Method to create an empty tree over an area
+ * @param {Int} minX 
+ * @param {Int} maxX 
+ * @param {Int} minY 
+ * @param {Int} maxY
+ * @param {Float} radius
  */
-class Leaf extends Tree {
-    constructor(maxX, maxY, minX, minY, people) {
-        this.maxX = maxX;
-        this.maxY = maxY;
-        this.minX = minX;
-        this.minY = minY;
-        this.people = people;
+export function createTree(minX, maxX, minY, maxY, radius) {
+    if((maxX - minX) < radius * 2 || (maxY - minY) < radius * 2) {
+        return new Leaf(maxX, maxY, minX, minY, []);
     }
-
-    insert(person) {
-        this.people.push(person);
-    }
+    const midX = minX + (maxX - minX) / 2;
+    const midY = minY + (maxY - minY) / 2;
+    const nwChild = createTree(minX, midX, midY, maxY, radius);
+    const swChild = createTree(minX, midX, minY, midY, radius);
+    const seChild = createTree(midX, maxX, minY, midY, radius);
+    const neChild = createTree(midX, maxX, midY, maxY, radius);
+    return new Node(nwChild, swChild, seChild, neChild, maxX, maxY, minX, minY);
 }
