@@ -67,7 +67,7 @@ export class Node extends Tree {
             this.swChild.insert(person);
         } else if(person.x > midX || person.y <= midY) {
             this.seChild.insert(person);
-        } else {
+        } else if(person.x > midX || person.y > midY) {
             this.neChild.insert(person);
         }
     }
