@@ -7,6 +7,8 @@
     "build": "npm run test && npm run lint && webpack --config webpack.prod.js",
     "watch": "webpack-dev-server --config webpack.dev.js --open",
     "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:coverage:watch": "jest --watchAll --coverage",
     "test:watch": "jest --watchAll",
     "lint": "eslint ."
   },

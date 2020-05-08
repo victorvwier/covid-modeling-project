@@ -33,34 +33,40 @@ export default class Person {
     this.accY += forceY;
   }
 
+  _handleXOutOfBounds(width) {
+    if (this.x > width - 2 * this.radius || this.x < 2 * this.radius) {
+      if (this.x > width - 2 * this.radius) this.x = width - 2 * this.radius;
+      else if (this.x < 2 * this.radius) this.x = 2 * this.radius;
+      this.speedX *= -1;
+    }
+  }
+
+  _handleYOutOfBounds(height) {
+    if (this.y > height - 2 * this.radius || this.y < 2 * this.radius) {
+      if (this.y > height - 2 * this.radius) this.y = height - 2 * this.radius;
+      else if (this.y < 2 * this.radius) this.y = 2 * this.radius;
+      this.speedY *= -1;
+    }
+  }
+
+  _checkIfExceededMaxSpeed() {
+    if (Math.abs(this.speedX) > this.maxSpeed)
+      this.speedX = Math.sign(this.speedX) * this.maxSpeed;
+
+    if (Math.abs(this.speedY) > this.maxSpeed)
+      this.speedY = Math.sign(this.speedY) * this.maxSpeed;
+  }
+
   move(width, height) {
     if (this.type !== TYPES.DEAD) {
       this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
       this.speedX += this.accX;
       this.speedY += this.accY;
 
-      if (this.x > width - 2 * this.radius || this.x < 2 * this.radius) {
-        if (this.x > width - 2 * this.radius) this.x = width - 2 * this.radius;
-        else if (this.x < 2 * this.radius) this.x = 2 * this.radius;
-        this.speedX *= -1;
-      }
+      this._handleXOutOfBounds(width);
+      this._handleYOutOfBounds(height);
 
-      if (this.y > height - 2 * this.radius || this.y < 2 * this.radius) {
-        if (this.y > height - 2 * this.radius)
-          this.y = height - 2 * this.radius;
-        else if (this.y < 2 * this.radius) this.y = 2 * this.radius;
-        this.speedY *= -1;
-      }
-
-      if (Math.abs(this.speedX) > this.maxSpeed)
-        this.speedX = Math.sign(this.speedX) * this.maxSpeed;
-
-      if (Math.abs(this.speedY) > this.maxSpeed)
-        this.speedY = Math.sign(this.speedY) * this.maxSpeed;
-      // if (this.practicesSocialDistance && enableSocialDistancing == true) {
-      //   this.speed_x *= 0.4;
-      //   this.speed_y *= 0.4;
-      // }
+      this._checkIfExceededMaxSpeed();
 
       this.x += this.speedX;
       this.y += this.speedY;
