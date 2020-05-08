@@ -33,15 +33,15 @@ export class Leaf extends Tree {
     }
 
     insert(person) {
-        //simple array on the leaves.
         this.people.push(person);
 
     }
 
     remove(person) {
-        for(var i=0;i<this.people.length;i++){
+        let i;
+        for(i=0;i<this.people.length;i++){
 
-            if(this.people[i]==person){
+            if(this.people[i]===person){
                 delete this.people[i]
             }
         }
