@@ -42,7 +42,7 @@ export class Leaf extends Tree {
         for(i=0;i<this.people.length;i++){
 
             if(this.people[i]===person){
-                delete this.people[i]
+                delete this.people[i];
             }
         }
     }
