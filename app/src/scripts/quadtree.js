@@ -43,13 +43,14 @@ export class Leaf extends Tree {
         this.people.push(person);
     }
 
-    remove(person) {
-        let i;
-        for(i=0;i<this.people.length;i++){
+    delete(person) {
+        if(person.x < this.minX || person.y < this.minY || person.x > this.maxX || person.y > this.maxY) {
+            throw new Error("Can't delete person outside of borders");
+        }
 
-            if(this.people[i]===person){
-                delete this.people[i]
-            }
+        const index = this.people.indexOf(person);
+        if(index > -1) {
+            this.people.splice(index, 1);
         }
     }
 }
@@ -90,8 +91,13 @@ export class Node extends Tree {
     }
 
     delete(person) {
+        if(person.x < this.minX || person.y < this.minY || person.x > this.maxX || person.y > this.maxY) {
+            throw new Error("Can't delete person outside of borders");
+        }
+
         const midX = this.minX + (this.maxX - this.minX) / 2;
         const midY = this.minY + (this.maxY - this.minY) / 2;
+
         if(person.x <= midX && person.y > midY) {
             this.nwChild.delete(person);
         } else if(person.x <= midX && person.y <= midY) {
