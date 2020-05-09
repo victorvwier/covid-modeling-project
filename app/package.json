@@ -17,6 +17,7 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/src/scripts/**/*.js",
+      "!**/src/scripts/agentChart.js",
       "!**/node_modules/**",
       "!**/vendor/**"
     ],
