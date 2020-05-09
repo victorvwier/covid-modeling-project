@@ -10,7 +10,8 @@
     "test:coverage": "jest --coverage",
     "test:coverage:watch": "jest --watchAll --coverage",
     "test:watch": "jest --watchAll",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dependencies": "apt install libxi-dev -y"
   },
   "jest": {
     "collectCoverage": true,
@@ -54,7 +55,6 @@
   },
   "dependencies": {
     "chart.js": "^2.9.3",
-    "gl": "^4.5.0",
     "gl-matrix": "^3.3.0"
   }
 }

@@ -12,11 +12,15 @@ stages:
   - build
 
 # Jobs are defined below
+before_script:
+  - apt install libxi-dev -y
+  - cd app
+  - npm install
+
+
 test:
   stage: test
-  script: 
-    - cd app
-    - npm install
+  script:
     - npm run test
   artifacts:
     paths:
@@ -24,16 +28,12 @@ test:
 
 lint:
   stage: test
-  script: 
-    - cd app
-    - npm install
+  script:
     - npm run lint
 
 build:
   stage: build
-  script: 
-    - cd app
-    - npm install
+  script:
     - npm run deploy
   artifacts:
     paths:
