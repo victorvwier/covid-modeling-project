@@ -8,13 +8,18 @@ export const PERSON_RADIUS = 5;
 export const POPULATION_SPEED = 2;
 export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 
-export const TIME_UNTIL_SYMPTOMS = 10;
-export const MORTALITY_RATE = 0.116;
 export const TRANSMISSION_PROB = 0.9;
-export const INCUBATION_PERIOD = 5;
 export const NONIN_TO_IMMUNE_PROB = 0.1;
 export const TIME_UNTIL_IMMUNE = 7;
-export const TIME_UNTIL_DEAD = 10;
+
+export const MIN_INCUBATION_TIME = 7;
+export const MAX_INCUBATION_TIME = 14;
+
+export const MIN_INFECTIOUS_TIME = 5;
+export const MAX_INFECTIOUS_TIME = 10;
+
+export const MIN_TIME_UNTIL_DEAD = 15;
+export const MAX_TIME_UNTIL_DEAD = 30;
 
 export const COLORS = {
   SUSCEPTIBLE: '#05befc',

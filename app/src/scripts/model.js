@@ -5,14 +5,16 @@ import {
   PERSON_RADIUS,
   POPULATION_SPEED,
   INFECTION_RADIUS,
-  TIME_UNTIL_IMMUNE,
-  MORTALITY_RATE,
   TYPES,
-  INCUBATION_PERIOD,
   NONIN_TO_IMMUNE_PROB,
   COLORS,
   TRANSMISSION_PROB,
-  TIME_UNTIL_DEAD,
+  MIN_INCUBATION_TIME,
+  MAX_INCUBATION_TIME,
+  MIN_INFECTIOUS_TIME,
+  MAX_INFECTIOUS_TIME,
+  MIN_TIME_UNTIL_DEAD,
+  MAX_TIME_UNTIL_DEAD,
 } from './CONSTANTS';
 import Stats from './data/stats';
 
@@ -38,11 +40,19 @@ export default class Model {
     this.numDead = stats.dead;
     // this.incubationPeriod = INCUBATION_PERIOD;
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
-    this.timeUntilImmune = TIME_UNTIL_IMMUNE;
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
     this.transmissionProb = TRANSMISSION_PROB;
-    this.timeUntilDead = TIME_UNTIL_DEAD;
+
+    this.minIncubationTime = MIN_INCUBATION_TIME;
+    this.maxIncubationTime = MAX_INCUBATION_TIME;
+
+    this.minInfectiousTime = MIN_INFECTIOUS_TIME;
+    this.maxInfectiousTime = MAX_INFECTIOUS_TIME;
+
+    this.minTimeUntilDead = MIN_TIME_UNTIL_DEAD;
+    this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
+
     this.totalPopulation =
       this.numSusceptible +
       this.numInfectious +
@@ -51,16 +61,36 @@ export default class Model {
       this.numNonInfectious;
   }
 
-  setAsymptomaticProb(newValue) {
-    this.asymptomaticProb = newValue;
+  setTransmissionProb(newValue) {
+    this.transmissionProb = newValue;
   }
 
-  setTimeUntilSymptoms(newValue) {
-    this.timeUntilSymptoms = newValue;
+  setNonInToImmuneProb(newValue) {
+    this.nonInfectiousToImmuneProb = newValue;
   }
 
-  setTimeUntilImmune(newValue) {
-    this.timeUntilImmune = newValue;
+  setMinIncubationTime(newValue) {
+    this.minIncubationTime = newValue;
+  }
+
+  setMaxIncubationTime(newValue) {
+    this.maxIncubationTime = newValue;
+  }
+
+  setMinInfectiousTime(newValue) {
+    this.minInfectiousTime = newValue;
+  }
+
+  setMaxInfectiousTime(newValue) {
+    this.maxInfectiousTime = newValue;
+  }
+
+  setMinTimeUntilDead(newValue) {
+    this.minTimeUntilDead = newValue;
+  }
+
+  setMaxTimeUntilDead(newValue) {
+    this.maxTimeUntilDead = newValue;
   }
 
   setInfectionRadius(newValue) {
@@ -145,7 +175,11 @@ export default class Model {
             ) {
               this.population[j].startIncubation();
               this.population[j].setIncubationPeriod(
-                this.gaussianRandom(7, 14)
+                this.gaussianRand(
+                  this.minIncubationTime,
+                  this.maxIncubationTime,
+                  1
+                )
               );
               // console.log(this.population[j].incubationPeriod);
               this.numNonInfectious += 1;
@@ -191,18 +225,23 @@ export default class Model {
     }
     if (person.type === TYPES.INFECTIOUS) {
       // TODO: this is where we will split removed into dead and recovered + immune
-
+      // console.log(person.age);
+      // console.log(this.mortalityStat(person.age));
       if (person.destinyDead === false && person.destinyImmune === false) {
-        if (Math.random() < MORTALITY_RATE) {
+        if (Math.random() <= this.mortalityStat(person.age)) {
           person.destinyDead = true;
-          person.setInfectiousPeriod(this.gaussianRandom(5, 10));
+          person.setInfectiousPeriod(
+            this.gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead, 1)
+          );
         } else {
           person.destinyImmune = true;
-          person.setInfectiousPeriod(this.gaussianRandom(15, 30));
+          person.setInfectiousPeriod(
+            this.gaussianRand(this.minInfectiousTime, this.maxInfectiousTime, 1)
+          );
         }
       }
 
-      console.log(person.infectiousPeriod);
+      // console.log(person.infectiousPeriod);
 
       if (person.destinyImmune) {
         person.infectiousTime += 1;
@@ -264,15 +303,49 @@ export default class Model {
 
   // Normal Distribution Function (min, max, 0)
 
-  gaussianRand() {
-    let rand = 0;
-    for (let i = 0; i < 6; i += 1) {
-      rand += Math.random();
-    }
-    return rand / 6;
+  gaussianRand(min, max, skew) {
+    // let rand = 0;
+    // for (let i = 0; i < 6; i += 1) {
+    //   rand += Math.random();
+    // }
+    // return rand / 6;
+    let u = 0;
+    let v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+    num = num / 10.0 + 0.5; // Translate to 0 -> 1
+    if (num > 1 || num < 0) num = gaussianRand(min, max, skew); // resample between 0 and 1 if out of range
+    num = Math.pow(num, skew); // Skew
+    num *= max - min; // Stretch to fill range
+    num += min; // offset to min
+    return Math.round(num);
   }
 
-  gaussianRandom(min, max) {
-    return Math.floor(min + this.gaussianRand() * (max - min + 1));
+  // gaussianRandom(min, max) {
+  //   return Math.floor(min + this.gaussianRand() * (max - min + 1));
+  // }
+
+  mortalityStat(age) {
+    if (0 <= age && age <= 9) {
+      return 0;
+    } else if (10 <= age && age <= 19) {
+      return 0.002;
+    } else if (20 <= age && age <= 29) {
+      return 0.002;
+    } else if (30 <= age && age <= 39) {
+      return 0.002;
+    } else if (40 <= age && age <= 49) {
+      return 0.004;
+    } else if (50 <= age && age <= 59) {
+      return 0.013;
+    } else if (60 <= age && age <= 69) {
+      return 0.036;
+    } else if (70 <= age && age <= 79) {
+      return 0.08;
+    } else {
+      return 0.148;
+    }
   }
 }

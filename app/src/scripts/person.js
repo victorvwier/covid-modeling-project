@@ -28,6 +28,7 @@ export default class Person {
     this.destinyImmune = false;
     this.incubationPeriod = 0;
     this.infectiousPeriod = 0;
+    this.age = Math.round(Math.random() * 100);
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
@@ -142,5 +143,9 @@ export default class Person {
       (this.type === TYPES.INFECTIOUS || this.type === TYPES.NONINFECTIOUS) &&
       p.type === TYPES.SUSCEPTIBLE
     );
+  }
+
+  initializeAge(value) {
+    this.age = value;
   }
 }
