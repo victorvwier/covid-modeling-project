@@ -145,7 +145,7 @@ describe('Test move method', () => {
 
   test('test can infect person is not infectable nothing happens', () => {
     const person = new Person(TYPES.DEAD, 1, 1, null);
-    const type = person.type;
+    const {type} = person;
     person.canInfect(null);
     expect(person.type).toBe(type);
   });
