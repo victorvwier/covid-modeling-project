@@ -29,7 +29,6 @@ export default class Model {
     this.getStats = getStats;
     this.updateStats = updateStats;
     this.spareRandom = null;
-    this.context = context;
     this.agentView = agentView;
     this.width = width;
     this.height = height;
@@ -159,18 +158,18 @@ export default class Model {
       if (!this.population[i].dead) {
         positions.push(this.population[i].x);
         positions.push(this.population[i].y);
-        colors.push(parseInt(this.population[i].color.slice(1,3), 16)/ 255.0);
-        colors.push(parseInt(this.population[i].color.slice(3,5), 16)/ 255.0);
-        colors.push(parseInt(this.population[i].color.slice(5,7), 16)/ 255.0);
+        colors.push(parseInt(this.population[i].color.slice(1, 3), 16) / 255.0);
+        colors.push(parseInt(this.population[i].color.slice(3, 5), 16) / 255.0);
+        colors.push(parseInt(this.population[i].color.slice(5, 7), 16) / 255.0);
         colors.push(1);
         count++;
       }
     }
-    return { 
-      positions : positions,
-      colors : colors,
+    return {
+      positions: positions,
+      colors: colors,
       size: this.personRadius,
-      count: count
+      count: count,
     };
   }
 
