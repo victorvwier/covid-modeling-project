@@ -1,6 +1,5 @@
 import Person from './person';
 import { getRandom } from './util';
-import {scanNearbyBoxes} from './boundingBox'
 
 import {
   PERSON_RADIUS,
@@ -148,17 +147,6 @@ export default class Model {
       }
     }
   }
-
-  // accelaration strucuture comes into play here-instead two for loops we will have one for
-  // loop and we will check the surrounding  Bounding Boxes for collisions. 
- 
-  // geometric datastructure version of interact.
-  interactPopulationGDS() {
-    for (let i = 0;i<this.totalPopulation;i +=1){
-      // returns a list of all people who will can/will get infected because of agent population[i]
-        const infected=scanNearbyBoxes(this.population[i],this.infectionRadius);
-    }
-  } 
 
   interactPopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
