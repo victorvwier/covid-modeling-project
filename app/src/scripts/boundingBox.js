@@ -99,4 +99,28 @@ export default class BoundingBoxStructure {
                          this.columns[index].query(person),
                          this.columns[index + 1].query(person));
     }
+
+    export function scanNearbyBoxes(person,infectionRadius) {
+        // find boundingBox of current person and scan nearby ones according to infectionRadius.
+        const index = this.getBoundingBox(person);// to be implemented.
+        const boxes=findBoxesNearby(index);
+        for(let i =0;i<boxes.length;i+=1) {
+            const current =boxes[i];
+            for(let j=0;j<current.people.length;j+=1){
+                if(person.metWith(current.people[j],infectionRadius)){
+                    if (this.population[i].canInfect(this.population[j])) {
+                      this.population[i].hasSymptomaticCount += 1;
+                      this.infect(this.population[j]);
+                    }
+                  }
+            }
+
+            
+        }
+
+    }
+
+    findBoxesNearby(index){
+        // gotta figure this out.
+    }
 }
