@@ -237,8 +237,6 @@ export default class Model {
         }
       }
 
-      // console.log(person.infectiousPeriod);
-
       if (person.destinyImmune) {
         person.infectiousTime += 1;
         if (person.infectiousTime === person.infectiousPeriod) {
@@ -307,8 +305,7 @@ export default class Model {
     let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 
     num = num / 10.0 + 0.5;
-    if (num > 1 || num < 0) num = gaussianRand(min, max);
-    num = Math.pow(num, 1);
+    if (num > 1 || num < 0) num = this.gaussianRand(min, max);
     num *= max - min;
     num += min;
     return Math.round(num);
