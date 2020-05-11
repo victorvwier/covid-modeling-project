@@ -38,12 +38,3 @@ build:
   artifacts:
     paths:
       - app/dist/
-
-buildLatex:
-  image: blang/latex
-  script:
-    - cd ./doc/assignments
-    - latexmk -pdf
-  artifacts:
-    paths:
-      - doc/assignments/*.pdf
