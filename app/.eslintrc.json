@@ -24,6 +24,8 @@
     "import/prefer-default-export": "off",
     "no-return-assign": "off",
     "no-plusplus": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-else-return": "off",
+    "yoda": "off"
   }
 }
