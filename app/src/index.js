@@ -5,23 +5,32 @@ import {
   INITIAL_IMMUNE,
   INITIAL_DEAD,
 } from './scripts/CONSTANTS';
+import wireSlidersToHandlers from './scripts/DOM/parameters';
 import Main from './scripts/main';
 
 window.onload = function () {
-  const canvas = document.getElementById('canvas');
-  const modelChart = canvas.getContext('2d');
+  const glCanvas = document.getElementById('glCanvas');
+  const context = glCanvas.getContext("webgl");
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
+  
+  if(context === null) {
+    this.alert("Please enable webGl support");
+    return;
+  }
+
+  
 
   const main = new Main(
-    modelChart,
+    context,
     chartCtx,
-    canvas.width,
-    canvas.height,
+    glCanvas.width,
+    glCanvas.height,
     INITIAL_SUSCEPTABLE,
     INITIAL_NONINFECTIOUS,
     INITAL_INFECTIOUS,
     INITIAL_DEAD,
     INITIAL_IMMUNE
   );
+
   main.run();
 };

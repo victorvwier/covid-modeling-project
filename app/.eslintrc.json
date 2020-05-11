@@ -26,6 +26,8 @@
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
     "no-else-return": "off",
-    "yoda": "off"
+    "yoda": "off",
+    "no-bitwise": "off",
+    "max-classes-per-file": "off"
   }
 }

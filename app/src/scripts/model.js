@@ -19,7 +19,7 @@ import {
 import Stats from './data/stats';
 
 export default class Model {
-  constructor(context, width, height, stats, getStats, updateStats) {
+  constructor(agentView, width, height, stats, getStats, updateStats) {
     // Intervals + animationFrame
     this._chartInterval = null;
     this._updatePopulationInterval = null;
@@ -30,6 +30,7 @@ export default class Model {
     this.updateStats = updateStats;
     this.spareRandom = null;
     this.context = context;
+    this.agentView = agentView;
     this.width = width;
     this.height = height;
     this.population = [];
@@ -146,11 +147,31 @@ export default class Model {
   }
 
   drawPopulation() {
+    const drawInfo = this.getDrawInfo();
+    this.agentView.draw(drawInfo);
+  }
+
+  getDrawInfo() {
+    const positions = [];
+    const colors = [];
+    let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
       if (!this.population[i].dead) {
-        this.population[i].draw();
+        positions.push(this.population[i].x);
+        positions.push(this.population[i].y);
+        colors.push(parseInt(this.population[i].color.slice(1,3), 16)/ 255.0);
+        colors.push(parseInt(this.population[i].color.slice(3,5), 16)/ 255.0);
+        colors.push(parseInt(this.population[i].color.slice(5,7), 16)/ 255.0);
+        colors.push(1);
+        count++;
       }
     }
+    return { 
+      positions : positions,
+      colors : colors,
+      size: this.personRadius,
+      count: count
+    };
   }
 
   updatePopulation() {
@@ -199,7 +220,7 @@ export default class Model {
       }
     };
 
-    // Bind this so that it can access this instace variables
+    // Bind this so that it can access this instance variables
     this._updatePopulationInterval = setInterval(intervalFunc.bind(this), 2000);
 
     // Bind this so that updates can proagate to chart via main
@@ -260,7 +281,7 @@ export default class Model {
 
   loop() {
     this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-    this.context.clearRect(0, 0, this.width, this.height);
+    // this.context.clearRect(0, 0, this.width, this.height);
 
     // applyForces();
     this.updatePopulation();
@@ -283,7 +304,7 @@ export default class Model {
     this.totalPopulation = stats.susceptible + stats.infectious;
 
     // clear the canvas
-    this.context.clearRect(0, 0, this.width, this.height);
+    // this.context.clearRect(0, 0, this.width, this.height);
 
     // start the loop again
     this.populateCanvas();
