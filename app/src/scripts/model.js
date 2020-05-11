@@ -241,8 +241,7 @@ export default class Model {
           this.numInfectious += 1;
         }
       }
-    }
-    if (person.type === TYPES.INFECTIOUS) {
+    } else if (person.type === TYPES.INFECTIOUS) {
       if (person.destinyDead === false && person.destinyImmune === false) {
         if (Math.random() <= this.mortalityStat(person.age)) {
           person.destinyDead = true;
