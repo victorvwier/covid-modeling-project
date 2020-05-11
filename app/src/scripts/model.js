@@ -177,8 +177,7 @@ export default class Model {
               this.population[j].setIncubationPeriod(
                 this.gaussianRand(
                   this.minIncubationTime,
-                  this.maxIncubationTime,
-                  1
+                  this.maxIncubationTime
                 )
               );
               // console.log(this.population[j].incubationPeriod);
@@ -224,19 +223,16 @@ export default class Model {
       }
     }
     if (person.type === TYPES.INFECTIOUS) {
-      // TODO: this is where we will split removed into dead and recovered + immune
-      // console.log(person.age);
-      // console.log(this.mortalityStat(person.age));
       if (person.destinyDead === false && person.destinyImmune === false) {
         if (Math.random() <= this.mortalityStat(person.age)) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
-            this.gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead, 1)
+            this.gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
           );
         } else {
           person.destinyImmune = true;
           person.setInfectiousPeriod(
-            this.gaussianRand(this.minInfectiousTime, this.maxInfectiousTime, 1)
+            this.gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
           );
         }
       }
@@ -303,29 +299,20 @@ export default class Model {
 
   // Normal Distribution Function (min, max, 0)
 
-  gaussianRand(min, max, skew) {
-    // let rand = 0;
-    // for (let i = 0; i < 6; i += 1) {
-    //   rand += Math.random();
-    // }
-    // return rand / 6;
+  gaussianRand(min, max) {
     let u = 0;
     let v = 0;
     while (u === 0) u = Math.random();
     while (v === 0) v = Math.random();
     let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 
-    num = num / 10.0 + 0.5; // Translate to 0 -> 1
-    if (num > 1 || num < 0) num = gaussianRand(min, max, skew); // resample between 0 and 1 if out of range
-    num = Math.pow(num, skew); // Skew
-    num *= max - min; // Stretch to fill range
-    num += min; // offset to min
+    num = num / 10.0 + 0.5;
+    if (num > 1 || num < 0) num = gaussianRand(min, max);
+    num = Math.pow(num, 1);
+    num *= max - min;
+    num += min;
     return Math.round(num);
   }
-
-  // gaussianRandom(min, max) {
-  //   return Math.floor(min + this.gaussianRand() * (max - min + 1));
-  // }
 
   mortalityStat(age) {
     if (0 <= age && age <= 9) {
