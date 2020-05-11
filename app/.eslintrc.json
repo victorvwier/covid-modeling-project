@@ -27,5 +27,6 @@
     "no-underscore-dangle": "off",
     "no-bitwise": "off",
     "no-unused-expressions": "off"
+    "max-classes-per-file": "off"
   }
 }
