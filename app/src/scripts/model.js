@@ -208,6 +208,7 @@ export default class Model {
     if (person.type === TYPES.SYMPTOMATIC) {
       // TODO: this is where we will split removed into dead and recovered + immune
       if (Math.random() < MORTALITY_RATE) {
+        person.type = TYPES.DEAD;
         person.dead = true;
         person.color = COLORS.DEAD;
         this.numSymptomatic -= 1;

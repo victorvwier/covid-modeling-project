@@ -25,6 +25,7 @@ test:
   artifacts:
     paths:
       - app/coverage/
+  coverage: /All\sfiles.*?\|\s+.*?\s+(\d+.\d+)/
 
 lint:
   stage: test

@@ -26,6 +26,7 @@ export default class Person {
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
     else if (type === TYPES.SYMPTOMATIC) this.color = COLORS.SYMPTOMATIC;
     else if (type === TYPES.ASYMPTOMATIC) this.color = COLORS.ASYMPTOMATIC;
+    else if (type === TYPES.DEAD) { this.dead = true; }
   }
 
   applyForce(forceX, forceY) {
