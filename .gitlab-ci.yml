@@ -13,7 +13,6 @@ stages:
 
 # Jobs are defined below
 before_script:
-  - apt install libxi-dev -y
   - cd app
   - npm install
 
