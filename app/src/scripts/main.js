@@ -6,7 +6,7 @@ import wireSlidersToHandlers, {
   wireReloadButtonToMain,
 } from './DOM/parameters';
 import {
-  getInitialNumSymptomatic,
+  getInitialNumInfectious,
   getInitialNumSusceptable,
 } from './DOM/domValues';
 
@@ -98,7 +98,7 @@ export default class Main {
 
   reset() {
     this.numSusceptible = getInitialNumSusceptable();
-    this.numInfectious = getInitialNumSymptomatic();
+    this.numInfectious = getInitialNumInfectious();
     this.numNonInfectious = 0;
     this.numImmune = 0;
     this.numDead = 0;
