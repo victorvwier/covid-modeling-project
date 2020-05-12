@@ -44,7 +44,7 @@ deploy:
   stage: deploy
   environment:
     name: dev
-    url: amazing-mcclintock-998498.netlify.app
+    url: covid-model.netlify.app
   only:
     - dev
   script:
