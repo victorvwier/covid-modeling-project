@@ -127,22 +127,22 @@ export default function (community) {
 
   // initial number of susceptibles
 
-  // wireInput(
-  //   'initSusceptable',
-  //   'initSusceptableCount',
-  //   INITIAL_SUSCEPTABLE,
-  //   '',
-  //   (x) => x // Don't need a setter
-  // );
+  wireInput(
+    'initSusceptable',
+    'initSusceptableCount',
+    INITIAL_SUSCEPTABLE,
+    '',
+    (x) => x // Don't need a setter
+  );
 
-  // // initial number of infected
-  // wireInput(
-  //   'initInfectious',
-  //   'initInfectiousCount',
-  //   INITAL_INFECTIOUS,
-  //   '',
-  //   (x) => x // Don't need a setter
-  // );
+  // initial number of infected
+  wireInput(
+    'initInfectious',
+    'initInfectiousCount',
+    INITAL_INFECTIOUS,
+    '',
+    (x) => x // Don't need a setter
+  );
 }
 
 export function wireReloadButtonToMain(main) {
