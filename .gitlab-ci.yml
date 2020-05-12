@@ -13,28 +13,27 @@ stages:
   - deploy
 
 # Jobs are defined below
+before_script:
+  - cd app
+  - npm install
+
 test:
   stage: test
-  script: 
-    - cd app
-    - npm install
+  script:
     - npm run test
   artifacts:
     paths:
       - app/coverage/
+  coverage: /All\sfiles.*?\|.*?\|.*?(\d*\.?\d)/
 
 lint:
   stage: test
-  script: 
-    - cd app
-    - npm install
+  script:
     - npm run lint
 
 build:
   stage: build
-  script: 
-    - cd app
-    - npm install
+  script:
     - npm run build
   artifacts:
     paths:
@@ -48,15 +47,5 @@ deploy:
   only:
     - dev
   script:
-    - cd app
     - npm run build
-    - npx netflix-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
-
-buildLatex:
-  image: blang/latex
-  script:
-    - cd ./doc/assignments
-    - latexmk -pdf
-  artifacts:
-    paths:
-      - doc/assignments/*.pdf
+    - npx netlify-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod

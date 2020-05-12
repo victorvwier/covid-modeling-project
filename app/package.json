@@ -3,16 +3,22 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "deploy": "webpack --config webpack.prod.js",
     "build": "webpack --config webpack.prod.js",
     "watch": "webpack-dev-server --config webpack.dev.js --open",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "test:watch": "jest --watchAll",
     "test:coverage:watch": "jest --watchAll --coverage --collectCoverage --color",
     "lint": "eslint ."
   },
   "jest": {
     "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/src/scripts/**/*.js",
+      "!**/src/scripts/agentChart.js",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 75
@@ -37,6 +43,7 @@
     "html-webpack-plugin": "^4.2.0",
     "jest": "^25.4.0",
     "mini-css-extract-plugin": "^0.9.0",
+    "netlify-cli": "^2.50.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "prettier": "^2.0.5",
     "style-loader": "^1.2.0",

@@ -1,7 +1,7 @@
 import { mat4 } from 'gl-matrix';
 
 // Vector shader source code
-const vSource = `
+export const vSource = `
     attribute vec4 aVertexColor;
     attribute vec4 aVertexPosition;
     uniform mat4 uModelViewMatrix;
@@ -17,7 +17,7 @@ const vSource = `
   `;
 
 // Fragment shader source code
-const fSource = `
+export const fSource = `
   varying lowp vec4 vColor;
   void main() {
     gl_FragColor = vColor;
@@ -25,7 +25,7 @@ const fSource = `
 `;
 
 // Creates, loads and compiles a shader with a given type
-function loadShader(gl, type, source) {
+export function loadShader(gl, type, source) {
   const shader = gl.createShader(type);   // Create empty shader of the given type 
   gl.shaderSource(shader, source);        // Load the source into the shader
   gl.compileShader(shader);               // Compile the shader program
@@ -41,7 +41,7 @@ function loadShader(gl, type, source) {
 }
 
 // This function loads the shader program, the program incorporates both shaders.
-function initShaderProgram(gl, vsSource, fsSource) {
+export function initShaderProgram(gl, vsSource, fsSource) {
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
