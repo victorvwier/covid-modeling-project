@@ -48,9 +48,6 @@ build:
 
 deploy:
   stage: deploy
-  environment:
-    name: covid-model
-    url: covid-model.netlify.app
   only:
     - fix-dev-pipeline
   script:
