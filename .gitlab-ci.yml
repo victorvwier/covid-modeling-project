@@ -56,4 +56,5 @@ deploy:
   script:
     - cd app
     - npm run build
+    - npm i -g netlify-cli
     - netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
