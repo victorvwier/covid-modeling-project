@@ -15,7 +15,7 @@ stages:
 # Jobs are defined below
 before_script:
   - cd app
-  - npm install
+  - npm install -g
 
 test:
   stage: test
@@ -42,7 +42,7 @@ build:
 deploy:
   stage: deploy
   environment:
-    name: dev
+    name: fix-dev-pipeline
     url: covid-model.netlify.app
   only:
     - dev
