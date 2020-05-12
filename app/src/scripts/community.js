@@ -7,7 +7,7 @@ export default class Community {
     this.numModels = numModels;
     this.communities = {};
     this.height = height;
-    this.widht = width;
+    this.width = width;
     this.stats = stats;
     this.agentView = agentView;
     this.updateStats = updateStats;
@@ -20,10 +20,6 @@ export default class Community {
 
     window.Community = this;
   }
-
-  // one large population
-  // we assign ids and types
-  // we pass these stats to models
 
   // setup method (initializes models)
   setup() {
@@ -38,7 +34,7 @@ export default class Community {
       this.communities[i].drawPopulation();
       this.communities[i].setup();
       this.communities[i].loop();
-      wireSlidersToHandlers(this.communities[i]);
+      //wireSlidersToHandlers(this.communities[i]);
     }
   }
 
@@ -59,13 +55,14 @@ export default class Community {
         this.width,
         this.height,
         dividedStats,
-        this.updateStats
+        this.compileStats.bind(this)
       );
+      wireSlidersToHandlers(this);
     }
   }
 
   compileStats() {
-    const stats = this.communities
+    const stats = Object.values(this.communities)
       .map((m) => m.exportStats())
       .reduce(
         (acc, cur) =>
@@ -82,7 +79,53 @@ export default class Community {
 
   resetCommunity() {}
 
-  // relocation method
+  // SLIDER HANDLER METHODS
 
-  //
+  updateAgentSize(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setPersonRadius(newValue)
+    );
+  }
+
+  updateInfectionRadius(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setInfectionRadius(newValue)
+    );
+  }
+
+  updateMinTimeUntilDead(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setMinTimeUntilDead(newValue)
+    );
+  }
+
+  updateMaxTimeUntilDead(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setMaxTimeUntilDead(newValue)
+    );
+  }
+
+  updateMinInfectiousTime(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setMinInfectiousTime(newValue)
+    );
+  }
+
+  updateMaxInfectiousTime(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setMaxInfectiousTime(newValue)
+    );
+  }
+
+  updateMinIncubationTime(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setMinIncubationTime(newValue)
+    );
+  }
+
+  updateMaxIncubationTime(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setMaxIncubationTime(newValue)
+    );
+  }
 }

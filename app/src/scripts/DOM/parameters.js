@@ -35,25 +35,25 @@ function wireInput(
   });
 }
 
-export default function (model) {
+export default function (community) {
   // TimeToSymptoms
-  wireInput(
-    'transmissionProb',
-    'transmissionProbOut',
-    TRANSMISSION_PROB,
-    '%',
-    model.setTransmissionProb.bind(model),
-    (x) => x * 100
-  );
+  // wireInput(
+  //   'transmissionProb',
+  //   'transmissionProbOut',
+  //   TRANSMISSION_PROB,
+  //   '%',
+  //   model.setTransmissionProb.bind(model),
+  //   (x) => x * 100
+  // );
 
-  wireInput(
-    'nonInToImmuneProb',
-    'nonInToImmuneProbOut',
-    NONIN_TO_IMMUNE_PROB,
-    '%',
-    model.setNonInToImmuneProb.bind(model),
-    (x) => x * 100
-  );
+  // wireInput(
+  //   'nonInToImmuneProb',
+  //   'nonInToImmuneProbOut',
+  //   NONIN_TO_IMMUNE_PROB,
+  //   '%',
+  //   model.setNonInToImmuneProb.bind(model),
+  //   (x) => x * 100
+  // );
 
   // timeUntilImmune
   wireInput(
@@ -61,7 +61,7 @@ export default function (model) {
     'minIncubationTimeOut',
     MIN_INCUBATION_TIME,
     'days',
-    model.setMinIncubationTime.bind(model)
+    community.updateMinIncubationTime.bind(community)
   );
 
   // timeUntilImmune
@@ -70,7 +70,7 @@ export default function (model) {
     'maxIncubationTimeOut',
     MAX_INCUBATION_TIME,
     'days',
-    model.setMaxIncubationTime.bind(model)
+    community.updateMaxIncubationTime.bind(community)
   );
 
   wireInput(
@@ -78,7 +78,7 @@ export default function (model) {
     'minInfectiousTimeOut',
     MIN_INFECTIOUS_TIME,
     'days',
-    model.setMinInfectiousTime.bind(model)
+    community.updateMinInfectiousTime.bind(community)
   );
 
   // timeUntilImmune
@@ -87,7 +87,7 @@ export default function (model) {
     'maxInfectiousTimeOut',
     MAX_INFECTIOUS_TIME,
     'days',
-    model.setMaxInfectiousTime.bind(model)
+    community.updateMaxInfectiousTime.bind(community)
   );
 
   wireInput(
@@ -95,7 +95,7 @@ export default function (model) {
     'minTimeUntilDeadOut',
     MIN_TIME_UNTIL_DEAD,
     'days',
-    model.setMinTimeUntilDead.bind(model)
+    community.updateMinTimeUntilDead.bind(community)
   );
 
   // timeUntilImmune
@@ -104,7 +104,7 @@ export default function (model) {
     'maxTimeUntilDeadOut',
     MAX_TIME_UNTIL_DEAD,
     'days',
-    model.setMaxTimeUntilDead.bind(model)
+    community.updateMaxTimeUntilDead.bind(community)
   );
 
   // Infection radius
@@ -113,7 +113,7 @@ export default function (model) {
     'infectionRadiusOut',
     INFECTION_RADIUS,
     'people',
-    model.setInfectionRadius.bind(model)
+    community.updateInfectionRadius.bind(community)
   );
 
   // agentRadius
@@ -122,27 +122,27 @@ export default function (model) {
     'agentRadiusOut',
     PERSON_RADIUS,
     '',
-    model.setPersonRadius.bind(model)
+    community.updateAgentSize.bind(community)
   );
 
   // initial number of susceptibles
 
-  wireInput(
-    'initSusceptable',
-    'initSusceptableCount',
-    INITIAL_SUSCEPTABLE,
-    '',
-    (x) => x // Don't need a setter
-  );
+  // wireInput(
+  //   'initSusceptable',
+  //   'initSusceptableCount',
+  //   INITIAL_SUSCEPTABLE,
+  //   '',
+  //   (x) => x // Don't need a setter
+  // );
 
-  // initial number of infected
-  wireInput(
-    'initInfectious',
-    'initInfectiousCount',
-    INITAL_INFECTIOUS,
-    '',
-    (x) => x // Don't need a setter
-  );
+  // // initial number of infected
+  // wireInput(
+  //   'initInfectious',
+  //   'initInfectiousCount',
+  //   INITAL_INFECTIOUS,
+  //   '',
+  //   (x) => x // Don't need a setter
+  // );
 }
 
 export function wireReloadButtonToMain(main) {

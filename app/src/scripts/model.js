@@ -19,7 +19,7 @@ import {
 import Stats from './data/stats';
 
 export default class Model {
-  constructor(id, agentView, width, height, stats) {
+  constructor(id, agentView, width, height, stats, compileStats) {
     // Intervals + animationFrame
     this._chartInterval = null;
     this._updatePopulationInterval = null;
@@ -37,6 +37,7 @@ export default class Model {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.compileStats = compileStats;
     // this.incubationPeriod = INCUBATION_PERIOD;
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = INFECTION_RADIUS;
@@ -222,7 +223,8 @@ export default class Model {
     );
 
     // Bind this so that updates can proagate to chart via main
-    this._chartInterval = setInterval(this.exportStats.bind(this), 500);
+    // this._chartInterval = setInterval(this.exportStats.bind(this), 500);
+    this._chartInterval = setInterval(this.compileStats, 500);
   }
 
   // Decided to implement this in model, but could move to person
