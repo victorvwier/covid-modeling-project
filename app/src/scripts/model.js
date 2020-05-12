@@ -141,7 +141,11 @@ export default class Model {
     for (let i = 0; i < count; i++) {
       const x = getRandom(this.personRadius, this.width - this.personRadius);
       const y = getRandom(this.personRadius, this.height - this.personRadius);
-      this.population.push(new Person(type, x, y, this.context));
+      const newPerson = new Person(type, x, y, this.context);
+      if (type === TYPES.DEAD) {
+        newPerson.dead = true;
+      }
+      this.population.push(newPerson);
     }
   }
 
@@ -185,42 +189,38 @@ export default class Model {
   interactPopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       for (let j = 0; j < this.totalPopulation; j += 1) {
-        if (i !== j) {
-          if (
-            this.population[i].metWith(this.population[j], this.infectionRadius)
-          ) {
-            if (
-              this.population[i].canInfect(this.population[j]) &&
-              Math.random() <= this.transmissionProb
-            ) {
-              this.population[j].startIncubation();
-              this.population[j].setIncubationPeriod(
-                this.gaussianRand(
-                  this.minIncubationTime,
-                  this.maxIncubationTime
-                )
-              );
-              // console.log(this.population[j].incubationPeriod);
-              this.numNonInfectious += 1;
-              this.numSusceptible -= 1;
-            }
-          }
+        if (
+          i !== j &&
+          this.population[i].metWith(
+            this.population[j],
+            this.infectionRadius
+          ) &&
+          this.population[i].canInfect(this.population[j]) &&
+          Math.random() <= this.transmissionProb
+        ) {
+          this.population[j].startIncubation();
+          this.population[j].setIncubationPeriod(
+            this.gaussianRand(this.minIncubationTime, this.maxIncubationTime)
+          );
+          // console.log(this.population[j].incubationPeriod);
+          this.numNonInfectious += 1;
+          this.numSusceptible -= 1;
         }
       }
     }
   }
 
   setup() {
-    const intervalFunc = () => {
+    this.updatePopulationInterval = () => {
       for (let i = 0; i < this.totalPopulation; i++) {
-        if (!this.population[i].dead) {
-          this.update(this.population[i]);
-        }
+        this.update(this.population[i]);
       }
     };
-
     // Bind this so that it can access this instance variables
-    this._updatePopulationInterval = setInterval(intervalFunc.bind(this), 2000);
+    this._updatePopulationInterval = setInterval(
+      this.updatePopulationInterval.bind(this),
+      2000
+    );
 
     // Bind this so that updates can proagate to chart via main
     this._chartInterval = setInterval(this.handleStateChange.bind(this), 500);
@@ -242,7 +242,7 @@ export default class Model {
         }
       }
     } else if (person.type === TYPES.INFECTIOUS) {
-      if (person.destinyDead === false && person.destinyImmune === false) {
+      if (!person.destinyDead && !person.destinyImmune) {
         if (Math.random() <= this.mortalityStat(person.age)) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
@@ -254,9 +254,7 @@ export default class Model {
             this.gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
           );
         }
-      }
-
-      if (person.destinyImmune) {
+      } else if (person.destinyImmune) {
         person.infectiousTime += 1;
         if (person.infectiousTime === person.infectiousPeriod) {
           person.type = TYPES.IMMUNE;
