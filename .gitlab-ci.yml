@@ -10,12 +10,12 @@ cache:
 stages:
   - test
   - build
+  - deploy
 
 # Jobs are defined below
 before_script:
   - cd app
   - npm install
-
 
 test:
   stage: test
@@ -33,6 +33,25 @@ lint:
 
 build:
   stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - app/dist/
+
+deploy:
+  stage: deploy
+  environment:
+    name: dev
+    url: covid-model.netlify.app
+  only:
+    - dev
+  script:
+    - npm run build
+    - npx netflix-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
+
+buildLatex:
+  image: blang/latex
   script:
     - npm run deploy
   artifacts:

@@ -25,8 +25,11 @@
     "no-return-assign": "off",
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
+    "no-else-return": "off",
+    "yoda": "off",
     "no-bitwise": "off",
-    "no-unused-expressions": "off"
-    "max-classes-per-file": "off"
+    "max-classes-per-file": "off",
+    "no-unused-expressions": "off",
+    "prefer-destructuring": "off"
   }
 }

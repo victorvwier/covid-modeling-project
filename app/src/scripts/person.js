@@ -22,11 +22,40 @@ export default class Person {
     this.dead = false;
     this.asymptomaticTime = 0;
     this.symptomaticTime = 0;
+    this.incubationTime = 0;
+    this.infectiousTime = 0;
+    this.destinyDead = false;
+    this.destinyImmune = false;
+    this.incubationPeriod = 0;
+    this.infectiousPeriod = 0;
+    this.age = Math.round(Math.random() * 100);
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
-    else if (type === TYPES.SYMPTOMATIC) this.color = COLORS.SYMPTOMATIC;
-    else if (type === TYPES.ASYMPTOMATIC) this.color = COLORS.ASYMPTOMATIC;
-    else if (type === TYPES.DEAD) { this.dead = true; }
+    else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
+    else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
+    else if (type === TYPES.DEAD) this.color = COLORS.DEAD;
+  }
+
+  draw() {
+    this.context.beginPath();
+    this.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+    this.context.fillStyle = this.color;
+    this.context.fill();
+    this.context.strokeStyle = this.color;
+
+    this.context.stroke();
+    this.context.beginPath();
+    this.context.arc(
+      this.x,
+      this.y,
+      this.infectionRadius,
+      0,
+      2 * Math.PI,
+      false
+    );
+    this.context.strokeStyle = 'white';
+
+    this.context.stroke();
   }
 
   applyForce(forceX, forceY) {
@@ -84,24 +113,38 @@ export default class Person {
     return dist < threshold * 2; // Collide on infectionraduis
   }
 
-  getBounds() {
-    return [
-      this.x - this.radius,
-      this.y - this.radius,
-      this.x + this.radius,
-      this.y + this.radius,
-    ];
+  startIncubation() {
+    this.type = TYPES.NONINFECTIOUS;
+    this.color = COLORS.NONINFECTIOUS;
   }
 
-  developSymptoms() {
-    this.type = TYPES.SYMPTOMATIC;
-    this.color = COLORS.SYMPTOMATIC;
+  setIncubationPeriod(val) {
+    this.incubationPeriod = val;
+  }
+
+  setInfectiousPeriod(val) {
+    this.infectiousPeriod = val;
+  }
+
+  becomesImmune() {
+    this.type = TYPES.IMMUNE;
+    this.color = COLORS.IMMUNE;
+  }
+
+  becomesInfectious() {
+    this.type = TYPES.INFECTIOUS;
+    this.color = COLORS.INFECTIOUS;
   }
 
   canInfect(p) {
+    // TODO: Get noninfectious cleared with Thomas
     return (
-      (this.type === TYPES.SYMPTOMATIC || this.type === TYPES.ASYMPTOMATIC) &&
+      (this.type === TYPES.INFECTIOUS || this.type === TYPES.NONINFECTIOUS) &&
       p.type === TYPES.SUSCEPTIBLE
     );
+  }
+
+  initializeAge(value) {
+    this.age = value;
   }
 }

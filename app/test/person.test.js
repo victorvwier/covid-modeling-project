@@ -1,12 +1,6 @@
 import Person from '../src/scripts/person';
 import { TYPES, COLORS } from '../src/scripts/CONSTANTS';
 
-function mockRandom(val) {
-  const mockMath = Object.create(global.Math);
-  mockMath.random = () => val;
-  global.Math = mockMath;
-}
-
 describe('Testing person initialization', () => {
   const X = 1;
   const Y = 2;
