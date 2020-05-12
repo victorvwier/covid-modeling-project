@@ -3,23 +3,28 @@ image: node:latest
 
 # Cache the downloaded node modules for next time
 cache:
+  untracked: true
   paths:
     - app/node_modules/
 
 # The different stages of our pipeline
 stages:
+  - setup
   - test
   - build
   - deploy
 
 # Jobs are defined below
-before_script:
-  - cd app
-  - npm install
-
+setup:
+  stage: setup
+  script:
+    - cd app
+    - npm ci
+  
 test:
   stage: test
   script:
+    - cd app
     - npm run test
   artifacts:
     paths:
@@ -29,11 +34,13 @@ test:
 lint:
   stage: test
   script:
+    - cd app
     - npm run lint
 
 build:
   stage: build
   script:
+    - cd app
     - npm run build
   artifacts:
     paths:
@@ -41,11 +48,10 @@ build:
 
 deploy:
   stage: deploy
-  environment:
-    name: dev
-    url: covid-model.netlify.app
   only:
     - dev
   script:
+    - cd app
     - npm run build
-    - npx netlify-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
+    - npm i -g netlify-cli
+    - netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
