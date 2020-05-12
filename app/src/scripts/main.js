@@ -78,7 +78,6 @@ export default class Main {
       this.width,
       this.height,
       stats,
-      this.createCurrentStats.bind(this),
       this.receiveNewStatsAndUpdateChart.bind(this)
     );
   }
@@ -86,6 +85,7 @@ export default class Main {
   run() {
     this.chart.drawChart();
 
+    this.community.setupCommunity();
     this.community.run();
   }
 
