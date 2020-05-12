@@ -24,7 +24,7 @@ test:
   artifacts:
     paths:
       - app/coverage/
-  coverage: /All\sfiles.*?\|\s+.*?\s+(\d+.\d+)/
+  coverage: /All\sfiles.*?\|.*?\|.*?(\d*\.?\d)/
 
 lint:
   stage: test
@@ -48,12 +48,4 @@ deploy:
     - dev
   script:
     - npm run build
-    - npx netflix-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
-
-buildLatex:
-  image: blang/latex
-  script:
-    - npm run deploy
-  artifacts:
-    paths:
-      - app/dist/
+    - npx netlify-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
