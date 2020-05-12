@@ -19,13 +19,14 @@ import {
 import Stats from './data/stats';
 
 export default class Model {
-  constructor(agentView, width, height, stats, getStats, updateStats) {
+  constructor(id, agentView, width, height, stats, getStats, updateStats) {
     // Intervals + animationFrame
     this._chartInterval = null;
     this._updatePopulationInterval = null;
     this._animationFrame = null;
 
     // state methods from main
+    this.id = id;
     this.getStats = getStats;
     this.updateStats = updateStats;
     this.spareRandom = null;
