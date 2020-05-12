@@ -15,7 +15,8 @@ stages:
 # Jobs are defined below
 before_script:
   - cd app
-  - npm install -g
+  - npm install
+  - npm install netlify-cli -g
 
 test:
   stage: test
