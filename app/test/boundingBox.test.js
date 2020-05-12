@@ -1,40 +1,121 @@
-import BoundingBox from '../src/scripts/boundingBox';
-import Column from '../src/scripts/Column';
-import BoundingBoxStructure from '../src/scripts/BoundingBoxStructure';
+import BoundingBoxStructure from "../src/scripts/boundingBox";
+import Person from "../src/scripts/person";
+import {TYPES} from "../src/scripts/CONSTANTS";
 
-
-describe('Bounding box constructor', function () {
-    beforeEach( () => {
-        const b=new BoundingBox(15);
-
-    })
-    it('creates a new boundingbox', function () {
-        expect(b.radius).toEqual(15);
-        expect(b.people).toHaveLength(0);
+describe('bounding box test suite', () => {
+    test('initialize to empty structure', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([]);
     });
-});
 
-describe('Column constructor', function () {
-    beforeEach( () => {
-        const b=new Column(15,20);
-
-    })
-    it('creates a new columns', function () {
-        expect(b.height).toEqual(15);
-        expect(b.radius).toEqual(20);
-       // expect(b.boxes).toHaveLength(0);
+    test('insert person 1', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        const person = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
+        struct.insert(person);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([person]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([]);
     });
-});
+    
+    test('insert person 2', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        const person = new Person(TYPES.SUSCEPTIBLE, 5, 15, null);
+        struct.insert(person);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([person]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([]);
+    });
 
-describe('BoundingBoxStructure constructor', function () {
-    beforeEach( () => {
-        const b=new BoundingBoxStructure(15,20,25);
+    test('insert person 3', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        const person = new Person(TYPES.SUSCEPTIBLE, 15, 15, null);
+        struct.insert(person);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([person]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([]);
+    });
 
-    })
-    it('creates a new BoundingBoxStructure', function () {
-        expect(b.width).toEqual(15)
-        expect(b.height).toEqual(20);
-        expect(b.radius).toEqual(25);
-       
+    test('insert person 4', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        const person = new Person(TYPES.SUSCEPTIBLE, 15, 5, null);
+        struct.insert(person);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([person]);
+    });
+
+    test('delete person 1', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        const person1 = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
+        const person2 = new Person(TYPES.SUSCEPTIBLE, 5, 15, null);
+        const person3 = new Person(TYPES.SUSCEPTIBLE, 15, 15, null);
+        const person4 = new Person(TYPES.SUSCEPTIBLE, 15, 5, null);
+        struct.insert(person1);
+        struct.insert(person2);
+        struct.insert(person3);
+        struct.insert(person4);
+        struct.remove(person1);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([person2]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([person3]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([person4]);
+    });
+
+    test('delete person 2', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        const person1 = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
+        const person2 = new Person(TYPES.SUSCEPTIBLE, 5, 15, null);
+        const person3 = new Person(TYPES.SUSCEPTIBLE, 15, 15, null);
+        const person4 = new Person(TYPES.SUSCEPTIBLE, 15, 5, null);
+        struct.insert(person1);
+        struct.insert(person2);
+        struct.insert(person3);
+        struct.insert(person4);
+        struct.remove(person2);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([person1]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([person3]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([person4]);
+    });
+
+    test('delete person 3', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        const person1 = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
+        const person2 = new Person(TYPES.SUSCEPTIBLE, 5, 15, null);
+        const person3 = new Person(TYPES.SUSCEPTIBLE, 15, 15, null);
+        const person4 = new Person(TYPES.SUSCEPTIBLE, 15, 5, null);
+        struct.insert(person1);
+        struct.insert(person2);
+        struct.insert(person3);
+        struct.insert(person4);
+        struct.remove(person3);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([person1]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([person2]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([person4]);
+    });
+
+    test('delete person 4', () => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        const person1 = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
+        const person2 = new Person(TYPES.SUSCEPTIBLE, 5, 15, null);
+        const person3 = new Person(TYPES.SUSCEPTIBLE, 15, 15, null);
+        const person4 = new Person(TYPES.SUSCEPTIBLE, 15, 5, null);
+        struct.insert(person1);
+        struct.insert(person2);
+        struct.insert(person3);
+        struct.insert(person4);
+        struct.remove(person4);
+        expect(struct.columns[0].boxes[0].people).toStrictEqual([person1]);
+        expect(struct.columns[0].boxes[1].people).toStrictEqual([person2]);
+        expect(struct.columns[1].boxes[1].people).toStrictEqual([person3]);
+        expect(struct.columns[1].boxes[0].people).toStrictEqual([]);
     });
 });

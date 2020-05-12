@@ -1,4 +1,4 @@
-export default class BoundingBox {
+class BoundingBox {
     constructor(radius) {
         this.people = [];
         this.radius = radius;
@@ -28,7 +28,7 @@ export default class BoundingBox {
     }
 }
 
-export default class Column {
+class Column {
     constructor(height, radius) {
         this.height = height;
         this.radius = radius;
