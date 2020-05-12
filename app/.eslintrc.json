@@ -28,6 +28,8 @@
     "no-else-return": "off",
     "yoda": "off",
     "no-bitwise": "off",
-    "max-classes-per-file": "off"
+    "max-classes-per-file": "off",
+    "no-unused-expressions": "off",
+    "prefer-destructuring": "off"
   }
 }
