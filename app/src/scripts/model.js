@@ -142,7 +142,7 @@ export default class Model {
     for (let i = 0; i < count; i++) {
       const x = getRandom(this.personRadius, this.width - this.personRadius);
       const y = getRandom(this.personRadius, this.height - this.personRadius);
-      const newPerson = new Person(type, x, y, this.context);
+      const newPerson = new Person(type, x, y, 1);
       if (type === TYPES.DEAD) {
         newPerson.dead = true;
       }

@@ -1,10 +1,8 @@
 import Stats from './data/stats';
-import Model from './model';
+import Community from './community';
 import Chart from './chart';
 import AgentChart from './agentChart';
-import wireSlidersToHandlers, {
-  wireReloadButtonToMain,
-} from './DOM/parameters';
+import { wireReloadButtonToMain } from './DOM/parameters';
 import {
   getInitialNumInfectious,
   getInitialNumSusceptable,
@@ -40,8 +38,8 @@ export default class Main {
       this.createCurrentStats.bind(this)
     );
     this.agentView = new AgentChart(context);
-    this.model = null;
-    this.setupModel();
+    this.community = null;
+    this.setupCommunity();
 
     // Wire reload button
     wireReloadButtonToMain(this);
@@ -72,9 +70,10 @@ export default class Main {
     this.chart.updateValues(this.createCurrentStats());
   }
 
-  setupModel() {
+  setupCommunity() {
     const stats = this.createCurrentStats();
-    this.model = new Model(
+    this.community = new Community(
+      1,
       this.agentView,
       this.width,
       this.height,
@@ -87,13 +86,7 @@ export default class Main {
   run() {
     this.chart.drawChart();
 
-    this.model.populateCanvas();
-    this.model.drawPopulation();
-
-    this.model.setup();
-    this.model.loop();
-
-    wireSlidersToHandlers(this.model);
+    this.community.run();
   }
 
   reset() {
@@ -104,6 +97,6 @@ export default class Main {
     this.numDead = 0;
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.model.resetModel(this.createCurrentStats());
+    this.community.resetCommunity(this.createCurrentStats());
   }
 }
