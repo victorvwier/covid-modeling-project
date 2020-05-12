@@ -45,12 +45,12 @@ deploy:
   environment:
     name: dev
     url: amazing-mcclintock-998498.netlify.app
-    only:
-      - dev
-    script:
-      - cd app
-      - npm run build
-      - npx netflix-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
+  only:
+    - dev
+  script:
+    - cd app
+    - npm run build
+    - npx netflix-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
 
 buildLatex:
   image: blang/latex
