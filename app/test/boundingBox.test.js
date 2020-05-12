@@ -118,4 +118,18 @@ describe('bounding box test suite', () => {
         expect(struct.columns[1].boxes[1].people).toStrictEqual([person3]);
         expect(struct.columns[1].boxes[0].people).toStrictEqual([]);
     });
+
+    test('query test',() => {
+        const struct = new BoundingBoxStructure(20, 20, 5);
+        // person 1 and 2 in same box
+        const person1 = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
+        const person2 = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
+        const person3 = new Person(TYPES.SUSCEPTIBLE, 15, 15, null);
+        const person4 = new Person(TYPES.SUSCEPTIBLE, 15, 5, null);
+        struct.insert(person1);
+        struct.insert(person2);
+        struct.insert(person3);
+        struct.insert(person4);
+        expect(struct.query(person1).toStrictEqual([person2]));
+    });
 });
