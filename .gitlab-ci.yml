@@ -14,8 +14,8 @@ stages:
 
 # Jobs are defined below
 before_script:
-  - npm ci
   - cd app
+  - npm ci
   - npm install
   
 
