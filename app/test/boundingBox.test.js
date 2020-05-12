@@ -123,13 +123,13 @@ describe('bounding box test suite', () => {
         const struct = new BoundingBoxStructure(20, 20, 5);
         // person 1 and 2 in same box
         const person1 = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
-        const person2 = new Person(TYPES.SUSCEPTIBLE, 5, 5, null);
-        const person3 = new Person(TYPES.SUSCEPTIBLE, 15, 15, null);
-        const person4 = new Person(TYPES.SUSCEPTIBLE, 15, 5, null);
+        const person2 = new Person(TYPES.SUSCEPTIBLE, 4, 4, null);
+        const person3 = new Person(TYPES.SUSCEPTIBLE, 16, 4, null);
+        const person4 = new Person(TYPES.SUSCEPTIBLE, 4, 16, null);
         struct.insert(person1);
         struct.insert(person2);
         struct.insert(person3);
         struct.insert(person4);
-        expect(struct.query(person1).toStrictEqual([person2]));
+        expect(struct.query(person1)).toStrictEqual([person2]);
     });
 });

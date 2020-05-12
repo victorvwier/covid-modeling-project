@@ -58,9 +58,14 @@ class Column {
 
     query(person) {
         const index = this.getIndex(person);
-        return [].concat(this.boxes[index - 1].query(person),
-                         this.boxes[index].query(person), 
-                         this.boxes[index + 1].query(person));
+let result = this.boxes[index].query(person);
+if (index !== 0) {
+    result = result.concat(this.boxes[index - 1].query(person));
+}
+if (index !== Math.floor(this.width / this.radius)) {
+result = result.concat(this.boxes[index + 1].query(person));
+}
+return result;
     }
 }
 
@@ -95,8 +100,14 @@ export default class BoundingBoxStructure {
 
     query(person) {
         const index = this.getIndex(person);
-        return [].concat(this.columns[index - 1].query(person), 
-                         this.columns[index].query(person),
-                         this.columns[index + 1].query(person));
+let result = this.columns[index].query(person);
+if (index !== 0) {
+    result = result.concat(this.columns[index - 1].query(person));
+}
+if (index !== Math.floor(this.width / this.radius)) {
+result = result.concat(this.columns[index + 1].query(person));
+}
+return result;
+        
     }
 }
