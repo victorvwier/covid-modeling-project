@@ -9,8 +9,8 @@ export default class Chart {
     this.x = 1; // TODO use a timescale instead at some point
     this.chart = null;
     this.susceptable = [];
-    this.asymptomatic = [];
-    this.symptomatic = [];
+    this.noninfectious = [];
+    this.infectious = [];
     this.immune = [];
     this.dead = [];
     this.xValues = [];
@@ -23,8 +23,8 @@ export default class Chart {
   resetChart(newInitSusceptable, newInitSymptomatic) {
     this.x = 1;
     this.susceptable = [newInitSusceptable];
-    this.asymptomatic = [];
-    this.symptomatic = [newInitSymptomatic];
+    this.noninfectious = [];
+    this.infectious = [newInitSymptomatic];
     this.immune = [];
     this.dead = [];
     this.xValues = [];
@@ -36,10 +36,10 @@ export default class Chart {
   updateValues(stats) {
     this.chart.data.datasets[0].data.push(stats.susceptible);
     this.susceptable.push(stats.susceptible);
-    this.chart.data.datasets[1].data.push(stats.asymptomatic);
-    this.asymptomatic.push(stats.asymptomatic);
-    this.chart.data.datasets[2].data.push(stats.symptomatic);
-    this.symptomatic.push(stats.symptomatic);
+    this.chart.data.datasets[1].data.push(stats.noninfectious);
+    this.noninfectious.push(stats.noninfectious);
+    this.chart.data.datasets[2].data.push(stats.infectious);
+    this.infectious.push(stats.infectious);
     this.chart.data.datasets[3].data.push(stats.immune);
     this.immune.push(stats.immune);
     this.chart.data.datasets[4].data.push(stats.dead);
@@ -69,28 +69,28 @@ export default class Chart {
             pointStyle: 'line',
           },
           {
-            label: 'Asymptomatic',
+            label: 'Non-Infectious',
             fill: true,
-            backgroundColor: COLORS.ASYMPTOMATIC,
-            pointBackgroundColor: COLORS.ASYMPTOMATIC,
-            borderColor: COLORS.ASYMPTOMATIC,
-            pointHighlightStroke: COLORS.ASYMPTOMATIC,
+            backgroundColor: COLORS.NONINFECTIOUS,
+            pointBackgroundColor: COLORS.NONINFECTIOUS,
+            borderColor: COLORS.NONINFECTIOUS,
+            pointHighlightStroke: COLORS.NONINFECTIOUS,
             borderCapStyle: 'square',
             lineCap: 'square',
             pointStyle: 'line',
-            data: this.asymptomatic,
+            data: this.noninfectious,
           },
           {
-            label: 'Symptomatic',
+            label: 'Infectious',
             fill: true,
-            backgroundColor: COLORS.SYMPTOMATIC,
-            pointBackgroundColor: COLORS.SYMPTOMATIC,
-            borderColor: COLORS.SYMPTOMATIC,
-            pointHighlightStroke: COLORS.SYMPTOMATIC,
+            backgroundColor: COLORS.INFECTIOUS,
+            pointBackgroundColor: COLORS.INFECTIOUS,
+            borderColor: COLORS.INFECTIOUS,
+            pointHighlightStroke: COLORS.INFECTIOUS,
             borderCapStyle: 'square',
             lineCap: 'square',
             pointStyle: 'line',
-            data: this.symptomatic,
+            data: this.infectious,
           },
           {
             label: 'Immune',

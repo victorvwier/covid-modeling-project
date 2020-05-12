@@ -1,8 +1,8 @@
 export default class Stats {
-  constructor(susceptible, symptomatic, asymptomatic, dead, immune) {
+  constructor(susceptible, noninfectious, infectious, dead, immune) {
     this.susceptible = susceptible;
-    this.symptomatic = symptomatic;
-    this.asymptomatic = asymptomatic;
+    this.noninfectious = noninfectious;
+    this.infectious = infectious;
     this.dead = dead;
     this.immune = immune;
   }
@@ -10,8 +10,8 @@ export default class Stats {
   sum() {
     return (
       this.susceptible +
-      this.symptomatic +
-      this.asymptomatic +
+      this.noninfectious +
+      this.infectious +
       this.dead +
       this.immune
     );
