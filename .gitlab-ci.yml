@@ -49,7 +49,7 @@ build:
 deploy:
   stage: deploy
   only:
-    - fix-dev-pipeline
+    - dev
   script:
     - cd app
     - npm run build
