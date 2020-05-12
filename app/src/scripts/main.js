@@ -45,7 +45,6 @@ export default class Main {
     wireReloadButtonToMain(this);
 
     // DEBUG
-    window.model = this.model;
     window.chart = this.chart;
   }
 

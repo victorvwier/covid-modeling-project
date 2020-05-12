@@ -57,6 +57,9 @@ export default class Community {
         dividedStats,
         this.compileStats.bind(this)
       );
+
+      // DEBUG
+      window.model = this.communities[i];
       wireSlidersToHandlers(this);
     }
   }
@@ -126,6 +129,18 @@ export default class Community {
   updateMaxIncubationTime(newValue) {
     Object.values(this.communities).forEach((model) =>
       model.setMaxIncubationTime(newValue)
+    );
+  }
+
+  updateTransmissionProb(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setTransmissionProb(newValue)
+    );
+  }
+
+  updateNonInToImmuneProb(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setNonInToImmuneProb(newValue)
     );
   }
 }
