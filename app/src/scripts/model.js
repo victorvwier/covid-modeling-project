@@ -227,7 +227,7 @@ export default class Model {
     // Bind this so that it can access this instance variables
     this._updatePopulationInterval = setInterval(
       this.updatePopulationInterval.bind(this),
-      2000
+      250
     );
 
     // Bind this so that updates can proagate to chart via main
