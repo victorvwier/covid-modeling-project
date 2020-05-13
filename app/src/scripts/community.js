@@ -72,35 +72,55 @@ export default class Community {
   _createIncrementals() {
     // return [new Bounds(0, 100, 0, 100), new Bounds(120, 220, 0, 100)];
     const listOfBounds = [];
-    // Space between each of the models + 2 on the sides
+
+    // Space between 2 models + 2 on the sides
     const oneModelWidth = Math.round(
-      (this.width -
-        this.numModels * SPACE_BETWEEN_COMMUNITIES -
-        2 * SPACE_BETWEEN_COMMUNITIES) /
-        this.numModels
+      (this.width - 3 * SPACE_BETWEEN_COMMUNITIES) / this.numModels
     );
+
+    // Space between each row (of two models) + 2 on the sides
     const oneModelHeight = Math.round(
       (this.height -
-        this.numModels * SPACE_BETWEEN_COMMUNITIES -
+        Math.round(this.numModels / 2) * SPACE_BETWEEN_COMMUNITIES -
         2 * SPACE_BETWEEN_COMMUNITIES) /
         this.numModels
     );
-    let currentX = 0;
-    let currentY = 0;
-    for (let i = 0; i < this.numModels; i++) {
-      currentX += SPACE_BETWEEN_COMMUNITIES;
-      currentY += SPACE_BETWEEN_COMMUNITIES;
-      listOfBounds.push(
-        new Bounds(
-          currentX,
-          currentX + oneModelWidth,
-          currentY,
-          currentY + oneModelHeight
-        )
-      );
-      currentX += oneModelWidth;
-      currentY += oneModelHeight;
+
+    // Keep increasing x until exceeds width
+    // reset x and increaes y and start over
+
+    // ASSUME even number
+    let idx = 0;
+    let y = SPACE_BETWEEN_COMMUNITIES;
+    while (idx < this.numModels) {
+      let x = SPACE_BETWEEN_COMMUNITIES;
+      for (let i = 0; i < 2; i++) {
+        listOfBounds.push(
+          new Bounds(x, x + oneModelWidth, y, y + oneModelHeight)
+        );
+
+        x += oneModelWidth + SPACE_BETWEEN_COMMUNITIES;
+      }
+      idx += 2;
+      y += oneModelHeight + SPACE_BETWEEN_COMMUNITIES;
     }
+
+    // let currentX = 0;
+    // let currentY = 0;
+    // for (let i = 0; i < this.numModels; i++) {
+    //   currentX += SPACE_BETWEEN_COMMUNITIES;
+    //   currentY += SPACE_BETWEEN_COMMUNITIES;
+    //   listOfBounds.push(
+    //     new Bounds(
+    //       currentX,
+    //       currentX + oneModelWidth,
+    //       currentY,
+    //       currentY + oneModelHeight
+    //     )
+    //   );
+    //   currentX += oneModelWidth;
+    //   currentY += oneModelHeight;
+    // }
     return listOfBounds;
   }
 
