@@ -143,8 +143,14 @@ export default class Model {
 
   populateCanvasWithType(type, count) {
     for (let i = 0; i < count; i++) {
-      const x = getRandom(this.personRadius, this.endX - this.personRadius);
-      const y = getRandom(this.personRadius, this.endY - this.personRadius);
+      const x = getRandom(
+        this.startX + this.personRadius,
+        this.endX - this.personRadius
+      );
+      const y = getRandom(
+        this.startY + this.personRadius,
+        this.endY - this.personRadius
+      );
       const newPerson = new Person(type, x, y, 1);
       if (type === TYPES.DEAD) {
         newPerson.dead = true;

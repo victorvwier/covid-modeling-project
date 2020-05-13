@@ -39,7 +39,7 @@ export default class Community {
   }
 
   _createIncrementals() {
-    return [new Bounds(20, 60, 20, 60), new Bounds(320, 400, 20, 50)];
+    return [new Bounds(20, 220, 20, 220), new Bounds(240, 460, 20, 220)];
     // const listOfBounds = [];
     // // Space between each of the models + 2 on the sides
     // const oneModelWidth =
@@ -89,6 +89,9 @@ export default class Community {
         dividedStats,
         this.compileStats.bind(this)
       );
+
+      console.log(bounds[0]);
+      console.log(bounds[1]);
 
       // DEBUG
       window.model = this.communities[i];
