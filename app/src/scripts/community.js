@@ -34,7 +34,7 @@ export default class Community {
       this.communities[i].drawPopulation();
       this.communities[i].setup();
       this.communities[i].loop();
-      //wireSlidersToHandlers(this.communities[i]);
+      // wireSlidersToHandlers(this.communities[i]);
     }
   }
 
@@ -46,7 +46,6 @@ export default class Community {
       this.numDead / this.numModels,
       this.numImmune / this.numModels
     );
-    console.log(dividedStats);
 
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i] = new Model(
@@ -57,6 +56,9 @@ export default class Community {
         dividedStats,
         this.compileStats.bind(this)
       );
+
+      // DEBUG
+      window.model = this.communities[i];
       wireSlidersToHandlers(this);
     }
   }
@@ -77,7 +79,22 @@ export default class Community {
     this.updateStats(stats);
   }
 
-  resetCommunity() {}
+  resetCommunity(stats) {
+    this.numSusceptible = stats.susceptible;
+    this.numInfectious = stats.infectious;
+    this.numNonInfectious = stats.noninfectious;
+    this.numImmune = stats.immune;
+    this.numDead = stats.dead;
+
+    const dividedStats = new Stats(
+      this.numSusceptible / this.numModels,
+      this.numNonInfectious / this.numModels,
+      this.numInfectious / this.numInfectious,
+      this.numDead / this.numModels,
+      this.numImmune / this.numModels
+    );
+    Object.values(this.communities).forEach((m) => m.resetModel(dividedStats));
+  }
 
   // SLIDER HANDLER METHODS
 
@@ -126,6 +143,18 @@ export default class Community {
   updateMaxIncubationTime(newValue) {
     Object.values(this.communities).forEach((model) =>
       model.setMaxIncubationTime(newValue)
+    );
+  }
+
+  updateTransmissionProb(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setTransmissionProb(newValue)
+    );
+  }
+
+  updateNonInToImmuneProb(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setNonInToImmuneProb(newValue)
     );
   }
 }

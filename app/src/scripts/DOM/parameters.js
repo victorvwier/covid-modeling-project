@@ -37,23 +37,23 @@ function wireInput(
 
 export default function (community) {
   // TimeToSymptoms
-  // wireInput(
-  //   'transmissionProb',
-  //   'transmissionProbOut',
-  //   TRANSMISSION_PROB,
-  //   '%',
-  //   model.setTransmissionProb.bind(model),
-  //   (x) => x * 100
-  // );
+  wireInput(
+    'transmissionProb',
+    'transmissionProbOut',
+    TRANSMISSION_PROB,
+    '%',
+    community.updateTransmissionProb.bind(community),
+    (x) => x * 100
+  );
 
-  // wireInput(
-  //   'nonInToImmuneProb',
-  //   'nonInToImmuneProbOut',
-  //   NONIN_TO_IMMUNE_PROB,
-  //   '%',
-  //   model.setNonInToImmuneProb.bind(model),
-  //   (x) => x * 100
-  // );
+  wireInput(
+    'nonInToImmuneProb',
+    'nonInToImmuneProbOut',
+    NONIN_TO_IMMUNE_PROB,
+    '%',
+    community.updateNonInToImmuneProb.bind(community),
+    (x) => x * 100
+  );
 
   // timeUntilImmune
   wireInput(
@@ -127,22 +127,22 @@ export default function (community) {
 
   // initial number of susceptibles
 
-  // wireInput(
-  //   'initSusceptable',
-  //   'initSusceptableCount',
-  //   INITIAL_SUSCEPTABLE,
-  //   '',
-  //   (x) => x // Don't need a setter
-  // );
+  wireInput(
+    'initSusceptable',
+    'initSusceptableCount',
+    INITIAL_SUSCEPTABLE,
+    '',
+    (x) => x // Don't need a setter
+  );
 
-  // // initial number of infected
-  // wireInput(
-  //   'initInfectious',
-  //   'initInfectiousCount',
-  //   INITAL_INFECTIOUS,
-  //   '',
-  //   (x) => x // Don't need a setter
-  // );
+  // initial number of infected
+  wireInput(
+    'initInfectious',
+    'initInfectiousCount',
+    INITAL_INFECTIOUS,
+    '',
+    (x) => x // Don't need a setter
+  );
 }
 
 export function wireReloadButtonToMain(main) {

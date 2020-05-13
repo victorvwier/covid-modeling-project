@@ -45,7 +45,6 @@ export default class Main {
     wireReloadButtonToMain(this);
 
     // DEBUG
-    window.model = this.model;
     window.chart = this.chart;
   }
 
@@ -73,7 +72,7 @@ export default class Main {
   setupCommunity() {
     const stats = this.createCurrentStats();
     this.community = new Community(
-      1,
+      1, // TODO determine the number of communities
       this.agentView,
       this.width,
       this.height,
