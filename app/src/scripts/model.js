@@ -19,7 +19,7 @@ import {
 import Stats from './data/stats';
 
 export default class Model {
-  constructor(id, agentView, bounds, stats, compileStats) {
+  constructor(id, bounds, stats, compileStats) {
     // Intervals + animationFrame
     this._chartInterval = null;
     this._updatePopulationInterval = null;
@@ -28,7 +28,6 @@ export default class Model {
     // state methods from main
     this.id = id;
     this.spareRandom = null;
-    this.agentView = agentView;
 
     this.startX = bounds.startX;
     this.endX = bounds.endX;
@@ -159,10 +158,10 @@ export default class Model {
     }
   }
 
-  drawPopulation() {
-    const drawInfo = this.getDrawInfo();
-    this.agentView.draw(drawInfo);
-  }
+  // drawPopulation() {
+  //   const drawInfo = this.getDrawInfo();
+  //   this.agentView.draw(drawInfo);
+  // }
 
   getDrawInfo() {
     const positions = [];
@@ -292,7 +291,7 @@ export default class Model {
     // applyForces();
     this.updatePopulation();
     this.interactPopulation();
-    this.drawPopulation();
+    // this.drawPopulation();
   }
 
   resetModel(stats) {
@@ -316,7 +315,7 @@ export default class Model {
     this.populateCanvas();
     this.updateInfectionRadius(this.infectionRadius);
     this.updateRadius(this.personRadius);
-    this.drawPopulation();
+    // this.drawPopulation();
 
     this.setup();
     this.loop();

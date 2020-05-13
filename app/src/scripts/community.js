@@ -14,12 +14,27 @@ export default class Community {
     this.agentView = agentView;
     this.updateStats = updateStats;
 
+    this._setValuesFromStatsToLocal(stats);
+
+    window.community = this;
+  }
+
+  _createDividedStats() {
+    return new Stats(
+      Math.round(this.numSusceptible / this.numModels),
+      Math.round(this.numNonInfectious / this.numModels),
+      Math.round(this.numInfectious / this.numInfectious),
+      Math.round(this.numDead / this.numModels),
+      Math.round(this.numImmune / this.numModels)
+    );
+  }
+
+  _setValuesFromStatsToLocal(stats) {
     this.numSusceptible = stats.susceptible;
     this.numInfectious = stats.infectious;
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
-    window.community = this;
   }
 
   // setup method (initializes models)
@@ -31,67 +46,75 @@ export default class Community {
   run() {
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i].populateCanvas();
-      this.communities[i].drawPopulation();
+      // this.communities[i].drawPopulation();
       this.communities[i].setup();
       this.communities[i].loop();
       // wireSlidersToHandlers(this.communities[i]);
     }
+
+    this.passDrawInfoToAgentChart();
+  }
+
+  passDrawInfoToAgentChart() {
+    requestAnimationFrame(this.passDrawInfoToAgentChart.bind(this));
+    const allData = Object.values(this.communities)
+      .map((com) => com.getDrawInfo())
+      .reduce((acc, cur) => ({
+        positions: acc.positions.concat(cur.positions),
+        colors: acc.colors.concat(cur.colors),
+        size: this.communities[0].personRadius,
+        count: acc.count + cur.count,
+      }));
+
+    this.agentView.draw(allData);
   }
 
   _createIncrementals() {
-    return [new Bounds(20, 220, 20, 220), new Bounds(240, 460, 20, 220)];
-    // const listOfBounds = [];
-    // // Space between each of the models + 2 on the sides
-    // const oneModelWidth =
-    //   (this.width -
-    //     this.numModels * SPACE_BETWEEN_COMMUNITIES -
-    //     2 * SPACE_BETWEEN_COMMUNITIES) /
-    //   this.numModels;
-    // const oneModelHeight =
-    //   (this.height -
-    //     this.numModels * SPACE_BETWEEN_COMMUNITIES -
-    //     2 * SPACE_BETWEEN_COMMUNITIES) /
-    //   this.numModels;
-    // let currentX = 0;
-    // let currentY = 0;
-    // for (let i = 0; i < this.numModels; i++) {
-    //   currentX += SPACE_BETWEEN_COMMUNITIES;
-    //   currentY += SPACE_BETWEEN_COMMUNITIES;
-    //   listOfBounds.push(
-    //     new Bounds(
-    //       currentX,
-    //       currentX + oneModelWidth,
-    //       currentY,
-    //       currentY + oneModelHeight
-    //     )
-    //   );
-    //   currentX += oneModelWidth;
-    //   currentY += oneModelHeight;
-    // }
-    // return listOfBounds;
+    // return [new Bounds(0, 100, 0, 100), new Bounds(120, 220, 0, 100)];
+    const listOfBounds = [];
+    // Space between each of the models + 2 on the sides
+    const oneModelWidth = Math.round(
+      (this.width -
+        this.numModels * SPACE_BETWEEN_COMMUNITIES -
+        2 * SPACE_BETWEEN_COMMUNITIES) /
+        this.numModels
+    );
+    const oneModelHeight = Math.round(
+      (this.height -
+        this.numModels * SPACE_BETWEEN_COMMUNITIES -
+        2 * SPACE_BETWEEN_COMMUNITIES) /
+        this.numModels
+    );
+    let currentX = 0;
+    let currentY = 0;
+    for (let i = 0; i < this.numModels; i++) {
+      currentX += SPACE_BETWEEN_COMMUNITIES;
+      currentY += SPACE_BETWEEN_COMMUNITIES;
+      listOfBounds.push(
+        new Bounds(
+          currentX,
+          currentX + oneModelWidth,
+          currentY,
+          currentY + oneModelHeight
+        )
+      );
+      currentX += oneModelWidth;
+      currentY += oneModelHeight;
+    }
+    return listOfBounds;
   }
 
   setupCommunity() {
-    const dividedStats = new Stats(
-      this.numSusceptible / this.numModels,
-      this.numNonInfectious / this.numModels,
-      this.numInfectious / this.numInfectious,
-      this.numDead / this.numModels,
-      this.numImmune / this.numModels
-    );
+    const dividedStats = this._createDividedStats();
     const bounds = this._createIncrementals();
 
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i] = new Model(
         i,
-        this.agentView,
         bounds[i],
         dividedStats,
         this.compileStats.bind(this)
       );
-
-      console.log(bounds[0]);
-      console.log(bounds[1]);
 
       // DEBUG
       window.model = this.communities[i];
@@ -113,28 +136,14 @@ export default class Community {
           )
       );
 
-    this.numSusceptible = stats.susceptible;
-    this.numInfectious = stats.infectious;
-    this.numNonInfectious = stats.noninfectious;
-    this.numImmune = stats.immune;
-    this.numDead = stats.dead;
+    this._setValuesFromStatsToLocal(stats);
     this.updateStats(stats);
   }
 
   resetCommunity(stats) {
-    this.numSusceptible = stats.susceptible;
-    this.numInfectious = stats.infectious;
-    this.numNonInfectious = stats.noninfectious;
-    this.numImmune = stats.immune;
-    this.numDead = stats.dead;
+    this._setValuesFromStatsToLocal(stats);
 
-    const dividedStats = new Stats(
-      this.numSusceptible / this.numModels,
-      this.numNonInfectious / this.numModels,
-      this.numInfectious / this.numInfectious,
-      this.numDead / this.numModels,
-      this.numImmune / this.numModels
-    );
+    const dividedStats = this._createDividedStats();
     Object.values(this.communities).forEach((m) => m.resetModel(dividedStats));
   }
 
