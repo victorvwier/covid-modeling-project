@@ -116,10 +116,7 @@ export default class Person {
 
   canInfect(p) {
     // TODO: Get noninfectious cleared with Thomas
-    return (
-      (this.type === TYPES.INFECTIOUS || this.type === TYPES.NONINFECTIOUS) &&
-      p.type === TYPES.SUSCEPTIBLE
-    );
+    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
   }
 
   initializeAge(value) {
