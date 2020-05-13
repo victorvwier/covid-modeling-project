@@ -186,8 +186,10 @@ export default class Model {
   updatePopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       if (!this.population[i].dead) {
+        this.boundingBoxStruct.remove(this.population[i]);
         this.population[i].maxSpeed = POPULATION_SPEED;
         this.population[i].move(this.width, this.height);
+        this.boundingBoxStruct.insert(this.population[i]);
       }
     }
   }
