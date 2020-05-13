@@ -19,7 +19,7 @@ import {
 import Stats from './data/stats';
 
 export default class Model {
-  constructor(id, agentView, width, height, stats, compileStats) {
+  constructor(id, agentView, bounds, stats, compileStats) {
     // Intervals + animationFrame
     this._chartInterval = null;
     this._updatePopulationInterval = null;
@@ -29,8 +29,12 @@ export default class Model {
     this.id = id;
     this.spareRandom = null;
     this.agentView = agentView;
-    this.width = width;
-    this.height = height;
+
+    this.startX = bounds.startX;
+    this.endX = bounds.endX;
+    this.startY = bounds.startY;
+    this.endY = bounds.endY;
+
     this.population = [];
     this.numSusceptible = stats.susceptible;
     this.numInfectious = stats.infectious;
@@ -139,8 +143,8 @@ export default class Model {
 
   populateCanvasWithType(type, count) {
     for (let i = 0; i < count; i++) {
-      const x = getRandom(this.personRadius, this.width - this.personRadius);
-      const y = getRandom(this.personRadius, this.height - this.personRadius);
+      const x = getRandom(this.personRadius, this.endX - this.personRadius);
+      const y = getRandom(this.personRadius, this.endY - this.personRadius);
       const newPerson = new Person(type, x, y, 1);
       if (type === TYPES.DEAD) {
         newPerson.dead = true;
@@ -181,7 +185,7 @@ export default class Model {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       if (!this.population[i].dead) {
         this.population[i].maxSpeed = POPULATION_SPEED;
-        this.population[i].move(this.width, this.height);
+        this.population[i].move(this.startX, this.endX, this.startY, this.endY);
       }
     }
   }
@@ -202,7 +206,6 @@ export default class Model {
           this.population[j].setIncubationPeriod(
             this.gaussianRand(this.minIncubationTime, this.maxIncubationTime)
           );
-          // console.log(this.population[j].incubationPeriod);
           this.numNonInfectious += 1;
           this.numSusceptible -= 1;
         }

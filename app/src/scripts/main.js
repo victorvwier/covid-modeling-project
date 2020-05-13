@@ -46,6 +46,7 @@ export default class Main {
 
     // DEBUG
     window.chart = this.chart;
+    window.main = this;
   }
 
   createCurrentStats() {
@@ -72,7 +73,7 @@ export default class Main {
   setupCommunity() {
     const stats = this.createCurrentStats();
     this.community = new Community(
-      1, // TODO determine the number of communities
+      2, // TODO determine the number of communities
       this.agentView,
       this.width,
       this.height,

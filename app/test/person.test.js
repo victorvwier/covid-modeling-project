@@ -26,7 +26,7 @@ describe('Test move method', () => {
     const x = 1;
     const y = 1;
     const person = new Person(TYPES.DEAD, 1, 2, null);
-    person.move(12, 12);
+    person.move(0, 12, 0, 12);
     // assert nothing moved
     expect(person.x).toBe(x) && expect(person.y).toBe(y);
   });
@@ -139,7 +139,7 @@ describe('Test move method', () => {
 
   test('test can infect person is not infectable nothing happens', () => {
     const person = new Person(TYPES.DEAD, 1, 1, null);
-    const {type} = person;
+    const { type } = person;
     person.canInfect(null);
     expect(person.type).toBe(type);
   });

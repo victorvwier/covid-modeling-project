@@ -41,18 +41,20 @@ export default class Person {
     this.accY += forceY;
   }
 
-  _handleXOutOfBounds(width) {
-    if (this.x > width - 2 * this.radius || this.x < 2 * this.radius) {
-      if (this.x > width - 2 * this.radius) this.x = width - 2 * this.radius;
-      else if (this.x < 2 * this.radius) this.x = 2 * this.radius;
+  _handleXOutOfBounds(startX, endX) {
+    if (this.x > endX - 2 * this.radius || this.x < startX + 2 * this.radius) {
+      if (this.x > endX - 2 * this.radius) this.x = endX - 2 * this.radius;
+      else if (this.x < startX + 2 * this.radius)
+        this.x = startX + 2 * this.radius;
       this.speedX *= -1;
     }
   }
 
-  _handleYOutOfBounds(height) {
-    if (this.y > height - 2 * this.radius || this.y < 2 * this.radius) {
-      if (this.y > height - 2 * this.radius) this.y = height - 2 * this.radius;
-      else if (this.y < 2 * this.radius) this.y = 2 * this.radius;
+  _handleYOutOfBounds(startY, endY) {
+    if (this.y > endY - 2 * this.radius || this.y < startY + 2 * this.radius) {
+      if (this.y > endY - 2 * this.radius) this.y = endY - 2 * this.radius;
+      else if (this.y < startY + 2 * this.radius)
+        this.y = startY + 2 * this.radius;
       this.speedY *= -1;
     }
   }
@@ -65,14 +67,14 @@ export default class Person {
       this.speedY = Math.sign(this.speedY) * this.maxSpeed;
   }
 
-  move(width, height) {
+  move(startX, endX, startY, endY) {
     if (this.type !== TYPES.DEAD) {
       this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
       this.speedX += this.accX;
       this.speedY += this.accY;
 
-      this._handleXOutOfBounds(width);
-      this._handleYOutOfBounds(height);
+      this._handleXOutOfBounds(startX, endX);
+      this._handleYOutOfBounds(startY, endY);
 
       this._checkIfExceededMaxSpeed();
 

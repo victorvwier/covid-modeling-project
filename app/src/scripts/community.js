@@ -1,6 +1,8 @@
 import wireSlidersToHandlers from './DOM/parameters';
 import Model from './model';
 import Stats from './data/stats';
+import Bounds from './data/bounds';
+import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
 
 export default class Community {
   constructor(numModels, agentView, width, height, stats, updateStats) {
@@ -17,8 +19,7 @@ export default class Community {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
-
-    window.Community = this;
+    window.community = this;
   }
 
   // setup method (initializes models)
@@ -28,7 +29,6 @@ export default class Community {
   }
 
   run() {
-    console.log(this.communities);
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i].populateCanvas();
       this.communities[i].drawPopulation();
@@ -36,6 +36,39 @@ export default class Community {
       this.communities[i].loop();
       // wireSlidersToHandlers(this.communities[i]);
     }
+  }
+
+  _createIncrementals() {
+    return [new Bounds(20, 60, 20, 60), new Bounds(320, 400, 20, 50)];
+    // const listOfBounds = [];
+    // // Space between each of the models + 2 on the sides
+    // const oneModelWidth =
+    //   (this.width -
+    //     this.numModels * SPACE_BETWEEN_COMMUNITIES -
+    //     2 * SPACE_BETWEEN_COMMUNITIES) /
+    //   this.numModels;
+    // const oneModelHeight =
+    //   (this.height -
+    //     this.numModels * SPACE_BETWEEN_COMMUNITIES -
+    //     2 * SPACE_BETWEEN_COMMUNITIES) /
+    //   this.numModels;
+    // let currentX = 0;
+    // let currentY = 0;
+    // for (let i = 0; i < this.numModels; i++) {
+    //   currentX += SPACE_BETWEEN_COMMUNITIES;
+    //   currentY += SPACE_BETWEEN_COMMUNITIES;
+    //   listOfBounds.push(
+    //     new Bounds(
+    //       currentX,
+    //       currentX + oneModelWidth,
+    //       currentY,
+    //       currentY + oneModelHeight
+    //     )
+    //   );
+    //   currentX += oneModelWidth;
+    //   currentY += oneModelHeight;
+    // }
+    // return listOfBounds;
   }
 
   setupCommunity() {
@@ -46,13 +79,13 @@ export default class Community {
       this.numDead / this.numModels,
       this.numImmune / this.numModels
     );
+    const bounds = this._createIncrementals();
 
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i] = new Model(
         i,
         this.agentView,
-        this.width,
-        this.height,
+        bounds[i],
         dividedStats,
         this.compileStats.bind(this)
       );
@@ -76,6 +109,12 @@ export default class Community {
             acc.immune + cur.immune
           )
       );
+
+    this.numSusceptible = stats.susceptible;
+    this.numInfectious = stats.infectious;
+    this.numNonInfectious = stats.noninfectious;
+    this.numImmune = stats.immune;
+    this.numDead = stats.dead;
     this.updateStats(stats);
   }
 
