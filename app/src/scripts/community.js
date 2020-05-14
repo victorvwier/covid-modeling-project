@@ -2,6 +2,7 @@ import wireSlidersToHandlers from './DOM/parameters';
 import Model from './model';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
+import Relocation from './data/relocation';
 import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
 
 export default class Community {
@@ -149,6 +150,15 @@ export default class Community {
     this._setValuesFromStatsToLocal(stats);
     this.updateStats(stats);
   }
+
+  // relocate(relocation) {
+  //   let destination = Math.random(0, this.numModels - 1);
+  //   while (destination === relocation.origin) {
+  //     destination = Math.random(0, this.numModels - 1);
+  //   }
+  //   relocation.setDestination(destination);
+  //   this.communities[destination].addPerson(relocation.person);
+  // }
 
   resetCommunity(stats) {
     this._setValuesFromStatsToLocal(stats);

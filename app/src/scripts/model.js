@@ -15,8 +15,11 @@ import {
   MAX_INFECTIOUS_TIME,
   MIN_TIME_UNTIL_DEAD,
   MAX_TIME_UNTIL_DEAD,
+  RELOCATION_PROBABILITY,
 } from './CONSTANTS';
 import Stats from './data/stats';
+import Relocation from './data/relocation';
+import Community from './community';
 
 export default class Model {
   constructor(id, bounds, stats, compileStats) {
@@ -55,6 +58,8 @@ export default class Model {
 
     this.minTimeUntilDead = MIN_TIME_UNTIL_DEAD;
     this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
+
+    this.relocationProbability = RELOCATION_PROBABILITY;
 
     this.totalPopulation =
       this.numSusceptible +
@@ -150,7 +155,7 @@ export default class Model {
         this.startY + this.personRadius,
         this.endY - this.personRadius
       );
-      const newPerson = new Person(type, x, y, 1);
+      const newPerson = new Person(type, x, y, this.id);
       if (type === TYPES.DEAD) {
         newPerson.dead = true;
       }
@@ -186,9 +191,18 @@ export default class Model {
     };
   }
 
+  relocationExport(id, person) {
+    const relocation = new Relocation(id, person);
+    return relocation;
+  }
+
   updatePopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       if (!this.population[i].dead) {
+        // if (Math.random() < this.relocationProbability) {
+        //   this.relocationExport(this.id, this.population[i]);
+        //   this.population.splice(i, 1);
+        // }
         this.population[i].maxSpeed = POPULATION_SPEED;
         this.population[i].move(this.startX, this.endX, this.startY, this.endY);
       }
@@ -216,6 +230,10 @@ export default class Model {
         }
       }
     }
+  }
+
+  addPerson(person) {
+    this.population.push(person);
   }
 
   setup() {

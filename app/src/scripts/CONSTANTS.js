@@ -21,6 +21,8 @@ export const MAX_INFECTIOUS_TIME = 10;
 export const MIN_TIME_UNTIL_DEAD = 15;
 export const MAX_TIME_UNTIL_DEAD = 30;
 
+export const RELOCATION_PROBABILITY = 0.1;
+
 export const COLORS = {
   SUSCEPTIBLE: '#05befc',
   NONINFECTIOUS: '#c9e265',
