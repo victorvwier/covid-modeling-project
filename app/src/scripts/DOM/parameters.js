@@ -11,6 +11,7 @@ import {
   MAX_INFECTIOUS_TIME,
   MIN_TIME_UNTIL_DEAD,
   MAX_TIME_UNTIL_DEAD,
+  REPULSION_FORCE,
 } from '../CONSTANTS';
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
@@ -123,6 +124,15 @@ export default function (model) {
     PERSON_RADIUS,
     '',
     model.setPersonRadius.bind(model)
+  );
+
+  // agentRadius
+  wireInput(
+    'repulsionForce',
+    'repulsionForceOut',
+    REPULSION_FORCE,
+    'Unit?',
+    model.setRepulsionForce.bind(model)
   );
 
   // initial number of susceptibles

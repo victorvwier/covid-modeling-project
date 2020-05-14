@@ -229,6 +229,25 @@
 
           <div class="row">
             <div class="col-sm">
+              <p>Repulsion:</p>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value="0"
+                step="0.2"
+                class="slider"
+                id="repulsionForce"
+              />
+              <div class="outputContainer">
+                <output id="repulsionForceOut" for="repulsionForce"
+                  >0</output
+                >
+              </div>
+              <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
+            </div>
+
+            <div class="col-sm">
               <p>Initial number of susceptibles:</p>
               <input
                 type="range"
@@ -282,6 +301,7 @@
               </button>
             </div>
           </div>
+          
         </div>
       </div>
       <div id="glcanvas-container">

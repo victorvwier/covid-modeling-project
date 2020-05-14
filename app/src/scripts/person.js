@@ -4,6 +4,7 @@ import {
   POPULATION_SPEED,
   TYPES,
   INFECTION_RADIUS,
+  REPULSION_FORCE,
 } from './CONSTANTS';
 
 export default class Person {
@@ -15,6 +16,7 @@ export default class Person {
     this.x = x;
     this.y = y;
     this.maxSpeed = POPULATION_SPEED;
+    this.repulsionForce = REPULSION_FORCE;
     this.speedX = 3 * (Math.floor(Math.random() * 2) || -1);
     this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
     this.accX = 0;
@@ -139,9 +141,19 @@ export default class Person {
   canInfect(p) {
     // TODO: Get noninfectious cleared with Thomas
     return (
-      (this.type === TYPES.INFECTIOUS || this.type === TYPES.NONINFECTIOUS) &&
+      (this.type === TYPES.INFECTIOUS) &&
       p.type === TYPES.SUSCEPTIBLE
     );
+  }
+
+  repel(p) {
+    const deltaX = this.x - p.x;
+    const deltaY = this.y - p.y;
+    const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    const vecX = deltaX * (1/dist)/dist * this.repulsionForce;
+    const vecY = deltaY * (1/dist)/dist * this.repulsionForce;
+    this.applyForce(vecX, vecY);
   }
 
   initializeAge(value) {

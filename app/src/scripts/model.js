@@ -15,6 +15,7 @@ import {
   MAX_INFECTIOUS_TIME,
   MIN_TIME_UNTIL_DEAD,
   MAX_TIME_UNTIL_DEAD,
+  REPULSION_FORCE,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -44,7 +45,7 @@ export default class Model {
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
     this.transmissionProb = TRANSMISSION_PROB;
-
+    this.repulsionForce = REPULSION_FORCE;
     this.minIncubationTime = MIN_INCUBATION_TIME;
     this.maxIncubationTime = MAX_INCUBATION_TIME;
 
@@ -61,7 +62,12 @@ export default class Model {
       this.numImmune +
       this.numNonInfectious;
 
-    this.boundingBoxStruct = new BoundingBoxStructure(width, height, INFECTION_RADIUS);
+    this.boundingBoxStruct = new BoundingBoxStructure(width, height, 5 * INFECTION_RADIUS);
+  }
+
+  setRepulsionForce(newValue) {
+    this.repulsionForce = newValue;
+    this.updateRepulsionForce(newValue);
   }
 
   setTransmissionProb(newValue) {
@@ -134,6 +140,12 @@ export default class Model {
     }
   }
 
+  updateRepulsionForce(newValue) {
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].repulsionForce = newValue;
+    }
+  }
+
   populateCanvas() {
     this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
     this.populateCanvasWithType(TYPES.INFECTIOUS, this.numInfectious);
@@ -198,6 +210,12 @@ export default class Model {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const met = this.boundingBoxStruct.query(this.population[i]);
       for(let j = 0; j < met.length; j += 1) {
+        // Social distancing
+        if(this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
+          this.population[i].repel(met[j]);
+        }
+        
+        // Infection
         if(this.population[i].canInfect(met[j]) && Math.random() <= this.transmissionProb) {
           met[j].startIncubation();
           met[j].setIncubationPeriod(this.gaussianRand(this.minIncubationTime, this.maxIncubationTime));
@@ -303,6 +321,7 @@ export default class Model {
     this.populateCanvas();
     this.updateInfectionRadius(this.infectionRadius);
     this.updateRadius(this.personRadius);
+    this.updateRepulsionForce(this.repulsionForce);
     this.drawPopulation();
 
     this.setup();
