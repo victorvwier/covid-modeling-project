@@ -69,7 +69,7 @@ return result;
     }
 }
 
-export default class BoundingBoxStructure {
+export class BoundingBoxStructure {
     constructor(width, height, radius) {
         this.width = width;
         this.height = height;
