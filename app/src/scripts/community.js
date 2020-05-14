@@ -73,33 +73,42 @@ export default class Community {
     // return [new Bounds(0, 100, 0, 100), new Bounds(120, 220, 0, 100)];
     const listOfBounds = [];
     // Space between each of the models + 2 on the sides
+    let widthFactor = 1;
+    let heightFactor = 1;
+    if (this.numModels <= 6) {
+      widthFactor = 2;
+      heightFactor = Math.ceil(this.numModels / widthFactor);
+    } else if (this.numModels <= 12) {
+      widthFactor = 3;
+      heightFactor = Math.ceil(this.numModels / widthFactor);
+    }
+
     const oneModelWidth = Math.round(
-      (this.width -
-        this.numModels * SPACE_BETWEEN_COMMUNITIES -
-        2 * SPACE_BETWEEN_COMMUNITIES) /
-        this.numModels
+      (this.width - (widthFactor + 1) * SPACE_BETWEEN_COMMUNITIES) / widthFactor
     );
+
     const oneModelHeight = Math.round(
-      (this.height -
-        this.numModels * SPACE_BETWEEN_COMMUNITIES -
-        2 * SPACE_BETWEEN_COMMUNITIES) /
-        this.numModels
+      (this.height - (heightFactor + 1) * SPACE_BETWEEN_COMMUNITIES) /
+        heightFactor
     );
     let currentX = 0;
     let currentY = 0;
+    let nextY = 0;
+
     for (let i = 0; i < this.numModels; i++) {
-      currentX += SPACE_BETWEEN_COMMUNITIES;
-      currentY += SPACE_BETWEEN_COMMUNITIES;
+      if (
+        (this.numModels <= 6 && i % 2 === 0) ||
+        (this.numModels <= 12 && this.numModels >= 7 && i % 3 === 0)
+      ) {
+        currentX = SPACE_BETWEEN_COMMUNITIES;
+        currentY = nextY + SPACE_BETWEEN_COMMUNITIES;
+        nextY = currentY + oneModelHeight;
+      }
       listOfBounds.push(
-        new Bounds(
-          currentX,
-          currentX + oneModelWidth,
-          currentY,
-          currentY + oneModelHeight
-        )
+        new Bounds(currentX, currentX + oneModelWidth, currentY, nextY)
       );
       currentX += oneModelWidth;
-      currentY += oneModelHeight;
+      currentX += SPACE_BETWEEN_COMMUNITIES;
     }
     return listOfBounds;
   }

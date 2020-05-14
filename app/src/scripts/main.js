@@ -73,7 +73,7 @@ export default class Main {
   setupCommunity() {
     const stats = this.createCurrentStats();
     this.community = new Community(
-      3, // TODO determine the number of communities
+      6, // TODO determine the number of communities
       this.agentView,
       this.width,
       this.height,
