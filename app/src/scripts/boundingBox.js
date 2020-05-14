@@ -1,4 +1,4 @@
-export class BoundingBox {
+class BoundingBox {
     constructor(radius) {
         this.people = [];
         this.radius = radius;
@@ -28,7 +28,7 @@ export class BoundingBox {
     }
 }
 
-export class Column {
+class Column {
     constructor(height, radius) {
         this.height = height;
         this.radius = radius;
@@ -58,13 +58,18 @@ export class Column {
 
     query(person) {
         const index = this.getIndex(person);
-        return [].concat(this.boxes[index - 1].query(person),
-                         this.boxes[index].query(person), 
-                         this.boxes[index + 1].query(person));
+        let result = this.boxes[index].query(person);
+        if (index !== 0) {
+            result = result.concat(this.boxes[index - 1].query(person));
+        }
+        if (index !== Math.floor(this.width / this.radius)) {
+            result = result.concat(this.boxes[index + 1].query(person));
+        }
+        return result;
     }
 }
 
-export class BoundingBoxStructure {
+export default class BoundingBoxStructure {
     constructor(width, height, radius) {
         this.width = width;
         this.height = height;
@@ -95,8 +100,13 @@ export class BoundingBoxStructure {
 
     query(person) {
         const index = this.getIndex(person);
-        return [].concat(this.columns[index - 1].query(person), 
-                         this.columns[index].query(person),
-                         this.columns[index + 1].query(person));
+        let result = this.columns[index].query(person);
+        if (index !== 0) {
+            result = result.concat(this.columns[index - 1].query(person));
+        }
+        if (index !== Math.floor(this.width / this.radius)) {
+            result = result.concat(this.columns[index + 1].query(person));
+        }
+        return result;
     }
 }

@@ -17,6 +17,7 @@ import {
   MAX_TIME_UNTIL_DEAD,
 } from './CONSTANTS';
 import Stats from './data/stats';
+import BoundingBoxStructure from './boundingBox';
 
 export default class Model {
   constructor(agentView, width, height, stats, getStats, updateStats) {
@@ -59,6 +60,8 @@ export default class Model {
       this.numDead +
       this.numImmune +
       this.numNonInfectious;
+
+    this.boundingBoxStruct = new BoundingBoxStructure(width, height, INFECTION_RADIUS);
   }
 
   setTransmissionProb(newValue) {
@@ -124,8 +127,10 @@ export default class Model {
   }
 
   updateInfectionRadius(newValue) {
+    this.boundingBoxStruct = new BoundingBoxStructure(this.width, this.height, newValue);
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].infectionRadius = newValue;
+      this.boundingBoxStruct.insert(this.population[i]);
     }
   }
 
@@ -146,6 +151,7 @@ export default class Model {
         newPerson.dead = true;
       }
       this.population.push(newPerson);
+      this.boundingBoxStruct.insert(newPerson);
     }
   }
 
@@ -180,29 +186,21 @@ export default class Model {
   updatePopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       if (!this.population[i].dead) {
+        this.boundingBoxStruct.remove(this.population[i]);
         this.population[i].maxSpeed = POPULATION_SPEED;
         this.population[i].move(this.width, this.height);
+        this.boundingBoxStruct.insert(this.population[i]);
       }
     }
   }
 
   interactPopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
-      for (let j = 0; j < this.totalPopulation; j += 1) {
-        if (
-          i !== j &&
-          this.population[i].metWith(
-            this.population[j],
-            this.infectionRadius
-          ) &&
-          this.population[i].canInfect(this.population[j]) &&
-          Math.random() <= this.transmissionProb
-        ) {
-          this.population[j].startIncubation();
-          this.population[j].setIncubationPeriod(
-            this.gaussianRand(this.minIncubationTime, this.maxIncubationTime)
-          );
-          // console.log(this.population[j].incubationPeriod);
+      const met = this.boundingBoxStruct.query(this.population[i]);
+      for(let j = 0; j < met.length; j += 1) {
+        if(this.population[i].canInfect(met[j]) && Math.random() <= this.transmissionProb) {
+          met[j].startIncubation();
+          met[j].setIncubationPeriod(this.gaussianRand(this.minIncubationTime, this.maxIncubationTime));
           this.numNonInfectious += 1;
           this.numSusceptible -= 1;
         }
@@ -294,8 +292,7 @@ export default class Model {
     // Set new values and reset to init
     this.population = [];
     this.numSusceptible = stats.susceptible;
-    this.numInfectious = stats.infectious;
-    this.numImmune = stats.immune;
+
     this.numNonInfectious = stats.noninfectious;
     this.totalPopulation = stats.susceptible + stats.infectious;
 

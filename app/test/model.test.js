@@ -71,7 +71,7 @@ describe('Model.js test suite', () => {
   });
 
   test('updatePopulation should not change anything if person is dead', () => {
-    const model = new Model(null, 1, 1, new Stats(0, 0, 0, 1, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 0, 0, 1, 0), null, null);
     model.populateCanvas();
     const person = model.population[0];
 
@@ -115,7 +115,7 @@ describe('Model.js test suite', () => {
   });
 
   test('update a non infectious with incubationTime !== incubationPeriod should do nothing', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 1, 0, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 1, 0, 0, 0), null, null);
     model.populateCanvas();
     const nonInfectiousPerson = model.population[0];
     // Set incubation time to be -1 incubation periode so that he can go in true
@@ -138,7 +138,7 @@ describe('Model.js test suite', () => {
   });
 
   test('update a non infectious should turn him infectious', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 1, 0, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 1, 0, 0, 0), null, null);
     model.populateCanvas();
     const nonInfectiousPerson = model.population[0];
     // Set incubation time to be -1 incubation periode so that he can go in true
@@ -163,7 +163,7 @@ describe('Model.js test suite', () => {
   });
 
   test('update a non infectious should turn him immune', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 1, 0, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 1, 0, 0, 0), null, null);
     model.populateCanvas();
     const nonInfectiousPerson = model.population[0];
     // Set incubation time to be -1 incubation periode so that he can go in true
@@ -221,7 +221,7 @@ describe('Model.js test suite', () => {
   // }
 
   test('calling update on susceptible person should have no effect', () => {
-    const model = new Model(null, 0, 0, new Stats(1, 0, 0, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(1, 0, 0, 0, 0), null, null);
     model.populateCanvas();
     const susceptiblePerson = model.population[0];
 
@@ -242,7 +242,7 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is destined to immunity should become immune cause it is time', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 1, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = false;
@@ -265,7 +265,7 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is destined to immunity should not become immune cause it is not time yet', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 1, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = false;
@@ -288,7 +288,7 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is destined to death should become dead', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 1, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = true;
@@ -312,7 +312,7 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is destined to death should not die cause it is not time yet', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 1, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = true;
@@ -336,7 +336,7 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is neither dead nor immune should be destined to immunity', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 1, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = false;
@@ -354,7 +354,7 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is neither dead nor immune should be destined to death', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 1, 0, 0), null, null);
+    const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = false;
