@@ -110,6 +110,23 @@ export default class Community {
       currentX += oneModelWidth;
       currentX += SPACE_BETWEEN_COMMUNITIES;
     }
+
+    // let currentX = 0;
+    // let currentY = 0;
+    // for (let i = 0; i < this.numModels; i++) {
+    //   currentX += SPACE_BETWEEN_COMMUNITIES;
+    //   currentY += SPACE_BETWEEN_COMMUNITIES;
+    //   listOfBounds.push(
+    //     new Bounds(
+    //       currentX,
+    //       currentX + oneModelWidth,
+    //       currentY,
+    //       currentY + oneModelHeight
+    //     )
+    //   );
+    //   currentX += oneModelWidth;
+    //   currentY += oneModelHeight;
+    // }
     return listOfBounds;
   }
 
