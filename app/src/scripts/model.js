@@ -1,5 +1,5 @@
 import Person from './person';
-import { getRandom } from './util';
+import { getRandom, gaussianRand, mortalityStat } from './util';
 
 import {
   PERSON_RADIUS,
@@ -19,7 +19,6 @@ import {
 } from './CONSTANTS';
 import Stats from './data/stats';
 import Relocation from './data/relocation';
-import Community from './community';
 
 export default class Model {
   constructor(id, bounds, stats, compileStats) {
@@ -163,11 +162,6 @@ export default class Model {
     }
   }
 
-  // drawPopulation() {
-  //   const drawInfo = this.getDrawInfo();
-  //   this.agentView.draw(drawInfo);
-  // }
-
   getDrawInfo() {
     const positions = [];
     const colors = [];
@@ -191,18 +185,9 @@ export default class Model {
     };
   }
 
-  relocationExport(id, person) {
-    const relocation = new Relocation(id, person);
-    return relocation;
-  }
-
   updatePopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       if (!this.population[i].dead) {
-        // if (Math.random() < this.relocationProbability) {
-        //   this.relocationExport(this.id, this.population[i]);
-        //   this.population.splice(i, 1);
-        // }
         this.population[i].maxSpeed = POPULATION_SPEED;
         this.population[i].move(this.startX, this.endX, this.startY, this.endY);
       }
@@ -223,17 +208,13 @@ export default class Model {
         ) {
           this.population[j].startIncubation();
           this.population[j].setIncubationPeriod(
-            this.gaussianRand(this.minIncubationTime, this.maxIncubationTime)
+            gaussianRand(this.minIncubationTime, this.maxIncubationTime)
           );
           this.numNonInfectious += 1;
           this.numSusceptible -= 1;
         }
       }
     }
-  }
-
-  addPerson(person) {
-    this.population.push(person);
   }
 
   setup() {
@@ -249,7 +230,6 @@ export default class Model {
     );
 
     // Bind this so that updates can proagate to chart via main
-    // this._chartInterval = setInterval(this.exportStats.bind(this), 500);
     this._chartInterval = setInterval(this.compileStats, 500);
   }
 
@@ -270,15 +250,15 @@ export default class Model {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
-        if (Math.random() <= this.mortalityStat(person.age)) {
+        if (Math.random() <= mortalityStat(person.age)) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
-            this.gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
+            gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
           );
         } else {
           person.destinyImmune = true;
           person.setInfectiousPeriod(
-            this.gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
+            gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
           );
         }
       } else if (person.destinyImmune) {
@@ -304,12 +284,10 @@ export default class Model {
 
   loop() {
     this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-    // this.context.clearRect(0, 0, this.width, this.height);
 
     // applyForces();
     this.updatePopulation();
     this.interactPopulation();
-    // this.drawPopulation();
   }
 
   resetModel(stats) {
@@ -327,53 +305,15 @@ export default class Model {
     this.totalPopulation = stats.susceptible + stats.infectious;
 
     // clear the canvas
-    // this.context.clearRect(0, 0, this.width, this.height);
 
     // start the loop again
     this.populateCanvas();
     this.updateInfectionRadius(this.infectionRadius);
     this.updateRadius(this.personRadius);
-    // this.drawPopulation();
 
     this.setup();
     this.loop();
   }
 
   // Normal Distribution Function (min, max, 0)
-
-  gaussianRand(min, max) {
-    let u = 0;
-    let v = 0;
-    while (u === 0) u = Math.random();
-    while (v === 0) v = Math.random();
-    let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-
-    num = num / 10.0 + 0.5;
-    if (num > 1 || num < 0) num = this.gaussianRand(min, max);
-    num *= max - min;
-    num += min;
-    return Math.round(num);
-  }
-
-  mortalityStat(age) {
-    if (0 <= age && age <= 9) {
-      return 0;
-    } else if (10 <= age && age <= 19) {
-      return 0.002;
-    } else if (20 <= age && age <= 29) {
-      return 0.002;
-    } else if (30 <= age && age <= 39) {
-      return 0.002;
-    } else if (40 <= age && age <= 49) {
-      return 0.004;
-    } else if (50 <= age && age <= 59) {
-      return 0.013;
-    } else if (60 <= age && age <= 69) {
-      return 0.036;
-    } else if (70 <= age && age <= 79) {
-      return 0.08;
-    } else {
-      return 0.148;
-    }
-  }
 }
