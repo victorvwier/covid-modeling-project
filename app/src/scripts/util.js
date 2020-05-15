@@ -2,6 +2,18 @@ export function getRandom(min, max) {
   return Math.random() * (max - min) + min;
 }
 
+/**
+ * Gets random between min-max inclusive
+ * @param {*} min
+ * @param {*} max
+ */
+export function getRandomIntExceptForValue(min, max, exceptFor) {
+  const rand = Math.floor(Math.random() * (max - min + 1)) + min;
+  return rand === exceptFor
+    ? getRandomIntExceptForValue(min, max, exceptFor)
+    : rand;
+}
+
 export function gaussianRand(min, max) {
   let u = 0;
   let v = 0;

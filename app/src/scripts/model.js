@@ -18,10 +18,12 @@ import {
   RELOCATION_PROBABILITY,
 } from './CONSTANTS';
 import Stats from './data/stats';
-import Relocation from './data/relocation';
 
 export default class Model {
-  constructor(id, bounds, stats, compileStats) {
+  constructor(id, bounds, stats, compileStats, registerRelocation) {
+    // Experimental
+    this.registerRelocation = registerRelocation;
+
     // Intervals + animationFrame
     this._chartInterval = null;
     this._updatePopulationInterval = null;
@@ -187,9 +189,24 @@ export default class Model {
 
   updatePopulation() {
     for (let i = 0; i < this.totalPopulation; i += 1) {
-      if (!this.population[i].dead) {
-        this.population[i].maxSpeed = POPULATION_SPEED;
-        this.population[i].move(this.startX, this.endX, this.startY, this.endY);
+      const currentPerson = this.population[i];
+      if (!currentPerson.dead) {
+        if (
+          Math.random() < RELOCATION_PROBABILITY &&
+          !currentPerson.recentlyRelocated
+        ) {
+          // Relocate
+          console.log('Should relocate');
+          this.registerRelocation(currentPerson);
+        } else {
+          this.population[i].maxSpeed = POPULATION_SPEED;
+          this.population[i].move(
+            this.startX,
+            this.endX,
+            this.startY,
+            this.endY
+          );
+        }
       }
     }
   }
@@ -283,7 +300,7 @@ export default class Model {
   }
 
   loop() {
-    this._animationFrame = requestAnimationFrame(this.loop.bind(this));
+    // this._animationFrame = requestAnimationFrame(this.loop.bind(this));
 
     // applyForces();
     this.updatePopulation();

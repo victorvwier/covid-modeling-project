@@ -7,8 +7,8 @@ import {
 } from './CONSTANTS';
 
 export default class Person {
-  constructor(type, x, y, id) {
-    this.id = id;
+  constructor(type, x, y, modelId) {
+    this.modelId = modelId;
     this.type = type;
     this.radius = PERSON_RADIUS;
     this.infectionRadius = INFECTION_RADIUS;

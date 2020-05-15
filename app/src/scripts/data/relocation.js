@@ -1,11 +1,7 @@
 export default class Relocation {
-  constructor(origin, person) {
+  constructor(origin, destination, person) {
     this.origin = origin;
     this.person = person;
-    this.destination = 0;
-  }
-
-  setDestination(newValue) {
-    this.destination = newValue;
+    this.destination = destination;
   }
 }

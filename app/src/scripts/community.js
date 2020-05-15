@@ -2,8 +2,9 @@ import wireSlidersToHandlers from './DOM/parameters';
 import Model from './model';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
-import Relocation from './data/relocation';
 import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
+import Relocation from './data/relocation';
+import { getRandomIntExceptForValue } from './util';
 
 export default class Community {
   constructor(numModels, agentView, width, height, stats, updateStats) {
@@ -15,8 +16,11 @@ export default class Community {
     this.agentView = agentView;
     this.updateStats = updateStats;
 
+    this.relocations = [];
+
     this._setValuesFromStatsToLocal(stats);
 
+    // DEBUG
     window.community = this;
   }
 
@@ -38,18 +42,34 @@ export default class Community {
     this.numDead = stats.dead;
   }
 
-  // setup method (initializes models)
-  setup() {
-    // initialize all models
-    // population
+  registerRelocation(person) {
+    const sourceId = person.modelId;
+    const destId = getRandomIntExceptForValue(0, this.numModels - 1, sourceId);
+    this.relocations.push(new Relocation(sourceId, destId, person));
+  }
+
+  handleRelocations() {
+    console.log('Handling yo');
+    this.relocations.forEach((relocation) => {
+      // Remove person from old community
+      this.communities[relocation.origin].population = this.communities[
+        relocation.origin
+      ].population.filter((x) => x !== relocation.person);
+      // // Add person to new community
+      this.communities[relocation.destination].population.push(
+        relocation.person
+      );
+      // // Change modelId of the person
+      relocation.person.modelId = relocation.destination;
+    });
+    this.relocations = [];
   }
 
   run() {
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i].populateCanvas();
-      // this.communities[i].drawPopulation();
       this.communities[i].setup();
-      this.communities[i].loop();
+      // this.communities[i].loop();
       // wireSlidersToHandlers(this.communities[i]);
     }
 
@@ -58,6 +78,13 @@ export default class Community {
 
   passDrawInfoToAgentChart() {
     requestAnimationFrame(this.passDrawInfoToAgentChart.bind(this));
+
+    // Handle all relocations before run
+    this.handleRelocations();
+    Object.values(this.communities).forEach((com) => {
+      com.loop();
+    });
+
     const allData = Object.values(this.communities)
       .map((com) => com.getDrawInfo())
       .reduce((acc, cur) => ({
@@ -124,7 +151,8 @@ export default class Community {
         i,
         bounds[i],
         dividedStats,
-        this.compileStats.bind(this)
+        this.compileStats.bind(this),
+        this.registerRelocation.bind(this)
       );
 
       // DEBUG
@@ -150,15 +178,6 @@ export default class Community {
     this._setValuesFromStatsToLocal(stats);
     this.updateStats(stats);
   }
-
-  // relocate(relocation) {
-  //   let destination = Math.random(0, this.numModels - 1);
-  //   while (destination === relocation.origin) {
-  //     destination = Math.random(0, this.numModels - 1);
-  //   }
-  //   relocation.setDestination(destination);
-  //   this.communities[destination].addPerson(relocation.person);
-  // }
 
   resetCommunity(stats) {
     this._setValuesFromStatsToLocal(stats);
