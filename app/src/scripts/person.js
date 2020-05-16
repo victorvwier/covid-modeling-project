@@ -4,6 +4,7 @@ import {
   POPULATION_SPEED,
   TYPES,
   INFECTION_RADIUS,
+  RELOCATION_STEP_SIZE,
 } from './CONSTANTS';
 
 export default class Person {
@@ -29,6 +30,13 @@ export default class Person {
     this.incubationPeriod = 0;
     this.infectiousPeriod = 0;
     this.age = Math.round(Math.random() * 100);
+
+    this.relocating = false;
+
+    this.destinationX = 0;
+    this.destinationY = 0;
+
+    this.step = RELOCATION_STEP_SIZE;
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
@@ -83,6 +91,43 @@ export default class Person {
 
       this.accX *= 0;
       this.accY *= 0;
+    }
+  }
+
+  getStep(current, destination) {
+    return (destination - current) / this.step;
+  }
+
+  isThereYet() {
+    return this._isXReached() && this._isYReached();
+  }
+
+  _isXReached() {
+    return this.destinationX + 5 > this.x && this.destinationX - 5 < this.x;
+  }
+
+  _isYReached() {
+    return this.destinationY + 5 > this.y && this.destinationY - 5 < this.y;
+  }
+
+  relocateMove() {
+    if (this.isThereYet()) {
+      this.relocation === false;
+    } else {
+      this.applyForce(
+        this.getStep(this.x, this.destinationX),
+        this.getStep(this.y, this.destinationY)
+      );
+      this.speedX += this.accX;
+      this.speedY += this.accY;
+
+      this.x += this.speedX;
+      this.y += this.speedY;
+
+      this.accX *= 0;
+      this.accY *= 0;
+      this.speedX = 0;
+      this.speedY = 0;
     }
   }
 

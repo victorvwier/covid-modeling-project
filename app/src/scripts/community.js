@@ -3,7 +3,6 @@ import Model from './model';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
 import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
-import Relocation from './data/relocation';
 import { getRandomIntExceptForValue } from './util';
 
 export default class Community {
@@ -71,6 +70,11 @@ export default class Community {
     this.communities[destId].handlePersonJoining(person);
     // Change modelId of person
     person.modelId = destId;
+    const coords = this.communities[destId].getCenterPoints();
+
+    person.destinationX = coords.x;
+    person.destinationY = coords.y;
+    // set destination coordinates for the person
 
     // Resume
     this.resumeExecution();

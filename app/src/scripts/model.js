@@ -18,6 +18,7 @@ import {
   RELOCATION_PROBABILITY,
 } from './CONSTANTS';
 import Stats from './data/stats';
+import Coordinate from './data/coordinate';
 
 export default class Model {
   constructor(id, bounds, stats, compileStats, registerRelocation) {
@@ -245,24 +246,29 @@ export default class Model {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const currentPerson = this.population[i];
       if (!currentPerson.dead) {
-        currentPerson.maxSpeed = POPULATION_SPEED;
-
         if (
           Math.random() < RELOCATION_PROBABILITY &&
-          !currentPerson.recentlyRelocated
+          !currentPerson.relocating
         ) {
-          // Relocate
-          console.log('Should relocate');
-          currentPerson.maxSpeed = POPULATION_SPEED;
+          currentPerson.relocating = true;
           this.registerRelocation(currentPerson);
 
           // Add other case person is now moving
+        } else if (currentPerson.relocating) {
+          currentPerson.relocateMove();
         } else {
-          // currentPerson.maxSpeed = POPULATION_SPEED;
+          currentPerson.maxSpeed = POPULATION_SPEED;
           currentPerson.move(this.startX, this.endX, this.startY, this.endY);
         }
       }
     }
+  }
+
+  getCenterPoints() {
+    return new Coordinate(
+      Math.round((this.startX + this.endX) / 2),
+      Math.round((this.startY + this.endY) / 2)
+    );
   }
 
   interactPopulation() {
