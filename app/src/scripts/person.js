@@ -34,6 +34,7 @@ export default class Person {
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
     else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
     else if (type === TYPES.DEAD) this.color = COLORS.DEAD;
+    else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
   }
 
   draw() {
@@ -59,8 +60,8 @@ export default class Person {
   }
 
   applyForce(forceX, forceY) {
-    this.accX += forceX;
-    this.accY += forceY;
+    this.accX = forceX;
+    this.accY = forceY;
   }
 
   _handleXOutOfBounds(width) {
@@ -87,19 +88,19 @@ export default class Person {
       this.speedY = Math.sign(this.speedY) * this.maxSpeed;
   }
 
-  move(width, height) {
+  move(width, height, dt) {
     if (this.type !== TYPES.DEAD) {
       this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
-      this.speedX += this.accX;
-      this.speedY += this.accY;
-
+      
+      this.speedX += this.accX * dt;
+      this.speedY += this.accY * dt;
       this._handleXOutOfBounds(width);
       this._handleYOutOfBounds(height);
 
       this._checkIfExceededMaxSpeed();
 
-      this.x += this.speedX;
-      this.y += this.speedY;
+      this.x += this.speedX * dt;
+      this.y += this.speedY * dt;
 
       this.accX *= 0;
       this.accY *= 0;
@@ -139,7 +140,7 @@ export default class Person {
   canInfect(p) {
     // TODO: Get noninfectious cleared with Thomas
     return (
-      (this.type === TYPES.INFECTIOUS || this.type === TYPES.NONINFECTIOUS) &&
+      (this.type === TYPES.INFECTIOUS) &&
       p.type === TYPES.SUSCEPTIBLE
     );
   }

@@ -91,7 +91,7 @@ export default class Main {
     this.model.drawPopulation();
 
     this.model.setup();
-    this.model.loop();
+    this.model.step();
 
     wireSlidersToHandlers(this.model);
   }
