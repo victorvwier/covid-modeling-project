@@ -62,7 +62,7 @@ export default class Model {
       this.numImmune +
       this.numNonInfectious;
 
-    this.boundingBoxStruct = new BoundingBoxStructure(width, height, 5 * INFECTION_RADIUS);
+    this.boundingBoxStruct = new BoundingBoxStructure(width, height, 4 * INFECTION_RADIUS);
   }
 
   setRepulsionForce(newValue) {
@@ -133,7 +133,7 @@ export default class Model {
   }
 
   updateInfectionRadius(newValue) {
-    this.boundingBoxStruct = new BoundingBoxStructure(this.width, this.height, newValue);
+    this.boundingBoxStruct = new BoundingBoxStructure(this.width, this.height, 4 * newValue);
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].infectionRadius = newValue;
       this.boundingBoxStruct.insert(this.population[i]);

@@ -8,8 +8,7 @@ import {
 } from './CONSTANTS';
 
 export default class Person {
-  constructor(type, x, y, context) {
-    this.context = context;
+  constructor(type, x, y) {
     this.type = type;
     this.radius = PERSON_RADIUS;
     this.infectionRadius = INFECTION_RADIUS;
@@ -36,28 +35,6 @@ export default class Person {
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
     else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
     else if (type === TYPES.DEAD) this.color = COLORS.DEAD;
-  }
-
-  draw() {
-    this.context.beginPath();
-    this.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-    this.context.fillStyle = this.color;
-    this.context.fill();
-    this.context.strokeStyle = this.color;
-
-    this.context.stroke();
-    this.context.beginPath();
-    this.context.arc(
-      this.x,
-      this.y,
-      this.infectionRadius,
-      0,
-      2 * Math.PI,
-      false
-    );
-    this.context.strokeStyle = 'white';
-
-    this.context.stroke();
   }
 
   applyForce(forceX, forceY) {
@@ -147,12 +124,11 @@ export default class Person {
   }
 
   repel(p) {
-    const deltaX = this.x - p.x;
-    const deltaY = this.y - p.y;
-    const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-    const vecX = deltaX * (1/dist)/dist * this.repulsionForce;
-    const vecY = deltaY * (1/dist)/dist * this.repulsionForce;
+    const delta = {x: this.x - p.x, y: this.y - p.y};
+    const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
+    const unitVec = {x: delta.x/dist, y: delta.y/dist};
+    const vecX = unitVec.x/dist * this.repulsionForce;
+    const vecY = unitVec.y/dist * this.repulsionForce;
     this.applyForce(vecX, vecY);
   }
 

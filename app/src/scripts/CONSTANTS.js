@@ -5,7 +5,7 @@ export const INITIAL_IMMUNE = 0;
 export const INITIAL_DEAD = 0;
 export const REPULSION_FORCE = 0;
 export const PERSON_RADIUS = 5;
-export const POPULATION_SPEED = 2;
+export const POPULATION_SPEED = 1;
 export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 
 export const TRANSMISSION_PROB = 0.9;
