@@ -16,6 +16,8 @@ export default class Community {
     this.agentView = agentView;
     this.updateStats = updateStats;
 
+    this._passDrawInfoAnimationFrame = null;
+
     this.relocations = [];
 
     this._setValuesFromStatsToLocal(stats);
@@ -43,13 +45,39 @@ export default class Community {
   }
 
   registerRelocation(person) {
+    // Pause
+    this.pauseExecution();
+
+    // Move person
     const sourceId = person.modelId;
     const destId = getRandomIntExceptForValue(0, this.numModels - 1, sourceId);
     this.relocations.push(new Relocation(sourceId, destId, person));
+
+    // Handle the movement (todo this should be in multiple steps later)
+    this.communities[sourceId].handlePersonLeaving(person);
+    this.communities[destId].handlePersonJoining(person);
+    // Change modelId of person
+    person.modelId = destId;
+
+    // Resume
+    this.resumeExecution();
+  }
+
+  pauseExecution() {
+    // Cancel animation frame
+    cancelAnimationFrame(this._passDrawInfoAnimationFrame);
+    // Cancel all model intervals/animationFrames
+    Object.values(this.communities).forEach((com) => com.pauseExecution());
+  }
+
+  resumeExecution() {
+    // Resume animationFrame
+    this.passDrawInfoToAgentChart();
+    // Resume models intervals/animationFrames
+    Object.values(this.communities).forEach((com) => com.resumeExecution());
   }
 
   handleRelocations() {
-    console.log('Handling yo');
     this.relocations.forEach((relocation) => {
       // Remove person from old community
       this.communities[relocation.origin].population = this.communities[
@@ -69,21 +97,16 @@ export default class Community {
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i].populateCanvas();
       this.communities[i].setup();
-      // this.communities[i].loop();
-      // wireSlidersToHandlers(this.communities[i]);
+      this.communities[i].loop();
     }
 
     this.passDrawInfoToAgentChart();
   }
 
   passDrawInfoToAgentChart() {
-    requestAnimationFrame(this.passDrawInfoToAgentChart.bind(this));
-
-    // Handle all relocations before run
-    this.handleRelocations();
-    Object.values(this.communities).forEach((com) => {
-      com.loop();
-    });
+    this._passDrawInfoAnimationFrame = requestAnimationFrame(
+      this.passDrawInfoToAgentChart.bind(this)
+    );
 
     const allData = Object.values(this.communities)
       .map((com) => com.getDrawInfo())

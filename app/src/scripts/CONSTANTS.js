@@ -1,4 +1,4 @@
-export const INITIAL_SUSCEPTABLE = 100;
+export const INITIAL_SUSCEPTABLE = 10;
 export const INITIAL_NONINFECTIOUS = 0;
 export const INITAL_INFECTIOUS = 1;
 export const INITIAL_IMMUNE = 0;

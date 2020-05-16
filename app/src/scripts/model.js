@@ -70,6 +70,62 @@ export default class Model {
       this.numNonInfectious;
   }
 
+  handlePersonLeaving(person) {
+    this.totalPopulation--;
+
+    this.population = this.population.filter((p) => p !== person);
+
+    switch (person.type) {
+      case TYPES.SUSCEPTIBLE:
+        this.numSusceptible--;
+        break;
+      case TYPES.NONINFECTIOUS:
+        this.numNonInfectious--;
+        break;
+      case TYPES.INFECTIOUS:
+        this.numInfectious--;
+        break;
+      case TYPES.IMMUNE:
+        this.numImmune--;
+        break;
+      case TYPES.DEAD:
+        this.numDead--;
+        break;
+      default:
+        console.log('What type am i');
+    }
+  }
+
+  handlePersonJoining(person) {
+    this.totalPopulation++;
+
+    if (this.population.includes(person)) {
+      console.log('But im already here');
+    }
+
+    this.population.push(person);
+
+    switch (person.type) {
+      case TYPES.SUSCEPTIBLE:
+        this.numSusceptible++;
+        break;
+      case TYPES.NONINFECTIOUS:
+        this.numNonInfectious++;
+        break;
+      case TYPES.INFECTIOUS:
+        this.numInfectious++;
+        break;
+      case TYPES.IMMUNE:
+        this.numImmune++;
+        break;
+      case TYPES.DEAD:
+        this.numDead++;
+        break;
+      default:
+        console.log('What type am i');
+    }
+  }
+
   setTransmissionProb(newValue) {
     this.transmissionProb = newValue;
   }
@@ -198,6 +254,8 @@ export default class Model {
           // Relocate
           console.log('Should relocate');
           this.registerRelocation(currentPerson);
+
+          // Add other case person is now moving
         } else {
           this.population[i].maxSpeed = POPULATION_SPEED;
           this.population[i].move(
@@ -237,7 +295,7 @@ export default class Model {
   setup() {
     this.updatePopulationInterval = () => {
       for (let i = 0; i < this.totalPopulation; i++) {
-        this.update(this.population[i]);
+        this.updateState(this.population[i]);
       }
     };
     // Bind this so that it can access this instance variables
@@ -251,7 +309,7 @@ export default class Model {
   }
 
   // Decided to implement this in model, but could move to person
-  update(person) {
+  updateState(person) {
     if (person.type === TYPES.NONINFECTIOUS) {
       person.incubationTime += 1;
       if (person.incubationTime === person.incubationPeriod) {
@@ -300,11 +358,22 @@ export default class Model {
   }
 
   loop() {
-    // this._animationFrame = requestAnimationFrame(this.loop.bind(this));
+    this._animationFrame = requestAnimationFrame(this.loop.bind(this));
 
     // applyForces();
     this.updatePopulation();
     this.interactPopulation();
+  }
+
+  pauseExecution() {
+    cancelAnimationFrame(this._animationFrame);
+    clearInterval(this._chartInterval);
+    clearInterval(this._updatePopulationInterval);
+  }
+
+  resumeExecution() {
+    this.setup();
+    this.loop();
   }
 
   resetModel(stats) {
