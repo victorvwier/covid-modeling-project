@@ -268,8 +268,8 @@ export default class Model {
     }
   }
 
-  step(timestamp) {
-    this._animationFrame = requestAnimationFrame(this.step.bind(this));
+  loop(timestamp) {
+    this._animationFrame = requestAnimationFrame(this.loop.bind(this));
     let dt = 0;
     if(this.lastTimestamp && timestamp) {dt = timestamp - this.lastTimestamp;} // The time passed since running the last step.
     this.lastTimestamp = timestamp;
@@ -302,7 +302,7 @@ export default class Model {
     this.drawPopulation();
 
     this.setup();
-    this.step();
+    this.loop();
   }
 
   // Normal Distribution Function (min, max, 0)
