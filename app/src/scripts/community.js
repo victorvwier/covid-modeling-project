@@ -50,8 +50,21 @@ export default class Community {
 
     // Move person
     const sourceId = person.modelId;
-    const destId = getRandomIntExceptForValue(0, this.numModels - 1, sourceId);
-    this.relocations.push(new Relocation(sourceId, destId, person));
+    // Get model with most population
+    const maxTotalPopulation = Math.round(
+      (this.stats.sum() / this.numModels) * 1.5
+    );
+    const exclude = Object.values(this.communities)
+      .filter((mod) => mod.totalPopulation > maxTotalPopulation)
+      .map((mod) => mod.id)
+      .concat([sourceId]);
+    // Destination Id
+    const destId = getRandomIntExceptForValue(0, this.numModels - 1, exclude);
+
+    // Add relocation to relocations to handle (TODO)
+    // this.relocations.push(new Relocation(sourceId, destId, person));
+
+    // console.log(`Person is moving from ${sourceId} to ${destId}`);
 
     // Handle the movement (todo this should be in multiple steps later)
     this.communities[sourceId].handlePersonLeaving(person);
@@ -66,13 +79,14 @@ export default class Community {
   pauseExecution() {
     // Cancel animation frame
     cancelAnimationFrame(this._passDrawInfoAnimationFrame);
+    this._passDrawInfoAnimationFrame = null;
     // Cancel all model intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.pauseExecution());
   }
 
   resumeExecution() {
     // Resume animationFrame
-    this.passDrawInfoToAgentChart();
+    this._animationFunction();
     // Resume models intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.resumeExecution());
   }
@@ -100,12 +114,17 @@ export default class Community {
       this.communities[i].loop();
     }
 
+    this._animationFunction();
+  }
+
+  _animationFunction() {
     this.passDrawInfoToAgentChart();
+    Object.values(this.communities).forEach((mod) => mod.loop());
   }
 
   passDrawInfoToAgentChart() {
     this._passDrawInfoAnimationFrame = requestAnimationFrame(
-      this.passDrawInfoToAgentChart.bind(this)
+      this._animationFunction.bind(this)
     );
 
     const allData = Object.values(this.communities)

@@ -7,9 +7,9 @@ export function getRandom(min, max) {
  * @param {*} min
  * @param {*} max
  */
-export function getRandomIntExceptForValue(min, max, exceptFor) {
-  const rand = Math.floor(Math.random() * (max - min + 1)) + min;
-  return rand === exceptFor
+export function getRandomIntExceptForValue(min, max, exceptFor = []) {
+  const rand = Math.round(Math.random() * (max + 1));
+  return exceptFor.includes(rand) || rand > max
     ? getRandomIntExceptForValue(min, max, exceptFor)
     : rand;
 }

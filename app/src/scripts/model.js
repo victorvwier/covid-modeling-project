@@ -24,10 +24,9 @@ export default class Model {
     // Experimental
     this.registerRelocation = registerRelocation;
 
-    // Intervals + animationFrame
+    // Intervals
     this._chartInterval = null;
     this._updatePopulationInterval = null;
-    this._animationFrame = null;
 
     // state methods from main
     this.id = id;
@@ -45,7 +44,6 @@ export default class Model {
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
     this.compileStats = compileStats;
-    // this.incubationPeriod = INCUBATION_PERIOD;
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
@@ -247,23 +245,21 @@ export default class Model {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const currentPerson = this.population[i];
       if (!currentPerson.dead) {
+        currentPerson.maxSpeed = POPULATION_SPEED;
+
         if (
           Math.random() < RELOCATION_PROBABILITY &&
           !currentPerson.recentlyRelocated
         ) {
           // Relocate
           console.log('Should relocate');
+          currentPerson.maxSpeed = POPULATION_SPEED;
           this.registerRelocation(currentPerson);
 
           // Add other case person is now moving
         } else {
-          this.population[i].maxSpeed = POPULATION_SPEED;
-          this.population[i].move(
-            this.startX,
-            this.endX,
-            this.startY,
-            this.endY
-          );
+          // currentPerson.maxSpeed = POPULATION_SPEED;
+          currentPerson.move(this.startX, this.endX, this.startY, this.endY);
         }
       }
     }
@@ -358,17 +354,16 @@ export default class Model {
   }
 
   loop() {
-    this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-
     // applyForces();
     this.updatePopulation();
     this.interactPopulation();
   }
 
   pauseExecution() {
-    cancelAnimationFrame(this._animationFrame);
     clearInterval(this._chartInterval);
+    this._chartInterval = null;
     clearInterval(this._updatePopulationInterval);
+    this._updatePopulationInterval = null;
   }
 
   resumeExecution() {
@@ -380,7 +375,6 @@ export default class Model {
     // clear the current running interval
     clearInterval(this._updatePopulationInterval);
     clearInterval(this._chartInterval);
-    cancelAnimationFrame(this._animationFrame);
 
     // Set new values and reset to init
     this.population = [];
@@ -400,6 +394,4 @@ export default class Model {
     this.setup();
     this.loop();
   }
-
-  // Normal Distribution Function (min, max, 0)
 }
