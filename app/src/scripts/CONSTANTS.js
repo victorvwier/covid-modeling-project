@@ -1,4 +1,4 @@
-export const INITIAL_SUSCEPTABLE = 100;
+export const INITIAL_SUSCEPTABLE = 2500;
 export const INITIAL_NONINFECTIOUS = 0;
 export const INITAL_INFECTIOUS = 1;
 export const INITIAL_IMMUNE = 0;
@@ -20,6 +20,8 @@ export const MAX_INFECTIOUS_TIME = 10;
 
 export const MIN_TIME_UNTIL_DEAD = 15;
 export const MAX_TIME_UNTIL_DEAD = 30;
+
+export const DAYS_PER_SECOND = 3;
 
 export const COLORS = {
   SUSCEPTIBLE: '#05befc',

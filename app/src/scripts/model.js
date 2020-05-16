@@ -15,6 +15,7 @@ import {
   MAX_INFECTIOUS_TIME,
   MIN_TIME_UNTIL_DEAD,
   MAX_TIME_UNTIL_DEAD,
+  DAYS_PER_SECOND,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -274,7 +275,7 @@ export default class Model {
     if(this.lastTimestamp && timestamp) {dt = timestamp - this.lastTimestamp;} // The time passed since running the last step.
     this.lastTimestamp = timestamp;
     
-    let days_passed = dt/1000; // TODO: link slider
+    let days_passed = dt/1000 * DAYS_PER_SECOND;
     this.updatePopulation(days_passed);
     this.interactPopulation();
     this.drawPopulation();
