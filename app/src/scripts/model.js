@@ -372,9 +372,9 @@ export default class Model {
     let forceX = (this.width / 2) - person.x;
     let forceY = (this.height / 2) - person.y;
     // normalize vector to center
-    const distance = Math.sqrt((forceX ** 2) + (forceY ** 2));
-    forceX /= distance;
-    forceY /= distance;
+    const maxDistance = Math.sqrt(((this.width / 2) ** 2) + ((this.height / 2) ** 2));
+    forceX /= maxDistance;
+    forceY /= maxDistance;
 
     person.applyForce(0.25 * forceX, 0.25 * forceY);
   }
