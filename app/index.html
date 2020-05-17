@@ -35,6 +35,23 @@
               <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
             </div>
             <div class="col-sm">
+              <p>Attraction:</p>
+              <input
+                type="range"
+                min="0"
+                max="2.5"
+                value="0"
+                step="0.1"
+                class="slider"
+                id="attractionForce"
+              />
+              <div class="outputContainer">
+                <output id="attractionForceOut" for="attractionForce">
+                  0
+                </output>
+              </div>
+            </div>
+            <div class="col-sm">
               <p>
                 Probability a collision will result in infection (transmission
                 probability)

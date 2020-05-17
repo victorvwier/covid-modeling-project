@@ -16,6 +16,7 @@ import {
   MIN_TIME_UNTIL_DEAD,
   MAX_TIME_UNTIL_DEAD,
   REPULSION_FORCE,
+  ATTRACTION_FORCE,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -46,6 +47,7 @@ export default class Model {
     this.personRadius = PERSON_RADIUS;
     this.transmissionProb = TRANSMISSION_PROB;
     this.repulsionForce = REPULSION_FORCE;
+    this.attractionToCenter = ATTRACTION_FORCE;
     this.minIncubationTime = MIN_INCUBATION_TIME;
     this.maxIncubationTime = MAX_INCUBATION_TIME;
 
@@ -65,6 +67,10 @@ export default class Model {
     this.boundingBoxStruct = new BoundingBoxStructure(width, height, 5 * INFECTION_RADIUS);
   }
 
+  setAttractionToCenter(newValue) {
+    this.attractionToCenter = newValue;
+  }
+  
   setRepulsionForce(newValue) {
     this.repulsionForce = newValue;
     this.updateRepulsionForce(newValue);
@@ -376,6 +382,6 @@ export default class Model {
     forceX /= maxDistance;
     forceY /= maxDistance;
 
-    person.applyForce(0.25 * forceX, 0.25 * forceY);
+    person.applyForce(this.attractionToCenter * forceX, this.attractionToCenter * forceY);
   }
 }
