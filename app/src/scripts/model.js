@@ -188,6 +188,7 @@ export default class Model {
       if (!this.population[i].dead) {
         this.boundingBoxStruct.remove(this.population[i]);
         this.population[i].maxSpeed = POPULATION_SPEED;
+        this.attractToCenter(this.population[i]);
         this.population[i].move(this.width, this.height);
         this.boundingBoxStruct.insert(this.population[i]);
       }
@@ -345,5 +346,17 @@ export default class Model {
     } else {
       return 0.148;
     }
+  }
+
+  attractToCenter(person) {
+    // get vector to center
+    let forceX = (this.width / 2) - person.x;
+    let forceY = (this.height / 2) - person.y;
+    // normalize vector to center
+    const distance = Math.sqrt((forceX ** 2) + (forceY ** 2));
+    forceX /= distance;
+    forceY /= distance;
+
+    person.applyForce(0.25 * forceX, 0.25 * forceY);
   }
 }
