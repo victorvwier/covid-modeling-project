@@ -17,8 +17,6 @@ export default class Community {
 
     this._passDrawInfoAnimationFrame = null;
 
-    this.relocations = [];
-
     this._setValuesFromStatsToLocal(stats);
 
     // DEBUG
@@ -49,7 +47,7 @@ export default class Community {
 
     // Move person
     const sourceId = person.modelId;
-    // Get model with most population
+    // Get models which very high density and exclude them from models being relocated to
     const maxTotalPopulation = Math.round(
       (this.stats.sum() / this.numModels) * 1.5
     );
@@ -60,9 +58,6 @@ export default class Community {
     // Destination Id
     const destId = getRandomIntExceptForValue(0, this.numModels - 1, exclude);
 
-    // Add relocation to relocations to handle (TODO)
-    // this.relocations.push(new Relocation(sourceId, destId, person));
-
     // console.log(`Person is moving from ${sourceId} to ${destId}`);
 
     // Handle the movement (todo this should be in multiple steps later)
@@ -70,15 +65,10 @@ export default class Community {
     this.communities[destId].handlePersonJoining(person);
     // Change modelId of person
     person.modelId = destId;
-    const coords = this.communities[destId].getCenterPoints();
+    const coords = this.communities[destId].getRandomPoint();
 
     person.destinationX = coords.x;
     person.destinationY = coords.y;
-    // person.accX *= 0;
-    // person.accY *= 0;
-    // person.speedX = 0;
-    // person.speedY = 0;
-    // set destination coordinates for the person
 
     // Resume
     this.resumeExecution();
@@ -97,22 +87,6 @@ export default class Community {
     this._animationFunction();
     // Resume models intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.resumeExecution());
-  }
-
-  handleRelocations() {
-    this.relocations.forEach((relocation) => {
-      // Remove person from old community
-      this.communities[relocation.origin].population = this.communities[
-        relocation.origin
-      ].population.filter((x) => x !== relocation.person);
-      // // Add person to new community
-      this.communities[relocation.destination].population.push(
-        relocation.person
-      );
-      // // Change modelId of the person
-      relocation.person.modelId = relocation.destination;
-    });
-    this.relocations = [];
   }
 
   run() {

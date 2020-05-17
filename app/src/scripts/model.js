@@ -264,10 +264,10 @@ export default class Model {
     }
   }
 
-  getCenterPoints() {
+  getRandomPoint() {
     return new Coordinate(
-      Math.round((this.startX + this.endX) / 2),
-      Math.round((this.startY + this.endY) / 2)
+      getRandom(this.startX, this.endX),
+      getRandom(this.startY, this.endY)
     );
   }
 

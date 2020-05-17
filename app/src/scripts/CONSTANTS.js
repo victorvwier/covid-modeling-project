@@ -4,7 +4,7 @@ export const INITAL_INFECTIOUS = 4;
 export const INITIAL_IMMUNE = 0;
 export const INITIAL_DEAD = 0;
 
-export const PERSON_RADIUS = 10;
+export const PERSON_RADIUS = 7;
 export const POPULATION_SPEED = 2;
 export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 
@@ -40,6 +40,6 @@ export const TYPES = {
 export const SPACE_BETWEEN_COMMUNITIES = 20;
 
 // Relocation
-export const RELOCATION_PROBABILITY = 0.0004;
+export const RELOCATION_PROBABILITY = 0.0002;
 
-export const RELOCATION_STEP_SIZE = 15;
+export const RELOCATION_STEP_SIZE = 80;
