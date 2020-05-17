@@ -103,16 +103,18 @@ export default class Person {
   }
 
   _isXReached() {
-    return this.destinationX + 50 > this.x && this.destinationX - 50 < this.x;
+    // return startX < this.x && endX > this.x;
+    return this.destinationX + 20 > this.x && this.destinationX - 20 < this.x;
   }
 
   _isYReached() {
-    return this.destinationY + 50 > this.y && this.destinationY - 50 < this.y;
+    // return startY < this.y && endY > this.y;
+    return this.destinationY + 20 > this.y && this.destinationY - 20 < this.y;
   }
 
   relocateMove() {
     if (this.isThereYet()) {
-      this.relocation === false;
+      this.relocating === false;
       this.move();
     } else {
       this.applyForce(
