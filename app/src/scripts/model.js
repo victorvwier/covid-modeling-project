@@ -59,6 +59,8 @@ export default class Model {
     
     this.maxSpeed = POPULATION_SPEED;
 
+    this.daysPerSecond = DAYS_PER_SECOND;
+
     this.totalPopulation =
       this.numSusceptible +
       this.numInfectious +
@@ -275,7 +277,7 @@ export default class Model {
     if(this.lastTimestamp && timestamp) {dt = timestamp - this.lastTimestamp;} // The time passed since running the last step.
     this.lastTimestamp = timestamp;
     
-    let days_passed = dt/1000 * DAYS_PER_SECOND;
+    let days_passed = dt/1000 * this.daysPerSecond;
     this.updatePopulation(days_passed);
     this.interactPopulation();
     this.drawPopulation();
