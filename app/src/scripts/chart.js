@@ -120,6 +120,8 @@ export default class Chart {
       },
       options: {
         responsive: false,
+        tooltips: {enabled: false},
+        hover: {mode: null},
         // Can't just just `stacked: true` like the docs say
         scales: {
           yAxes: [
