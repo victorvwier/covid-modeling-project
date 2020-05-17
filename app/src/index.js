@@ -36,9 +36,9 @@ window.onload = function () {
 };
 
 export function updateTheStatistics(numSusceptible,numNonInfectious,numInfectious,numImmune,numDead){
-  document.getElementById("s1").innerHTML =numSusceptible;
-  document.getElementById("s2").innerHTML =numNonInfectious;
-  document.getElementById("s3").innerHTML =numInfectious;
-  document.getElementById("s4").innerHTML =numImmune;
-  document.getElementById("s5").innerHTML =numDead;
+  document.getElementById("s1").innerHTML =`Susceptible ${numSusceptible}` ;
+  document.getElementById("s2").innerHTML =`Non infectious ${numNonInfectious}` ;
+  document.getElementById("s3").innerHTML =`Infectious ${numInfectious}` ;
+  document.getElementById("s4").innerHTML =`Immune ${numImmune}` ;
+  document.getElementById("s5").innerHTML =`Dead ${numDead}` ;
 }
