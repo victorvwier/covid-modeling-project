@@ -22,6 +22,14 @@ top:-10px;
 left: 1150px;
 }
 
+#stats{
+  position:relative;
+  top:550px;
+  left:700px;
+  font-size: 30px;
+  color: black;
+}
+
 button {
   color: white;
   text-align: center;

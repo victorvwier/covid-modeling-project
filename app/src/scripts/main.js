@@ -9,6 +9,7 @@ import {
   getInitialNumInfectious,
   getInitialNumSusceptable,
 } from './DOM/domValues';
+import {updateTheStatistics} from '../index';
 
 // Creates chart and graph internally
 export default class Main {
@@ -70,7 +71,10 @@ export default class Main {
     this.numDead = stats.dead;
 
     this.chart.updateValues(this.createCurrentStats());
+    updateTheStatistics(this.numSusceptible,this.numNonInfectious,this.numInfectious,this.numImmune,this.numDead);
   }
+
+
 
   setupModel() {
     const stats = this.createCurrentStats();
