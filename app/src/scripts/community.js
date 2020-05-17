@@ -74,6 +74,10 @@ export default class Community {
 
     person.destinationX = coords.x;
     person.destinationY = coords.y;
+    // person.accX *= 0;
+    // person.accY *= 0;
+    // person.speedX = 0;
+    // person.speedY = 0;
     // set destination coordinates for the person
 
     // Resume

@@ -103,16 +103,17 @@ export default class Person {
   }
 
   _isXReached() {
-    return this.destinationX + 5 > this.x && this.destinationX - 5 < this.x;
+    return this.destinationX + 50 > this.x && this.destinationX - 50 < this.x;
   }
 
   _isYReached() {
-    return this.destinationY + 5 > this.y && this.destinationY - 5 < this.y;
+    return this.destinationY + 50 > this.y && this.destinationY - 50 < this.y;
   }
 
   relocateMove() {
     if (this.isThereYet()) {
       this.relocation === false;
+      this.move();
     } else {
       this.applyForce(
         this.getStep(this.x, this.destinationX),
@@ -126,8 +127,8 @@ export default class Person {
 
       this.accX *= 0;
       this.accY *= 0;
-      this.speedX = 0;
-      this.speedY = 0;
+      // this.speedX = 0;
+      // this.speedY = 0;
     }
   }
 
