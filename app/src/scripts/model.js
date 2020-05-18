@@ -15,8 +15,10 @@ import {
   MAX_INFECTIOUS_TIME,
   MIN_TIME_UNTIL_DEAD,
   MAX_TIME_UNTIL_DEAD,
+  DAYS_PER_SECOND,
   REPULSION_FORCE,
   ATTRACTION_FORCE,
+  MOVEMENT_TIME_SCALAR,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -27,6 +29,7 @@ export default class Model {
     this._chartInterval = null;
     this._updatePopulationInterval = null;
     this._animationFrame = null;
+    this.lastTimestamp = null;
 
     // state methods from main
     this.getStats = getStats;
@@ -41,6 +44,7 @@ export default class Model {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    
     // this.incubationPeriod = INCUBATION_PERIOD;
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = INFECTION_RADIUS;
@@ -56,6 +60,10 @@ export default class Model {
 
     this.minTimeUntilDead = MIN_TIME_UNTIL_DEAD;
     this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
+    
+    this.maxSpeed = POPULATION_SPEED;
+
+    this.daysPerSecond = DAYS_PER_SECOND;
 
     this.totalPopulation =
       this.numSusceptible +
@@ -201,19 +209,21 @@ export default class Model {
     };
   }
 
-  updatePopulation() {
+  updatePopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
+      
+      this.update(this.population[i], dt);
       if (!this.population[i].dead) {
         this.boundingBoxStruct.remove(this.population[i]);
-        this.population[i].maxSpeed = POPULATION_SPEED;
+        this.population[i].maxSpeed = this.maxSpeed;
         this.attractToCenter(this.population[i]);
-        this.population[i].move(this.width, this.height);
+        this.population[i].move(this.width, this.height, dt * MOVEMENT_TIME_SCALAR); // TODO: make slider to 
         this.boundingBoxStruct.insert(this.population[i]);
       }
     }
   }
 
-  interactPopulation() {
+  interactPopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const met = this.boundingBoxStruct.query(this.population[i]);
       for(let j = 0; j < met.length; j += 1) {
@@ -223,7 +233,7 @@ export default class Model {
         }
         
         // Infection
-        if(this.population[i].canInfect(met[j]) && Math.random() <= this.transmissionProb) {
+        if(this.population[i].canInfect(met[j]) && Math.random() <= this.transmissionProb * dt) {
           met[j].startIncubation();
           met[j].setIncubationPeriod(this.gaussianRand(this.minIncubationTime, this.maxIncubationTime));
           this.numNonInfectious += 1;
@@ -234,26 +244,15 @@ export default class Model {
   }
 
   setup() {
-    this.updatePopulationInterval = () => {
-      for (let i = 0; i < this.totalPopulation; i++) {
-        this.update(this.population[i]);
-      }
-    };
-    // Bind this so that it can access this instance variables
-    this._updatePopulationInterval = setInterval(
-      this.updatePopulationInterval.bind(this),
-      2000
-    );
-
     // Bind this so that updates can proagate to chart via main
     this._chartInterval = setInterval(this.handleStateChange.bind(this), 500);
   }
 
   // Decided to implement this in model, but could move to person
-  update(person) {
+  update(person, dt) {
     if (person.type === TYPES.NONINFECTIOUS) {
-      person.incubationTime += 1;
-      if (person.incubationTime === person.incubationPeriod) {
+      person.incubationTime += dt;
+      if (person.incubationTime >= person.incubationPeriod) {
         if (Math.random() < this.nonInfectiousToImmuneProb) {
           person.becomesImmune();
           this.numNonInfectious -= 1;
@@ -278,16 +277,16 @@ export default class Model {
           );
         }
       } else if (person.destinyImmune) {
-        person.infectiousTime += 1;
-        if (person.infectiousTime === person.infectiousPeriod) {
+        person.infectiousTime += dt;
+        if (person.infectiousTime >= person.infectiousPeriod) {
           person.type = TYPES.IMMUNE;
           person.color = COLORS.IMMUNE;
           this.numInfectious -= 1;
           this.numImmune += 1;
         }
       } else {
-        person.infectiousTime += 1;
-        if (person.infectiousTime === person.infectiousPeriod) {
+        person.infectiousTime += dt;
+        if (person.infectiousTime >= person.infectiousPeriod) {
           person.dead = true;
           person.type = TYPES.DEAD;
           person.color = COLORS.DEAD;
@@ -298,19 +297,20 @@ export default class Model {
     }
   }
 
-  loop() {
+  loop(timestamp) {
     this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-    // this.context.clearRect(0, 0, this.width, this.height);
-
-    // applyForces();
-    this.updatePopulation();
-    this.interactPopulation();
+    let dt = 0;
+    if(this.lastTimestamp && timestamp) {dt = timestamp - this.lastTimestamp;} // The time passed since running the last step.
+    this.lastTimestamp = timestamp;
+    
+    const daysPassed = dt/1000 * this.daysPerSecond;
+    this.updatePopulation(daysPassed);
+    this.interactPopulation(daysPassed);
     this.drawPopulation();
   }
 
   resetModel(stats) {
     // clear the current running interval
-    clearInterval(this._updatePopulationInterval);
     clearInterval(this._chartInterval);
     cancelAnimationFrame(this._animationFrame);
 
