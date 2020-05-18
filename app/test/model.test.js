@@ -1,5 +1,4 @@
 import Model from '../src/scripts/model';
-import Person from '../src/scripts/person';
 import Stats from '../src/scripts/data/stats';
 import { mockRandom } from './testHelpers';
 import { COLORS, TYPES, POPULATION_SPEED } from '../src/scripts/CONSTANTS';
@@ -109,7 +108,7 @@ describe('Model.js test suite', () => {
     const oldNonInfectious = model.numNonInfectious;
     const oldSusceptible = model.numSusceptible;
 
-    model.interactPopulation();
+    model.interactPopulation(1);
     expect(model.numNonInfectious).toBe(oldNonInfectious + 1) &&
       expect(model.numSusceptible).toBe(oldSusceptible - 1);
   });

@@ -5,7 +5,6 @@ import {
   INITIAL_IMMUNE,
   INITIAL_DEAD,
 } from './scripts/CONSTANTS';
-import wireSlidersToHandlers from './scripts/DOM/parameters';
 import Main from './scripts/main';
 
 window.onload = function () {
