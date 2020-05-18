@@ -4,17 +4,18 @@ import {
   POPULATION_SPEED,
   TYPES,
   INFECTION_RADIUS,
+  REPULSION_FORCE,
 } from './CONSTANTS';
 
 export default class Person {
-  constructor(type, x, y, context) {
-    this.context = context;
+  constructor(type, x, y) {
     this.type = type;
     this.radius = PERSON_RADIUS;
     this.infectionRadius = INFECTION_RADIUS;
     this.x = x;
     this.y = y;
     this.maxSpeed = POPULATION_SPEED;
+    this.repulsionForce = REPULSION_FORCE;
     this.speedX = 3 * (Math.floor(Math.random() * 2) || -1);
     this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
     this.accX = 0;
@@ -37,31 +38,9 @@ export default class Person {
     else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
   }
 
-  draw() {
-    this.context.beginPath();
-    this.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-    this.context.fillStyle = this.color;
-    this.context.fill();
-    this.context.strokeStyle = this.color;
-
-    this.context.stroke();
-    this.context.beginPath();
-    this.context.arc(
-      this.x,
-      this.y,
-      this.infectionRadius,
-      0,
-      2 * Math.PI,
-      false
-    );
-    this.context.strokeStyle = 'white';
-
-    this.context.stroke();
-  }
-
   applyForce(forceX, forceY) {
-    this.accX = forceX;
-    this.accY = forceY;
+    this.accX += forceX; // Plus symbol because we're adding forces together
+    this.accY += forceY;
   }
 
   _handleXOutOfBounds(width) {
@@ -143,6 +122,15 @@ export default class Person {
       (this.type === TYPES.INFECTIOUS) &&
       p.type === TYPES.SUSCEPTIBLE
     );
+  }
+
+  repel(p) {
+    const delta = {x: this.x - p.x, y: this.y - p.y};
+    const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
+    const unitVec = {x: delta.x/dist, y: delta.y/dist};
+    const vecX = unitVec.x/dist * this.repulsionForce;
+    const vecY = unitVec.y/dist * this.repulsionForce;
+    this.applyForce(vecX, vecY);
   }
 
   initializeAge(value) {

@@ -16,6 +16,9 @@ import {
   MIN_TIME_UNTIL_DEAD,
   MAX_TIME_UNTIL_DEAD,
   DAYS_PER_SECOND,
+  REPULSION_FORCE,
+  ATTRACTION_FORCE,
+  MOVEMENT_TIME_SCALAR,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -47,7 +50,8 @@ export default class Model {
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
     this.transmissionProb = TRANSMISSION_PROB;
-
+    this.repulsionForce = REPULSION_FORCE;
+    this.attractionToCenter = ATTRACTION_FORCE;
     this.minIncubationTime = MIN_INCUBATION_TIME;
     this.maxIncubationTime = MAX_INCUBATION_TIME;
 
@@ -68,7 +72,16 @@ export default class Model {
       this.numImmune +
       this.numNonInfectious;
 
-    this.boundingBoxStruct = new BoundingBoxStructure(width, height, INFECTION_RADIUS);
+    this.boundingBoxStruct = new BoundingBoxStructure(width, height, 5 * INFECTION_RADIUS);
+  }
+
+  setAttractionToCenter(newValue) {
+    this.attractionToCenter = newValue;
+  }
+  
+  setRepulsionForce(newValue) {
+    this.repulsionForce = newValue;
+    this.updateRepulsionForce(newValue);
   }
 
   setTransmissionProb(newValue) {
@@ -134,10 +147,16 @@ export default class Model {
   }
 
   updateInfectionRadius(newValue) {
-    this.boundingBoxStruct = new BoundingBoxStructure(this.width, this.height, newValue);
+    this.boundingBoxStruct = new BoundingBoxStructure(this.width, this.height, 5 * newValue);
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].infectionRadius = newValue;
       this.boundingBoxStruct.insert(this.population[i]);
+    }
+  }
+
+  updateRepulsionForce(newValue) {
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].repulsionForce = newValue;
     }
   }
 
@@ -197,17 +216,24 @@ export default class Model {
       if (!this.population[i].dead) {
         this.boundingBoxStruct.remove(this.population[i]);
         this.population[i].maxSpeed = this.maxSpeed;
-        this.population[i].move(this.width, this.height, dt);
+        this.attractToCenter(this.population[i]);
+        this.population[i].move(this.width, this.height, dt * MOVEMENT_TIME_SCALAR); // TODO: make slider to 
         this.boundingBoxStruct.insert(this.population[i]);
       }
     }
   }
 
-  interactPopulation() {
+  interactPopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const met = this.boundingBoxStruct.query(this.population[i]);
       for(let j = 0; j < met.length; j += 1) {
-        if(this.population[i].canInfect(met[j]) && Math.random() <= this.transmissionProb) {
+        // Social distancing
+        if(this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
+          this.population[i].repel(met[j]);
+        }
+        
+        // Infection
+        if(this.population[i].canInfect(met[j]) && Math.random() <= this.transmissionProb * dt) {
           met[j].startIncubation();
           met[j].setIncubationPeriod(this.gaussianRand(this.minIncubationTime, this.maxIncubationTime));
           this.numNonInfectious += 1;
@@ -279,7 +305,7 @@ export default class Model {
     
     const daysPassed = dt/1000 * this.daysPerSecond;
     this.updatePopulation(daysPassed);
-    this.interactPopulation();
+    this.interactPopulation(daysPassed);
     this.drawPopulation();
   }
 
@@ -302,6 +328,7 @@ export default class Model {
     this.populateCanvas();
     this.updateInfectionRadius(this.infectionRadius);
     this.updateRadius(this.personRadius);
+    this.updateRepulsionForce(this.repulsionForce);
     this.drawPopulation();
 
     this.setup();
@@ -344,5 +371,17 @@ export default class Model {
     } else {
       return 0.148;
     }
+  }
+
+  attractToCenter(person) {
+    // get vector to center
+    let forceX = (this.width / 2) - person.x;
+    let forceY = (this.height / 2) - person.y;
+    // normalize vector to center
+    const maxDistance = Math.sqrt(((this.width / 2) ** 2) + ((this.height / 2) ** 2));
+    forceX /= maxDistance;
+    forceY /= maxDistance;
+
+    person.applyForce(this.attractionToCenter * forceX, this.attractionToCenter * forceY);
   }
 }
