@@ -277,8 +277,8 @@ export default class Model {
     if(this.lastTimestamp && timestamp) {dt = timestamp - this.lastTimestamp;} // The time passed since running the last step.
     this.lastTimestamp = timestamp;
     
-    let days_passed = dt/1000 * this.daysPerSecond;
-    this.updatePopulation(days_passed);
+    const daysPassed = dt/1000 * this.daysPerSecond;
+    this.updatePopulation(daysPassed);
     this.interactPopulation();
     this.drawPopulation();
   }
