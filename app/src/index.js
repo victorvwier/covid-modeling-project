@@ -7,7 +7,7 @@ import {
 } from './scripts/CONSTANTS';
 import Main from './scripts/main';
 
-//var statistics= {susceptible:INITIAL_SUSCEPTABLE, noninfectious:INITIAL_NONINFECTIOUS, infectious:INITAL_INFECTIOUS,immune:INITIAL_IMMUNE,dead:INITIAL_DEAD};
+// var statistics= {susceptible:INITIAL_SUSCEPTABLE, noninfectious:INITIAL_NONINFECTIOUS, infectious:INITAL_INFECTIOUS,immune:INITIAL_IMMUNE,dead:INITIAL_DEAD};
 
 window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
@@ -34,10 +34,3 @@ window.onload = function () {
   main.run();
 };
 
-export function updateTheStatistics(numSusceptible,numNonInfectious,numInfectious,numImmune,numDead){
-  document.getElementById("s1").innerHTML =`Susceptible ${numSusceptible}` ;
-  document.getElementById("s2").innerHTML =`Non infectious ${numNonInfectious}` ;
-  document.getElementById("s3").innerHTML =`Infectious ${numInfectious}` ;
-  document.getElementById("s4").innerHTML =`Immune ${numImmune}` ;
-  document.getElementById("s5").innerHTML =`Dead ${numDead}` ;
-}

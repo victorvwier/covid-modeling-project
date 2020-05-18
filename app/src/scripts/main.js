@@ -8,8 +8,8 @@ import wireSlidersToHandlers, {
 import {
   getInitialNumInfectious,
   getInitialNumSusceptable,
+  updateTheStatistics,
 } from './DOM/domValues';
-import {updateTheStatistics} from '../index';
 
 // Creates chart and graph internally
 export default class Main {
