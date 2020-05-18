@@ -64,7 +64,7 @@ describe('Model.js test suite', () => {
     const personOldSpeed = 20;
     person.maxSpeed = personOldSpeed;
 
-    model.updatePopulation();
+    model.updatePopulation(1);
     expect(person.x).not.toBe(personOldX) &&
       expect(person.y).not.toBe(personOldY) &&
       expect(person.maxSpeed).toBe(POPULATION_SPEED);
@@ -127,7 +127,7 @@ describe('Model.js test suite', () => {
     const oldImmune = model.numImmune;
 
     // Call method
-    model.update(nonInfectiousPerson);
+    model.update(nonInfectiousPerson, 1);
 
     // assert
     expect(nonInfectiousPerson.incubationTime).toBe(oldIncubationTime + 1) &&
@@ -153,7 +153,7 @@ describe('Model.js test suite', () => {
     const oldInfectious = model.numInfectious;
 
     // Call method
-    model.update(nonInfectiousPerson);
+    model.update(nonInfectiousPerson, 1);
 
     // assert
     expect(nonInfectiousPerson.incubationTime).toBe(oldIncubationTime + 1) &&
@@ -178,7 +178,7 @@ describe('Model.js test suite', () => {
     const oldImmune = model.numImmune;
 
     // Call method
-    model.update(nonInfectiousPerson);
+    model.update(nonInfectiousPerson, 1);
 
     // assert
     expect(nonInfectiousPerson.incubationTime).toBe(oldIncubationTime + 1) &&
@@ -255,7 +255,7 @@ describe('Model.js test suite', () => {
     const oldNumImmune = model.numImmune;
 
     // Call method
-    model.update(infectiousPerson);
+    model.update(infectiousPerson, 1);
 
     // assert
     expect(infectiousPerson.type).toBe(TYPES.IMMUNE) &&
@@ -301,7 +301,7 @@ describe('Model.js test suite', () => {
     const oldNumDead = model.numDead;
 
     // Call method
-    model.update(infectiousPerson);
+    model.update(infectiousPerson, 1);
 
     // assert
     expect(infectiousPerson.dead).toBe(true) &&
