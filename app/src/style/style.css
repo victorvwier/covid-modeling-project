@@ -9,25 +9,34 @@ body {
   padding-left: 0;
 }
 
-h1 {
+.headerElement {
+  float: left;
+  height: 80px;
+}
+
+.l {
+  padding-left: 2%;
+  width: 6%;
+}
+
+.r {
+  width: 90%;
+  padding-left: 2%;
+}
+
+.headerMenu:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.header {
+  padding: 5px;
+  text-align: left;
   padding-left: 50px;
-  font-size: 3em;
-  color: black;
-  background-color: white;
-}
-
-#sliderBUTTON{
-position:relative;
-top:-10px;
-left: 1150px;
-}
-
-#stats{
-  position:relative;
-  top:500px;
-  left:650px;
-  font-size: 30px;
-  color: black;
+  background: #1abc9c;
+  color: white;
+  font-size: 20px;
 }
 
 button {
@@ -51,17 +60,16 @@ button {
 }
 
 #sliderDIV {
-  /* top: 150px;
-  left: 25px; */
   margin-top: 30px;
-  background-color: white;
   color: black;
   padding: 10px;
-  width: 80%;
-  margin-bottom: 30px;
-  position: relative;
-  left:30px;
-  top:90px
+  width: 580px;
+  margin-bottom: 100px;
+}
+
+.col-sm {
+  color: white;
+  margin-left: 20px;
 }
 
 .slider {
@@ -93,53 +101,71 @@ button {
   width: 45vw;
 }
 
-.overlay {
+.sidenav {
   height: 100%;
   width: 0;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0, 0.9);
+  background-color: #111;
   overflow-x: hidden;
   transition: 0.5s;
 }
 
-.overlay-content {
-  position: relative;
-  /* top: 25%; */
-  /* right: 30%; */
-  /* width: 100%; */
-  /* text-align: center; */
-  margin: 10px 10px 10px 10px;
-}
-
-.overlay a {
-  /* padding: 8px; */
-  /* text-decoration: none; */
-  /* font-size: 36px; */
-  /* color: #818181; */
-  /* display: block; */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
   transition: 0.3s;
 }
 
-.overlay a:hover, .overlay a:focus {
-  color: #f1f1f1;
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
 }
 
-.overlay .closebtn {
-  position: absolute;
-  top: 20px;
-  right: 45px;
-  font-size: 60px;
+#main {
+  transition: margin-left 0.5s;
+  padding: 20px;
 }
 
 @media screen and (max-height: 450px) {
-  .overlay a {font-size: 20px}
-  .overlay .closebtn {
-  font-size: 40px;
-  top: 15px;
-  right: 35px;
+  .sidenav {
+    padding-top: 15px;
   }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+h2 {
+  color: white;
+  padding-left: 20px;
+}
+
+h3 {
+  font-size: 13px;
+  text-align: center;
+}
+
+.stat {
+  float: left;
+  text-align: center;
+  align-content: center;
+  margin: 10px;
+  width: 100px;
+}
+
+/* Clear floats after the columns */
+.statrow:after {
+  align-content: center;
+  content: '';
+  display: table;
+  clear: both;
 }
