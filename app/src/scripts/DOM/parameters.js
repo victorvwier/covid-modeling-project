@@ -132,16 +132,18 @@ export default function (model) {
     'repulsionForce',
     'repulsionForceOut',
     REPULSION_FORCE,
-    'Unit?',
-    model.setRepulsionForce.bind(model)
+    '%',
+    model.setRepulsionForce.bind(model),
+    (x) => x * 100
   );
 
   wireInput(
     'attractionForce',
     'attractionForceOut',
     ATTRACTION_FORCE,
-    'Unit?',
-    model.setAttractionToCenter.bind(model)
+    '%',
+    model.setAttractionToCenter.bind(model),
+    (x) => x * 100
   );
 
   // initial number of susceptibles

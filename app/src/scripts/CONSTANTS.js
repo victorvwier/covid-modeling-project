@@ -22,7 +22,7 @@ export const MAX_INFECTIOUS_TIME = 10;
 export const MIN_TIME_UNTIL_DEAD = 15;
 export const MAX_TIME_UNTIL_DEAD = 30;
 
-export const DAYS_PER_SECOND = 1;
+export const DAYS_PER_SECOND = 2;
 
 export const COLORS = {
   SUSCEPTIBLE: '#05befc',

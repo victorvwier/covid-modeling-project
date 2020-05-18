@@ -80,6 +80,10 @@ export default class Person {
 
       this.x += this.speedX * dt;
       this.y += this.speedY * dt;
+      
+      // Slow the agents down a bit, remove some energy from the system
+      this.speedY *= 0.95 ** dt;
+      this.speedX *= 0.95 ** dt;
 
       this.accX *= 0;
       this.accY *= 0;
@@ -128,8 +132,8 @@ export default class Person {
     const delta = {x: this.x - p.x, y: this.y - p.y};
     const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
     const unitVec = {x: delta.x/dist, y: delta.y/dist};
-    const vecX = unitVec.x/dist * this.repulsionForce;
-    const vecY = unitVec.y/dist * this.repulsionForce;
+    const vecX = unitVec.x/dist * this.repulsionForce * 2;
+    const vecY = unitVec.y/dist * this.repulsionForce * 2;
     this.applyForce(vecX, vecY);
   }
 
