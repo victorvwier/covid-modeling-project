@@ -32,7 +32,7 @@ export function loadShader(gl, type, source) {
   
   // See if it compiled successfully
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { 
-    alert(`Error compiling shaders: ${gl.getShaderInfoLog(shader)}`);
+    window.alert(`Error compiling shaders: ${gl.getShaderInfoLog(shader)}`);
     gl.deleteShader(shader);
     return null;
   }

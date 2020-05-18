@@ -5,7 +5,6 @@ import {
   INITIAL_IMMUNE,
   INITIAL_DEAD,
 } from './scripts/CONSTANTS';
-import wireSlidersToHandlers from './scripts/DOM/parameters';
 import Main from './scripts/main';
 
 //var statistics= {susceptible:INITIAL_SUSCEPTABLE, noninfectious:INITIAL_NONINFECTIOUS, infectious:INITAL_INFECTIOUS,immune:INITIAL_IMMUNE,dead:INITIAL_DEAD};

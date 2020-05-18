@@ -1,5 +1,4 @@
 import Model from '../src/scripts/model';
-import Person from '../src/scripts/person';
 import Stats from '../src/scripts/data/stats';
 import { mockRandom } from './testHelpers';
 import { COLORS, TYPES, POPULATION_SPEED } from '../src/scripts/CONSTANTS';
@@ -64,7 +63,7 @@ describe('Model.js test suite', () => {
     const personOldSpeed = 20;
     person.maxSpeed = personOldSpeed;
 
-    model.updatePopulation();
+    model.updatePopulation(1);
     expect(person.x).not.toBe(personOldX) &&
       expect(person.y).not.toBe(personOldY) &&
       expect(person.maxSpeed).toBe(POPULATION_SPEED);
@@ -109,7 +108,7 @@ describe('Model.js test suite', () => {
     const oldNonInfectious = model.numNonInfectious;
     const oldSusceptible = model.numSusceptible;
 
-    model.interactPopulation();
+    model.interactPopulation(1);
     expect(model.numNonInfectious).toBe(oldNonInfectious + 1) &&
       expect(model.numSusceptible).toBe(oldSusceptible - 1);
   });
@@ -127,7 +126,7 @@ describe('Model.js test suite', () => {
     const oldImmune = model.numImmune;
 
     // Call method
-    model.update(nonInfectiousPerson);
+    model.update(nonInfectiousPerson, 1);
 
     // assert
     expect(nonInfectiousPerson.incubationTime).toBe(oldIncubationTime + 1) &&
@@ -153,7 +152,7 @@ describe('Model.js test suite', () => {
     const oldInfectious = model.numInfectious;
 
     // Call method
-    model.update(nonInfectiousPerson);
+    model.update(nonInfectiousPerson, 1);
 
     // assert
     expect(nonInfectiousPerson.incubationTime).toBe(oldIncubationTime + 1) &&
@@ -178,7 +177,7 @@ describe('Model.js test suite', () => {
     const oldImmune = model.numImmune;
 
     // Call method
-    model.update(nonInfectiousPerson);
+    model.update(nonInfectiousPerson, 1);
 
     // assert
     expect(nonInfectiousPerson.incubationTime).toBe(oldIncubationTime + 1) &&
@@ -255,7 +254,7 @@ describe('Model.js test suite', () => {
     const oldNumImmune = model.numImmune;
 
     // Call method
-    model.update(infectiousPerson);
+    model.update(infectiousPerson, 1);
 
     // assert
     expect(infectiousPerson.type).toBe(TYPES.IMMUNE) &&
@@ -301,7 +300,7 @@ describe('Model.js test suite', () => {
     const oldNumDead = model.numDead;
 
     // Call method
-    model.update(infectiousPerson);
+    model.update(infectiousPerson, 1);
 
     // assert
     expect(infectiousPerson.dead).toBe(true) &&

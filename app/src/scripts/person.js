@@ -4,17 +4,18 @@ import {
   POPULATION_SPEED,
   TYPES,
   INFECTION_RADIUS,
+  REPULSION_FORCE,
 } from './CONSTANTS';
 
 export default class Person {
-  constructor(type, x, y, context) {
-    this.context = context;
+  constructor(type, x, y) {
     this.type = type;
     this.radius = PERSON_RADIUS;
     this.infectionRadius = INFECTION_RADIUS;
     this.x = x;
     this.y = y;
     this.maxSpeed = POPULATION_SPEED;
+    this.repulsionForce = REPULSION_FORCE;
     this.speedX = 3 * (Math.floor(Math.random() * 2) || -1);
     this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
     this.accX = 0;
@@ -34,32 +35,11 @@ export default class Person {
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
     else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
     else if (type === TYPES.DEAD) this.color = COLORS.DEAD;
-  }
-
-  draw() {
-    this.context.beginPath();
-    this.context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-    this.context.fillStyle = this.color;
-    this.context.fill();
-    this.context.strokeStyle = this.color;
-
-    this.context.stroke();
-    this.context.beginPath();
-    this.context.arc(
-      this.x,
-      this.y,
-      this.infectionRadius,
-      0,
-      2 * Math.PI,
-      false
-    );
-    this.context.strokeStyle = 'white';
-
-    this.context.stroke();
+    else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
   }
 
   applyForce(forceX, forceY) {
-    this.accX += forceX;
+    this.accX += forceX; // Plus symbol because we're adding forces together
     this.accY += forceY;
   }
 
@@ -87,19 +67,23 @@ export default class Person {
       this.speedY = Math.sign(this.speedY) * this.maxSpeed;
   }
 
-  move(width, height) {
+  move(width, height, dt) {
     if (this.type !== TYPES.DEAD) {
       this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
-      this.speedX += this.accX;
-      this.speedY += this.accY;
-
+      
+      this.speedX += this.accX * dt;
+      this.speedY += this.accY * dt;
       this._handleXOutOfBounds(width);
       this._handleYOutOfBounds(height);
 
       this._checkIfExceededMaxSpeed();
 
-      this.x += this.speedX;
-      this.y += this.speedY;
+      this.x += this.speedX * dt;
+      this.y += this.speedY * dt;
+      
+      // Slow the agents down a bit, remove some energy from the system
+      this.speedY *= 0.95 ** dt;
+      this.speedX *= 0.95 ** dt;
 
       this.accX *= 0;
       this.accY *= 0;
@@ -139,9 +123,18 @@ export default class Person {
   canInfect(p) {
     // TODO: Get noninfectious cleared with Thomas
     return (
-      (this.type === TYPES.INFECTIOUS || this.type === TYPES.NONINFECTIOUS) &&
+      (this.type === TYPES.INFECTIOUS) &&
       p.type === TYPES.SUSCEPTIBLE
     );
+  }
+
+  repel(p) {
+    const delta = {x: this.x - p.x, y: this.y - p.y};
+    const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
+    const unitVec = {x: delta.x/dist, y: delta.y/dist};
+    const vecX = unitVec.x/dist * this.repulsionForce * 2;
+    const vecY = unitVec.y/dist * this.repulsionForce * 2;
+    this.applyForce(vecX, vecY);
   }
 
   initializeAge(value) {

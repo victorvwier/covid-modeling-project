@@ -1,13 +1,14 @@
-export const INITIAL_SUSCEPTABLE = 100;
+export const INITIAL_SUSCEPTABLE = 2500;
 export const INITIAL_NONINFECTIOUS = 0;
 export const INITAL_INFECTIOUS = 1;
 export const INITIAL_IMMUNE = 0;
 export const INITIAL_DEAD = 0;
-
+export const REPULSION_FORCE = 0;
+export const ATTRACTION_FORCE = 0;
 export const PERSON_RADIUS = 5;
 export const POPULATION_SPEED = 2;
 export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
-
+export const MOVEMENT_TIME_SCALAR = 5;
 export const TRANSMISSION_PROB = 0.9;
 export const NONIN_TO_IMMUNE_PROB = 0.1;
 export const TIME_UNTIL_IMMUNE = 7;
@@ -20,6 +21,8 @@ export const MAX_INFECTIOUS_TIME = 10;
 
 export const MIN_TIME_UNTIL_DEAD = 15;
 export const MAX_TIME_UNTIL_DEAD = 30;
+
+export const DAYS_PER_SECOND = 2;
 
 export const COLORS = {
   SUSCEPTIBLE: '#05befc',

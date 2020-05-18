@@ -62,7 +62,7 @@ class Column {
         if (index !== 0) {
             result = result.concat(this.boxes[index - 1].query(person));
         }
-        if (index !== Math.floor(this.width / this.radius)) {
+        if (index + 1 < this.boxes.length) {
             result = result.concat(this.boxes[index + 1].query(person));
         }
         return result;
@@ -104,7 +104,7 @@ export default class BoundingBoxStructure {
         if (index !== 0) {
             result = result.concat(this.columns[index - 1].query(person));
         }
-        if (index !== Math.floor(this.width / this.radius)) {
+        if (index + 1 < this.columns.length) {
             result = result.concat(this.columns[index + 1].query(person));
         }
         return result;
