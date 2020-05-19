@@ -7,6 +7,8 @@ import {
 } from './scripts/CONSTANTS';
 import Main from './scripts/main';
 
+// var statistics= {susceptible:INITIAL_SUSCEPTABLE, noninfectious:INITIAL_NONINFECTIOUS, infectious:INITAL_INFECTIOUS,immune:INITIAL_IMMUNE,dead:INITIAL_DEAD};
+
 window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext("webgl");
@@ -31,3 +33,4 @@ window.onload = function () {
 
   main.run();
 };
+

@@ -3,325 +3,401 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MVP</title>
+    <title>COVID-19 MODEL</title>
   </head>
 
   <body id="mainPage">
-    <h1>COVID-19 AGENT BASED SIMULATION MODEL</h1>
+    <div class="headerMenu">
+      <div class="headerElement l" style="background-color: #bbb;">
+        <span
+          style="font-size: 50px; cursor: pointer; color: white;"
+          onclick="openNav()"
+          >&#9776;
+        </span>
+      </div>
+      <div class="headerElement r" style="background-color: #aaa;">
+        <h1>COVID-19 AGENT-BASED SIMULATION MODEL</h1>
+      </div>
+    </div>
+
+    <div id="myNav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+        >&times;</a
+      >
+      <div id="sliderDIV">
+        <div class="row">
+          <h2>Parameters</h2>
+          <div class="col-sm">
+            <p>Repulsion:</p>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              value="0"
+              step="0.05"
+              class="slider"
+              id="repulsionForce"
+            />
+            <div class="outputContainer">
+              <output id="repulsionForceOut" for="repulsionForce">0</output>
+            </div>
+            <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
+          </div>
+          <div class="col-sm">
+            <p>Attraction:</p>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              value="0"
+              step="0.05"
+              class="slider"
+              id="attractionForce"
+            />
+            <div class="outputContainer">
+              <output id="attractionForceOut" for="attractionForce">
+                0
+              </output>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p>
+              Probability a collision will result in infection (transmission
+              probability)
+            </p>
+            <input
+              type="range"
+              min="0.00"
+              max="1.00"
+              step="0.05"
+              value="0.90"
+              class="slider"
+              id="transmissionProb"
+            />
+            <div class="outputContainer">
+              <output id="transmissionProbOut" for="transmissionProb"
+                >90%
+              </output>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p>
+              Probability a non-infectious agent becomes immune
+            </p>
+            <input
+              type="range"
+              min="0.00"
+              max="1.00"
+              step="0.05"
+              value="0.1"
+              class="slider"
+              id="nonInToImmuneProb"
+            />
+            <div class="outputContainer">
+              <output id="nonInToImmuneProbOut" for="nonInToImmuneProb"
+                >10%</output
+              >
+            </div>
+          </div>
+          <div class="col-sm">
+            <p>Size of agents</p>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              value="1.5"
+              step="0.1"
+              class="slider"
+              id="agentRadius"
+            />
+            <div class="outputContainer">
+              <output id="agentRadiusOut" for="agentRadius">2</output>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p>
+              Probability a collision will result in infection (transmission
+              probability)
+            </p>
+            <input
+              type="range"
+              min="0.00"
+              max="1.00"
+              step="0.05"
+              value="0.90"
+              class="slider"
+              id="transmissionProb"
+            />
+            <div class="outputContainer">
+              <output id="transmissionProbOut" for="transmissionProb"
+                >90%
+              </output>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p>
+              Probability a non-infectious agent becomes immune
+            </p>
+            <input
+              type="range"
+              min="0.00"
+              max="1.00"
+              step="0.05"
+              value="0.1"
+              class="slider"
+              id="nonInToImmuneProb"
+            />
+            <div class="outputContainer">
+              <output id="nonInToImmuneProbOut" for="nonInToImmuneProb"
+                >10%</output
+              >
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>
+                Minimum incubation time
+              </p>
+              <input
+                type="range"
+                min="1"
+                max="7"
+                value="7"
+                step="1"
+                class="slider"
+                id="minIncubationTime"
+              />
+              <div class="outputContainer">
+                <output id="minIncubationTimeOut" for="minIncubationTime"
+                  >7 days</output
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>
+                Maxmimum incubation time
+              </p>
+              <input
+                type="range"
+                min="8"
+                max="14"
+                value="14"
+                step="1"
+                class="slider"
+                id="maxIncubationTime"
+              />
+              <div class="outputContainer">
+                <output id="maxIncubationTimeOut" for="maxIncubationTime"
+                  >14 days</output
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>
+                Minimum time a patient is infectious
+              </p>
+              <input
+                type="range"
+                min="1"
+                max="6"
+                value="5"
+                step="1"
+                class="slider"
+                id="minInfectiousTime"
+              />
+              <div class="outputContainer">
+                <output id="minInfectiousTimeOut" for="minInfectiousTime"
+                  >5 days</output
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>
+                Maximum time a patient is infectious
+              </p>
+              <input
+                type="range"
+                min="7"
+                max="11"
+                value="10"
+                step="1"
+                class="slider"
+                id="maxInfectiousTime"
+              />
+              <div class="outputContainer">
+                <output id="maxInfectiousTimeOut" for="maxInfectiousTime"
+                  >10 days</output
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>
+                Minimum time from end of incubation to death.
+              </p>
+              <input
+                type="range"
+                min="1"
+                max="16"
+                value="15"
+                step="1"
+                class="slider"
+                id="minTimeUntilDead"
+              />
+              <div class="outputContainer">
+                <output id="minTimeUntilDeadOut" for="minTimeUntilDead"
+                  >15 days</output
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <p>
+                Maximum time from end of incubation to death.
+              </p>
+              <input
+                type="range"
+                min="17"
+                max="35"
+                value="30"
+                step="1"
+                class="slider"
+                id="maxTimeUntilDead"
+              />
+              <div class="outputContainer">
+                <output id="maxTimeUntilDeadOut" for="maxTimeUntilDead"
+                  >30 days</output
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm">
+            <p>
+              Circle of infection (how many people one person can infect at
+              once)
+            </p>
+            <input
+              type="range"
+              min="1"
+              max="20"
+              value="2"
+              class="slider"
+              id="infectionCircleRadius"
+            />
+            <div class="outputContainer">
+              <output id="infectionRadiusOut" for="infectionCircleRadius"
+                >5</output
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm">
+            <p>Initial number of susceptibles:</p>
+            <input
+              type="range"
+              min="100"
+              max="10000"
+              value="100"
+              step="20"
+              class="slider"
+              id="initSusceptable"
+            />
+            <div class="outputContainer">
+              <output id="initSusceptableCount" for="initSusceptable"
+                >50</output
+              >
+            </div>
+            <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
+          </div>
+          <div class="col-sm">
+            <p>Initial number of infectious:</p>
+            <input
+              type="range"
+              min="1"
+              max="200"
+              value="1"
+              step="5"
+              class="slider"
+              id="initInfectious"
+            />
+            <div class="outputContainer">
+              <div class="outputContainer">
+                <output id="initInfectiousCount" for="initInfectious">3</output>
+              </div>
+            </div>
+            <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
+          </div>
+        </div>
+
+        <div class="row p-3">
+          <div class="col-sm">
+            <button type="button" id="startSimulation" class="btn btn-primary">
+              Start simulation
+            </button>
+            <button type="button" id="reload" class="btn btn-secondary">
+              Reload
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openNav() {
+        document.getElementById('myNav').style.width = '45%';
+      }
+
+      function closeNav() {
+        document.getElementById('myNav').style.width = '0%';
+      }
+    </script>
 
     <main id="main">
       <div id="left-panel">
         <div id="chart-container">
           <canvas id="chart-canvas" width="600px" height="300px"></canvas>
         </div>
-        <div id="sliderDIV">
-          <div class="row">
-            <div class="col-sm">
-              <p>Repulsion:</p>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                value="0"
-                step="0.05"
-                class="slider"
-                id="repulsionForce"
-              />
-              <div class="outputContainer">
-                <output id="repulsionForceOut" for="repulsionForce"
-                  >0</output
-                >
-              </div>
-              <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
-            </div>
-            <div class="col-sm">
-              <p>Attraction:</p>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                value="0"
-                step="0.05"
-                class="slider"
-                id="attractionForce"
-              />
-              <div class="outputContainer">
-                <output id="attractionForceOut" for="attractionForce">
-                  0
-                </output>
-              </div>
-            </div>
-            <div class="col-sm">
-              <p>
-                Probability a collision will result in infection (transmission
-                probability)
-              </p>
-              <input
-                type="range"
-                min="0.00"
-                max="1.00"
-                step="0.05"
-                value="0.90"
-                class="slider"
-                id="transmissionProb"
-              />
-              <div class="outputContainer">
-                <output id="transmissionProbOut" for="transmissionProb"
-                  >90%
-                </output>
-              </div>
-            </div>
-            <div class="col-sm">
-              <p>
-                Probability a non-infectious agent becomes immune
-              </p>
-              <input
-                type="range"
-                min="0.00"
-                max="1.00"
-                step="0.05"
-                value="0.1"
-                class="slider"
-                id="nonInToImmuneProb"
-              />
-              <div class="outputContainer">
-                <output id="nonInToImmuneProbOut" for="nonInToImmuneProb"
-                  >10%</output
-                >
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm">
-                <p>
-                  Minimum incubation time
-                </p>
-                <input
-                  type="range"
-                  min="1"
-                  max="7"
-                  value="7"
-                  step="1"
-                  class="slider"
-                  id="minIncubationTime"
-                />
-                <div class="outputContainer">
-                  <output id="minIncubationTimeOut" for="minIncubationTime"
-                    >7 days</output
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm">
-                <p>
-                  Maxmimum incubation time
-                </p>
-                <input
-                  type="range"
-                  min="8"
-                  max="14"
-                  value="14"
-                  step="1"
-                  class="slider"
-                  id="maxIncubationTime"
-                />
-                <div class="outputContainer">
-                  <output id="maxIncubationTimeOut" for="maxIncubationTime"
-                    >14 days</output
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm">
-                <p>
-                  Minimum time a patient is infectious
-                </p>
-                <input
-                  type="range"
-                  min="1"
-                  max="6"
-                  value="5"
-                  step="1"
-                  class="slider"
-                  id="minInfectiousTime"
-                />
-                <div class="outputContainer">
-                  <output id="minInfectiousTimeOut" for="minInfectiousTime"
-                    >5 days</output
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm">
-                <p>
-                  Maximum time a patient is infectious
-                </p>
-                <input
-                  type="range"
-                  min="7"
-                  max="11"
-                  value="10"
-                  step="1"
-                  class="slider"
-                  id="maxInfectiousTime"
-                />
-                <div class="outputContainer">
-                  <output id="maxInfectiousTimeOut" for="maxInfectiousTime"
-                    >10 days</output
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm">
-                <p>
-                  Minimum time from end of incubation to death.
-                </p>
-                <input
-                  type="range"
-                  min="1"
-                  max="16"
-                  value="15"
-                  step="1"
-                  class="slider"
-                  id="minTimeUntilDead"
-                />
-                <div class="outputContainer">
-                  <output id="minTimeUntilDeadOut" for="minTimeUntilDead"
-                    >15 days</output
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm">
-                <p>
-                  Maximum time from end of incubation to death.
-                </p>
-                <input
-                  type="range"
-                  min="17"
-                  max="35"
-                  value="30"
-                  step="1"
-                  class="slider"
-                  id="maxTimeUntilDead"
-                />
-                <div class="outputContainer">
-                  <output id="maxTimeUntilDeadOut" for="maxTimeUntilDead"
-                    >30 days</output
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm">
-                <p>Size of agents</p>
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  value="1.5"
-                  step="0.1"
-                  class="slider"
-                  id="agentRadius"
-                />
-                <div class="outputContainer">
-                  <output id="agentRadiusOut" for="agentRadius">2</output>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm">
-              <p>
-                Circle of infection (how many people one person can infect at
-                once)
-              </p>
-              <input
-                type="range"
-                min="1"
-                max="20"
-                value="2"
-                class="slider"
-                id="infectionCircleRadius"
-              />
-              <div class="outputContainer">
-                <output id="infectionRadiusOut" for="infectionCircleRadius"
-                  >5</output
-                >
-              </div>
-            </div>
+        <div class="statrow">
+          <div class="stat" style="background-color: #05befc;">
+            <h3>Susceptible</h3>
+            <p id="s1"></p>
           </div>
-
-          <div class="row">
-            
-
-            <div class="col-sm">
-              <p>Initial number of susceptibles:</p>
-              <input
-                type="range"
-                min="100"
-                max="10000"
-                value="100"
-                step="20"
-                class="slider"
-                id="initSusceptable"
-              />
-              <div class="outputContainer">
-                <output id="initSusceptableCount" for="initSusceptable"
-                  >50</output
-                >
-              </div>
-              <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
-            </div>
-            <div class="col-sm">
-              <p>Initial number of infectious:</p>
-              <input
-                type="range"
-                min="1"
-                max="200"
-                value="1"
-                step="5"
-                class="slider"
-                id="initInfectious"
-              />
-              <div class="outputContainer">
-                <div class="outputContainer">
-                  <output id="initInfectiousCount" for="initInfectious"
-                    >3</output
-                  >
-                </div>
-              </div>
-              <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
-            </div>
+          <div class="stat" style="background-color: #c9e265;">
+            <h3>Non-Infectious</h3>
+            <p id="s2"></p>
           </div>
-
-          <div class="row p-3">
-            <div class="col-sm">
-              <button
-                type="button"
-                id="startSimulation"
-                class="btn btn-primary"
-              >
-                Start simulation
-              </button>
-              <button type="button" id="reload" class="btn btn-secondary">
-                Reload
-              </button>
-            </div>
+          <div class="stat" style="background-color: #fd7e65;">
+            <h3>Infectious</h3>
+            <p id="s3"></p>
           </div>
-          
+          <div class="stat" style="background-color: #a6a6a6;">
+            <h3>Immune</h3>
+            <p id="s4"></p>
+          </div>
+          <div class="stat" style="background-color: #000000ff;">
+            <h3>Dead</h3>
+            <p id="s5"></p>
+          </div>
         </div>
       </div>
+      <!-- </div> -->
       <div id="glcanvas-container">
         <canvas id="glCanvas" width="600px" height="600px"></canvas>
       </div>

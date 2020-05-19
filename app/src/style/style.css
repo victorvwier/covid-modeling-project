@@ -9,11 +9,34 @@ body {
   padding-left: 0;
 }
 
-h1 {
+.headerElement {
+  float: left;
+  height: 80px;
+}
+
+.l {
+  padding-left: 2%;
+  width: 6%;
+}
+
+.r {
+  width: 90%;
+  padding-left: 2%;
+}
+
+.headerMenu:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.header {
+  padding: 5px;
+  text-align: left;
   padding-left: 50px;
-  font-size: 3em;
-  color: black;
-  background-color: white;
+  background: #1abc9c;
+  color: white;
+  font-size: 20px;
 }
 
 button {
@@ -37,14 +60,16 @@ button {
 }
 
 #sliderDIV {
-  /* top: 150px;
-  left: 25px; */
   margin-top: 30px;
-  background-color: white;
   color: black;
   padding: 10px;
   width: 580px;
-  margin-bottom: 30px;
+  margin-bottom: 100px;
+}
+
+.col-sm {
+  color: white;
+  margin-left: 20px;
 }
 
 .slider {
@@ -74,4 +99,73 @@ button {
   justify-content: space-around;
   align-items: center;
   width: 45vw;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left 0.5s;
+  padding: 20px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+h2 {
+  color: white;
+  padding-left: 20px;
+}
+
+h3 {
+  font-size: 13px;
+  text-align: center;
+}
+
+.stat {
+  float: left;
+  text-align: center;
+  align-content: center;
+  margin: 10px;
+  width: 100px;
+}
+
+/* Clear floats after the columns */
+.statrow:after {
+  align-content: center;
+  content: '';
+  display: table;
+  clear: both;
 }
