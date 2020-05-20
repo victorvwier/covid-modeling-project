@@ -257,4 +257,10 @@ describe('Bounding box test suite', () => {
         struct.insert(person9);
         expect(struct.query(person8)).toStrictEqual([person7, person9, person5, person4, person6]);
     });
+
+    test('Construct Invalid Bounding Box', () => {
+        expect(() => {
+            const struct = new BoundingBoxStructure(10, 0, 10, 0, 5);
+        }).toThrow();
+    });
 });

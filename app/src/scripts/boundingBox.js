@@ -29,6 +29,9 @@ class BoundingBox {
 
 class Column {
     constructor(startY, endY, size) {
+        if(endY < startY) {
+            throw new Error("Start points must be closer to origin than end points");
+        }
         this.startY = startY;
         this.endY = endY;
         this.size = size;
@@ -71,6 +74,9 @@ class Column {
 
 export default class BoundingBoxStructure {
     constructor(startX, endX, startY, endY, size) {
+        if (endX < startX || endY < startY) {
+            throw new Error("Start points must be closer to origin than end points");
+        }
         this.startX = startX;
         this.endX = endX;
         this.startY = startY;
