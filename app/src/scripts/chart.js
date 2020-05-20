@@ -8,7 +8,7 @@ export default class Chart {
 
     this.x = 1; // TODO use a timescale instead at some point
     this.chart = null;
-    this.susceptable = [];
+    this.susceptible = [];
     this.noninfectious = [];
     this.infectious = [];
     this.immune = [];
@@ -20,9 +20,9 @@ export default class Chart {
     return this.getStats().sum();
   }
 
-  resetChart(newInitSusceptable, newInitInfectious) {
+  resetChart(newInitSusceptible, newInitInfectious) {
     this.x = 1;
-    this.susceptable = [newInitSusceptable];
+    this.susceptible = [newInitSusceptible];
     this.noninfectious = [];
     this.infectious = [newInitInfectious];
     this.immune = [];
@@ -35,7 +35,7 @@ export default class Chart {
 
   updateValues(stats) {
     this.chart.data.datasets[0].data.push(stats.susceptible);
-    this.susceptable.push(stats.susceptible);
+    this.susceptible.push(stats.susceptible);
     this.chart.data.datasets[1].data.push(stats.noninfectious);
     this.noninfectious.push(stats.noninfectious);
     this.chart.data.datasets[2].data.push(stats.infectious);
@@ -57,7 +57,7 @@ export default class Chart {
         labels: this.xValues,
         datasets: [
           {
-            label: 'Susceptable',
+            label: 'Susceptible',
             fill: true,
             backgroundColor: COLORS.SUSCEPTIBLE,
             pointBackgroundColor: COLORS.SUSCEPTIBLE,
@@ -65,7 +65,7 @@ export default class Chart {
             pointHighlightStroke: COLORS.SUSCEPTIBLE,
             borderCapStyle: 'square',
             lineCap: 'square',
-            data: this.susceptable,
+            data: this.susceptible,
             pointStyle: 'line',
           },
           {

@@ -7,7 +7,7 @@ import wireSlidersToHandlers, {
 } from './DOM/parameters';
 import {
   getInitialNumInfectious,
-  getInitialNumSusceptable,
+  getInitialNumSusceptible,
   updateTheStatistics,
 } from './DOM/domValues';
 
@@ -72,7 +72,13 @@ export default class Main {
     this.numDead = stats.dead;
 
     this.chart.updateValues(this.createCurrentStats());
-    updateTheStatistics(this.numSusceptible,this.numNonInfectious,this.numInfectious,this.numImmune,this.numDead);
+    updateTheStatistics(
+      this.numSusceptible,
+      this.numNonInfectious,
+      this.numInfectious,
+      this.numImmune,
+      this.numDead
+    );
   }
 
   setupModel() {
@@ -101,7 +107,7 @@ export default class Main {
 
   reset() {
     // Reset the stats
-    this.numSusceptible = getInitialNumSusceptable();
+    this.numSusceptible = getInitialNumSusceptible();
     this.numInfectious = getInitialNumInfectious();
     this.numNonInfectious = 0;
     this.numImmune = 0;

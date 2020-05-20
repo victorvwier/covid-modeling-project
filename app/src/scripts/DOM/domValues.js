@@ -1,5 +1,5 @@
-export function getInitialNumSusceptable() {
-  return parseInt(document.getElementById('initSusceptableCount').value, 10);
+export function getInitialNumSusceptible() {
+  return parseInt(document.getElementById('initSusceptibleCount').value, 10);
 }
 
 export function getInitialNumInfectious() {
