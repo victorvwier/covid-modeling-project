@@ -6,7 +6,7 @@ import {
   INFECTION_RADIUS,
   PERSON_RADIUS,
   INITAL_INFECTIOUS,
-  INITIAL_SUSCEPTABLE,
+  INITIAL_SUSCEPTIBLE,
   MIN_INFECTIOUS_TIME,
   MAX_INFECTIOUS_TIME,
   MIN_TIME_UNTIL_DEAD,
@@ -149,9 +149,9 @@ export default function (model) {
   // initial number of susceptibles
 
   wireInput(
-    'initSusceptable',
-    'initSusceptableCount',
-    INITIAL_SUSCEPTABLE,
+    'initSusceptible',
+    'initSusceptibleCount',
+    INITIAL_SUSCEPTIBLE,
     '',
     (x) => x // Don't need a setter
   );

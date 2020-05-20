@@ -70,7 +70,7 @@ export default class Person {
   move(width, height, dt) {
     if (this.type !== TYPES.DEAD) {
       this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
-      
+
       this.speedX += this.accX * dt;
       this.speedY += this.accY * dt;
       this._handleXOutOfBounds(width);
@@ -80,7 +80,7 @@ export default class Person {
 
       this.x += this.speedX * dt;
       this.y += this.speedY * dt;
-      
+
       // Slow the agents down a bit, remove some energy from the system
       this.speedY *= 0.95 ** dt;
       this.speedX *= 0.95 ** dt;
@@ -121,15 +121,11 @@ export default class Person {
   }
 
   canInfect(p) {
-    // TODO: Get noninfectious cleared with Thomas
-    return (
-      (this.type === TYPES.INFECTIOUS) &&
-      p.type === TYPES.SUSCEPTIBLE
-    );
+    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
   }
 
   repel(p) {
-    const delta = {x: this.x - p.x, y: this.y - p.y};
+    const delta = { x: this.x - p.x, y: this.y - p.y };
     const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
     
     if(delta.x !== 0) {

@@ -1,5 +1,5 @@
 import Person from './person';
-import { getRandom } from './util';
+import { getRandom, gaussianRand } from './util';
 
 import {
   PERSON_RADIUS,
@@ -44,7 +44,7 @@ export default class Model {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
-    
+
     // this.incubationPeriod = INCUBATION_PERIOD;
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = INFECTION_RADIUS;
@@ -60,7 +60,7 @@ export default class Model {
 
     this.minTimeUntilDead = MIN_TIME_UNTIL_DEAD;
     this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
-    
+
     this.maxSpeed = POPULATION_SPEED;
 
     this.daysPerSecond = DAYS_PER_SECOND;
@@ -78,7 +78,7 @@ export default class Model {
   setAttractionToCenter(newValue) {
     this.attractionToCenter = newValue;
   }
-  
+
   setRepulsionForce(newValue) {
     this.repulsionForce = newValue;
     this.updateRepulsionForce(newValue);
@@ -211,13 +211,16 @@ export default class Model {
 
   updatePopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
-      
       this.update(this.population[i], dt);
       if (!this.population[i].dead) {
         this.boundingBoxStruct.remove(this.population[i]);
         this.population[i].maxSpeed = this.maxSpeed;
         this.attractToCenter(this.population[i]);
-        this.population[i].move(this.width, this.height, dt * MOVEMENT_TIME_SCALAR); // TODO: make slider to 
+        this.population[i].move(
+          this.width,
+          this.height,
+          dt * MOVEMENT_TIME_SCALAR
+        ); // TODO: make slider to
         this.boundingBoxStruct.insert(this.population[i]);
       }
     }
@@ -226,16 +229,21 @@ export default class Model {
   interactPopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const met = this.boundingBoxStruct.query(this.population[i]);
-      for(let j = 0; j < met.length; j += 1) {
+      for (let j = 0; j < met.length; j += 1) {
         // Social distancing
-        if(this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
+        if (this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
           this.population[i].repel(met[j]);
         }
-        
+
         // Infection
-        if(this.population[i].canInfect(met[j]) && Math.random() <= this.transmissionProb * dt) {
+        if (
+          this.population[i].canInfect(met[j]) &&
+          Math.random() <= this.transmissionProb * dt
+        ) {
           met[j].startIncubation();
-          met[j].setIncubationPeriod(this.gaussianRand(this.minIncubationTime, this.maxIncubationTime));
+          met[j].setIncubationPeriod(
+            gaussianRand(this.minIncubationTime, this.maxIncubationTime)
+          );
           this.numNonInfectious += 1;
           this.numSusceptible -= 1;
         }
@@ -268,12 +276,12 @@ export default class Model {
         if (Math.random() <= this.mortalityStat(person.age)) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
-            this.gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
+            gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
           );
         } else {
           person.destinyImmune = true;
           person.setInfectiousPeriod(
-            this.gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
+            gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
           );
         }
       } else if (person.destinyImmune) {
@@ -300,10 +308,12 @@ export default class Model {
   loop(timestamp) {
     this._animationFrame = requestAnimationFrame(this.loop.bind(this));
     let dt = 0;
-    if(this.lastTimestamp && timestamp) {dt = timestamp - this.lastTimestamp;} // The time passed since running the last step.
+    if (this.lastTimestamp && timestamp) {
+      dt = timestamp - this.lastTimestamp;
+    } // The time passed since running the last step.
     this.lastTimestamp = timestamp;
-    
-    const daysPassed = dt/1000 * this.daysPerSecond;
+
+    const daysPassed = (dt / 1000) * this.daysPerSecond;
     this.updatePopulation(daysPassed);
     this.interactPopulation(daysPassed);
     this.drawPopulation();
@@ -313,22 +323,6 @@ export default class Model {
     // clear the current running interval
     clearInterval(this._chartInterval);
     cancelAnimationFrame(this._animationFrame);
-  }
-
-  // Normal Distribution Function (min, max, 0)
-
-  gaussianRand(min, max) {
-    let u = 0;
-    let v = 0;
-    while (u === 0) u = Math.random();
-    while (v === 0) v = Math.random();
-    let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-
-    num = num / 10.0 + 0.5;
-    if (num > 1 || num < 0) num = this.gaussianRand(min, max);
-    num *= max - min;
-    num += min;
-    return Math.round(num);
   }
 
   mortalityStat(age) {
@@ -355,13 +349,18 @@ export default class Model {
 
   attractToCenter(person) {
     // get vector to center
-    let forceX = (this.width / 2) - person.x;
-    let forceY = (this.height / 2) - person.y;
+    let forceX = this.width / 2 - person.x;
+    let forceY = this.height / 2 - person.y;
     // normalize vector to center
-    const maxDistance = Math.sqrt(((this.width / 2) ** 2) + ((this.height / 2) ** 2));
+    const maxDistance = Math.sqrt(
+      (this.width / 2) ** 2 + (this.height / 2) ** 2
+    );
     forceX /= maxDistance;
     forceY /= maxDistance;
 
-    person.applyForce(this.attractionToCenter * forceX, this.attractionToCenter * forceY);
+    person.applyForce(
+      this.attractionToCenter * forceX,
+      this.attractionToCenter * forceY
+    );
   }
 }
