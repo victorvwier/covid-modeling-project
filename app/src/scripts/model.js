@@ -72,7 +72,7 @@ export default class Model {
       this.numImmune +
       this.numNonInfectious;
 
-    this.boundingBoxStruct = new BoundingBoxStructure(width, height, 5 * INFECTION_RADIUS);
+    this.boundingBoxStruct = new BoundingBoxStructure(0, width, 0, height, 10 * INFECTION_RADIUS);
   }
 
   setAttractionToCenter(newValue) {
@@ -147,7 +147,7 @@ export default class Model {
   }
 
   updateInfectionRadius(newValue) {
-    this.boundingBoxStruct = new BoundingBoxStructure(this.width, this.height, 5 * newValue);
+    this.boundingBoxStruct = new BoundingBoxStructure(0, this.width, 0, this.height, 10 * newValue);
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].infectionRadius = newValue;
       this.boundingBoxStruct.insert(this.population[i]);

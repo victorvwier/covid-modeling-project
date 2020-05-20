@@ -1,7 +1,6 @@
 class BoundingBox {
-    constructor(radius) {
+    constructor() {
         this.people = [];
-        this.radius = radius;
     }
 
     insert(person) {
@@ -20,7 +19,7 @@ class BoundingBox {
         let i;
         for(i = 0; i < this.people.length; i++) {
             const other = this.people[i];
-            if(other !== person && other.metWith(person, this.radius)) {
+            if(other !== person && other.metWith(person)) {
                 contacts.push(other);
             }
         }
@@ -29,21 +28,22 @@ class BoundingBox {
 }
 
 class Column {
-    constructor(height, radius) {
-        this.height = height;
-        this.radius = radius;
+    constructor(startY, endY, size) {
+        this.startY = startY;
+        this.endY = endY;
+        this.size = size;
         this.boxes = [];
         let i;
         for(i = 0; i * radius < height; i++) {
-            this.boxes.push(new BoundingBox(radius));
+            this.boxes.push(new BoundingBox());
         }
     }
 
     getIndex(person) {
-        if(person.y > this.height || person.y < 0) {
+        if(person.y > this.endY || person.y < this.startY) {
             throw new Error("Person is out of bounds");
         }
-        return Math.floor(person.y / (this.radius * 2));
+        return Math.floor(person.y / this.size);
     }
 
     insert(person) {
@@ -59,7 +59,7 @@ class Column {
     query(person) {
         const index = this.getIndex(person);
         let result = this.boxes[index].query(person);
-        if (index !== 0) {
+        if (index > 0) {
             result = result.concat(this.boxes[index - 1].query(person));
         }
         if (index + 1 < this.boxes.length) {
@@ -70,22 +70,23 @@ class Column {
 }
 
 export default class BoundingBoxStructure {
-    constructor(width, height, radius) {
-        this.width = width;
-        this.height = height;
-        this.radius = radius;
+    constructor(startX, endX, startY, endY, size) {
+        this.startX = startX;
+        this.endX = endX;
+        this.startY = startY;
+        this.endY = endY;
         this.columns = [];
         let i;
-        for(i = 0; i * radius < width; i++) {
-            this.columns.push(new Column(height, radius));
+        for(i = 0; i * size < endX - startX; i++) {
+            this.columns.push(new Column(startY, endY, size));
         }
     }
 
     getIndex(person) {
-        if(person.x > this.width || person.x < 0) {
+        if(person.x > this.endX || person.x < startX) {
             throw new Error("Person is out of bounds");
         }
-        return Math.floor(person.x / (this.radius * 2));
+        return Math.floor(person.x / this.size);
     }
 
     insert(person) {
@@ -101,7 +102,7 @@ export default class BoundingBoxStructure {
     query(person) {
         const index = this.getIndex(person);
         let result = this.columns[index].query(person);
-        if (index !== 0) {
+        if (index > 0) {
             result = result.concat(this.columns[index - 1].query(person));
         }
         if (index + 1 < this.columns.length) {
