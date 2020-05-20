@@ -50,7 +50,6 @@ export default class Main {
     // DEBUG
     window.model = this.model;
     window.chart = this.chart;
-    this.run();
   }
 
   createCurrentStats() {
