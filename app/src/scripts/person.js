@@ -132,8 +132,10 @@ export default class Person {
     const delta = {x: this.x - p.x, y: this.y - p.y};
     const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
     const unitVec = {x: delta.x/dist, y: delta.y/dist};
-    const vecX = unitVec.x/dist * this.repulsionForce * 2;
-    const vecY = unitVec.y/dist * this.repulsionForce * 2;
+    let vecX = unitVec.x/dist * this.repulsionForce * 2;
+    let vecY = unitVec.y/dist * this.repulsionForce * 2;
+    if(isNaN(vecX)) {vecX = 0;}
+    if(isNaN(vecY)) {vecY = 0;}
     this.applyForce(vecX, vecY);
   }
 
