@@ -34,7 +34,7 @@ class Column {
         this.size = size;
         this.boxes = [];
         let i;
-        for(i = 0; i * radius < height; i++) {
+        for(i = 0; i * size < endY - startY; i++) {
             this.boxes.push(new BoundingBox());
         }
     }
@@ -83,7 +83,7 @@ export default class BoundingBoxStructure {
     }
 
     getIndex(person) {
-        if(person.x > this.endX || person.x < startX) {
+        if(person.x > this.endX || person.x < this.startX) {
             throw new Error("Person is out of bounds");
         }
         return Math.floor(person.x / this.size);
