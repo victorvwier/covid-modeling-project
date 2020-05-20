@@ -20,11 +20,11 @@ export default class Chart {
     return this.getStats().sum();
   }
 
-  resetChart(newInitSusceptable, newInitSymptomatic) {
+  resetChart(newInitSusceptable, newInitInfectious) {
     this.x = 1;
     this.susceptable = [newInitSusceptable];
     this.noninfectious = [];
-    this.infectious = [newInitSymptomatic];
+    this.infectious = [newInitInfectious];
     this.immune = [];
     this.dead = [];
     this.xValues = [];
