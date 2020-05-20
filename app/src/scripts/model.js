@@ -309,30 +309,10 @@ export default class Model {
     this.drawPopulation();
   }
 
-  resetModel(stats) {
+  remove() {
     // clear the current running interval
     clearInterval(this._chartInterval);
     cancelAnimationFrame(this._animationFrame);
-
-    // Set new values and reset to init
-    this.population = [];
-    this.numSusceptible = stats.susceptible;
-
-    this.numNonInfectious = stats.noninfectious;
-    this.totalPopulation = stats.susceptible + stats.infectious;
-
-    // clear the canvas
-    // this.context.clearRect(0, 0, this.width, this.height);
-
-    // start the loop again
-    this.populateCanvas();
-    this.updateInfectionRadius(this.infectionRadius);
-    this.updateRadius(this.personRadius);
-    this.updateRepulsionForce(this.repulsionForce);
-    this.drawPopulation();
-
-    this.setup();
-    this.loop();
   }
 
   // Normal Distribution Function (min, max, 0)
