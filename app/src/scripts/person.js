@@ -90,11 +90,11 @@ export default class Person {
     }
   }
 
-  metWith(p, threshold) {
+  metWith(p) {
     const deltaX = this.x - p.x;
     const deltaY = this.y - p.y;
     const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    return dist < threshold * 2; // Collide on infectionraduis
+    return dist < this.infectionRadius + p.infectionRadius; // Collide on infectionraduis
   }
 
   startIncubation() {
