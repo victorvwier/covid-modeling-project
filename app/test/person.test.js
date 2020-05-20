@@ -154,4 +154,11 @@ describe('Test move method', () => {
     const infectablePerson = new Person(TYPES.DEAD, 1, 1, null);
     expect(infectiousPerson.canInfect(infectablePerson)).toBe(false);
   });
+
+  test("test repel for two people with the exact same coordinates doesn't fail", () => {
+    const person1 = new Person(TYPES.SUSCEPTIBLE, 0, 0, null);
+    const person2 = new Person(TYPES.SUSCEPTIBLE, 0, 0, null);
+    person1.repel(person2);
+    expect(Number.isNaN(person1.accX)).toBe(false);
+  });
 });

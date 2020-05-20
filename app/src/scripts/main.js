@@ -50,6 +50,7 @@ export default class Main {
     // DEBUG
     window.model = this.model;
     window.chart = this.chart;
+    this.run();
   }
 
   createCurrentStats() {
@@ -73,8 +74,6 @@ export default class Main {
     this.chart.updateValues(this.createCurrentStats());
     updateTheStatistics(this.numSusceptible,this.numNonInfectious,this.numInfectious,this.numImmune,this.numDead);
   }
-
-
 
   setupModel() {
     const stats = this.createCurrentStats();
@@ -101,13 +100,18 @@ export default class Main {
   }
 
   reset() {
+    // Reset the stats
     this.numSusceptible = getInitialNumSusceptable();
     this.numInfectious = getInitialNumInfectious();
     this.numNonInfectious = 0;
     this.numImmune = 0;
     this.numDead = 0;
 
-    this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.model.resetModel(this.createCurrentStats());
+    // Delete the intervals the model has running
+    this.model.remove();
+
+    // Finally setup model and run.
+    this.setupModel();
+    this.run();
   }
 }

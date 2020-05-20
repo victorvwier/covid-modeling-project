@@ -72,11 +72,7 @@ export default class Model {
       this.numImmune +
       this.numNonInfectious;
 
-    this.boundingBoxStruct = new BoundingBoxStructure(
-      width,
-      height,
-      5 * INFECTION_RADIUS
-    );
+    this.boundingBoxStruct = new BoundingBoxStructure(0, width, 0, height, 10 * INFECTION_RADIUS);
   }
 
   setAttractionToCenter(newValue) {
@@ -151,11 +147,7 @@ export default class Model {
   }
 
   updateInfectionRadius(newValue) {
-    this.boundingBoxStruct = new BoundingBoxStructure(
-      this.width,
-      this.height,
-      5 * newValue
-    );
+    this.boundingBoxStruct = new BoundingBoxStructure(0, this.width, 0, this.height, 10 * newValue);
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].infectionRadius = newValue;
       this.boundingBoxStruct.insert(this.population[i]);
@@ -327,30 +319,10 @@ export default class Model {
     this.drawPopulation();
   }
 
-  resetModel(stats) {
+  remove() {
     // clear the current running interval
     clearInterval(this._chartInterval);
     cancelAnimationFrame(this._animationFrame);
-
-    // Set new values and reset to init
-    this.population = [];
-    this.numSusceptible = stats.susceptible;
-
-    this.numInfectious = stats.infectious;
-    this.totalPopulation = stats.susceptible + stats.infectious;
-
-    // clear the canvas
-    // this.context.clearRect(0, 0, this.width, this.height);
-
-    // start the loop again
-    this.populateCanvas();
-    this.updateInfectionRadius(this.infectionRadius);
-    this.updateRadius(this.personRadius);
-    this.updateRepulsionForce(this.repulsionForce);
-    this.drawPopulation();
-
-    this.setup();
-    this.loop();
   }
 
   mortalityStat(age) {

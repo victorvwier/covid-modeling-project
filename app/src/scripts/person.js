@@ -90,11 +90,11 @@ export default class Person {
     }
   }
 
-  metWith(p, threshold) {
+  metWith(p) {
     const deltaX = this.x - p.x;
     const deltaY = this.y - p.y;
     const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    return dist < threshold * 2; // Collide on infectionraduis
+    return dist < this.infectionRadius + p.infectionRadius; // Collide on infectionraduis
   }
 
   startIncubation() {
@@ -127,9 +127,11 @@ export default class Person {
   repel(p) {
     const delta = { x: this.x - p.x, y: this.y - p.y };
     const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
-    const unitVec = { x: delta.x / dist, y: delta.y / dist };
-    const vecX = (unitVec.x / dist) * this.repulsionForce * 2;
-    const vecY = (unitVec.y / dist) * this.repulsionForce * 2;
+    const unitVec = {x: delta.x/dist, y: delta.y/dist};
+    let vecX = unitVec.x/dist * this.repulsionForce * 2;
+    let vecY = unitVec.y/dist * this.repulsionForce * 2;
+    if(Number.isNaN(vecX)) {vecX = 0;}
+    if(Number.isNaN(vecY)) {vecY = 0;}
     this.applyForce(vecX, vecY);
   }
 
