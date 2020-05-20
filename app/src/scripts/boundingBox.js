@@ -75,6 +75,7 @@ export default class BoundingBoxStructure {
         this.endX = endX;
         this.startY = startY;
         this.endY = endY;
+        this.size = size;
         this.columns = [];
         let i;
         for(i = 0; i * size < endX - startX; i++) {
