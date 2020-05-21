@@ -253,10 +253,9 @@ export default class Model {
           currentPerson.relocating = true;
           this.registerRelocation(currentPerson);
 
-          // Add other case person is now moving
-        } else if (currentPerson.relocating) {
-          currentPerson.relocateMove();
-        } else {
+          // } else if (currentPerson.relocating) {
+          //   currentPerson.relocateMove();
+        } else if (!currentPerson.relocating) {
           currentPerson.maxSpeed = POPULATION_SPEED;
           currentPerson.move(this.startX, this.endX, this.startY, this.endY);
         }

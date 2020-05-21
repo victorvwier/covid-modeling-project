@@ -3,7 +3,7 @@ import Model from './model';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
 import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
-import { getRandomIntExceptForValue } from './util';
+import RelocationUtil from './relocationUtil';
 
 export default class Community {
   constructor(numModels, agentView, width, height, stats, updateStats) {
@@ -16,6 +16,7 @@ export default class Community {
     this.updateStats = updateStats;
 
     this._passDrawInfoAnimationFrame = null;
+    this.relocationUtil = new RelocationUtil(this);
 
     this._setValuesFromStatsToLocal(stats);
 
@@ -42,36 +43,7 @@ export default class Community {
   }
 
   registerRelocation(person) {
-    // Pause
-    this.pauseExecution();
-
-    // Move person
-    const sourceId = person.modelId;
-    // Get models which very high density and exclude them from models being relocated to
-    const maxTotalPopulation = Math.round(
-      (this.stats.sum() / this.numModels) * 1.5
-    );
-    const exclude = Object.values(this.communities)
-      .filter((mod) => mod.totalPopulation > maxTotalPopulation)
-      .map((mod) => mod.id)
-      .concat([sourceId]);
-    // Destination Id
-    const destId = getRandomIntExceptForValue(0, this.numModels - 1, exclude);
-
-    // console.log(`Person is moving from ${sourceId} to ${destId}`);
-
-    // Handle the movement (todo this should be in multiple steps later)
-    this.communities[sourceId].handlePersonLeaving(person);
-    this.communities[destId].handlePersonJoining(person);
-    // Change modelId of person
-    person.modelId = destId;
-    const coords = this.communities[destId].getRandomPoint();
-
-    person.destinationX = coords.x;
-    person.destinationY = coords.y;
-
-    // Resume
-    this.resumeExecution();
+    this.relocationUtil.insertRelocation(person);
   }
 
   pauseExecution() {
@@ -102,6 +74,8 @@ export default class Community {
   _animationFunction() {
     this.passDrawInfoToAgentChart();
     Object.values(this.communities).forEach((mod) => mod.loop());
+    // Check all relocations
+    this.relocationUtil.handleAllRelocations();
   }
 
   passDrawInfoToAgentChart() {
@@ -118,6 +92,16 @@ export default class Community {
         count: acc.count + cur.count,
       }));
 
+    // TODO remove this and refactor person to get his own drawInfo
+    this.relocationUtil.relocations.forEach(({ person }) => {
+      allData.positions.push(person.x);
+      allData.positions.push(person.y);
+      allData.colors.push(parseInt(person.color.slice(1, 3), 16) / 255.0);
+      allData.colors.push(parseInt(person.color.slice(3, 5), 16) / 255.0);
+      allData.colors.push(parseInt(person.color.slice(5, 7), 16) / 255.0);
+      allData.colors.push(1);
+      allData.count++;
+    });
     this.agentView.draw(allData);
   }
 

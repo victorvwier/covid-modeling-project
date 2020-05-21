@@ -33,9 +33,6 @@ export default class Person {
 
     this.relocating = false;
 
-    this.destinationX = 0;
-    this.destinationY = 0;
-
     this.step = RELOCATION_STEP_SIZE;
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
@@ -98,40 +95,16 @@ export default class Person {
     return (destination - current) / this.step;
   }
 
-  isThereYet() {
-    return this._isXReached() && this._isYReached();
-  }
+  relocateMove({ x: destX, y: destY }) {
+    this.applyForce(this.getStep(this.x, destX), this.getStep(this.y, destY));
+    this.speedX += this.accX;
+    this.speedY += this.accY;
 
-  _isXReached() {
-    // return startX < this.x && endX > this.x;
-    return this.destinationX + 20 > this.x && this.destinationX - 20 < this.x;
-  }
+    this.x += this.speedX;
+    this.y += this.speedY;
 
-  _isYReached() {
-    // return startY < this.y && endY > this.y;
-    return this.destinationY + 20 > this.y && this.destinationY - 20 < this.y;
-  }
-
-  relocateMove() {
-    if (this.isThereYet()) {
-      this.relocating === false;
-      this.move();
-    } else {
-      this.applyForce(
-        this.getStep(this.x, this.destinationX),
-        this.getStep(this.y, this.destinationY)
-      );
-      this.speedX += this.accX;
-      this.speedY += this.accY;
-
-      this.x += this.speedX;
-      this.y += this.speedY;
-
-      this.accX *= 0;
-      this.accY *= 0;
-      // this.speedX = 0;
-      // this.speedY = 0;
-    }
+    this.accX *= 0;
+    this.accY *= 0;
   }
 
   metWith(p, threshold) {
