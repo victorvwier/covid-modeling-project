@@ -351,8 +351,8 @@ export default class Model {
           this.population[i].canInfect(met[j]) &&
           Math.random() <= this.transmissionProb * dt
         ) {
-          this.population[j].startIncubation();
-          this.population[j].setIncubationPeriod(
+          met[j].startIncubation();
+          met[j].setIncubationPeriod(
             gaussianRand(this.minIncubationTime, this.maxIncubationTime)
           );
           this.numNonInfectious += 1;
