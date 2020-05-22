@@ -15,12 +15,15 @@ export default class RelocationUtil {
       const relocation = this.relocations[i];
       relocation.takeStep();
       if (relocation.hasArrived()) {
-        console.log('Has arrived!!');
+        this.community.pauseExecution();
+
         relocation.person.relocating = false;
         this.community.communities[relocation.destId].handlePersonJoining(
           relocation.person
         );
         this._removeRelocationInfo(relocation);
+
+        this.community.resumeExecution();
       }
     }
   }

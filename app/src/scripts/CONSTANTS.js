@@ -1,4 +1,4 @@
-export const INITIAL_SUSCEPTIBLE = 2500;
+export const INITIAL_SUSCEPTIBLE = 100;
 export const INITIAL_NONINFECTIOUS = 0;
 export const INITAL_INFECTIOUS = 4;
 export const INITIAL_IMMUNE = 0;
@@ -43,6 +43,6 @@ export const TYPES = {
 export const SPACE_BETWEEN_COMMUNITIES = 20;
 
 // Relocation
-export const RELOCATION_PROBABILITY = 0.0002;
+export const RELOCATION_PROBABILITY = 0.002;
 export const RELOCATION_ERROR_MARGIN = 20;
 export const RELOCATION_STEP_SIZE = 80;

@@ -20,6 +20,7 @@ import {
   ATTRACTION_FORCE,
   RELOCATION_PROBABILITY,
   MOVEMENT_TIME_SCALAR,
+  RELOCATION_ERROR_MARGIN,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -323,8 +324,14 @@ export default class Model {
 
   getRandomPoint() {
     return new Coordinate(
-      getRandom(this.startX, this.endX),
-      getRandom(this.startY, this.endY)
+      getRandom(
+        this.startX + RELOCATION_ERROR_MARGIN,
+        this.endX - RELOCATION_ERROR_MARGIN
+      ),
+      getRandom(
+        this.startY + RELOCATION_ERROR_MARGIN,
+        this.endY - RELOCATION_ERROR_MARGIN
+      )
     );
   }
 
@@ -422,7 +429,7 @@ export default class Model {
 
   resumeExecution() {
     this.setup();
-    this.step(); // TODO what is the value of timestamp parameter
+    this.step(0); // TODO what is the value of timestamp parameter
   }
 
   attractToCenter(person) {
@@ -431,7 +438,8 @@ export default class Model {
     let forceY = (this.startY + this.endY) / 2.0 - person.y;
     // normalize vector to center
     const maxDistance = Math.sqrt(
-      ((this.startX + this.endX) / 2) ** 2 + ((this.startY + this.endY) / 2) ** 2
+      ((this.startX + this.endX) / 2) ** 2 +
+        ((this.startY + this.endY) / 2) ** 2
     );
     forceX /= maxDistance;
     forceY /= maxDistance;
@@ -440,8 +448,9 @@ export default class Model {
       this.attractionToCenter * forceX,
       this.attractionToCenter * forceY
     );
-    }
-    reset (){
+  }
+
+  reset(stats) {
     // Set new values and reset to init
     this.population = [];
     this.numSusceptible = stats.susceptible;

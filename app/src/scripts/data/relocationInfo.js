@@ -27,7 +27,6 @@ export default class RelocationInfo {
   }
 
   takeStep() {
-    console.log('relocateMovng');
     this.person.relocateMove(this.destination);
   }
 }
