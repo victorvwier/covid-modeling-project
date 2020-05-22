@@ -28,7 +28,6 @@ import Coordinate from './data/coordinate';
 
 export default class Model {
   constructor(id, bounds, stats, compileStats, registerRelocation) {
-    // Experimental
     this.registerRelocation = registerRelocation;
     this.compileStats = compileStats;
 
@@ -108,6 +107,9 @@ export default class Model {
 
     switch (person.type) {
       case TYPES.SUSCEPTIBLE:
+        if (this.numSusceptible < 0) {
+          throw Error('Why?');
+        }
         this.numSusceptible--;
         break;
       case TYPES.NONINFECTIOUS:

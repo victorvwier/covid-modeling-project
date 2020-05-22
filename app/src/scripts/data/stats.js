@@ -16,4 +16,14 @@ export default class Stats {
       this.immune
     );
   }
+
+  static joinStats(one, other) {
+    return new Stats(
+      one.susceptible + other.susceptible,
+      one.noninfectious + other.noninfectious,
+      one.infectious + other.infectious,
+      one.dead + other.dead,
+      one.immune + other.immune
+    );
+  }
 }

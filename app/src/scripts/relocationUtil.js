@@ -1,5 +1,7 @@
 import { getRandomIntExceptForValue } from './util';
+import { TYPES } from './CONSTANTS';
 import RelocationInfo from './data/relocationInfo';
+import Stats from './data/stats';
 
 export default class RelocationUtil {
   constructor(community) {
@@ -29,6 +31,7 @@ export default class RelocationUtil {
   }
 
   insertRelocation(person) {
+    console.log('He watned to relocate');
     // Pause
     this.community.pauseExecution();
     // Move person
@@ -66,6 +69,32 @@ export default class RelocationUtil {
         'Tried to remove a relocation info but nothing was removed???'
       );
     }
+  }
+
+  getStats() {
+    const stats = new Stats(0, 0, 0, 0, 0);
+    this.relocations.forEach(({ person }) => {
+      switch (person.type) {
+        case TYPES.SUSCEPTIBLE:
+          stats.susceptible++;
+          break;
+        case TYPES.NONINFECTIOUS:
+          stats.noninfectious++;
+          break;
+        case TYPES.INFECTIOUS:
+          stats.infectious++;
+          break;
+        case TYPES.IMMUNE:
+          stats.immune++;
+          break;
+        case TYPES.DEAD:
+          stats.dead++;
+          break;
+        default:
+          console.log('What type am i');
+      }
+    });
+    return stats;
   }
 
   // _getPersonsRelocationInfo(person) {

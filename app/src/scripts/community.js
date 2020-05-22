@@ -30,7 +30,7 @@ export default class Community {
     return new Stats(
       Math.round(this.numSusceptible / this.numModels),
       Math.round(this.numNonInfectious / this.numModels),
-      Math.round(this.numInfectious / this.numInfectious),
+      Math.round(this.numInfectious / this.numModels),
       Math.round(this.numDead / this.numModels),
       Math.round(this.numImmune / this.numModels)
     );
@@ -191,8 +191,11 @@ export default class Community {
           )
       );
 
-    this._setValuesFromStatsToLocal(stats);
-    this.updateStats(stats);
+    const relocationStats = this.relocationUtil.getStats();
+    const finalStats = Stats.joinStats(stats, relocationStats);
+
+    this._setValuesFromStatsToLocal(finalStats);
+    this.updateStats(finalStats);
   }
 
   resetCommunity(stats) {
