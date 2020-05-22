@@ -6,7 +6,7 @@ import { COLORS, TYPES, POPULATION_SPEED } from '../src/scripts/CONSTANTS';
 describe('Model.js test suite', () => {
   test('getDrawInfo should not do anything if all existing are dead', () => {
     const stats = new Stats(0, 0, 0, 1, 0);
-    const model = new Model(null, 100, 100, stats, null, null);
+    const model = new Model(1, null, 100, 100, stats, null, null);
     model.populateCanvas();
     const info = model.getDrawInfo();
 
@@ -16,7 +16,7 @@ describe('Model.js test suite', () => {
 
   test('getDrawInfo should not do anything if all existing are dead', () => {
     const stats = new Stats(1, 0, 0, 0, 0); // Only one susc
-    const model = new Model(null, 100, 100, stats, null, null);
+    const model = new Model(1, null, 100, 100, stats, null, null);
     model.populateCanvas();
     const info = model.getDrawInfo();
 
@@ -34,7 +34,7 @@ describe('Model.js test suite', () => {
   });
 
   // test('updatePopulation should do nothing if person is dead', () => {
-  //   const model = new Model(null, 100, 100, new Stats(), null, null);
+  //   const model = new Model(1 ,null, 100, 100, new Stats(), null, null);
   //   const person = new Person(TYPES.DEAD, 1, 1, null);
   //   model.population.push(person);
 
@@ -46,6 +46,7 @@ describe('Model.js test suite', () => {
 
   test('updatePopulation should change speed if person not dead', () => {
     const model = new Model(
+      1,
       null,
       100,
       100,
@@ -70,7 +71,19 @@ describe('Model.js test suite', () => {
   });
 
   test('updatePopulation should not change anything if person is dead', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 0, 0, 1, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      1,
+      1,
+      new Stats(0, 0, 0, 1, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const person = model.population[0];
 
@@ -87,7 +100,15 @@ describe('Model.js test suite', () => {
   });
 
   test('interactPopulation should do nothing if same person', () => {
-    const model = new Model(null, 10, 10, new Stats(1, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      10,
+      10,
+      new Stats(1, 0, 0, 0, 0),
+      null,
+      null
+    );
     model.populateCanvas();
     const symptomaticCountOld = model.population[0].symptomaticTime;
     model.interactPopulation();
@@ -95,7 +116,15 @@ describe('Model.js test suite', () => {
   });
 
   test('interactPopulation should increase symptomaticcount', () => {
-    const model = new Model(null, 10, 10, new Stats(1, 0, 1, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      10,
+      10,
+      new Stats(1, 0, 1, 0, 0),
+      null,
+      null
+    );
     model.populateCanvas();
     // Let them be at the same location.
     model.population.forEach((x) => {
@@ -114,7 +143,19 @@ describe('Model.js test suite', () => {
   });
 
   test('update a non infectious with incubationTime !== incubationPeriod should do nothing', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 1, 0, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 1, 0, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const nonInfectiousPerson = model.population[0];
     // Set incubation time to be -1 incubation periode so that he can go in true
@@ -137,7 +178,19 @@ describe('Model.js test suite', () => {
   });
 
   test('update a non infectious should turn him infectious', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 1, 0, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 1, 0, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const nonInfectiousPerson = model.population[0];
     // Set incubation time to be -1 incubation periode so that he can go in true
@@ -162,7 +215,19 @@ describe('Model.js test suite', () => {
   });
 
   test('update a non infectious should turn him immune', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 1, 0, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 1, 0, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const nonInfectiousPerson = model.population[0];
     // Set incubation time to be -1 incubation periode so that he can go in true
@@ -220,7 +285,19 @@ describe('Model.js test suite', () => {
   // }
 
   test('calling update on susceptible person should have no effect', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(1, 0, 0, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(1, 0, 0, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const susceptiblePerson = model.population[0];
 
@@ -241,7 +318,19 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is destined to immunity should become immune cause it is time', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 1, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = false;
@@ -264,7 +353,19 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is destined to immunity should not become immune cause it is not time yet', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 1, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = false;
@@ -287,7 +388,19 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is destined to death should become dead', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 1, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = true;
@@ -311,7 +424,19 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is destined to death should not die cause it is not time yet', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 1, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = true;
@@ -335,7 +460,19 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is neither dead nor immune should be destined to immunity', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 1, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = false;
@@ -353,7 +490,19 @@ describe('Model.js test suite', () => {
   });
 
   test('infectious person who is neither dead nor immune should be destined to death', () => {
+<<<<<<< HEAD
     const model = new Model(null, 20, 20, new Stats(0, 0, 1, 0, 0), null, null);
+=======
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 1, 0, 0),
+      null,
+      null
+    );
+>>>>>>> origin/working-relocation
     model.populateCanvas();
     const infectiousPerson = model.population[0];
     infectiousPerson.destinyDead = false;
@@ -371,47 +520,119 @@ describe('Model.js test suite', () => {
   });
 
   test('Mortality rate for younger than 10 should be 0', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(8)).toBe(0);
   });
 
   test('Mortality rate for younger than 20 should be 0.002', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(18)).toBe(0.002);
   });
 
   test('Mortality rate for younger than 30 should be 0.002', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(28)).toBe(0.002);
   });
 
   test('Mortality rate for younger than 40 should be 0.002', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(38)).toBe(0.002);
   });
 
   test('Mortality rate for younger than 50 should be 0.004', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(48)).toBe(0.004);
   });
 
   test('Mortality rate for younger than 60 should be 0.013', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(58)).toBe(0.013);
   });
 
   test('Mortality rate for younger than 70 should be 0.036', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(68)).toBe(0.036);
   });
 
   test('Mortality rate for younger than 80 should be 0.08', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(78)).toBe(0.08);
   });
 
   test('Mortality rate for older than 80 should be 0.148', () => {
-    const model = new Model(null, 0, 0, new Stats(0, 0, 0, 0, 0), null, null);
+    const model = new Model(
+      1,
+      null,
+      0,
+      0,
+      new Stats(0, 0, 0, 0, 0),
+      null,
+      null
+    );
     expect(model.mortalityStat(88)).toBe(0.148);
   });
 });

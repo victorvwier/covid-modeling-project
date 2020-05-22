@@ -1,5 +1,5 @@
 import Person from './person';
-import { getRandom, gaussianRand } from './util';
+import { getRandom, gaussianRand, mortalityStat } from './util';
 
 import {
   PERSON_RADIUS,
@@ -18,26 +18,35 @@ import {
   DAYS_PER_SECOND,
   REPULSION_FORCE,
   ATTRACTION_FORCE,
+  RELOCATION_PROBABILITY,
   MOVEMENT_TIME_SCALAR,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
+import Coordinate from './data/coordinate';
 
 export default class Model {
-  constructor(agentView, width, height, stats, getStats, updateStats) {
-    // Intervals + animationFrame
+  constructor(id, bounds, stats, compileStats, registerRelocation) {
+    // Experimental
+    this.registerRelocation = registerRelocation;
+    this.compileStats = compileStats;
+
+    // Intervals
     this._chartInterval = null;
     this._updatePopulationInterval = null;
-    this._animationFrame = null;
+
+    // this._animationFrame = null; TODO you removed this!
     this.lastTimestamp = null;
 
     // state methods from main
-    this.getStats = getStats;
-    this.updateStats = updateStats;
+    this.id = id;
     this.spareRandom = null;
-    this.agentView = agentView;
-    this.width = width;
-    this.height = height;
+
+    this.startX = bounds.startX;
+    this.endX = bounds.endX;
+    this.startY = bounds.startY;
+    this.endY = bounds.endY;
+
     this.population = [];
     this.numSusceptible = stats.susceptible;
     this.numInfectious = stats.infectious;
@@ -45,7 +54,6 @@ export default class Model {
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
 
-    // this.incubationPeriod = INCUBATION_PERIOD;
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = INFECTION_RADIUS;
     this.personRadius = PERSON_RADIUS;
@@ -62,8 +70,8 @@ export default class Model {
     this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
 
     this.maxSpeed = POPULATION_SPEED;
-
     this.daysPerSecond = DAYS_PER_SECOND;
+    this.relocationProbability = RELOCATION_PROBABILITY;
 
     this.totalPopulation =
       this.numSusceptible +
@@ -72,7 +80,13 @@ export default class Model {
       this.numImmune +
       this.numNonInfectious;
 
-    this.boundingBoxStruct = new BoundingBoxStructure(0, width, 0, height, 10 * INFECTION_RADIUS);
+    this.boundingBoxStruct = new BoundingBoxStructure(
+      this.startX,
+      this.endX,
+      this.startY,
+      this.endY,
+      10 * INFECTION_RADIUS
+    );
   }
 
   setAttractionToCenter(newValue) {
@@ -82,6 +96,66 @@ export default class Model {
   setRepulsionForce(newValue) {
     this.repulsionForce = newValue;
     this.updateRepulsionForce(newValue);
+  }
+
+  handlePersonLeaving(person) {
+    this.totalPopulation--;
+
+    this.population = this.population.filter((p) => p !== person);
+
+    this.boundingBoxStruct.remove(person);
+
+    switch (person.type) {
+      case TYPES.SUSCEPTIBLE:
+        this.numSusceptible--;
+        break;
+      case TYPES.NONINFECTIOUS:
+        this.numNonInfectious--;
+        break;
+      case TYPES.INFECTIOUS:
+        this.numInfectious--;
+        break;
+      case TYPES.IMMUNE:
+        this.numImmune--;
+        break;
+      case TYPES.DEAD:
+        this.numDead--;
+        break;
+      default:
+        console.log('What type am i');
+    }
+  }
+
+  handlePersonJoining(person) {
+    this.totalPopulation++;
+
+    if (this.population.includes(person)) {
+      console.log('But im already here');
+    }
+
+    this.boundingBoxStruct.insert(person);
+
+    this.population.push(person);
+
+    switch (person.type) {
+      case TYPES.SUSCEPTIBLE:
+        this.numSusceptible++;
+        break;
+      case TYPES.NONINFECTIOUS:
+        this.numNonInfectious++;
+        break;
+      case TYPES.INFECTIOUS:
+        this.numInfectious++;
+        break;
+      case TYPES.IMMUNE:
+        this.numImmune++;
+        break;
+      case TYPES.DEAD:
+        this.numDead++;
+        break;
+      default:
+        console.log('What type am i');
+    }
   }
 
   setTransmissionProb(newValue) {
@@ -129,7 +203,7 @@ export default class Model {
   /**
    * Method used to update the stats in main
    */
-  handleStateChange() {
+  exportStats() {
     const stats = new Stats(
       this.numSusceptible,
       this.numNonInfectious,
@@ -137,7 +211,7 @@ export default class Model {
       this.numDead,
       this.numImmune
     );
-    this.updateStats(stats);
+    return stats;
   }
 
   updateRadius(newValue) {
@@ -147,7 +221,13 @@ export default class Model {
   }
 
   updateInfectionRadius(newValue) {
-    this.boundingBoxStruct = new BoundingBoxStructure(0, this.width, 0, this.height, 10 * newValue);
+    this.boundingBoxStruct = new BoundingBoxStructure(
+      0,
+      this.width,
+      0,
+      this.height,
+      10 * newValue
+    );
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].infectionRadius = newValue;
       this.boundingBoxStruct.insert(this.population[i]);
@@ -170,20 +250,21 @@ export default class Model {
 
   populateCanvasWithType(type, count) {
     for (let i = 0; i < count; i++) {
-      const x = getRandom(this.personRadius, this.width - this.personRadius);
-      const y = getRandom(this.personRadius, this.height - this.personRadius);
-      const newPerson = new Person(type, x, y, this.context);
+      const x = getRandom(
+        this.startX + this.personRadius,
+        this.endX - this.personRadius
+      );
+      const y = getRandom(
+        this.startY + this.personRadius,
+        this.endY - this.personRadius
+      );
+      const newPerson = new Person(type, x, y, this.id);
       if (type === TYPES.DEAD) {
         newPerson.dead = true;
       }
       this.population.push(newPerson);
       this.boundingBoxStruct.insert(newPerson);
     }
-  }
-
-  drawPopulation() {
-    const drawInfo = this.getDrawInfo();
-    this.agentView.draw(drawInfo);
   }
 
   getDrawInfo() {
@@ -211,19 +292,40 @@ export default class Model {
 
   updatePopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
-      this.update(this.population[i], dt);
-      if (!this.population[i].dead) {
-        this.boundingBoxStruct.remove(this.population[i]);
-        this.population[i].maxSpeed = this.maxSpeed;
-        this.attractToCenter(this.population[i]);
-        this.population[i].move(
-          this.width,
-          this.height,
-          dt * MOVEMENT_TIME_SCALAR
-        ); // TODO: make slider to
-        this.boundingBoxStruct.insert(this.population[i]);
+      const currentPerson = this.population[i];
+      this.update(currentPerson, dt);
+      if (!currentPerson.dead) {
+        if (
+          Math.random() < RELOCATION_PROBABILITY &&
+          !currentPerson.relocating
+        ) {
+          currentPerson.relocating = true;
+          this.registerRelocation(currentPerson);
+
+          // } else if (currentPerson.relocating) {
+          //   currentPerson.relocateMove();
+        } else if (!currentPerson.relocating) {
+          this.boundingBoxStruct.remove(currentPerson);
+          currentPerson.maxSpeed = this.maxSpeed;
+          this.attractToCenter(currentPerson);
+          currentPerson.move(
+            this.startX,
+            this.endX,
+            this.startY,
+            this.endY,
+            dt * MOVEMENT_TIME_SCALAR
+          ); // TODO: make slider to
+          this.boundingBoxStruct.insert(currentPerson);
+        }
       }
     }
+  }
+
+  getRandomPoint() {
+    return new Coordinate(
+      getRandom(this.startX, this.endX),
+      getRandom(this.startY, this.endY)
+    );
   }
 
   interactPopulation(dt) {
@@ -240,8 +342,8 @@ export default class Model {
           this.population[i].canInfect(met[j]) &&
           Math.random() <= this.transmissionProb * dt
         ) {
-          met[j].startIncubation();
-          met[j].setIncubationPeriod(
+          this.population[j].startIncubation();
+          this.population[j].setIncubationPeriod(
             gaussianRand(this.minIncubationTime, this.maxIncubationTime)
           );
           this.numNonInfectious += 1;
@@ -253,7 +355,7 @@ export default class Model {
 
   setup() {
     // Bind this so that updates can proagate to chart via main
-    this._chartInterval = setInterval(this.handleStateChange.bind(this), 500);
+    this._chartInterval = setInterval(this.compileStats, 500);
   }
 
   // Decided to implement this in model, but could move to person
@@ -273,7 +375,7 @@ export default class Model {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
-        if (Math.random() <= this.mortalityStat(person.age)) {
+        if (Math.random() <= mortalityStat(person.age)) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
             gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
@@ -305,46 +407,22 @@ export default class Model {
     }
   }
 
-  loop(timestamp) {
-    this._animationFrame = requestAnimationFrame(this.loop.bind(this));
-    let dt = 0;
-    if (this.lastTimestamp && timestamp) {
-      dt = timestamp - this.lastTimestamp;
-    } // The time passed since running the last step.
-    this.lastTimestamp = timestamp;
-
+  step(dt) {
     const daysPassed = (dt / 1000) * this.daysPerSecond;
     this.updatePopulation(daysPassed);
     this.interactPopulation(daysPassed);
-    this.drawPopulation();
   }
 
-  remove() {
-    // clear the current running interval
+  pauseExecution() {
     clearInterval(this._chartInterval);
-    cancelAnimationFrame(this._animationFrame);
+    this._chartInterval = null;
+    clearInterval(this._updatePopulationInterval);
+    this._updatePopulationInterval = null;
   }
 
-  mortalityStat(age) {
-    if (0 <= age && age <= 9) {
-      return 0;
-    } else if (10 <= age && age <= 19) {
-      return 0.002;
-    } else if (20 <= age && age <= 29) {
-      return 0.002;
-    } else if (30 <= age && age <= 39) {
-      return 0.002;
-    } else if (40 <= age && age <= 49) {
-      return 0.004;
-    } else if (50 <= age && age <= 59) {
-      return 0.013;
-    } else if (60 <= age && age <= 69) {
-      return 0.036;
-    } else if (70 <= age && age <= 79) {
-      return 0.08;
-    } else {
-      return 0.148;
-    }
+  resumeExecution() {
+    this.setup();
+    this.loop(); // TODO what is the value of timestamp parameter
   }
 
   attractToCenter(person) {
@@ -362,5 +440,23 @@ export default class Model {
       this.attractionToCenter * forceX,
       this.attractionToCenter * forceY
     );
+
+    // Set new values and reset to init
+    this.population = [];
+    this.numSusceptible = stats.susceptible;
+    this.numInfectious = stats.infectious;
+    this.numImmune = stats.immune;
+    this.numNonInfectious = stats.noninfectious;
+    this.totalPopulation = stats.susceptible + stats.infectious;
+
+    // clear the canvas
+
+    // start the loop again
+    this.populateCanvas();
+    this.updateInfectionRadius(this.infectionRadius);
+    this.updateRadius(this.personRadius);
+
+    this.setup();
+    this.loop();
   }
 }
