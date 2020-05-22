@@ -450,7 +450,7 @@ export default class Model {
     );
   }
 
-  reset(stats) {
+  resetModel(stats) {
     // Set new values and reset to init
     this.population = [];
     this.numSusceptible = stats.susceptible;
@@ -467,6 +467,5 @@ export default class Model {
     this.updateRadius(this.personRadius);
 
     this.setup();
-    this.loop();
   }
 }

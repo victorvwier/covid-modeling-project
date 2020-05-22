@@ -105,16 +105,7 @@ export default class Main {
     this.numImmune = 0;
     this.numDead = 0;
 
-    // <<<<<<< HEAD
-    //     // Delete the intervals the model has running
-    //     this.model.remove();
-
-    //     // Finally setup model and run.
-    //     this.setupModel();
-    //     this.run();
-    // =======
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
     this.community.resetCommunity(this.createCurrentStats());
-    // >>>>>>> origin/working-relocation
   }
 }
