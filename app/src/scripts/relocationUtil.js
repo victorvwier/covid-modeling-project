@@ -47,9 +47,7 @@ export default class RelocationUtil {
       this.community.numModels - 1,
       exclude
     );
-    // console.log(`Person is moving from ${sourceId} to ${destId}`);
     this.community.communities[sourceId].handlePersonLeaving(person);
-    // this.community.communities[destId].handlePersonJoining(person);
     // Change modelId of person
     person.modelId = destId;
     const distCoords = this.community.communities[destId].getRandomPoint();
