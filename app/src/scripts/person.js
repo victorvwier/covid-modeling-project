@@ -45,6 +45,9 @@ export default class Person {
   }
 
   applyForce(forceX, forceY) {
+    if(isNaN(forceX) || isNaN(forceY)) {
+      throw new Error("Wtf");
+    }
     this.accX += forceX; // Plus symbol because we're adding forces together
     this.accY += forceY;
   }
@@ -77,6 +80,9 @@ export default class Person {
 
   // TODO model should call with start and end
   move(startX, endX, startY, endY, dt) {
+    if(isNaN(dt)) {
+      throw new Error("Oh no");
+    }
     if (this.type !== TYPES.DEAD) {
       this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
 

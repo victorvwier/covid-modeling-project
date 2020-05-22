@@ -222,10 +222,10 @@ export default class Model {
 
   updateInfectionRadius(newValue) {
     this.boundingBoxStruct = new BoundingBoxStructure(
-      0,
-      this.width,
-      0,
-      this.height,
+      this.startX,
+      this.endX,
+      this.startY,
+      this.endY,
       10 * newValue
     );
     for (let i = 0; i < this.totalPopulation; i++) {
@@ -422,16 +422,16 @@ export default class Model {
 
   resumeExecution() {
     this.setup();
-    this.loop(); // TODO what is the value of timestamp parameter
+    this.step(); // TODO what is the value of timestamp parameter
   }
 
   attractToCenter(person) {
     // get vector to center
-    let forceX = this.width / 2 - person.x;
-    let forceY = this.height / 2 - person.y;
+    let forceX = (this.startX + this.endX) / 2.0 - person.x;
+    let forceY = (this.startY + this.endY) / 2.0 - person.y;
     // normalize vector to center
     const maxDistance = Math.sqrt(
-      (this.width / 2) ** 2 + (this.height / 2) ** 2
+      ((this.startX + this.endX) / 2) ** 2 + ((this.startY + this.endY) / 2) ** 2
     );
     forceX /= maxDistance;
     forceY /= maxDistance;
@@ -440,7 +440,8 @@ export default class Model {
       this.attractionToCenter * forceX,
       this.attractionToCenter * forceY
     );
-
+    }
+    reset (){
     // Set new values and reset to init
     this.population = [];
     this.numSusceptible = stats.susceptible;
