@@ -25,7 +25,7 @@ export function gaussianRand(min, max) {
   if (num > 1 || num < 0) num = gaussianRand(min, max);
   num *= max - min;
   num += min;
-  return Math.round(num);
+  return num;
 }
 
 export function mortalityStat(age) {

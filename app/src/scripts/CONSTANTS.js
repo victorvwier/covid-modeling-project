@@ -6,7 +6,7 @@ export const INITIAL_DEAD = 0;
 export const REPULSION_FORCE = 0;
 export const ATTRACTION_FORCE = 0;
 export const PERSON_RADIUS = 5;
-export const POPULATION_SPEED = 2;
+export const POPULATION_SPEED = 4;
 export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 export const MOVEMENT_TIME_SCALAR = 5;
 export const TRANSMISSION_PROB = 0.9;
@@ -43,6 +43,6 @@ export const TYPES = {
 export const SPACE_BETWEEN_COMMUNITIES = 20;
 
 // Relocation
-export const RELOCATION_PROBABILITY = 0;
+export const RELOCATION_PROBABILITY = 0.0002;
 export const RELOCATION_ERROR_MARGIN = 20;
 export const RELOCATION_STEP_SIZE = 80;

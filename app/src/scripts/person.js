@@ -113,6 +113,10 @@ export default class Person {
 
     this.accX *= 0;
     this.accY *= 0;
+
+    // Slow the agents down a bit, remove some energy from the system
+    this.speedY *= 0.95;
+    this.speedX *= 0.95;
   }
 
   metWith(p) {

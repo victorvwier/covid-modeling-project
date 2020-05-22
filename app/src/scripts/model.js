@@ -27,12 +27,10 @@ import BoundingBoxStructure from './boundingBox';
 import Coordinate from './data/coordinate';
 
 export default class Model {
-  constructor(id, bounds, stats, compileStats, registerRelocation) {
+  constructor(id, bounds, stats, registerRelocation) {
     this.registerRelocation = registerRelocation;
-    this.compileStats = compileStats;
 
     // Intervals
-    this._chartInterval = null;
     this._updatePopulationInterval = null;
 
     // this._animationFrame = null; TODO you removed this!
@@ -304,9 +302,6 @@ export default class Model {
         ) {
           currentPerson.relocating = true;
           this.registerRelocation(currentPerson);
-
-          // } else if (currentPerson.relocating) {
-          //   currentPerson.relocateMove();
         } else if (!currentPerson.relocating) {
           this.boundingBoxStruct.remove(currentPerson);
           currentPerson.maxSpeed = this.maxSpeed;
@@ -360,11 +355,6 @@ export default class Model {
         }
       }
     }
-  }
-
-  setup() {
-    // Bind this so that updates can proagate to chart via main
-    this._chartInterval = setInterval(this.compileStats, 500);
   }
 
   // Decided to implement this in model, but could move to person
@@ -423,14 +413,11 @@ export default class Model {
   }
 
   pauseExecution() {
-    clearInterval(this._chartInterval);
-    this._chartInterval = null;
     clearInterval(this._updatePopulationInterval);
     this._updatePopulationInterval = null;
   }
 
   resumeExecution() {
-    this.setup();
     this.step(0); // TODO what is the value of timestamp parameter
   }
 
@@ -467,7 +454,5 @@ export default class Model {
     this.populateCanvas();
     this.updateInfectionRadius(this.infectionRadius);
     this.updateRadius(this.personRadius);
-
-    this.setup();
   }
 }

@@ -15,6 +15,8 @@ export default class Community {
     this.agentView = agentView;
     this.updateStats = updateStats;
 
+    this._chartInterval = null;
+
     this.lastTimestamp = 0;
 
     this._passDrawInfoAnimationFrame = null;
@@ -52,6 +54,8 @@ export default class Community {
     // Cancel animation frame
     cancelAnimationFrame(this._passDrawInfoAnimationFrame);
     this._passDrawInfoAnimationFrame = null;
+    clearInterval(this.chartInterval);
+    this.chartInterval = null;
     // Cancel all model intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.pauseExecution());
   }
@@ -59,6 +63,7 @@ export default class Community {
   resumeExecution() {
     // Resume animationFrame
     this._animationFunction();
+    this.chartInterval = setInterval(this.compileStats.bind(this), 500);
     // Resume models intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.resumeExecution());
   }
@@ -66,11 +71,11 @@ export default class Community {
   run() {
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i].populateCanvas();
-      this.communities[i].setup();
       // this.communities[i].step();
     }
 
     this._animationFunction();
+    this.chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
   _animationFunction(timestamp) {
@@ -167,7 +172,6 @@ export default class Community {
         i,
         bounds[i],
         dividedStats,
-        this.compileStats.bind(this),
         this.registerRelocation.bind(this)
       );
 
