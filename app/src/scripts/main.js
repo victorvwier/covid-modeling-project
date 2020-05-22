@@ -40,7 +40,7 @@ export default class Main {
     );
     this.agentView = new AgentChart(context);
     this.community = null;
-    this.setupCommunity();
+    this.setupMain();
 
     // Wire reload button
     wireReloadButtonToMain(this);
@@ -78,7 +78,7 @@ export default class Main {
     );
   }
 
-  setupCommunity() {
+  setupMain() {
     const stats = this.createCurrentStats();
     this.community = new Community(
       4, // TODO determine the number of communities
