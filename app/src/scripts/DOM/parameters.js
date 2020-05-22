@@ -4,7 +4,7 @@ import {
   MIN_INCUBATION_TIME,
   MAX_INCUBATION_TIME,
   INFECTION_RADIUS,
-  PERSON_RADIUS,
+  // PERSON_RADIUS,
   INITAL_INFECTIOUS,
   INITIAL_SUSCEPTIBLE,
   MIN_INFECTIOUS_TIME,
@@ -118,6 +118,7 @@ export default function (model) {
     model.setInfectionRadius.bind(model)
   );
 
+  const PERSON_RADIUS=5
   // agentRadius
   wireInput(
     'agentRadius',
