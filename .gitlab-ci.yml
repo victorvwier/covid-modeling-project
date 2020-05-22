@@ -49,7 +49,7 @@ build:
 deploy:
   stage: deploy
   only:
-    - dev
+    - master
   script:
     - cd app
     - npm run build
