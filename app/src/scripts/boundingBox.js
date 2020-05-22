@@ -46,7 +46,7 @@ class Column {
     if (person.y > this.endY || person.y < this.startY) {
       throw new Error('Person is out of bounds');
     }
-    return Math.floor(person.y / this.size);
+    return Math.floor((person.y - this.startY) / this.size);
   }
 
   insert(person) {
@@ -93,7 +93,7 @@ export default class BoundingBoxStructure {
     if (person.x > this.endX || person.x < this.startX) {
       throw new Error('Person is out of bounds');
     }
-    return Math.floor(person.x / this.size);
+    return Math.floor((person.x - this.startX) / this.size);
   }
 
   insert(person) {
