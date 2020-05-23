@@ -91,35 +91,9 @@ export default class RelocationUtil {
           stats.dead++;
           break;
         default:
-          console.log('What type am i');
+          throw Error('Unknown type');
       }
     });
     return stats;
   }
-
-  // _getPersonsRelocationInfo(person) {
-  //   const relocationInfo = this.relocations.filter(
-  //     (rel) => rel.person === person
-  //   );
-  //   if (relocationInfo.length <= 0) {
-  //     return null;
-  //   }
-  //   return relocationInfo[0];
-  // }
-
-  // takeStep(person) {
-  //   const relocationInfo = this._getPersonsRelocationInfo(person);
-  //   if (!relocationInfo) {
-  //     throw Error(
-  //       'Trying to relocate a person who does not have a relocation info object!'
-  //     );
-  //   }
-  //   // For now!!!
-  //   person.relocateMove();
-  //   // In here check when the person arrives and remove him
-  //   if (this.hasArrived(person)) {
-  //     person.relocating = false;
-  //     this._removeRelocationInfo(relocationInfo);
-  //   }
-  // }
 }
