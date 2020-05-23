@@ -273,4 +273,16 @@ export default class Community {
       model.setNonInToImmuneProb(newValue)
     );
   }
+
+  updateRepulsionForce(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setRepulsionForce(newValue)
+    );
+  }
+
+  updateAttractionToCenter(newValue) {
+    Object.values(this.communities).forEach((model) =>
+      model.setAttractionToCenter(newValue)
+    );
+  }
 }

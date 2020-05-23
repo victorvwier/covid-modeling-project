@@ -47,7 +47,6 @@ export default function (community) {
     community.updateTransmissionProb.bind(community),
     (x) => x * 100
   );
-
   wireInput(
     'nonInToImmuneProb',
     'nonInToImmuneProbOut',
@@ -65,7 +64,6 @@ export default function (community) {
     'days',
     community.updateMinIncubationTime.bind(community)
   );
-
   // timeUntilImmune
   wireInput(
     'maxIncubationTime',
@@ -74,7 +72,6 @@ export default function (community) {
     'days',
     community.updateMaxIncubationTime.bind(community)
   );
-
   wireInput(
     'minInfectiousTime',
     'minInfectiousTimeOut',
@@ -82,7 +79,6 @@ export default function (community) {
     'days',
     community.updateMinInfectiousTime.bind(community)
   );
-
   // timeUntilImmune
   wireInput(
     'maxInfectiousTime',
@@ -91,7 +87,6 @@ export default function (community) {
     'days',
     community.updateMaxInfectiousTime.bind(community)
   );
-
   wireInput(
     'minTimeUntilDead',
     'minTimeUntilDeadOut',
@@ -99,7 +94,6 @@ export default function (community) {
     'days',
     community.updateMinTimeUntilDead.bind(community)
   );
-
   // timeUntilImmune
   wireInput(
     'maxTimeUntilDead',
@@ -108,7 +102,6 @@ export default function (community) {
     'days',
     community.updateMaxTimeUntilDead.bind(community)
   );
-
   // Infection radius
   wireInput(
     'infectionCircleRadius',
@@ -118,15 +111,15 @@ export default function (community) {
     community.updateInfectionRadius.bind(community)
   );
 
-  const PERSON_RADIUS=5
+  // const PERSON_RADIUS=5
   // agentRadius
-  wireInput(
-    'agentRadius',
-    'agentRadiusOut',
-    PERSON_RADIUS,
-    '',
-    community.updateAgentSize.bind(community)
-  );
+  // wireInput(
+  //   'agentRadius',
+  //   'agentRadiusOut',
+  //   PERSON_RADIUS,
+  //   '',
+  //   community.updateAgentSize.bind(community)
+  // );
 
   // agentRadius
   wireInput(
@@ -134,7 +127,7 @@ export default function (community) {
     'repulsionForceOut',
     REPULSION_FORCE,
     '%',
-    model.setRepulsionForce.bind(model),
+    community.updateRepulsionForce.bind(community),
     (x) => x * 100
   );
 
@@ -143,7 +136,7 @@ export default function (community) {
     'attractionForceOut',
     ATTRACTION_FORCE,
     '%',
-    model.setAttractionToCenter.bind(model),
+    community.updateAttractionToCenter.bind(community),
     (x) => x * 100
   );
 
