@@ -1,4 +1,4 @@
-class BoundingBox {
+export class BoundingBox {
   constructor() {
     this.people = [];
   }
@@ -27,7 +27,7 @@ class BoundingBox {
   }
 }
 
-class Column {
+export class Column {
   constructor(startY, endY, size) {
     if (endY < startY) {
       throw new Error('Start points must be closer to origin than end points');
@@ -98,9 +98,6 @@ export default class BoundingBoxStructure {
 
   insert(person) {
     const index = this.getIndex(person);
-    if (!person.x) {
-      throw new Error('Person has nan x');
-    }
     this.columns[index].insert(person);
   }
 
