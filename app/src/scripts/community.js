@@ -68,11 +68,15 @@ export default class Community {
     Object.values(this.communities).forEach((com) => com.resumeExecution());
   }
 
-  run() {
+  populateCommunities() {
     for (let i = 0; i < this.numModels; i++) {
       this.communities[i].populateCanvas();
-      // this.communities[i].step();
     }
+  }
+
+  run() {
+    wireSlidersToHandlers(this);
+    this.populateCommunities();
 
     this._animationFunction();
     this.chartInterval = setInterval(this.compileStats.bind(this), 500);
@@ -177,7 +181,6 @@ export default class Community {
 
       // DEBUG
       window.model = this.communities[i];
-      wireSlidersToHandlers(this);
     }
   }
 
