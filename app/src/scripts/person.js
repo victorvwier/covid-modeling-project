@@ -82,13 +82,14 @@ export default class Person {
 
       this.speedX += this.accX * dt;
       this.speedY += this.accY * dt;
-      this._handleXOutOfBounds(startX, endX);
-      this._handleYOutOfBounds(startY, endY);
 
       this._checkIfExceededMaxSpeed();
 
       this.x += this.speedX * dt;
       this.y += this.speedY * dt;
+
+      this._handleXOutOfBounds(startX, endX);
+      this._handleYOutOfBounds(startY, endY);
 
       // Slow the agents down a bit, remove some energy from the system
       this.speedY *= 0.95 ** dt;

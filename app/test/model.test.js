@@ -48,9 +48,6 @@ describe('Model.js test suite', () => {
     const model = new Model(1, bounds, stats, null);
     model.populateCanvas();
     const person = model.population[0];
-
-    model.population.push(person);
-
     const personOldX = person.x;
     const personOldY = person.y;
     const personOldSpeed = 20;

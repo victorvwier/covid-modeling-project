@@ -295,12 +295,16 @@ export default class Model {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const currentPerson = this.population[i];
       this.update(currentPerson, dt);
-      if (!currentPerson.dead) {
-        if (
-          Math.random() < RELOCATION_PROBABILITY &&
-          !currentPerson.relocating
-        ) {
-          currentPerson.relocating = true;
+
+      if (currentPerson.dead) {
+        return;
+      }
+
+      if (
+        Math.random() < RELOCATION_PROBABILITY &&
+        !currentPerson.relocating
+      ) {
+        currentPerson.relocating = true;
           this.registerRelocation(currentPerson);
         } else if (!currentPerson.relocating) {
           this.boundingBoxStruct.remove(currentPerson);
@@ -315,7 +319,7 @@ export default class Model {
           ); // TODO: make slider to
           this.boundingBoxStruct.insert(currentPerson);
         }
-      }
+      
     }
   }
 
