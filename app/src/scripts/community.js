@@ -54,8 +54,8 @@ export default class Community {
     // Cancel animation frame
     cancelAnimationFrame(this._passDrawInfoAnimationFrame);
     this._passDrawInfoAnimationFrame = null;
-    clearInterval(this.chartInterval);
-    this.chartInterval = null;
+    // clearInterval(this._chartInterval);
+    // this._chartInterval = null;
     // Cancel all model intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.pauseExecution());
   }
@@ -63,7 +63,9 @@ export default class Community {
   resumeExecution() {
     // Resume animationFrame
     this._animationFunction();
-    this.chartInterval = setInterval(this.compileStats.bind(this), 500);
+    // if(this._chartInterval === null) {
+    //   this._chartInterval = setInterval(this.compileStats.bind(this), 500);
+    // }
     // Resume models intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.resumeExecution());
   }
@@ -79,7 +81,7 @@ export default class Community {
     this.populateCommunities();
 
     this._animationFunction();
-    this.chartInterval = setInterval(this.compileStats.bind(this), 500);
+    this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
   _animationFunction(timestamp) {
