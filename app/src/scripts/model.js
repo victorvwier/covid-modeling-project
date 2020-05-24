@@ -133,7 +133,10 @@ export default class Model {
     if (this.population.includes(person)) {
       console.log('But im already here');
     }
-
+    
+    person._handleXOutOfBounds(this.startX, this.endX);
+    person._handleYOutOfBounds(this.startY, this.endY);
+    
     this.boundingBoxStruct.insert(person);
 
     this.population.push(person);
