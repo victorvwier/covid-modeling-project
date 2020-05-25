@@ -4,7 +4,7 @@ import {
   MIN_INCUBATION_TIME,
   MAX_INCUBATION_TIME,
   INFECTION_RADIUS,
-  PERSON_RADIUS,
+  // PERSON_RADIUS,
   INITAL_INFECTIOUS,
   INITIAL_SUSCEPTIBLE,
   MIN_INFECTIOUS_TIME,
@@ -37,23 +37,22 @@ function wireInput(
   });
 }
 
-export default function (model) {
+export default function (community) {
   // TimeToSymptoms
   wireInput(
     'transmissionProb',
     'transmissionProbOut',
     TRANSMISSION_PROB,
     '%',
-    model.setTransmissionProb.bind(model),
+    community.updateTransmissionProb.bind(community),
     (x) => x * 100
   );
-
   wireInput(
     'nonInToImmuneProb',
     'nonInToImmuneProbOut',
     NONIN_TO_IMMUNE_PROB,
     '%',
-    model.setNonInToImmuneProb.bind(model),
+    community.updateNonInToImmuneProb.bind(community),
     (x) => x * 100
   );
 
@@ -63,69 +62,64 @@ export default function (model) {
     'minIncubationTimeOut',
     MIN_INCUBATION_TIME,
     'days',
-    model.setMinIncubationTime.bind(model)
+    community.updateMinIncubationTime.bind(community)
   );
-
   // timeUntilImmune
   wireInput(
     'maxIncubationTime',
     'maxIncubationTimeOut',
     MAX_INCUBATION_TIME,
     'days',
-    model.setMaxIncubationTime.bind(model)
+    community.updateMaxIncubationTime.bind(community)
   );
-
   wireInput(
     'minInfectiousTime',
     'minInfectiousTimeOut',
     MIN_INFECTIOUS_TIME,
     'days',
-    model.setMinInfectiousTime.bind(model)
+    community.updateMinInfectiousTime.bind(community)
   );
-
   // timeUntilImmune
   wireInput(
     'maxInfectiousTime',
     'maxInfectiousTimeOut',
     MAX_INFECTIOUS_TIME,
     'days',
-    model.setMaxInfectiousTime.bind(model)
+    community.updateMaxInfectiousTime.bind(community)
   );
-
   wireInput(
     'minTimeUntilDead',
     'minTimeUntilDeadOut',
     MIN_TIME_UNTIL_DEAD,
     'days',
-    model.setMinTimeUntilDead.bind(model)
+    community.updateMinTimeUntilDead.bind(community)
   );
-
   // timeUntilImmune
   wireInput(
     'maxTimeUntilDead',
     'maxTimeUntilDeadOut',
     MAX_TIME_UNTIL_DEAD,
     'days',
-    model.setMaxTimeUntilDead.bind(model)
+    community.updateMaxTimeUntilDead.bind(community)
   );
-
   // Infection radius
   wireInput(
     'infectionCircleRadius',
     'infectionRadiusOut',
     INFECTION_RADIUS,
     'people',
-    model.setInfectionRadius.bind(model)
+    community.updateInfectionRadius.bind(community)
   );
 
+  // const PERSON_RADIUS=5
   // agentRadius
-  wireInput(
-    'agentRadius',
-    'agentRadiusOut',
-    PERSON_RADIUS,
-    '',
-    model.setPersonRadius.bind(model)
-  );
+  // wireInput(
+  //   'agentRadius',
+  //   'agentRadiusOut',
+  //   PERSON_RADIUS,
+  //   '',
+  //   community.updateAgentSize.bind(community)
+  // );
 
   // agentRadius
   wireInput(
@@ -133,7 +127,7 @@ export default function (model) {
     'repulsionForceOut',
     REPULSION_FORCE,
     '%',
-    model.setRepulsionForce.bind(model),
+    community.updateRepulsionForce.bind(community),
     (x) => x * 100
   );
 
@@ -142,7 +136,7 @@ export default function (model) {
     'attractionForceOut',
     ATTRACTION_FORCE,
     '%',
-    model.setAttractionToCenter.bind(model),
+    community.updateAttractionToCenter.bind(community),
     (x) => x * 100
   );
 

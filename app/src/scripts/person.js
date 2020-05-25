@@ -4,11 +4,13 @@ import {
   POPULATION_SPEED,
   TYPES,
   INFECTION_RADIUS,
+  RELOCATION_STEP_SIZE,
   REPULSION_FORCE,
 } from './CONSTANTS';
 
 export default class Person {
-  constructor(type, x, y) {
+  constructor(type, x, y, modelId) {
+    this.modelId = modelId;
     this.type = type;
     this.radius = PERSON_RADIUS;
     this.infectionRadius = INFECTION_RADIUS;
@@ -20,7 +22,6 @@ export default class Person {
     this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
     this.accX = 0;
     this.accY = 0;
-    this.dead = false;
     this.asymptomaticTime = 0;
     this.symptomaticTime = 0;
     this.incubationTime = 0;
@@ -30,6 +31,10 @@ export default class Person {
     this.incubationPeriod = 0;
     this.infectiousPeriod = 0;
     this.age = Math.round(Math.random() * 100);
+
+    this.relocating = false;
+
+    this.step = RELOCATION_STEP_SIZE;
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
@@ -43,18 +48,20 @@ export default class Person {
     this.accY += forceY;
   }
 
-  _handleXOutOfBounds(width) {
-    if (this.x > width - 2 * this.radius || this.x < 2 * this.radius) {
-      if (this.x > width - 2 * this.radius) this.x = width - 2 * this.radius;
-      else if (this.x < 2 * this.radius) this.x = 2 * this.radius;
+  _handleXOutOfBounds(startX, endX) {
+    if (this.x > endX - 2 * this.radius || this.x < startX + 2 * this.radius) {
+      if (this.x > endX - 2 * this.radius) this.x = endX - 2 * this.radius;
+      else if (this.x < startX + 2 * this.radius)
+        this.x = startX + 2 * this.radius;
       this.speedX *= -1;
     }
   }
 
-  _handleYOutOfBounds(height) {
-    if (this.y > height - 2 * this.radius || this.y < 2 * this.radius) {
-      if (this.y > height - 2 * this.radius) this.y = height - 2 * this.radius;
-      else if (this.y < 2 * this.radius) this.y = 2 * this.radius;
+  _handleYOutOfBounds(startY, endY) {
+    if (this.y > endY - 2 * this.radius || this.y < startY + 2 * this.radius) {
+      if (this.y > endY - 2 * this.radius) this.y = endY - 2 * this.radius;
+      else if (this.y < startY + 2 * this.radius)
+        this.y = startY + 2 * this.radius;
       this.speedY *= -1;
     }
   }
@@ -67,27 +74,49 @@ export default class Person {
       this.speedY = Math.sign(this.speedY) * this.maxSpeed;
   }
 
-  move(width, height, dt) {
-    if (this.type !== TYPES.DEAD) {
-      this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
+  // TODO model should call with start and end
+  move(startX, endX, startY, endY, dt) {
+    // if (this.type !== TYPES.DEAD) {
+    this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
 
-      this.speedX += this.accX * dt;
-      this.speedY += this.accY * dt;
-      this._handleXOutOfBounds(width);
-      this._handleYOutOfBounds(height);
+    this.speedX += this.accX * dt;
+    this.speedY += this.accY * dt;
 
-      this._checkIfExceededMaxSpeed();
+    this._checkIfExceededMaxSpeed();
 
-      this.x += this.speedX * dt;
-      this.y += this.speedY * dt;
+    this.x += this.speedX * dt;
+    this.y += this.speedY * dt;
 
-      // Slow the agents down a bit, remove some energy from the system
-      this.speedY *= 0.95 ** dt;
-      this.speedX *= 0.95 ** dt;
+    this._handleXOutOfBounds(startX, endX);
+    this._handleYOutOfBounds(startY, endY);
 
-      this.accX *= 0;
-      this.accY *= 0;
-    }
+    // Slow the agents down a bit, remove some energy from the system
+    this.speedY *= 0.95 ** dt;
+    this.speedX *= 0.95 ** dt;
+
+    this.accX *= 0;
+    this.accY *= 0;
+    // }
+  }
+
+  getStep(current, destination) {
+    return (destination - current) / this.step;
+  }
+
+  relocateMove({ x: destX, y: destY }) {
+    this.applyForce(this.getStep(this.x, destX), this.getStep(this.y, destY));
+    this.speedX += this.accX;
+    this.speedY += this.accY;
+
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    this.accX *= 0;
+    this.accY *= 0;
+
+    // Slow the agents down a bit, remove some energy from the system
+    this.speedY *= 0.95;
+    this.speedX *= 0.95;
   }
 
   metWith(p) {
@@ -120,25 +149,25 @@ export default class Person {
     this.color = COLORS.INFECTIOUS;
   }
 
-  canInfect(p) {
-    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
-  }
-
   repel(p) {
     const delta = { x: this.x - p.x, y: this.y - p.y };
     const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
-    
-    if(delta.x !== 0) {
-      const unitX = delta.x/dist;
-      const vecX = unitX/dist * this.repulsionForce * 4;
+
+    if (delta.x !== 0) {
+      const unitX = delta.x / dist;
+      const vecX = (unitX / dist) * this.repulsionForce * 4;
       this.applyForce(vecX, 0);
     }
-    
-    if(delta.y !== 0) {
-      const unitY = delta.y/dist;
-      const vecY = unitY/dist * this.repulsionForce * 4;
+
+    if (delta.y !== 0) {
+      const unitY = delta.y / dist;
+      const vecY = (unitY / dist) * this.repulsionForce * 4;
       this.applyForce(0, vecY);
     }
+  }
+
+  canInfect(p) {
+    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
   }
 
   initializeAge(value) {
