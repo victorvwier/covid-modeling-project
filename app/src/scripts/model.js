@@ -133,10 +133,10 @@ export default class Model {
     if (this.population.includes(person)) {
       console.log('But im already here');
     }
-    
+
     person._handleXOutOfBounds(this.startX, this.endX);
     person._handleYOutOfBounds(this.startY, this.endY);
-    
+
     this.boundingBoxStruct.insert(person);
 
     this.population.push(person);
@@ -263,9 +263,9 @@ export default class Model {
         this.endY - this.personRadius
       );
       const newPerson = new Person(type, x, y, this.id);
-      if (type === TYPES.DEAD) {
-        newPerson.dead = true;
-      }
+      // if (type !== TYPES.DEAD) {
+      //   // newPerson.dead = true;
+      // }
       this.population.push(newPerson);
       this.boundingBoxStruct.insert(newPerson);
     }
@@ -276,7 +276,7 @@ export default class Model {
     const colors = [];
     let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
-      if (!this.population[i].dead) {
+      if (!(this.population[i].type === TYPES.DEAD)) {
         positions.push(this.population[i].x);
         positions.push(this.population[i].y);
         colors.push(parseInt(this.population[i].color.slice(1, 3), 16) / 255.0);
@@ -299,30 +299,26 @@ export default class Model {
       const currentPerson = this.population[i];
       this.update(currentPerson, dt);
 
-      if (currentPerson.dead) {
-        return;
-      }
+      // if (currentPerson.type === TYPES.DEAD) {
+      //   return;
+      // }
 
-      if (
-        Math.random() < RELOCATION_PROBABILITY &&
-        !currentPerson.relocating
-      ) {
+      if (Math.random() < RELOCATION_PROBABILITY && !currentPerson.relocating) {
         currentPerson.relocating = true;
-          this.registerRelocation(currentPerson);
-        } else if (!currentPerson.relocating) {
-          this.boundingBoxStruct.remove(currentPerson);
-          currentPerson.maxSpeed = this.maxSpeed;
-          this.attractToCenter(currentPerson);
-          currentPerson.move(
-            this.startX,
-            this.endX,
-            this.startY,
-            this.endY,
-            dt * MOVEMENT_TIME_SCALAR
-          ); // TODO: make slider to
-          this.boundingBoxStruct.insert(currentPerson);
-        }
-      
+        this.registerRelocation(currentPerson);
+      } else if (!currentPerson.relocating) {
+        this.boundingBoxStruct.remove(currentPerson);
+        currentPerson.maxSpeed = this.maxSpeed;
+        this.attractToCenter(currentPerson);
+        currentPerson.move(
+          this.startX,
+          this.endX,
+          this.startY,
+          this.endY,
+          dt * MOVEMENT_TIME_SCALAR
+        ); // TODO: make slider to
+        this.boundingBoxStruct.insert(currentPerson);
+      }
     }
   }
 
@@ -344,9 +340,9 @@ export default class Model {
       const met = this.boundingBoxStruct.query(this.population[i]);
       for (let j = 0; j < met.length; j += 1) {
         // Social distancing
-        if (this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
-          this.population[i].repel(met[j]);
-        }
+        // if (this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
+        this.population[i].repel(met[j]);
+        // }
 
         // Infection
         if (
@@ -403,7 +399,7 @@ export default class Model {
       } else {
         person.infectiousTime += dt;
         if (person.infectiousTime >= person.infectiousPeriod) {
-          person.dead = true;
+          // person.dead = true;
           person.type = TYPES.DEAD;
           person.color = COLORS.DEAD;
           this.numInfectious -= 1;

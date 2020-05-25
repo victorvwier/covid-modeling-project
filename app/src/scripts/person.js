@@ -22,7 +22,6 @@ export default class Person {
     this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
     this.accX = 0;
     this.accY = 0;
-    this.dead = false;
     this.asymptomaticTime = 0;
     this.symptomaticTime = 0;
     this.incubationTime = 0;
@@ -77,27 +76,27 @@ export default class Person {
 
   // TODO model should call with start and end
   move(startX, endX, startY, endY, dt) {
-    if (this.type !== TYPES.DEAD) {
-      this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
+    // if (this.type !== TYPES.DEAD) {
+    this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
 
-      this.speedX += this.accX * dt;
-      this.speedY += this.accY * dt;
+    this.speedX += this.accX * dt;
+    this.speedY += this.accY * dt;
 
-      this._checkIfExceededMaxSpeed();
+    this._checkIfExceededMaxSpeed();
 
-      this.x += this.speedX * dt;
-      this.y += this.speedY * dt;
+    this.x += this.speedX * dt;
+    this.y += this.speedY * dt;
 
-      this._handleXOutOfBounds(startX, endX);
-      this._handleYOutOfBounds(startY, endY);
+    this._handleXOutOfBounds(startX, endX);
+    this._handleYOutOfBounds(startY, endY);
 
-      // Slow the agents down a bit, remove some energy from the system
-      this.speedY *= 0.95 ** dt;
-      this.speedX *= 0.95 ** dt;
+    // Slow the agents down a bit, remove some energy from the system
+    this.speedY *= 0.95 ** dt;
+    this.speedX *= 0.95 ** dt;
 
-      this.accX *= 0;
-      this.accY *= 0;
-    }
+    this.accX *= 0;
+    this.accY *= 0;
+    // }
   }
 
   getStep(current, destination) {
