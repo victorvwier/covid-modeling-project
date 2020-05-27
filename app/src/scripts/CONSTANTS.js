@@ -1,6 +1,6 @@
 export const INITIAL_SUSCEPTIBLE = 100;
 export const INITIAL_NONINFECTIOUS = 0;
-export const INITAL_INFECTIOUS = 120;
+export const INITIAL_INFECTIOUS = 120;
 export const INITIAL_IMMUNE = 0;
 export const INITIAL_DEAD = 0;
 export const REPULSION_FORCE = 0;
