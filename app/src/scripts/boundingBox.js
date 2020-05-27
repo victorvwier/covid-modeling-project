@@ -66,10 +66,10 @@ export class Column {
     if (endY < startY) {
       throw new Error('Start points must be closer to origin than end points');
     }
-    this.startY = startY;
-    this.endY = endY;
-    this.size = size;
-    this.boxes = [];
+    /** @private */ this.startY = startY;
+    /** @private */ this.endY = endY;
+    /** @private */ this.size = size;
+    /** @private */ this.boxes = [];
     /** 
      * The bounding boxes are all have sides with set size starting from the lower bound.
      * The last bounding box may be cut off by the upper bound.
@@ -150,12 +150,12 @@ export default class BoundingBoxStructure {
     if (endX < startX || endY < startY) {
       throw new Error('Start points must be closer to origin than end points');
     }
-    this.startX = startX;
-    this.endX = endX;
-    this.startY = startY;
-    this.endY = endY;
-    this.size = size;
-    this.columns = [];
+    /** @private */ this.startX = startX;
+    /** @private */ this.endX = endX;
+    /** @private */ this.startY = startY;
+    /** @private */ this.endY = endY;
+    /** @private */ this.size = size;
+    /** @private */ this.columns = [];
     /** 
      * The bounding boxes are all have sides with set size starting from the lower bound.
      * The last bounding box may be cut off by the upper bound.
