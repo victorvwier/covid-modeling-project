@@ -9,8 +9,8 @@ import {
 } from './CONSTANTS';
 
 export default class Person {
-  constructor(type, x, y, modelId) {
-    this.modelId = modelId;
+  constructor(type, x, y, communityId) {
+    this.communityId = communityId;
     this.type = type;
     this.radius = PERSON_RADIUS;
     this.infectionRadius = INFECTION_RADIUS;

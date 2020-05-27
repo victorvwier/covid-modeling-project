@@ -1,5 +1,5 @@
 import Stats from './data/stats';
-import Community from './community';
+import Model from './model';
 import Chart from './chart';
 import AgentChart from './agentChart';
 import { wireReloadButtonToMain } from './DOM/parameters';
@@ -39,7 +39,7 @@ export default class Main {
       this.createCurrentStats.bind(this)
     );
     this.agentView = new AgentChart(context);
-    this.community = null;
+    this.model = null;
     this.setupMain();
 
     // Wire reload button
@@ -81,7 +81,7 @@ export default class Main {
   setupMain() {
     const stats = this.createCurrentStats();
     console.log(stats);
-    this.community = new Community(
+    this.model = new Model(
       4, // TODO determine the number of communities
       this.agentView,
       this.width,
@@ -94,8 +94,8 @@ export default class Main {
   run() {
     this.chart.drawChart();
 
-    this.community.setupCommunity();
-    this.community.run();
+    this.model.setupCommunity();
+    this.model.run();
   }
 
   reset() {
@@ -107,6 +107,6 @@ export default class Main {
     this.numDead = 0;
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.community.resetCommunity(this.createCurrentStats());
+    this.model.resetCommunity(this.createCurrentStats());
   }
 }
