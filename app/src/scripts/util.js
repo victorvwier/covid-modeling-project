@@ -1,11 +1,21 @@
+/**
+ * a function returning a random number inbetween the minimum and maximum value. Is inclusive of its bounds.
+ * 
+ * @param {number} min the lower bound of the range.
+ * @param {number} max the upper bound of the range.
+ * @returns {number} a random number inbetween min and max.
+ */
 export function getRandom(min, max) {
   return Math.random() * (max - min) + min;
 }
 
 /**
- * Gets random between min-max inclusive
- * @param {*} min
- * @param {*} max
+ * Gets random Integer between min-max inclusive.
+ * 
+ * @param {number} min the lower bound of the range.
+ * @param {number} max the upper bound of the range.
+ * @param {Array{Int}} exceptFor integers to be excluded from possible results.
+ * @returns {Int} Random integer for which min <= n <= max and n not in exceptFor.
  */
 export function getRandomIntExceptForValue(min, max, exceptFor = []) {
   const rand = Math.round(Math.random() * (max + 1));
@@ -14,6 +24,13 @@ export function getRandomIntExceptForValue(min, max, exceptFor = []) {
     : rand;
 }
 
+/**
+ * Returns a random number on a gaussian distribution.
+ * 
+ * @param {number} min lower bound on possible results.
+ * @param {number} max upper bound on possible results.
+ * @returns {number} random number between min and max, normally distributed.
+ */
 export function gaussianRand(min, max) {
   let u = 0;
   let v = 0;
@@ -28,6 +45,12 @@ export function gaussianRand(min, max) {
   return num;
 }
 
+/**
+ * Returns the mortality rate coupled to the age.
+ * 
+ * @param {number} age The age for which the mortality rate is to be retrieved.
+ * @returns {number} The mortality rate of people that age.
+ */
 export function mortalityStat(age) {
   if (0 <= age && age <= 9) {
     return 0;
