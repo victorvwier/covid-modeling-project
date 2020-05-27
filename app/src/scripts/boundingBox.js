@@ -61,6 +61,8 @@ export class Column {
    * @param {number} startY The lower bound of the column on the Y axis.
    * @param {number} endY The upper bound of the column on the Y axis.
    * @param {number} size The size of the side of a single bounding box.
+   * 
+   * @throws Lower bound must be a smaller number than upper bound.
    */
   constructor(startY, endY, size) {
     if (endY < startY) {
@@ -70,7 +72,7 @@ export class Column {
     /** @private */ this.endY = endY;
     /** @private */ this.size = size;
     /** @private */ this.boxes = [];
-    /** 
+    /*
      * The bounding boxes are all have sides with set size starting from the lower bound.
      * The last bounding box may be cut off by the upper bound.
      */
@@ -85,6 +87,8 @@ export class Column {
    * 
    * @param {Person} person The person for which the index is to be retrieved.
    * @returns {number} The corresponding index.
+   * 
+   * @throws Person must be between lower and upper bound.
    */
   getIndex(person) {
     if (person.y > this.endY || person.y < this.startY) {
@@ -145,6 +149,8 @@ export default class BoundingBoxStructure {
    * @param {number} startY The lower bound of the structure on the Y axis.
    * @param {number} endY The upper bound of the structure on the Y axis.
    * @param {number} size The size of the sides of a single BoundingBox.
+   * 
+   * @throws Lower bound must be a smaller number than upper bound.
    */
   constructor(startX, endX, startY, endY, size) {
     if (endX < startX || endY < startY) {
@@ -156,7 +162,7 @@ export default class BoundingBoxStructure {
     /** @private */ this.endY = endY;
     /** @private */ this.size = size;
     /** @private */ this.columns = [];
-    /** 
+    /*
      * The bounding boxes are all have sides with set size starting from the lower bound.
      * The last bounding box may be cut off by the upper bound.
      */
@@ -171,6 +177,8 @@ export default class BoundingBoxStructure {
    * 
    * @param {Person} person The person of which the corresponding index is to be found.
    * @returns {number} The corresponding index.
+   * 
+   * @throws Person must be between lower and upper bound.
    */
   getIndex(person) {
     if (person.x > this.endX || person.x < this.startX) {
