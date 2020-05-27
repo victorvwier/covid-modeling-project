@@ -73,8 +73,8 @@ describe('RelocationUtil tests', () => {
   });
 
   test('getStats should return all the stats', () => {
-    Object.values(model.communities).forEach((model) => {
-      model.population.forEach((person) =>
+    Object.values(model.communities).forEach((community) => {
+      community.population.forEach((person) =>
         relocationUtil.relocations.push(new RelocationInfo(person, null, 1))
       );
     });
