@@ -78,5 +78,5 @@ export const SPACE_BETWEEN_COMMUNITIES = 20;
 export const RELOCATION_PROBABILITY = 0.0002;
 /** @constant RELOCATION_ERROR_MARGIN The distance a person is allowed to be offset from his destination to finish relocating. */
 export const RELOCATION_ERROR_MARGIN = 20;
-/** @constant RELOCATION_STEP_SIZE The distance a person steps towards his destination in one step during relocation. */
+/** @constant RELOCATION_STEP_SIZE The amount of steps the distance to a persons destination is divided up into. */
 export const RELOCATION_STEP_SIZE = 80;
