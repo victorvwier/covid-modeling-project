@@ -6,6 +6,10 @@ export function getInitialNumInfectious() {
   return parseInt(document.getElementById('initInfectiousCount').value, 10);
 }
 
+export function getNumCommunities() {
+  return parseInt(document.getElementById('numCommunities').value, 10);
+}
+
 export function updateTheStatistics(
   numSusceptible,
   numNonInfectious,

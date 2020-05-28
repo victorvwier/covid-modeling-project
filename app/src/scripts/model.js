@@ -28,14 +28,33 @@ export default class Model {
     window.community = this;
   }
 
-  _createDividedStats() {
-    return new Stats(
-      Math.round(this.numSusceptible / this.numCommunities),
-      Math.round(this.numNonInfectious / this.numCommunities),
-      Math.round(this.numInfectious / this.numCommunities),
-      Math.round(this.numDead / this.numCommunities),
-      Math.round(this.numImmune / this.numCommunities)
-    );
+  _distributeStats(total, index) {
+    let itemsPerBucket = Math.floor(total / this.numCommunities);
+    if (total < this.numCommunities) {
+      itemsPerBucket = 0;
+    }
+
+    const remainingItems = total % this.numCommunities;
+    const values = [];
+    values[0] = 0;
+    for (let i = 1; i <= this.numCommunities; i++) {
+      let extra = 0;
+      if (i <= remainingItems) {
+        extra = 1;
+      }
+      values[i] = itemsPerBucket + extra;
+    }
+    return values[index + 1];
+  }
+
+  _createDividedStats(index) {
+    const valSus = this._distributeStats(this.numSusceptible, index);
+    const valNonInf = this._distributeStats(this.numNonInfectious, index);
+    const valInf = this._distributeStats(this.numInfectious, index);
+    const valDead = this._distributeStats(this.numDead, index);
+    const valImm = this._distributeStats(this.numImmune, index);
+
+    return new Stats(valSus, valNonInf, valInf, valDead, valImm);
   }
 
   _setValuesFromStatsToLocal(stats) {
@@ -130,7 +149,10 @@ export default class Model {
     // Space between each of the communities + 2 on the sides
     let widthFactor = 1;
     let heightFactor = 1;
-    if (this.numCommunities <= 6) {
+    if (this.numCommunities === 1) {
+      widthFactor = 1;
+      heightFactor = 1;
+    } else if (this.numCommunities <= 6) {
       widthFactor = 2;
       heightFactor = Math.ceil(this.numCommunities / widthFactor);
     } else if (this.numCommunities <= 12) {
@@ -170,10 +192,11 @@ export default class Model {
   }
 
   setupCommunity() {
-    const dividedStats = this._createDividedStats();
     const bounds = this._createIncrementals();
 
     for (let i = 0; i < this.numCommunities; i++) {
+      const dividedStats = this._createDividedStats(i);
+
       this.communities[i] = new Community(
         i,
         bounds[i],
@@ -211,10 +234,11 @@ export default class Model {
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
 
-    const dividedStats = this._createDividedStats();
-    Object.values(this.communities).forEach((m) =>
-      m.resetCommunity(dividedStats)
-    );
+    for (let i = 0; i < this.numModels; i++) {
+      const dividedStats = this._createDividedStats(i);
+
+      this.communities[i].resetCommunity(dividedStats);
+    }
   }
 
   // SLIDER HANDLER METHODS

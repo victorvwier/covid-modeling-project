@@ -25,6 +25,8 @@ export const MAX_TIME_UNTIL_DEAD = 30;
 
 export const DAYS_PER_SECOND = 2;
 
+export const NUM_COMMUNITIES = 4;
+
 export const COLORS = {
   SUSCEPTIBLE: '#05befc',
   NONINFECTIOUS: '#c9e265',

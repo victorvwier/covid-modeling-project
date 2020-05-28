@@ -13,6 +13,7 @@ import {
   MAX_TIME_UNTIL_DEAD,
   REPULSION_FORCE,
   ATTRACTION_FORCE,
+  NUM_COMMUNITIES,
 } from '../CONSTANTS';
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
@@ -157,6 +158,14 @@ export default function (community) {
     INITIAL_INFECTIOUS,
     '',
     (x) => x // Don't need a setter
+  );
+
+  wireInput(
+    'numCommunities',
+    'numCommunitiesOut',
+    NUM_COMMUNITIES,
+    '',
+    (x) => x
   );
 }
 
