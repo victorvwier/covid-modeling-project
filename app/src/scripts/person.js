@@ -43,6 +43,10 @@ export default class Person {
     else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
   }
 
+  isDead() {
+    return this.type === TYPES.DEAD;
+  }
+
   applyForce(forceX, forceY) {
     this.accX += forceX; // Plus symbol because we're adding forces together
     this.accY += forceY;
@@ -74,9 +78,7 @@ export default class Person {
       this.speedY = Math.sign(this.speedY) * this.maxSpeed;
   }
 
-  // TODO model should call with start and end
   move(startX, endX, startY, endY, dt) {
-    // if (this.type !== TYPES.DEAD) {
     this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
 
     this.speedX += this.accX * dt;
@@ -96,7 +98,6 @@ export default class Person {
 
     this.accX *= 0;
     this.accY *= 0;
-    // }
   }
 
   getStep(current, destination) {
