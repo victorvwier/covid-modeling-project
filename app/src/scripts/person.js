@@ -119,11 +119,11 @@ export default class Person {
     this.speedX *= 0.95;
   }
 
-  metWith(p) {
+  isInRange(p, range) {
     const deltaX = this.x - p.x;
     const deltaY = this.y - p.y;
     const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    return dist < this.infectionRadius + p.infectionRadius; // Collide on infectionraduis
+    return dist < range; // Collide on infectionraduis
   }
 
   startIncubation() {

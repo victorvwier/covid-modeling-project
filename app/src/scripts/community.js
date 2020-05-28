@@ -21,6 +21,7 @@ import {
   RELOCATION_PROBABILITY,
   MOVEMENT_TIME_SCALAR,
   RELOCATION_ERROR_MARGIN,
+  INTERACTION_RANGE,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -337,7 +338,7 @@ export default class Community {
 
   interactPopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
-      const met = this.boundingBoxStruct.query(this.population[i]);
+      const met = this.boundingBoxStruct.query(this.population[i], INTERACTION_RANGE);
       for (let j = 0; j < met.length; j += 1) {
         // Social distancing
         // if (this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {

@@ -34,7 +34,7 @@ describe('Bounding box test suite', () => {
     box.insert(person1);
     box.insert(person2);
     box.insert(person3);
-    expect(box.query(person1)).toStrictEqual([person2]);
+    expect(box.query(person1, 5)).toStrictEqual([person2]);
   });
 
   test('Column getIndex 1', () => {
@@ -108,7 +108,7 @@ describe('Bounding box test suite', () => {
     column.insert(person3);
     column.insert(person4);
     column.insert(person5);
-    expect(column.query(person1)).toStrictEqual([person2]);
+    expect(column.query(person1, 2.1)).toStrictEqual([person2]);
   });
 
   test('Column query 2', () => {
@@ -124,7 +124,7 @@ describe('Bounding box test suite', () => {
     column.insert(person3);
     column.insert(person4);
     column.insert(person5);
-    expect(column.query(person3)).toStrictEqual([person2, person4]);
+    expect(column.query(person3, 2.1)).toStrictEqual([person2, person4]);
   });
 
   test('Column query 3', () => {
@@ -140,7 +140,7 @@ describe('Bounding box test suite', () => {
     column.insert(person3);
     column.insert(person4);
     column.insert(person5);
-    expect(column.query(person5)).toStrictEqual([person4]);
+    expect(column.query(person5, 2.1)).toStrictEqual([person4]);
   });
 
   test('Bounding Box Structure getIndex 1', () => {
@@ -212,13 +212,13 @@ describe('Bounding box test suite', () => {
     struct.insert(person7);
     struct.insert(person8);
     struct.insert(person9);
-    expect(struct.query(person2)).toStrictEqual([
-      person1,
+    const query = struct.query(person2, 5.9).sort();
+    const expected = [person1,
       person3,
-      person5,
       person4,
-      person6,
-    ]);
+      person5,
+      person6,].sort();
+    expect(query).toStrictEqual(expected);
   });
 
   test('Bounding Box Structure query 2', () => {
@@ -241,16 +241,18 @@ describe('Bounding box test suite', () => {
     struct.insert(person7);
     struct.insert(person8);
     struct.insert(person9);
-    expect(struct.query(person5)).toStrictEqual([
+    const query = struct.query(person5, 5.9).sort();
+    const expected = [
+      person1,
+      person2,
+      person3,
       person4,
       person6,
-      person2,
-      person1,
-      person3,
-      person8,
       person7,
+      person8,
       person9,
-    ]);
+    ].sort();
+    expect(query).toStrictEqual(expected);
   });
 
   test('Bounding Box Structure query 3', () => {
@@ -273,24 +275,26 @@ describe('Bounding box test suite', () => {
     struct.insert(person7);
     struct.insert(person8);
     struct.insert(person9);
-    expect(struct.query(person8)).toStrictEqual([
+    const query = struct.query(person8, 5.9).sort();
+    const expected = [
+      person4,
+      person5,
+      person6,
       person7,
       person9,
-      person5,
-      person4,
-      person6,
-    ]);
+    ].sort();
+    expect(query).toStrictEqual(expected);
   });
 
   test('Construct Invalid Bounding Box', () => {
     expect(() => {
-      const struct = new BoundingBoxStructure(10, 0, 10, 0, 5);
+      BoundingBoxStructure(10, 0, 10, 0, 5);
     }).toThrow();
   });
 
   test('column with end < start should throw an error', () => {
     expect(() => {
-      const column = new Column(20, 1, 1);
+      Column(20, 1, 1);
     }).toThrow(Error);
   });
 
