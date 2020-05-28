@@ -208,6 +208,7 @@ export default class Community {
   }
 
   resetCommunity(stats) {
+    this.relocationUtil.clearAllRelocationsForReset();
     this._setValuesFromStatsToLocal(stats);
 
     const dividedStats = this._createDividedStats();

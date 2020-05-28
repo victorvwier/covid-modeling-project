@@ -43,6 +43,6 @@ export const TYPES = {
 export const SPACE_BETWEEN_COMMUNITIES = 20;
 
 // Relocation
-export const RELOCATION_PROBABILITY = 0.0002;
+export const RELOCATION_PROBABILITY = 0.00005;
 export const RELOCATION_ERROR_MARGIN = 20;
 export const RELOCATION_STEP_SIZE = 80;

@@ -263,9 +263,7 @@ export default class Model {
         this.endY - this.personRadius
       );
       const newPerson = new Person(type, x, y, this.id);
-      // if (type !== TYPES.DEAD) {
-      //   // newPerson.dead = true;
-      // }
+
       this.population.push(newPerson);
       this.boundingBoxStruct.insert(newPerson);
     }
@@ -276,15 +274,18 @@ export default class Model {
     const colors = [];
     let count = 0;
     for (let i = 0; i < this.totalPopulation; i++) {
-      if (!(this.population[i].type === TYPES.DEAD)) {
-        positions.push(this.population[i].x);
-        positions.push(this.population[i].y);
-        colors.push(parseInt(this.population[i].color.slice(1, 3), 16) / 255.0);
-        colors.push(parseInt(this.population[i].color.slice(3, 5), 16) / 255.0);
-        colors.push(parseInt(this.population[i].color.slice(5, 7), 16) / 255.0);
-        colors.push(1);
-        count++;
+      const currentPerson = this.population[i];
+      // If the person is dead don't pass his draw info down
+      if (currentPerson.isDead()) {
+        continue;
       }
+      positions.push(currentPerson.x);
+      positions.push(currentPerson.y);
+      colors.push(parseInt(currentPerson.color.slice(1, 3), 16) / 255.0);
+      colors.push(parseInt(currentPerson.color.slice(3, 5), 16) / 255.0);
+      colors.push(parseInt(currentPerson.color.slice(5, 7), 16) / 255.0);
+      colors.push(1);
+      count++;
     }
     return {
       positions: positions,
@@ -295,13 +296,13 @@ export default class Model {
   }
 
   updatePopulation(dt) {
-    for (let i = 0; i < this.totalPopulation; i += 1) {
+    for (let i = 0; i < this.totalPopulation; i++) {
       const currentPerson = this.population[i];
+      // If person is dead don't do anything don't move him
+      if (currentPerson.isDead()) {
+        continue;
+      }
       this.update(currentPerson, dt);
-
-      // if (currentPerson.type === TYPES.DEAD) {
-      //   return;
-      // }
 
       if (Math.random() < RELOCATION_PROBABILITY && !currentPerson.relocating) {
         currentPerson.relocating = true;
@@ -337,20 +338,30 @@ export default class Model {
 
   interactPopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
-      const met = this.boundingBoxStruct.query(this.population[i]);
+      const currentPerson = this.population[i];
+      // If this person is dead then no matter who he interacts with it doesn't matter
+      if (currentPerson.isDead()) {
+        continue;
+      }
+
+      const met = this.boundingBoxStruct.query(currentPerson);
       for (let j = 0; j < met.length; j += 1) {
+        const personMet = this.population[j];
+        // if the person that was met is is dead then it doesn't matter
+        if (personMet.isDead()) {
+          continue;
+        }
         // Social distancing
-        // if (this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
-        this.population[i].repel(met[j]);
+        currentPerson.repel(personMet);
         // }
 
         // Infection
         if (
-          this.population[i].canInfect(met[j]) &&
+          currentPerson.canInfect(personMet) &&
           Math.random() <= this.transmissionProb * dt
         ) {
-          met[j].startIncubation();
-          met[j].setIncubationPeriod(
+          personMet.startIncubation();
+          personMet.setIncubationPeriod(
             gaussianRand(this.minIncubationTime, this.maxIncubationTime)
           );
           this.numNonInfectious += 1;

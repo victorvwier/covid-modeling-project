@@ -1,4 +1,4 @@
-import { getRandomIntExceptForValue } from './util';
+import { getRandomIntExceptForValue, getRandomInt } from './util';
 import { TYPES } from './CONSTANTS';
 import RelocationInfo from './data/relocationInfo';
 import Stats from './data/stats';
@@ -37,18 +37,23 @@ export default class RelocationUtil {
     // Move person
     const sourceId = person.modelId;
     // Get models which very high density and exclude them from models being relocated to
-    const maxTotalPopulation = Math.round(
-      (this.community.stats.sum() / this.community.numModels) * 1.5
-    );
-    const exclude = Object.values(this.community.communities)
-      .filter((mod) => mod.totalPopulation > maxTotalPopulation)
-      .map((mod) => mod.id)
-      .concat([sourceId]);
-    // Destination Id
+
+    // TODO now we're not using this (find a way to do it)
+    // const maxTotalPopulation = Math.round(
+    //   (this.community.stats.sum() / this.community.numModels) * 1.5
+    // );
+    // const exclude = Object.values(this.community.communities)
+    //   .filter((mod) => mod.totalPopulation > maxTotalPopulation)
+    //   .map((mod) => mod.id)
+    //   .concat([sourceId]);
+    // // Destination Id
+
+    // Only exclude the source if there are more than one community
+    const excludedIds = this.community.numModels > 1 ? [sourceId] : [];
     const destId = getRandomIntExceptForValue(
       0,
       this.community.numModels - 1,
-      exclude
+      excludedIds
     );
     this.community.communities[sourceId].handlePersonLeaving(person);
     // Change modelId of person
@@ -69,6 +74,10 @@ export default class RelocationUtil {
         'Tried to remove a relocation info but nothing was removed???'
       );
     }
+  }
+
+  clearAllRelocationsForReset() {
+    this.relocations = [];
   }
 
   getStats() {

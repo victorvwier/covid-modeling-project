@@ -80,7 +80,6 @@ export default class Main {
 
   setupMain() {
     const stats = this.createCurrentStats();
-    console.log(stats);
     this.community = new Community(
       4, // TODO determine the number of communities
       this.agentView,

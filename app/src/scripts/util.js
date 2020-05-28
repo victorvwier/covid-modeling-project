@@ -14,6 +14,18 @@ export function getRandomIntExceptForValue(min, max, exceptFor = []) {
     : rand;
 }
 
+/**
+ * Returns a random integer in range
+ * @param {*} min
+ * @param {*} max
+ * @param {*} exceptFor
+ */
+export function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export function gaussianRand(min, max) {
   let u = 0;
   let v = 0;
