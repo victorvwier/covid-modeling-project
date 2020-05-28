@@ -7,6 +7,9 @@ import {
 } from './scripts/CONSTANTS';
 import Main from './scripts/main';
 
+/**
+ * A function to initialize our program when the page is loaded.
+ */
 window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');

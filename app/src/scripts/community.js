@@ -27,7 +27,17 @@ import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
 import Coordinate from './data/coordinate';
 
+/** @class Community describing a single community within the model. */
 export default class Community {
+  /**
+   * Instatiates a Community.
+   *
+   * @constructor
+   * @param {number} id The ID which can be used to refer to the community.
+   * @param {Bounds} bounds An object representing the bounds of the community.
+   * @param {Stats} stats The stats object for the community.
+   * @param {function} registerRelocation A function to call when a person is relocating.
+   */
   constructor(id, bounds, stats, registerRelocation) {
     this.registerRelocation = registerRelocation;
 
@@ -88,15 +98,30 @@ export default class Community {
     );
   }
 
+  /**
+   * A function setting the attraction to the center.
+   *
+   * @param {number} newValue The new attraction to the center in the community.
+   */
   setAttractionToCenter(newValue) {
     this.attractionToCenter = newValue;
   }
 
+  /**
+   * A function setting the force with which people repel each other.
+   *
+   * @param {number} newValue The new Repulsion force.
+   */
   setRepulsionForce(newValue) {
     this.repulsionForce = newValue;
     this.updateRepulsionForce(newValue);
   }
 
+  /**
+   * A function to handle a person relocating to another community.
+   *
+   * @param {Person} person The person leaving the community.
+   */
   handlePersonLeaving(person) {
     this.totalPopulation--;
 
@@ -128,6 +153,11 @@ export default class Community {
     }
   }
 
+  /**
+   * A function to handle a person relocating to this Community.
+   *
+   * @param {Person} person The person joining this community.
+   */
   handlePersonJoining(person) {
     this.totalPopulation++;
 
@@ -163,43 +193,93 @@ export default class Community {
     }
   }
 
+  /**
+   * A function to set the probability of transmission between people.
+   *
+   * @param {number} newValue The new probability of transmission.
+   */
   setTransmissionProb(newValue) {
     this.transmissionProb = newValue;
   }
 
+  /**
+   * A function to set the probability for a person to move from the Non-Infectious state to the Immune state.
+   *
+   * @param {number} newValue The new probability for this state transition.
+   */
   setNonInToImmuneProb(newValue) {
     this.nonInfectiousToImmuneProb = newValue;
   }
 
+  /**
+   * A function to set the minimum time to move from the Non-Infectious state to the Infectious state in this community.
+   *
+   * @param {number} newValue The new minimum incubation time.
+   */
   setMinIncubationTime(newValue) {
     this.minIncubationTime = newValue;
   }
 
+  /**
+   * A function to set the maximum time to move from the Non-Infectious state to the Infectious state in this community.
+   *
+   * @param {number} newValue The new maximum incubation time.
+   */
   setMaxIncubationTime(newValue) {
     this.maxIncubationTime = newValue;
   }
 
+  /**
+   * A function to set the minimum time to move from the Infectious state to the Immune state in this community.
+   *
+   * @param {number} newValue The new minimum infectious period.
+   */
   setMinInfectiousTime(newValue) {
     this.minInfectiousTime = newValue;
   }
 
+  /**
+   * A function to set the maximum time to move from the Infectious state to the Immune state in this community.
+   *
+   * @param {number} newValue The new maximum infectious period.
+   */
   setMaxInfectiousTime(newValue) {
     this.maxInfectiousTime = newValue;
   }
 
+  /**
+   * A function to set the minimum time to move from the Infectious state to the Dead state in this community.
+   *
+   * @param {number} newValue The new minimum time to death.
+   */
   setMinTimeUntilDead(newValue) {
     this.minTimeUntilDead = newValue;
   }
 
+  /**
+   * A function to set the maximum time to move from the Infectious state to the Dead state in this community.
+   *
+   * @param {*} newValue The new maximum time to death.
+   */
   setMaxTimeUntilDead(newValue) {
     this.maxTimeUntilDead = newValue;
   }
 
+  /**
+   * A function to set the infection radius in this community.
+   *
+   * @param {number} newValue The new Infection radius.
+   */
   setInfectionRadius(newValue) {
     this.infectionRadius = newValue;
     this.updateInfectionRadius(newValue);
   }
 
+  /**
+   * A function to set the person radius in this community.
+   *
+   * @param {number} newValue The new radius of the people.
+   */
   setPersonRadius(newValue) {
     this.personRadius = newValue;
     this.updateRadius(newValue);
@@ -219,12 +299,22 @@ export default class Community {
     return stats;
   }
 
+  /**
+   * Update the radius of people in this community.
+   *
+   * @param {number} newValue The new radius.
+   */
   updateRadius(newValue) {
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].radius = newValue;
     }
   }
 
+  /**
+   * Update the infection radius of people in this community.
+   *
+   * @param {number} newValue The new infection radius.
+   */
   updateInfectionRadius(newValue) {
     this.boundingBoxStruct = new BoundingBoxStructure(
       this.startX,
@@ -239,12 +329,20 @@ export default class Community {
     }
   }
 
+  /**
+   * Update the repulsion force of the people in this community.
+   *
+   * @param {number} newValue The new repulsion force.
+   */
   updateRepulsionForce(newValue) {
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].repulsionForce = newValue;
     }
   }
 
+  /**
+   * A function to create a population
+   */
   populateCanvas() {
     this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
     this.populateCanvasWithType(TYPES.INFECTIOUS, this.numInfectious);
@@ -253,6 +351,12 @@ export default class Community {
     this.populateCanvasWithType(TYPES.NONINFECTIOUS, this.numNonInfectious);
   }
 
+  /**
+   * A function to create the part of the population which consists of one type
+   *
+   * @param {TYPES} type The initial state of this part of the population.
+   * @param {number} count The amount of people in this part of the population.
+   */
   populateCanvasWithType(type, count) {
     for (let i = 0; i < count; i++) {
       const x = getRandom(
@@ -272,6 +376,11 @@ export default class Community {
     }
   }
 
+  /**
+   * A function to get the info required to render this community.
+   *
+   * @returns {Object} An object containing all necessary information for rendering this community.
+   */
   getDrawInfo() {
     const positions = [];
     const colors = [];
@@ -295,6 +404,11 @@ export default class Community {
     };
   }
 
+  /**
+   * A function to handle all necessary actions to advance this community in time.
+   *
+   * @param {number} dt The timestep over which to update the population.
+   */
   updatePopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const currentPerson = this.population[i];
@@ -323,6 +437,11 @@ export default class Community {
     }
   }
 
+  /**
+   * A function returning a random point in this community.
+   *
+   * @returns {Coordinate} A random coordinate within this model and the margin of error for relocation
+   */
   getRandomPoint() {
     return new Coordinate(
       getRandom(
@@ -336,9 +455,17 @@ export default class Community {
     );
   }
 
+  /**
+   * A function handling the interactions between the people of the population
+   *
+   * @param {number} dt The timestep over which the interactions take place.
+   */
   interactPopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
-      const met = this.boundingBoxStruct.query(this.population[i], INTERACTION_RANGE);
+      const met = this.boundingBoxStruct.query(
+        this.population[i],
+        INTERACTION_RANGE
+      );
       for (let j = 0; j < met.length; j += 1) {
         // Social distancing
         // if (this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
@@ -362,6 +489,12 @@ export default class Community {
   }
 
   // Decided to implement this in model, but could move to person
+  /**
+   * A function handling the updates for a person.
+   *
+   * @param {Person} person The person for which the update is to be done.
+   * @param {number} dt The timestep over which the update is to be calculated.
+   */
   update(person, dt) {
     if (person.type === TYPES.NONINFECTIOUS) {
       person.incubationTime += dt;
@@ -410,21 +543,37 @@ export default class Community {
     }
   }
 
+  /**
+   * A function to step through the community with a timestep.
+   *
+   * @param {number} dt The timestep for which to step.
+   */
   step(dt) {
     const daysPassed = (dt / 1000) * this.daysPerSecond;
     this.updatePopulation(daysPassed);
     this.interactPopulation(daysPassed);
   }
 
+  /**
+   * A function to pause execution of the community.
+   */
+
   pauseExecution() {
     clearInterval(this._updatePopulationInterval);
     this._updatePopulationInterval = null;
   }
 
+  /**
+   * A function to resume execution of the community.
+   */
   resumeExecution() {
     this.step(0); // TODO what is the value of timestamp parameter
   }
 
+  /**
+   * A function to attract a person in the community to its center
+   * @param {Person} person The person to be attracted to the center of the community.
+   */
   attractToCenter(person) {
     // get vector to center
     let forceX = (this.startX + this.endX) / 2.0 - person.x;
@@ -443,6 +592,11 @@ export default class Community {
     );
   }
 
+  /**
+   * A function to reset the community.
+   *
+   * @param {Stats} stats the new Initial stats for the Community.
+   */
   resetCommunity(stats) {
     // Set new values and reset to init
     this.population = [];
