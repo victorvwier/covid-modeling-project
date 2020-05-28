@@ -5,7 +5,18 @@ import Bounds from './data/bounds';
 import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
 import RelocationUtil from './relocationUtil';
 
+/** @class Model representing a simulation of one or multiple communities. */
 export default class Model {
+  /**
+   * Instantiates a model.
+   *
+   * @param {number} numCommunities The number of communities in the model.
+   * @param {Object} agentView The agentChart used to display the people.
+   * @param {number} width The width of the model.
+   * @param {number} height The height of the model.
+   * @param {Stats} stats The stats object used by the model.
+   * @param {function} updateStats A function to update the displayed stats and chart.
+   */
   constructor(numCommunities, agentView, width, height, stats, updateStats) {
     this.numCommunities = numCommunities;
     this.communities = {};
@@ -28,6 +39,12 @@ export default class Model {
     window.community = this;
   }
 
+  /**
+   * A function to distribute the stats between the communitites
+   * @param {Number} total the total number of people of a specific category (infectious, immune...).
+   * @param {Number} index the index of the model being created.
+   * @returns {Number} the number of people that should go in one box
+   */
   _distributeStats(total, index) {
     let itemsPerBucket = Math.floor(total / this.numCommunities);
     if (total < this.numCommunities) {
@@ -57,6 +74,11 @@ export default class Model {
     return new Stats(valSus, valNonInf, valInf, valDead, valImm);
   }
 
+  /**
+   * A function to set the values of the model to those of a stats object.
+   *
+   * @param {Stats} stats The stats object with the desired values.
+   */
   _setValuesFromStatsToLocal(stats) {
     this.numSusceptible = stats.susceptible;
     this.numInfectious = stats.infectious;
@@ -65,10 +87,18 @@ export default class Model {
     this.numDead = stats.dead;
   }
 
+  /**
+   * A function to register a person relocating within the model.
+   *
+   * @param {Person} person The person relocating.
+   */
   registerRelocation(person) {
     this.relocationUtil.insertRelocation(person);
   }
 
+  /**
+   * A function to pause the execution of the model.
+   */
   pauseExecution() {
     // Cancel animation frame
     cancelAnimationFrame(this._passDrawInfoAnimationFrame);
@@ -79,6 +109,9 @@ export default class Model {
     Object.values(this.communities).forEach((com) => com.pauseExecution());
   }
 
+  /**
+   * A function to resume the execution of the model.
+   */
   resumeExecution() {
     // Resume animationFrame
     this._animationFunction();
@@ -89,12 +122,18 @@ export default class Model {
     Object.values(this.communities).forEach((com) => com.resumeExecution());
   }
 
+  /**
+   * A function to populate each of the communities in the model.
+   */
   populateCommunities() {
     for (let i = 0; i < this.numCommunities; i++) {
       this.communities[i].populateCanvas();
     }
   }
 
+  /**
+   * A function to start execution of the model.
+   */
   run() {
     wireSlidersToHandlers(this);
     this.populateCommunities();
@@ -103,6 +142,11 @@ export default class Model {
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
+  /**
+   * A function to handle the animations for a certain timestamp.
+   *
+   * @param {number} timestamp The timestamp of the current moment.
+   */
   _animationFunction(timestamp) {
     let dt = 0;
     if (this.lastTimestamp && timestamp) {
@@ -116,6 +160,9 @@ export default class Model {
     this.relocationUtil.handleAllRelocations();
   }
 
+  /**
+   * A function to pass all info to AgentChart to allow drawing the model.
+   */
   passDrawInfoToAgentChart() {
     this._passDrawInfoAnimationFrame = requestAnimationFrame(
       this._animationFunction.bind(this)
@@ -143,6 +190,11 @@ export default class Model {
     this.agentView.draw(allData);
   }
 
+  /**
+   * A function to create a list of bounds of the communities in the model.
+   *
+   * @returns {Array{Bounds}} A list of bounds of the different communities.
+   */
   _createIncrementals() {
     // return [new Bounds(0, 100, 0, 100), new Bounds(120, 220, 0, 100)];
     const listOfBounds = [];
@@ -191,6 +243,9 @@ export default class Model {
     return listOfBounds;
   }
 
+  /**
+   * A function to initialize all communities.
+   */
   setupCommunity() {
     const bounds = this._createIncrementals();
 
@@ -209,6 +264,9 @@ export default class Model {
     }
   }
 
+  /**
+   * A function to combine the stats of all communities.
+   */
   compileStats() {
     const stats = Object.values(this.communities)
       .map((m) => m.exportStats())
@@ -230,6 +288,11 @@ export default class Model {
     this.updateStats(finalStats);
   }
 
+  /**
+   * A function to reset the model.
+   *
+   * @param {Stats} stats New initial stats.
+   */
   resetModel(stats) {
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
@@ -243,72 +306,132 @@ export default class Model {
 
   // SLIDER HANDLER METHODS
 
+  /**
+   * A function to update the size of a person from the slider.
+   *
+   * @param {number} newValue The new size of a person in the model.
+   */
   updateAgentSize(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setPersonRadius(newValue)
     );
   }
 
+  /**
+   * A function to update the infection radius of people from the slider.
+   *
+   * @param {number} newValue The new the infection radius of a person in the model.
+   */
   updateInfectionRadius(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setInfectionRadius(newValue)
     );
   }
 
+  /**
+   * A function to update the minimum time from the Infectious to the Dead state in the model.
+   *
+   * @param {number} newValue The new time for the state transition.
+   */
   updateMinTimeUntilDead(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setMinTimeUntilDead(newValue)
     );
   }
 
+  /**
+   * A function to update the maximum time from the Infectious state to the Dead state in the model.
+   *
+   * @param {number} newValue the new time for the state transition.
+   */
   updateMaxTimeUntilDead(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setMaxTimeUntilDead(newValue)
     );
   }
 
+  /**
+   * A function to update the minimum time from the Infectious state to the Immune state in the model.
+   *
+   * @param {number} newValue the new time for the state transition.
+   */
   updateMinInfectiousTime(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setMinInfectiousTime(newValue)
     );
   }
 
+  /**
+   * A function to update the maximum time from the Infectious state to the Immune state in the model.
+   *
+   * @param {number} newValue the new time for the state transition.
+   */
   updateMaxInfectiousTime(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setMaxInfectiousTime(newValue)
     );
   }
 
+  /**
+   * A function to update the minimum time from the Non-Infectious state to the Infectious state in the model.
+   *
+   * @param {number} newValue the new time for the state transition.
+   */
   updateMinIncubationTime(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setMinIncubationTime(newValue)
     );
   }
 
+  /**
+   * A function to update the maximum time from the Non-Infectious state to the Infectious state in the model.
+   *
+   * @param {number} newValue the new time for the state transition.
+   */
   updateMaxIncubationTime(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setMaxIncubationTime(newValue)
     );
   }
 
+  /**
+   * A function to update the probability of transmission in the model.
+   *
+   * @param {number} newValue the new probability of transmission in the model.
+   */
   updateTransmissionProb(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setTransmissionProb(newValue)
     );
   }
 
+  /**
+   * A function to update the probability of a person moving from the Non-Infectious state to the Immmune state in the model.
+   *
+   * @param {number} newValue The new probability of the transition in the model.
+   */
   updateNonInToImmuneProb(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setNonInToImmuneProb(newValue)
     );
   }
 
+  /**
+   * A function to update the force with which people repel each other in the model.
+   *
+   * @param {number} newValue The new repulsion force in the model.
+   */
   updateRepulsionForce(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setRepulsionForce(newValue)
     );
   }
 
+  /**
+   * A function to update the force with which people are attracted to the center in the model.
+   *
+   * @param {number} newValue The new attraction to center in the model.
+   */
   updateAttractionToCenter(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setAttractionToCenter(newValue)
