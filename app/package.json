@@ -6,7 +6,6 @@
     "build": "webpack --config webpack.prod.js",
     "watch": "webpack-dev-server --config webpack.dev.js --open",
     "test": "jest",
-    "test:coverage": "jest --coverage",
     "test:watch": "jest --watchAll",
     "test:coverage:watch": "jest --watchAll --coverage --collectCoverage --color",
     "lint": "eslint ."
