@@ -36,20 +36,26 @@ export default class RelocationUtil {
     this.model.pauseExecution();
     // Move person
     const sourceId = person.communityId;
-    // Get community with very high density and exclude them from models being relocated to
-    const maxTotalPopulation = Math.round(
-      (this.model.stats.sum() / this.model.numCommunities) * 1.5
-    );
-    const exclude = Object.values(this.model.communities)
-      .filter((mod) => mod.totalPopulation > maxTotalPopulation)
-      .map((mod) => mod.id)
-      .concat([sourceId]);
-    // Destination Id
+    // Get models which very high density and exclude them from models being relocated to
+
+    // TODO now we're not using this (find a way to do it)
+    // const maxTotalPopulation = Math.round(
+    //   (this.model.stats.sum() / this.model.numCommunities) * 1.5
+    // );
+    // const exclude = Object.values(this.model.communities)
+    //   .filter((mod) => mod.totalPopulation > maxTotalPopulation)
+    //   .map((mod) => mod.id)
+    //   .concat([sourceId]);
+    // // Destination Id
+
+    // Only exclude the source if there are more than one community
+    const excludedIds = this.model.numCommunities > 1 ? [sourceId] : [];
     const destId = getRandomIntExceptForValue(
       0,
       this.model.numCommunities - 1,
-      exclude
+      excludedIds
     );
+
     this.model.communities[sourceId].handlePersonLeaving(person);
     // Change communityId of person
     person.communityId = destId;
@@ -69,6 +75,10 @@ export default class RelocationUtil {
         'Tried to remove a relocation info but nothing was removed???'
       );
     }
+  }
+
+  clearAllRelocationsForReset() {
+    this.relocations = [];
   }
 
   getStats() {

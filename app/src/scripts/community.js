@@ -442,7 +442,7 @@ export default class Community {
     );
   }
 
-  resetModel(stats) {
+  resetCommunity(stats) {
     // Set new values and reset to init
     this.population = [];
     this.numSusceptible = stats.susceptible;
