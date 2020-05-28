@@ -66,7 +66,7 @@ export class Column {
     for(let i = index - maxOffset; i < index + maxOffset; i++) {
       if (i >= 0 && i < this.boxes.length) {
         if( this.boxes[i] === undefined) {
-          throw new Error("something is not quite going as planned");          
+          throw new Error("Boundingbox Error");          
         }
         result = result.concat(this.boxes[i].query(person, range));
       }
@@ -111,8 +111,8 @@ export default class BoundingBoxStructure {
   }
 
   query(person, range) {
-    if(isNaN(range) || range === undefined) { 
-      throw new Error("Yeah we forgot to include the range in our query"); 
+    if(range === undefined) { 
+      throw new Error("No range was specified in the query"); 
     }
     const index = this.getIndex(person);
     let result = [];
@@ -121,7 +121,7 @@ export default class BoundingBoxStructure {
     for(i = index - maxOffset; i < index + maxOffset; i++) {
       if (i >= 0 && i < this.columns.length) {
         if( this.columns[i] === undefined) {
-          throw new Error("something is not quite going as planned");          
+          throw new Error("Boundingbox error");          
         }
         result = result.concat(this.columns[i].query(person, range));
       }       

@@ -120,6 +120,7 @@ export default class Person {
     this.speedX *= 0.95;
   }
 
+  // Checks to see if another person is within a certain distance from this person.
   isInRange(p, range) {
     const deltaX = this.x - p.x;
     const deltaY = this.y - p.y;

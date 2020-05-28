@@ -84,7 +84,7 @@ export default class Community {
       this.endX,
       this.startY,
       this.endY,
-      10 * INFECTION_RADIUS
+      INFECTION_RADIUS
     );
   }
 
@@ -231,7 +231,7 @@ export default class Community {
       this.endX,
       this.startY,
       this.endY,
-      10 * newValue
+      newValue
     );
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].infectionRadius = newValue;
