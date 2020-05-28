@@ -1,11 +1,11 @@
-import { getRandomIntExceptForValue, getRandomInt } from './util';
+import { getRandomIntExceptForValue } from './util';
 import { TYPES } from './CONSTANTS';
 import RelocationInfo from './data/relocationInfo';
 import Stats from './data/stats';
 
 export default class RelocationUtil {
-  constructor(community) {
-    this.community = community;
+  constructor(model) {
+    this.model = model;
     this.relocations = [];
 
     // DEBUG
@@ -17,15 +17,15 @@ export default class RelocationUtil {
       const relocation = this.relocations[i];
       relocation.takeStep();
       if (relocation.hasArrived()) {
-        this.community.pauseExecution();
+        this.model.pauseExecution();
 
         relocation.person.relocating = false;
-        this.community.communities[relocation.destId].handlePersonJoining(
+        this.model.communities[relocation.destId].handlePersonJoining(
           relocation.person
         );
         this._removeRelocationInfo(relocation);
 
-        this.community.resumeExecution();
+        this.model.resumeExecution();
       }
     }
   }
@@ -33,37 +33,38 @@ export default class RelocationUtil {
   insertRelocation(person) {
     console.log('He watned to relocate');
     // Pause
-    this.community.pauseExecution();
+    this.model.pauseExecution();
     // Move person
-    const sourceId = person.modelId;
+    const sourceId = person.communityId;
     // Get models which very high density and exclude them from models being relocated to
 
     // TODO now we're not using this (find a way to do it)
     // const maxTotalPopulation = Math.round(
-    //   (this.community.stats.sum() / this.community.numModels) * 1.5
+    //   (this.model.stats.sum() / this.model.numCommunities) * 1.5
     // );
-    // const exclude = Object.values(this.community.communities)
+    // const exclude = Object.values(this.model.communities)
     //   .filter((mod) => mod.totalPopulation > maxTotalPopulation)
     //   .map((mod) => mod.id)
     //   .concat([sourceId]);
     // // Destination Id
 
     // Only exclude the source if there are more than one community
-    const excludedIds = this.community.numModels > 1 ? [sourceId] : [];
+    const excludedIds = this.model.numCommunities > 1 ? [sourceId] : [];
     const destId = getRandomIntExceptForValue(
       0,
-      this.community.numModels - 1,
+      this.model.numCommunities - 1,
       excludedIds
     );
-    this.community.communities[sourceId].handlePersonLeaving(person);
-    // Change modelId of person
-    person.modelId = destId;
-    const distCoords = this.community.communities[destId].getRandomPoint();
+
+    this.model.communities[sourceId].handlePersonLeaving(person);
+    // Change communityId of person
+    person.communityId = destId;
+    const distCoords = this.model.communities[destId].getRandomPoint();
 
     // Do it via this
     this.relocations.push(new RelocationInfo(person, distCoords, destId));
     // Resume
-    this.community.resumeExecution();
+    this.model.resumeExecution();
   }
 
   _removeRelocationInfo(relocationInfo) {

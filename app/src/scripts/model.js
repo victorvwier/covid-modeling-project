@@ -1,472 +1,293 @@
-import Person from './person';
-import { getRandom, gaussianRand, mortalityStat } from './util';
-
-import {
-  PERSON_RADIUS,
-  POPULATION_SPEED,
-  INFECTION_RADIUS,
-  TYPES,
-  NONIN_TO_IMMUNE_PROB,
-  COLORS,
-  TRANSMISSION_PROB,
-  MIN_INCUBATION_TIME,
-  MAX_INCUBATION_TIME,
-  MIN_INFECTIOUS_TIME,
-  MAX_INFECTIOUS_TIME,
-  MIN_TIME_UNTIL_DEAD,
-  MAX_TIME_UNTIL_DEAD,
-  DAYS_PER_SECOND,
-  REPULSION_FORCE,
-  ATTRACTION_FORCE,
-  RELOCATION_PROBABILITY,
-  MOVEMENT_TIME_SCALAR,
-  RELOCATION_ERROR_MARGIN,
-} from './CONSTANTS';
+import wireSlidersToHandlers from './DOM/parameters';
+import Community from './community';
 import Stats from './data/stats';
-import BoundingBoxStructure from './boundingBox';
-import Coordinate from './data/coordinate';
+import Bounds from './data/bounds';
+import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
+import RelocationUtil from './relocationUtil';
 
 export default class Model {
-  constructor(id, bounds, stats, registerRelocation) {
-    this.registerRelocation = registerRelocation;
+  constructor(numCommunities, agentView, width, height, stats, updateStats) {
+    this.numCommunities = numCommunities;
+    this.communities = {};
+    this.height = height;
+    this.width = width;
+    this.stats = stats;
+    this.agentView = agentView;
+    this.updateStats = updateStats;
 
-    // Intervals
-    this._updatePopulationInterval = null;
+    this._chartInterval = null;
 
-    // this._animationFrame = null; TODO you removed this!
-    this.lastTimestamp = null;
+    this.lastTimestamp = 0;
 
-    // state methods from main
-    this.id = id;
-    this.spareRandom = null;
+    this._passDrawInfoAnimationFrame = null;
+    this.relocationUtil = new RelocationUtil(this);
 
-    this.startX = bounds.startX;
-    this.endX = bounds.endX;
-    this.startY = bounds.startY;
-    this.endY = bounds.endY;
+    this._setValuesFromStatsToLocal(stats);
 
-    this.population = [];
+    // DEBUG
+    window.community = this;
+  }
+
+  _createDividedStats() {
+    return new Stats(
+      Math.round(this.numSusceptible / this.numCommunities),
+      Math.round(this.numNonInfectious / this.numCommunities),
+      Math.round(this.numInfectious / this.numCommunities),
+      Math.round(this.numDead / this.numCommunities),
+      Math.round(this.numImmune / this.numCommunities)
+    );
+  }
+
+  _setValuesFromStatsToLocal(stats) {
     this.numSusceptible = stats.susceptible;
     this.numInfectious = stats.infectious;
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
-
-    this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
-    this.infectionRadius = INFECTION_RADIUS;
-    this.personRadius = PERSON_RADIUS;
-    this.transmissionProb = TRANSMISSION_PROB;
-    this.repulsionForce = REPULSION_FORCE;
-    this.attractionToCenter = ATTRACTION_FORCE;
-    this.minIncubationTime = MIN_INCUBATION_TIME;
-    this.maxIncubationTime = MAX_INCUBATION_TIME;
-
-    this.minInfectiousTime = MIN_INFECTIOUS_TIME;
-    this.maxInfectiousTime = MAX_INFECTIOUS_TIME;
-
-    this.minTimeUntilDead = MIN_TIME_UNTIL_DEAD;
-    this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
-
-    this.maxSpeed = POPULATION_SPEED;
-    this.daysPerSecond = DAYS_PER_SECOND;
-    this.relocationProbability = RELOCATION_PROBABILITY;
-
-    this.totalPopulation =
-      this.numSusceptible +
-      this.numInfectious +
-      this.numDead +
-      this.numImmune +
-      this.numNonInfectious;
-
-    this.boundingBoxStruct = new BoundingBoxStructure(
-      this.startX,
-      this.endX,
-      this.startY,
-      this.endY,
-      10 * INFECTION_RADIUS
-    );
   }
 
-  setAttractionToCenter(newValue) {
-    this.attractionToCenter = newValue;
-  }
-
-  setRepulsionForce(newValue) {
-    this.repulsionForce = newValue;
-    this.updateRepulsionForce(newValue);
-  }
-
-  handlePersonLeaving(person) {
-    this.totalPopulation--;
-
-    this.population = this.population.filter((p) => p !== person);
-
-    this.boundingBoxStruct.remove(person);
-
-    switch (person.type) {
-      case TYPES.SUSCEPTIBLE:
-        if (this.numSusceptible < 0) {
-          throw Error('Why?');
-        }
-        this.numSusceptible--;
-        break;
-      case TYPES.NONINFECTIOUS:
-        this.numNonInfectious--;
-        break;
-      case TYPES.INFECTIOUS:
-        this.numInfectious--;
-        break;
-      case TYPES.IMMUNE:
-        this.numImmune--;
-        break;
-      case TYPES.DEAD:
-        this.numDead--;
-        break;
-      default:
-        console.log('What type am i');
-    }
-  }
-
-  handlePersonJoining(person) {
-    this.totalPopulation++;
-
-    if (this.population.includes(person)) {
-      console.log('But im already here');
-    }
-
-    person._handleXOutOfBounds(this.startX, this.endX);
-    person._handleYOutOfBounds(this.startY, this.endY);
-
-    this.boundingBoxStruct.insert(person);
-
-    this.population.push(person);
-
-    switch (person.type) {
-      case TYPES.SUSCEPTIBLE:
-        this.numSusceptible++;
-        break;
-      case TYPES.NONINFECTIOUS:
-        this.numNonInfectious++;
-        break;
-      case TYPES.INFECTIOUS:
-        this.numInfectious++;
-        break;
-      case TYPES.IMMUNE:
-        this.numImmune++;
-        break;
-      case TYPES.DEAD:
-        this.numDead++;
-        break;
-      default:
-        console.log('What type am i');
-    }
-  }
-
-  setTransmissionProb(newValue) {
-    this.transmissionProb = newValue;
-  }
-
-  setNonInToImmuneProb(newValue) {
-    this.nonInfectiousToImmuneProb = newValue;
-  }
-
-  setMinIncubationTime(newValue) {
-    this.minIncubationTime = newValue;
-  }
-
-  setMaxIncubationTime(newValue) {
-    this.maxIncubationTime = newValue;
-  }
-
-  setMinInfectiousTime(newValue) {
-    this.minInfectiousTime = newValue;
-  }
-
-  setMaxInfectiousTime(newValue) {
-    this.maxInfectiousTime = newValue;
-  }
-
-  setMinTimeUntilDead(newValue) {
-    this.minTimeUntilDead = newValue;
-  }
-
-  setMaxTimeUntilDead(newValue) {
-    this.maxTimeUntilDead = newValue;
-  }
-
-  setInfectionRadius(newValue) {
-    this.infectionRadius = newValue;
-    this.updateInfectionRadius(newValue);
-  }
-
-  setPersonRadius(newValue) {
-    this.personRadius = newValue;
-    this.updateRadius(newValue);
-  }
-
-  /**
-   * Method used to update the stats in main
-   */
-  exportStats() {
-    const stats = new Stats(
-      this.numSusceptible,
-      this.numNonInfectious,
-      this.numInfectious,
-      this.numDead,
-      this.numImmune
-    );
-    return stats;
-  }
-
-  updateRadius(newValue) {
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].radius = newValue;
-    }
-  }
-
-  updateInfectionRadius(newValue) {
-    this.boundingBoxStruct = new BoundingBoxStructure(
-      this.startX,
-      this.endX,
-      this.startY,
-      this.endY,
-      10 * newValue
-    );
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].infectionRadius = newValue;
-      this.boundingBoxStruct.insert(this.population[i]);
-    }
-  }
-
-  updateRepulsionForce(newValue) {
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].repulsionForce = newValue;
-    }
-  }
-
-  populateCanvas() {
-    this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
-    this.populateCanvasWithType(TYPES.INFECTIOUS, this.numInfectious);
-    this.populateCanvasWithType(TYPES.DEAD, this.numDead);
-    this.populateCanvasWithType(TYPES.IMMUNE, this.numImmune);
-    this.populateCanvasWithType(TYPES.NONINFECTIOUS, this.numNonInfectious);
-  }
-
-  populateCanvasWithType(type, count) {
-    for (let i = 0; i < count; i++) {
-      const x = getRandom(
-        this.startX + this.personRadius,
-        this.endX - this.personRadius
-      );
-      const y = getRandom(
-        this.startY + this.personRadius,
-        this.endY - this.personRadius
-      );
-      const newPerson = new Person(type, x, y, this.id);
-
-      this.population.push(newPerson);
-      this.boundingBoxStruct.insert(newPerson);
-    }
-  }
-
-  getDrawInfo() {
-    const positions = [];
-    const colors = [];
-    let count = 0;
-    for (let i = 0; i < this.totalPopulation; i++) {
-      const currentPerson = this.population[i];
-      // If the person is dead don't pass his draw info down
-      if (currentPerson.isDead()) {
-        continue;
-      }
-      positions.push(currentPerson.x);
-      positions.push(currentPerson.y);
-      colors.push(parseInt(currentPerson.color.slice(1, 3), 16) / 255.0);
-      colors.push(parseInt(currentPerson.color.slice(3, 5), 16) / 255.0);
-      colors.push(parseInt(currentPerson.color.slice(5, 7), 16) / 255.0);
-      colors.push(1);
-      count++;
-    }
-    return {
-      positions: positions,
-      colors: colors,
-      size: this.personRadius,
-      count: count,
-    };
-  }
-
-  updatePopulation(dt) {
-    for (let i = 0; i < this.totalPopulation; i++) {
-      const currentPerson = this.population[i];
-      // If person is dead don't do anything don't move him
-      if (currentPerson.isDead()) {
-        continue;
-      }
-      this.update(currentPerson, dt);
-
-      if (Math.random() < RELOCATION_PROBABILITY && !currentPerson.relocating) {
-        currentPerson.relocating = true;
-        this.registerRelocation(currentPerson);
-      } else if (!currentPerson.relocating) {
-        this.boundingBoxStruct.remove(currentPerson);
-        currentPerson.maxSpeed = this.maxSpeed;
-        this.attractToCenter(currentPerson);
-        currentPerson.move(
-          this.startX,
-          this.endX,
-          this.startY,
-          this.endY,
-          dt * MOVEMENT_TIME_SCALAR
-        ); // TODO: make slider to
-        this.boundingBoxStruct.insert(currentPerson);
-      }
-    }
-  }
-
-  getRandomPoint() {
-    return new Coordinate(
-      getRandom(
-        this.startX + RELOCATION_ERROR_MARGIN,
-        this.endX - RELOCATION_ERROR_MARGIN
-      ),
-      getRandom(
-        this.startY + RELOCATION_ERROR_MARGIN,
-        this.endY - RELOCATION_ERROR_MARGIN
-      )
-    );
-  }
-
-  interactPopulation(dt) {
-    for (let i = 0; i < this.totalPopulation; i += 1) {
-      const currentPerson = this.population[i];
-      // If this person is dead then no matter who he interacts with it doesn't matter
-      if (currentPerson.isDead()) {
-        continue;
-      }
-
-      const met = this.boundingBoxStruct.query(currentPerson);
-      for (let j = 0; j < met.length; j += 1) {
-        const personMet = this.population[j];
-        // if the person that was met is is dead then it doesn't matter
-        if (personMet.isDead()) {
-          continue;
-        }
-        // Social distancing
-        currentPerson.repel(personMet);
-        // }
-
-        // Infection
-        if (
-          currentPerson.canInfect(personMet) &&
-          Math.random() <= this.transmissionProb * dt
-        ) {
-          personMet.startIncubation();
-          personMet.setIncubationPeriod(
-            gaussianRand(this.minIncubationTime, this.maxIncubationTime)
-          );
-          this.numNonInfectious += 1;
-          this.numSusceptible -= 1;
-        }
-      }
-    }
-  }
-
-  // Decided to implement this in model, but could move to person
-  update(person, dt) {
-    if (person.type === TYPES.NONINFECTIOUS) {
-      person.incubationTime += dt;
-      if (person.incubationTime >= person.incubationPeriod) {
-        if (Math.random() < this.nonInfectiousToImmuneProb) {
-          person.becomesImmune();
-          this.numNonInfectious -= 1;
-          this.numImmune += 1;
-        } else {
-          person.becomesInfectious();
-          this.numNonInfectious -= 1;
-          this.numInfectious += 1;
-        }
-      }
-    } else if (person.type === TYPES.INFECTIOUS) {
-      if (!person.destinyDead && !person.destinyImmune) {
-        if (Math.random() <= mortalityStat(person.age)) {
-          person.destinyDead = true;
-          person.setInfectiousPeriod(
-            gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
-          );
-        } else {
-          person.destinyImmune = true;
-          person.setInfectiousPeriod(
-            gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
-          );
-        }
-      } else if (person.destinyImmune) {
-        person.infectiousTime += dt;
-        if (person.infectiousTime >= person.infectiousPeriod) {
-          person.type = TYPES.IMMUNE;
-          person.color = COLORS.IMMUNE;
-          this.numInfectious -= 1;
-          this.numImmune += 1;
-        }
-      } else {
-        person.infectiousTime += dt;
-        if (person.infectiousTime >= person.infectiousPeriod) {
-          // person.dead = true;
-          person.type = TYPES.DEAD;
-          person.color = COLORS.DEAD;
-          this.numInfectious -= 1;
-          this.numDead += 1;
-        }
-      }
-    }
-  }
-
-  step(dt) {
-    const daysPassed = (dt / 1000) * this.daysPerSecond;
-    this.updatePopulation(daysPassed);
-    this.interactPopulation(daysPassed);
+  registerRelocation(person) {
+    this.relocationUtil.insertRelocation(person);
   }
 
   pauseExecution() {
-    clearInterval(this._updatePopulationInterval);
-    this._updatePopulationInterval = null;
+    // Cancel animation frame
+    cancelAnimationFrame(this._passDrawInfoAnimationFrame);
+    this._passDrawInfoAnimationFrame = null;
+    // clearInterval(this._chartInterval);
+    // this._chartInterval = null;
+    // Cancel all community intervals/animationFrames
+    Object.values(this.communities).forEach((com) => com.pauseExecution());
   }
 
   resumeExecution() {
-    this.step(0); // TODO what is the value of timestamp parameter
+    // Resume animationFrame
+    this._animationFunction();
+    // if(this._chartInterval === null) {
+    //   this._chartInterval = setInterval(this.compileStats.bind(this), 500);
+    // }
+    // Resume community intervals/animationFrames
+    Object.values(this.communities).forEach((com) => com.resumeExecution());
   }
 
-  attractToCenter(person) {
-    // get vector to center
-    let forceX = (this.startX + this.endX) / 2.0 - person.x;
-    let forceY = (this.startY + this.endY) / 2.0 - person.y;
-    // normalize vector to center
-    const maxDistance = Math.sqrt(
-      ((this.startX + this.endX) / 2) ** 2 +
-        ((this.startY + this.endY) / 2) ** 2
-    );
-    forceX /= maxDistance;
-    forceY /= maxDistance;
+  populateCommunities() {
+    for (let i = 0; i < this.numCommunities; i++) {
+      this.communities[i].populateCanvas();
+    }
+  }
 
-    person.applyForce(
-      this.attractionToCenter * forceX,
-      this.attractionToCenter * forceY
+  run() {
+    wireSlidersToHandlers(this);
+    this.populateCommunities();
+
+    this._animationFunction();
+    this._chartInterval = setInterval(this.compileStats.bind(this), 500);
+  }
+
+  _animationFunction(timestamp) {
+    let dt = 0;
+    if (this.lastTimestamp && timestamp) {
+      dt = timestamp - this.lastTimestamp;
+    } // The time passed since running the last step.
+    this.lastTimestamp = timestamp;
+
+    this.passDrawInfoToAgentChart();
+    Object.values(this.communities).forEach((mod) => mod.step(dt));
+    // Check all relocations
+    this.relocationUtil.handleAllRelocations();
+  }
+
+  passDrawInfoToAgentChart() {
+    this._passDrawInfoAnimationFrame = requestAnimationFrame(
+      this._animationFunction.bind(this)
     );
+
+    const allData = Object.values(this.communities)
+      .map((com) => com.getDrawInfo())
+      .reduce((acc, cur) => ({
+        positions: acc.positions.concat(cur.positions),
+        colors: acc.colors.concat(cur.colors),
+        size: this.communities[0].personRadius,
+        count: acc.count + cur.count,
+      }));
+
+    // TODO remove this and refactor person to get his own drawInfo
+    this.relocationUtil.relocations.forEach(({ person }) => {
+      allData.positions.push(person.x);
+      allData.positions.push(person.y);
+      allData.colors.push(parseInt(person.color.slice(1, 3), 16) / 255.0);
+      allData.colors.push(parseInt(person.color.slice(3, 5), 16) / 255.0);
+      allData.colors.push(parseInt(person.color.slice(5, 7), 16) / 255.0);
+      allData.colors.push(1);
+      allData.count++;
+    });
+    this.agentView.draw(allData);
+  }
+
+  _createIncrementals() {
+    // return [new Bounds(0, 100, 0, 100), new Bounds(120, 220, 0, 100)];
+    const listOfBounds = [];
+    // Space between each of the communities + 2 on the sides
+    let widthFactor = 1;
+    let heightFactor = 1;
+    if (this.numCommunities <= 6) {
+      widthFactor = 2;
+      heightFactor = Math.ceil(this.numCommunities / widthFactor);
+    } else if (this.numCommunities <= 12) {
+      widthFactor = 3;
+      heightFactor = Math.ceil(this.numCommunities / widthFactor);
+    }
+
+    const oneCommunityWidth = Math.round(
+      (this.width - (widthFactor + 1) * SPACE_BETWEEN_COMMUNITIES) / widthFactor
+    );
+
+    const oneCommunityHeight = Math.round(
+      (this.height - (heightFactor + 1) * SPACE_BETWEEN_COMMUNITIES) /
+        heightFactor
+    );
+    let currentX = 0;
+    let currentY = 0;
+    let nextY = 0;
+
+    for (let i = 0; i < this.numCommunities; i++) {
+      if (
+        (this.numCommunities <= 6 && i % 2 === 0) ||
+        (this.numCommunities <= 12 && this.numCommunities >= 7 && i % 3 === 0)
+      ) {
+        currentX = SPACE_BETWEEN_COMMUNITIES;
+        currentY = nextY + SPACE_BETWEEN_COMMUNITIES;
+        nextY = currentY + oneCommunityHeight;
+      }
+      listOfBounds.push(
+        new Bounds(currentX, currentX + oneCommunityWidth, currentY, nextY)
+      );
+      currentX += oneCommunityWidth;
+      currentX += SPACE_BETWEEN_COMMUNITIES;
+    }
+
+    return listOfBounds;
+  }
+
+  setupCommunity() {
+    const dividedStats = this._createDividedStats();
+    const bounds = this._createIncrementals();
+
+    for (let i = 0; i < this.numCommunities; i++) {
+      this.communities[i] = new Community(
+        i,
+        bounds[i],
+        dividedStats,
+        this.registerRelocation.bind(this)
+      );
+
+      // DEBUG
+      window.model = this;
+    }
+  }
+
+  compileStats() {
+    const stats = Object.values(this.communities)
+      .map((m) => m.exportStats())
+      .reduce(
+        (acc, cur) =>
+          new Stats(
+            acc.susceptible + cur.susceptible,
+            acc.noninfectious + cur.noninfectious,
+            acc.infectious + cur.infectious,
+            acc.dead + cur.dead,
+            acc.immune + cur.immune
+          )
+      );
+
+    const relocationStats = this.relocationUtil.getStats();
+    const finalStats = Stats.joinStats(stats, relocationStats);
+
+    this._setValuesFromStatsToLocal(finalStats);
+    this.updateStats(finalStats);
   }
 
   resetModel(stats) {
-    // Set new values and reset to init
-    this.population = [];
-    this.numSusceptible = stats.susceptible;
-    this.numInfectious = stats.infectious;
-    this.numImmune = stats.immune;
-    this.numNonInfectious = stats.noninfectious;
-    this.totalPopulation = stats.susceptible + stats.infectious;
+    this._setValuesFromStatsToLocal(stats);
+    this.relocationUtil.clearAllRelocationsForReset();
 
-    // clear the canvas
+    const dividedStats = this._createDividedStats();
+    Object.values(this.communities).forEach((m) =>
+      m.resetCommunity(dividedStats)
+    );
+  }
 
-    // start the loop again
-    this.populateCanvas();
-    this.updateInfectionRadius(this.infectionRadius);
-    this.updateRadius(this.personRadius);
+  // SLIDER HANDLER METHODS
+
+  updateAgentSize(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setPersonRadius(newValue)
+    );
+  }
+
+  updateInfectionRadius(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setInfectionRadius(newValue)
+    );
+  }
+
+  updateMinTimeUntilDead(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setMinTimeUntilDead(newValue)
+    );
+  }
+
+  updateMaxTimeUntilDead(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setMaxTimeUntilDead(newValue)
+    );
+  }
+
+  updateMinInfectiousTime(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setMinInfectiousTime(newValue)
+    );
+  }
+
+  updateMaxInfectiousTime(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setMaxInfectiousTime(newValue)
+    );
+  }
+
+  updateMinIncubationTime(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setMinIncubationTime(newValue)
+    );
+  }
+
+  updateMaxIncubationTime(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setMaxIncubationTime(newValue)
+    );
+  }
+
+  updateTransmissionProb(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setTransmissionProb(newValue)
+    );
+  }
+
+  updateNonInToImmuneProb(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setNonInToImmuneProb(newValue)
+    );
+  }
+
+  updateRepulsionForce(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setRepulsionForce(newValue)
+    );
+  }
+
+  updateAttractionToCenter(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setAttractionToCenter(newValue)
+    );
   }
 }

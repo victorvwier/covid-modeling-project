@@ -1,6 +1,6 @@
 import RelocationInfo from '../src/scripts/data/relocationInfo';
 import RelocationUtil from '../src/scripts/relocationUtil';
-import Community from '../src/scripts/community';
+import Model from '../src/scripts/model';
 import Stats from '../src/scripts/data/stats';
 import AgentChart from '../src/scripts/agentChart';
 import Person from '../src/scripts/person';
@@ -9,13 +9,13 @@ jest.mock('../src/scripts/agentChart.js');
 
 describe('RelocationUtil tests', () => {
   const stats = new Stats(1, 1, 1, 1, 1);
-  let community;
-  let model0;
-  let model1;
+  let model;
+  let community0;
+  let community1;
   let relocationUtil;
 
   beforeEach(() => {
-    community = new Community(
+    model = new Model(
       2,
       new AgentChart(null),
       100,
@@ -23,26 +23,26 @@ describe('RelocationUtil tests', () => {
       stats,
       () => {}
     );
-    community.setupCommunity();
-    community.populateCommunities();
-    model0 = community.communities[0];
-    model1 = community.communities[1];
-    relocationUtil = new RelocationUtil(community);
+    model.setupCommunity();
+    model.populateCommunities();
+    community0 = model.communities[0];
+    community1 = model.communities[1];
+    relocationUtil = new RelocationUtil(model);
   });
 
   test('Handle all relocations should terminate when person arrives and add that person to the new model ', () => {
     const destId = 1;
 
-    const person = model0.population[0];
-    const destCoords = model1.getRandomPoint();
-    model0.handlePersonLeaving(person);
+    const person = community0.population[0];
+    const destCoords = community1.getRandomPoint();
+    community0.handlePersonLeaving(person);
 
     person.relocating = true;
     person.x = destCoords.x;
     person.y = destCoords.y;
 
-    const lengthOfModel0 = model0.population.length;
-    const lengthOfModel1 = model0.population.length;
+    const lengthOfCommunity0 = community0.population.length;
+    const lengthOfCommunity1 = community0.population.length;
     relocationUtil.relocations.push(
       new RelocationInfo(person, destCoords, destId)
     );
@@ -50,21 +50,22 @@ describe('RelocationUtil tests', () => {
     while (person.relocating) {
       relocationUtil.handleAllRelocations();
     }
+
     expect(person.relocating).toBe(false) &&
-      expect(person.modelId).toBe(destId) &&
-      expect(model0.population.length).toBe(lengthOfModel0 - 1) &&
-      expect(model1.population.length).toBe(lengthOfModel1 + 1);
+      expect(person.communityId).toBe(destId) &&
+      expect(community0.population.length).toBe(lengthOfCommunity0 - 1) &&
+      expect(community1.population.length).toBe(lengthOfCommunity1 + 1);
   });
 
   test('_removeRelocationInfo should throw error if length of relocations doesnt change', () => {
-    const relocationInfo = new RelocationInfo(model0.population[0], null, 1);
+    const relocationInfo = new RelocationInfo(community0.population[0], null, 1);
     expect(() => relocationUtil._removeRelocationInfo(relocationInfo)).toThrow(
       Error
     );
   });
 
   test('_removeRelocationInfo should remove relocation if it exists', () => {
-    const relocationInfo = new RelocationInfo(model0.population[0], null, 1);
+    const relocationInfo = new RelocationInfo(community0.population[0], null, 1);
     relocationUtil.relocations.push(relocationInfo);
     const lengthBefore = relocationUtil.relocations.length;
     relocationUtil._removeRelocationInfo(relocationInfo);
@@ -72,8 +73,8 @@ describe('RelocationUtil tests', () => {
   });
 
   test('getStats should return all the stats', () => {
-    Object.values(community.communities).forEach((model) => {
-      model.population.forEach((person) =>
+    Object.values(model.communities).forEach((community) => {
+      community.population.forEach((person) =>
         relocationUtil.relocations.push(new RelocationInfo(person, null, 1))
       );
     });
