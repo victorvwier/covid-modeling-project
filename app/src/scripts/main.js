@@ -107,6 +107,6 @@ export default class Main {
     this.numDead = 0;
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.model.resetCommunity(this.createCurrentStats());
+    this.model.resetModel(this.createCurrentStats());
   }
 }

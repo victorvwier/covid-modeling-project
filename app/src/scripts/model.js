@@ -207,11 +207,14 @@ export default class Model {
     this.updateStats(finalStats);
   }
 
-  resetCommunity(stats) {
+  resetModel(stats) {
     this._setValuesFromStatsToLocal(stats);
+    this.relocationUtil.clearAllRelocationsForReset();
 
     const dividedStats = this._createDividedStats();
-    Object.values(this.communities).forEach((m) => m.resetCommunity(dividedStats));
+    Object.values(this.communities).forEach((m) =>
+      m.resetCommunity(dividedStats)
+    );
   }
 
   // SLIDER HANDLER METHODS
