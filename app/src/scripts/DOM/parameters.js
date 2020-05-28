@@ -5,7 +5,7 @@ import {
   MAX_INCUBATION_TIME,
   INFECTION_RADIUS,
   // PERSON_RADIUS,
-  INITAL_INFECTIOUS,
+  INITIAL_INFECTIOUS,
   INITIAL_SUSCEPTIBLE,
   MIN_INFECTIOUS_TIME,
   MAX_INFECTIOUS_TIME,
@@ -169,7 +169,7 @@ export default function (community) {
   wireInput(
     'initInfectious',
     'initInfectiousCount',
-    INITAL_INFECTIOUS,
+    INITIAL_INFECTIOUS,
     '',
     (x) => x // Don't need a setter
   );

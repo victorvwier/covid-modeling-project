@@ -12,10 +12,9 @@ import {
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
 export default class Main {
-  
   /**
    * Creates an instance of the Main class.
-   * 
+   *
    * @constructor
    * @param {Object} context The webGL context of our HTML.
    * @param {Object} chartContext The 2D context we use to draw our chart.
@@ -68,7 +67,7 @@ export default class Main {
 
   /**
    * A function to create a stats object with current stats.
-   * 
+   *
    * @returns {Stats} A Stats object representing the current state.
    */
   createCurrentStats() {
@@ -84,7 +83,7 @@ export default class Main {
   // Assume only model calls this one so update chart
   /**
    * A function to update the local stats and update the chart with them.
-   * 
+   *
    * @param {Stats} stats the new stats.
    */
   receiveNewStatsAndUpdateChart(stats) {
@@ -142,6 +141,6 @@ export default class Main {
     this.numDead = 0;
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.model.resetCommunity(this.createCurrentStats());
+    this.model.resetModel(this.createCurrentStats());
   }
 }

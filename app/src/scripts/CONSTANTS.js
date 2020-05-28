@@ -2,8 +2,8 @@
 export const INITIAL_SUSCEPTIBLE = 100;
 /** @constant INITAL_NONINFECTIOUS Default initial amount of Non-Infectious people in the model. */
 export const INITIAL_NONINFECTIOUS = 0;
-/** @constant INITAL_INFECTIOUS Default initial amount of Infectious people in the model. */
-export const INITAL_INFECTIOUS = 120;
+/** @constant INITIAL_INFECTIOUS Default initial amount of Infectious people in the model. */
+export const INITIAL_INFECTIOUS = 120;
 /** @constant INITIAL_IMMUNE Default initial amount of Immune people in the model. */
 export const INITIAL_IMMUNE = 0;
 /** @constant INITIAL_DEAD Default initial amount of Dead people in the model. */
@@ -16,6 +16,8 @@ export const ATTRACTION_FORCE = 0;
 export const PERSON_RADIUS = 5;
 /** @constant POPULATION_SPEED Default value of the maxSpeed attribute of a community and person. */
 export const POPULATION_SPEED = 4;
+/** @constant INTERACTION_RANGE the infectious range of a person */
+export const INTERACTION_RANGE = 20;
 /** @constant INFECTION_RADIUS Default value of the infectionRadius attribute of a person. */
 export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 /** @constant MOVEMENT_TIME_SCALAR Scalar for the timestep provided when moving a person. */
@@ -45,10 +47,10 @@ export const MAX_TIME_UNTIL_DEAD = 30;
 /** @constant DAYS_PER_SECOND Amount of days that are simulated every second. */
 export const DAYS_PER_SECOND = 2;
 
-/** 
+/**
  * Enum for the colors related to the states a person can be in.
  * @readonly
- * @enum {string} 
+ * @enum {string}
  */
 export const COLORS = {
   SUSCEPTIBLE: '#05befc',
@@ -75,7 +77,7 @@ export const TYPES = {
 export const SPACE_BETWEEN_COMMUNITIES = 20;
 
 /** @constant RELOCATION_PROBABILITY The probability a person will relocate to a different community. */
-export const RELOCATION_PROBABILITY = 0.0002;
+export const RELOCATION_PROBABILITY = 0.00005;
 /** @constant RELOCATION_ERROR_MARGIN The distance a person is allowed to be offset from his destination to finish relocating. */
 export const RELOCATION_ERROR_MARGIN = 20;
 /** @constant RELOCATION_STEP_SIZE The amount of steps the distance to a persons destination is divided up into. */

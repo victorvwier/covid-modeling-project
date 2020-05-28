@@ -4,14 +4,12 @@ import Stats from './data/stats';
 import Bounds from './data/bounds';
 import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
 import RelocationUtil from './relocationUtil';
-import Person from './person';
 
 /** @class Model representing a simulation of one or multiple communities. */
 export default class Model {
-  
   /**
    * Instantiates a model.
-   * 
+   *
    * @param {number} numCommunities The number of communities in the model.
    * @param {Object} agentView The agentChart used to display the people.
    * @param {number} width The width of the model.
@@ -43,7 +41,7 @@ export default class Model {
 
   /**
    * A function to create a stats object representative of one community.
-   * 
+   *
    * @returns {Stats} A stats object the size of one community.
    */
   _createDividedStats() {
@@ -58,7 +56,7 @@ export default class Model {
 
   /**
    * A function to set the values of the model to those of a stats object.
-   * 
+   *
    * @param {Stats} stats The stats object with the desired values.
    */
   _setValuesFromStatsToLocal(stats) {
@@ -71,7 +69,7 @@ export default class Model {
 
   /**
    * A function to register a person relocating within the model.
-   * 
+   *
    * @param {Person} person The person relocating.
    */
   registerRelocation(person) {
@@ -126,7 +124,7 @@ export default class Model {
 
   /**
    * A function to handle the animations for a certain timestamp.
-   * 
+   *
    * @param {number} timestamp The timestamp of the current moment.
    */
   _animationFunction(timestamp) {
@@ -174,7 +172,7 @@ export default class Model {
 
   /**
    * A function to create a list of bounds of the communities in the model.
-   * 
+   *
    * @returns {Array{Bounds}} A list of bounds of the different communities.
    */
   _createIncrementals() {
@@ -268,21 +266,24 @@ export default class Model {
 
   /**
    * A function to reset the model.
-   * 
+   *
    * @param {Stats} stats New initial stats.
    */
-  resetCommunity(stats) {
+  resetModel(stats) {
     this._setValuesFromStatsToLocal(stats);
+    this.relocationUtil.clearAllRelocationsForReset();
 
     const dividedStats = this._createDividedStats();
-    Object.values(this.communities).forEach((m) => m.resetCommunity(dividedStats));
+    Object.values(this.communities).forEach((m) =>
+      m.resetCommunity(dividedStats)
+    );
   }
 
   // SLIDER HANDLER METHODS
 
   /**
    * A function to update the size of a person from the slider.
-   * 
+   *
    * @param {number} newValue The new size of a person in the model.
    */
   updateAgentSize(newValue) {
@@ -293,7 +294,7 @@ export default class Model {
 
   /**
    * A function to update the infection radius of people from the slider.
-   * 
+   *
    * @param {number} newValue The new the infection radius of a person in the model.
    */
   updateInfectionRadius(newValue) {
@@ -304,7 +305,7 @@ export default class Model {
 
   /**
    * A function to update the minimum time from the Infectious to the Dead state in the model.
-   * 
+   *
    * @param {number} newValue The new time for the state transition.
    */
   updateMinTimeUntilDead(newValue) {
@@ -315,7 +316,7 @@ export default class Model {
 
   /**
    * A function to update the maximum time from the Infectious state to the Dead state in the model.
-   * 
+   *
    * @param {number} newValue the new time for the state transition.
    */
   updateMaxTimeUntilDead(newValue) {
@@ -326,7 +327,7 @@ export default class Model {
 
   /**
    * A function to update the minimum time from the Infectious state to the Immune state in the model.
-   * 
+   *
    * @param {number} newValue the new time for the state transition.
    */
   updateMinInfectiousTime(newValue) {
@@ -337,7 +338,7 @@ export default class Model {
 
   /**
    * A function to update the maximum time from the Infectious state to the Immune state in the model.
-   * 
+   *
    * @param {number} newValue the new time for the state transition.
    */
   updateMaxInfectiousTime(newValue) {
@@ -348,7 +349,7 @@ export default class Model {
 
   /**
    * A function to update the minimum time from the Non-Infectious state to the Infectious state in the model.
-   * 
+   *
    * @param {number} newValue the new time for the state transition.
    */
   updateMinIncubationTime(newValue) {
@@ -359,7 +360,7 @@ export default class Model {
 
   /**
    * A function to update the maximum time from the Non-Infectious state to the Infectious state in the model.
-   * 
+   *
    * @param {number} newValue the new time for the state transition.
    */
   updateMaxIncubationTime(newValue) {
@@ -370,7 +371,7 @@ export default class Model {
 
   /**
    * A function to update the probability of transmission in the model.
-   * 
+   *
    * @param {number} newValue the new probability of transmission in the model.
    */
   updateTransmissionProb(newValue) {
@@ -381,7 +382,7 @@ export default class Model {
 
   /**
    * A function to update the probability of a person moving from the Non-Infectious state to the Immmune state in the model.
-   * 
+   *
    * @param {number} newValue The new probability of the transition in the model.
    */
   updateNonInToImmuneProb(newValue) {
@@ -392,7 +393,7 @@ export default class Model {
 
   /**
    * A function to update the force with which people repel each other in the model.
-   * 
+   *
    * @param {number} newValue The new repulsion force in the model.
    */
   updateRepulsionForce(newValue) {
@@ -403,7 +404,7 @@ export default class Model {
 
   /**
    * A function to update the force with which people are attracted to the center in the model.
-   * 
+   *
    * @param {number} newValue The new attraction to center in the model.
    */
   updateAttractionToCenter(newValue) {

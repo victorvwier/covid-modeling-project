@@ -10,10 +10,9 @@ import {
 
 /** @class Person describing a person in the model. */
 export default class Person {
-  
   /**
    * Instantiates a person.
-   * 
+   *
    * @constructor
    * @param {TYPE} type The state the person starts in.
    * @param {number} x The initial X coordinate of the person.
@@ -56,7 +55,7 @@ export default class Person {
 
   /**
    * A function applying a force to the person.
-   * 
+   *
    * @param {number} forceX The component of the force parallel to the X axis.
    * @param {number} forceY The component of the force parallel to the Y axis.
    */
@@ -66,8 +65,16 @@ export default class Person {
   }
 
   /**
+   * A function to check if this person is dead
+   * @returns {Boolean} boolean representing whether a person is dead
+   */
+  isDead() {
+    return this.type === TYPES.DEAD;
+  }
+
+  /**
    * A function handling a person attempting to move out of bounds along the X axis.
-   * 
+   *
    * @param {number} startX The lower bound on the X axis.
    * @param {number} endX The upper bound on the X axis.
    */
@@ -82,7 +89,7 @@ export default class Person {
 
   /**
    * A function handling a person attempting to move out of bounds along the Y axis.
-   * 
+   *
    * @param {number} startY The lower bound on the Y axis.
    * @param {number} endY The upper bound on the Y axis.
    */
@@ -108,17 +115,14 @@ export default class Person {
 
   /**
    * A function moving a person for a given timestep.
-   * 
+   *
    * @param {number} startX The lower bound along the X axis.
    * @param {number} endX The upper bound along the X axis.
    * @param {number} startY The lower bound along the Y axis.
    * @param {number} endY The upper bound along the Y axis.
    * @param {number} dt The amount of time which passes for this movement.
-   * 
-   * @todo model should call with start and end
    */
   move(startX, endX, startY, endY, dt) {
-    // if (this.type !== TYPES.DEAD) {
     this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
 
     this.speedX += this.accX * dt;
@@ -138,12 +142,11 @@ export default class Person {
 
     this.accX *= 0;
     this.accY *= 0;
-    // }
   }
 
   /**
    * A function retrieving the step a person will take towards its destination.
-   * 
+   *
    * @param {number} current The current coordinate of the person.
    * @param {number} destination The coordinate of the persons destination.
    * @returns {number} The step a person will take towards its destination.
@@ -154,7 +157,7 @@ export default class Person {
 
   /**
    * A function moving a relocating person.
-   * 
+   *
    * @param {Object} destination An object containing the coordinates of the destination of the person.
    */
   relocateMove({ x: destX, y: destY }) {
@@ -175,15 +178,16 @@ export default class Person {
 
   /**
    * A function determining if a person is within the distance to infect another person.
-   * 
+   *
    * @param {Person} p The other person the check is made over.
+   * @param {Number} range the infectious range of a person to determing if the other person is close enough for an infection.
    * @returns {Boolean} A boolean representing whether the two people are within each others infection radius.
    */
-  metWith(p) {
+  isInRange(p, range) {
     const deltaX = this.x - p.x;
     const deltaY = this.y - p.y;
     const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    return dist < this.infectionRadius + p.infectionRadius; // Collide on infectionraduis
+    return dist < range; // Collide on infectionraduis
   }
 
   /**
@@ -196,7 +200,7 @@ export default class Person {
 
   /**
    * A function to set the incubation time of the person.
-   * 
+   *
    * @param {number} val The new incubation time.
    */
   setIncubationPeriod(val) {
@@ -205,7 +209,7 @@ export default class Person {
 
   /**
    * A function to set the infectious time of the person.
-   * 
+   *
    * @param {number} val The new infectious period.
    */
   setInfectiousPeriod(val) {
@@ -230,7 +234,7 @@ export default class Person {
 
   /**
    * A function pushing this person away from another person.
-   * 
+   *
    * @param {Person} p The person to be repelled.
    */
   repel(p) {
@@ -252,7 +256,7 @@ export default class Person {
 
   /**
    * A function saying if we can infect a person.
-   * 
+   *
    * @param {Person} p The person which we want to know can be infected.
    * @returns {Boolean} A boolean representing if the other person can be infected.
    */
@@ -262,7 +266,7 @@ export default class Person {
 
   /**
    * A function setting the age of a person.
-   * 
+   *
    * @param {number} value The new age of the person.
    */
   initializeAge(value) {

@@ -21,6 +21,7 @@ import {
   RELOCATION_PROBABILITY,
   MOVEMENT_TIME_SCALAR,
   RELOCATION_ERROR_MARGIN,
+  INTERACTION_RANGE,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -28,10 +29,9 @@ import Coordinate from './data/coordinate';
 
 /** @class Community describing a single community within the model. */
 export default class Community {
-
   /**
    * Instatiates a Community.
-   * 
+   *
    * @constructor
    * @param {number} id The ID which can be used to refer to the community.
    * @param {Bounds} bounds An object representing the bounds of the community.
@@ -94,13 +94,13 @@ export default class Community {
       this.endX,
       this.startY,
       this.endY,
-      10 * INFECTION_RADIUS
+      INFECTION_RADIUS
     );
   }
 
   /**
    * A function setting the attraction to the center.
-   * 
+   *
    * @param {number} newValue The new attraction to the center in the community.
    */
   setAttractionToCenter(newValue) {
@@ -109,7 +109,7 @@ export default class Community {
 
   /**
    * A function setting the force with which people repel each other.
-   * 
+   *
    * @param {number} newValue The new Repulsion force.
    */
   setRepulsionForce(newValue) {
@@ -119,7 +119,7 @@ export default class Community {
 
   /**
    * A function to handle a person relocating to another community.
-   * 
+   *
    * @param {Person} person The person leaving the community.
    */
   handlePersonLeaving(person) {
@@ -155,7 +155,7 @@ export default class Community {
 
   /**
    * A function to handle a person relocating to this Community.
-   * 
+   *
    * @param {Person} person The person joining this community.
    */
   handlePersonJoining(person) {
@@ -195,7 +195,7 @@ export default class Community {
 
   /**
    * A function to set the probability of transmission between people.
-   * 
+   *
    * @param {number} newValue The new probability of transmission.
    */
   setTransmissionProb(newValue) {
@@ -204,7 +204,7 @@ export default class Community {
 
   /**
    * A function to set the probability for a person to move from the Non-Infectious state to the Immune state.
-   * 
+   *
    * @param {number} newValue The new probability for this state transition.
    */
   setNonInToImmuneProb(newValue) {
@@ -213,7 +213,7 @@ export default class Community {
 
   /**
    * A function to set the minimum time to move from the Non-Infectious state to the Infectious state in this community.
-   * 
+   *
    * @param {number} newValue The new minimum incubation time.
    */
   setMinIncubationTime(newValue) {
@@ -222,7 +222,7 @@ export default class Community {
 
   /**
    * A function to set the maximum time to move from the Non-Infectious state to the Infectious state in this community.
-   * 
+   *
    * @param {number} newValue The new maximum incubation time.
    */
   setMaxIncubationTime(newValue) {
@@ -231,7 +231,7 @@ export default class Community {
 
   /**
    * A function to set the minimum time to move from the Infectious state to the Immune state in this community.
-   * 
+   *
    * @param {number} newValue The new minimum infectious period.
    */
   setMinInfectiousTime(newValue) {
@@ -240,7 +240,7 @@ export default class Community {
 
   /**
    * A function to set the maximum time to move from the Infectious state to the Immune state in this community.
-   * 
+   *
    * @param {number} newValue The new maximum infectious period.
    */
   setMaxInfectiousTime(newValue) {
@@ -249,7 +249,7 @@ export default class Community {
 
   /**
    * A function to set the minimum time to move from the Infectious state to the Dead state in this community.
-   * 
+   *
    * @param {number} newValue The new minimum time to death.
    */
   setMinTimeUntilDead(newValue) {
@@ -258,7 +258,7 @@ export default class Community {
 
   /**
    * A function to set the maximum time to move from the Infectious state to the Dead state in this community.
-   * 
+   *
    * @param {*} newValue The new maximum time to death.
    */
   setMaxTimeUntilDead(newValue) {
@@ -267,7 +267,7 @@ export default class Community {
 
   /**
    * A function to set the infection radius in this community.
-   * 
+   *
    * @param {number} newValue The new Infection radius.
    */
   setInfectionRadius(newValue) {
@@ -277,7 +277,7 @@ export default class Community {
 
   /**
    * A function to set the person radius in this community.
-   * 
+   *
    * @param {number} newValue The new radius of the people.
    */
   setPersonRadius(newValue) {
@@ -301,7 +301,7 @@ export default class Community {
 
   /**
    * Update the radius of people in this community.
-   * 
+   *
    * @param {number} newValue The new radius.
    */
   updateRadius(newValue) {
@@ -312,7 +312,7 @@ export default class Community {
 
   /**
    * Update the infection radius of people in this community.
-   * 
+   *
    * @param {number} newValue The new infection radius.
    */
   updateInfectionRadius(newValue) {
@@ -321,7 +321,7 @@ export default class Community {
       this.endX,
       this.startY,
       this.endY,
-      10 * newValue
+      newValue
     );
     for (let i = 0; i < this.totalPopulation; i++) {
       this.population[i].infectionRadius = newValue;
@@ -331,7 +331,7 @@ export default class Community {
 
   /**
    * Update the repulsion force of the people in this community.
-   * 
+   *
    * @param {number} newValue The new repulsion force.
    */
   updateRepulsionForce(newValue) {
@@ -353,7 +353,7 @@ export default class Community {
 
   /**
    * A function to create the part of the population which consists of one type
-   * 
+   *
    * @param {TYPES} type The initial state of this part of the population.
    * @param {number} count The amount of people in this part of the population.
    */
@@ -378,7 +378,7 @@ export default class Community {
 
   /**
    * A function to get the info required to render this community.
-   * 
+   *
    * @returns {Object} An object containing all necessary information for rendering this community.
    */
   getDrawInfo() {
@@ -406,7 +406,7 @@ export default class Community {
 
   /**
    * A function to handle all necessary actions to advance this community in time.
-   * 
+   *
    * @param {number} dt The timestep over which to update the population.
    */
   updatePopulation(dt) {
@@ -439,7 +439,7 @@ export default class Community {
 
   /**
    * A function returning a random point in this community.
-   * 
+   *
    * @returns {Coordinate} A random coordinate within this model and the margin of error for relocation
    */
   getRandomPoint() {
@@ -457,12 +457,15 @@ export default class Community {
 
   /**
    * A function handling the interactions between the people of the population
-   * 
+   *
    * @param {number} dt The timestep over which the interactions take place.
    */
   interactPopulation(dt) {
     for (let i = 0; i < this.totalPopulation; i += 1) {
-      const met = this.boundingBoxStruct.query(this.population[i]);
+      const met = this.boundingBoxStruct.query(
+        this.population[i],
+        INTERACTION_RANGE
+      );
       for (let j = 0; j < met.length; j += 1) {
         // Social distancing
         // if (this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
@@ -488,7 +491,7 @@ export default class Community {
   // Decided to implement this in model, but could move to person
   /**
    * A function handling the updates for a person.
-   * 
+   *
    * @param {Person} person The person for which the update is to be done.
    * @param {number} dt The timestep over which the update is to be calculated.
    */
@@ -542,7 +545,7 @@ export default class Community {
 
   /**
    * A function to step through the community with a timestep.
-   * 
+   *
    * @param {number} dt The timestep for which to step.
    */
   step(dt) {
@@ -551,9 +554,10 @@ export default class Community {
     this.interactPopulation(daysPassed);
   }
 
-/**
- * A function to pause execution of the community.
- */  
+  /**
+   * A function to pause execution of the community.
+   */
+
   pauseExecution() {
     clearInterval(this._updatePopulationInterval);
     this._updatePopulationInterval = null;
@@ -590,10 +594,10 @@ export default class Community {
 
   /**
    * A function to reset the community.
-   * 
+   *
    * @param {Stats} stats the new Initial stats for the Community.
    */
-  resetModel(stats) {
+  resetCommunity(stats) {
     // Set new values and reset to init
     this.population = [];
     this.numSusceptible = stats.susceptible;
