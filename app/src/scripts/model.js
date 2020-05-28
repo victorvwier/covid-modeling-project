@@ -234,7 +234,7 @@ export default class Model {
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
 
-    for (let i = 0; i < this.numModels; i++) {
+    for (let i = 0; i < this.numCommunities; i++) {
       const dividedStats = this._createDividedStats(i);
 
       this.communities[i].resetCommunity(dividedStats);

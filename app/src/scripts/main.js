@@ -113,10 +113,9 @@ export default class Main {
 
     if (this.numCommunities !== this.model.numCommunities) {
       this.model.numCommunities = this.numCommunities;
+      this.model.communities = {};
       this.model.setupCommunity();
     }
-
-    this.model.communities = {};
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
     this.model.resetModel(this.createCurrentStats());
