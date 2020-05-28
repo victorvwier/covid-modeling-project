@@ -22,7 +22,7 @@ export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 export const MOVEMENT_TIME_SCALAR = 10;
 /** @constant TRANSMISSION_PROB Default value for the probability of transmission between people. */
 export const TRANSMISSION_PROB = 0.9;
-/** @constant NONIN_TO_IMMUNE_PROB Probability a person moves from the Non-Infectious state to the Immune state.*/
+/** @constant NONIN_TO_IMMUNE_PROB Probability a person moves from the Non-Infectious state to the Immune state. */
 export const NONIN_TO_IMMUNE_PROB = 0.1;
 /** @constant TIME_UNTIL_IMMUNE Default value for the time from the Infectious state to the Immune state. */
 export const TIME_UNTIL_IMMUNE = 7;

@@ -10,7 +10,23 @@ import {
 } from './DOM/domValues';
 
 // Creates chart and graph internally
+/** @class Main handling all seperate components of our program. */
 export default class Main {
+  
+  /**
+   * Creates an instance of the Main class.
+   * 
+   * @constructor
+   * @param {Object} context The webGL context of our HTML.
+   * @param {Object} chartContext The 2D context we use to draw our chart.
+   * @param {number} width The width of our glCanvas.
+   * @param {number} height The height of our glCanvas.
+   * @param {number} numSusceptible The initial number of Susceptible people.
+   * @param {*} numNonInfectious The initial number of Non-Infectious people.
+   * @param {*} numInfectious The initial number of Infectious people.
+   * @param {*} numDead The initial number of Dead people.
+   * @param {*} numImmune The initial number of Immune people.
+   */
   constructor(
     context,
     chartContext,
@@ -50,6 +66,11 @@ export default class Main {
     window.main = this;
   }
 
+  /**
+   * A function to create a stats object with current stats.
+   * 
+   * @returns {Stats} A Stats object representing the current state.
+   */
   createCurrentStats() {
     return new Stats(
       this.numSusceptible,
@@ -61,6 +82,11 @@ export default class Main {
   }
 
   // Assume only model calls this one so update chart
+  /**
+   * A function to update the local stats and update the chart with them.
+   * 
+   * @param {Stats} stats the new stats.
+   */
   receiveNewStatsAndUpdateChart(stats) {
     this.numSusceptible = stats.susceptible;
     this.numNonInfectious = stats.noninfectious;
@@ -78,6 +104,9 @@ export default class Main {
     );
   }
 
+  /**
+   * A function to setup the main class.
+   */
   setupMain() {
     const stats = this.createCurrentStats();
     console.log(stats);
@@ -91,6 +120,9 @@ export default class Main {
     );
   }
 
+  /**
+   * A function to run the model and the chart.
+   */
   run() {
     this.chart.drawChart();
 
@@ -98,6 +130,9 @@ export default class Main {
     this.model.run();
   }
 
+  /**
+   * A function to reset the model and the chart.
+   */
   reset() {
     // Reset the stats
     this.numSusceptible = getInitialNumSusceptible();
