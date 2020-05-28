@@ -3,7 +3,14 @@ import { TYPES } from './CONSTANTS';
 import RelocationInfo from './data/relocationInfo';
 import Stats from './data/stats';
 
+/** @class RelocationUtil handling relocating people. */
 export default class RelocationUtil {
+
+  /**
+   * Instantiates an Object to keep track of relocations.
+   * 
+   * @param {Model} model The model in which to keep track of relocations.
+   */
   constructor(model) {
     this.model = model;
     this.relocations = [];
@@ -12,6 +19,9 @@ export default class RelocationUtil {
     window.relocationUtil = this;
   }
 
+  /**
+   * A function to handle a step of all current relocations in the model.
+   */
   handleAllRelocations() {
     for (let i = 0; i < this.relocations.length; i++) {
       const relocation = this.relocations[i];
@@ -30,8 +40,13 @@ export default class RelocationUtil {
     }
   }
 
+  /**
+   * A function handling a person starting to relocate.
+   * 
+   * @param {Person} person The person to start relocating.
+   */
   insertRelocation(person) {
-    console.log('He watned to relocate');
+    console.log('He wanted to relocate');
     // Pause
     this.model.pauseExecution();
     // Move person
@@ -61,6 +76,13 @@ export default class RelocationUtil {
     this.model.resumeExecution();
   }
 
+  /**
+   * A function to remove the RelocationInfo from the ones we are tracking.
+   * 
+   * @param {RelocationInfo} relocationInfo The relocationInfo to remove.
+   * 
+   * @throws When no element is removed from tracked relocations.
+   */
   _removeRelocationInfo(relocationInfo) {
     const lengthBefore = this.relocations.length;
     this.relocations = this.relocations.filter((rel) => rel !== relocationInfo);
@@ -71,6 +93,13 @@ export default class RelocationUtil {
     }
   }
 
+  /**
+   * A function to get the stats of all relocating people.
+   * 
+   * @returns {Stats} The stats of all combined relocating people.
+   * 
+   * @throws If a person of an invalid type is found.
+   */
   getStats() {
     const stats = new Stats(0, 0, 0, 0, 0);
     this.relocations.forEach(({ person }) => {
