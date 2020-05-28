@@ -15,14 +15,7 @@ describe('RelocationUtil tests', () => {
   let relocationUtil;
 
   beforeEach(() => {
-    model = new Model(
-      2,
-      new AgentChart(null),
-      100,
-      100,
-      stats,
-      () => {}
-    );
+    model = new Model(2, new AgentChart(null), 100, 100, stats, () => {});
     model.setupCommunity();
     model.populateCommunities();
     community0 = model.communities[0];
@@ -58,14 +51,22 @@ describe('RelocationUtil tests', () => {
   });
 
   test('_removeRelocationInfo should throw error if length of relocations doesnt change', () => {
-    const relocationInfo = new RelocationInfo(community0.population[0], null, 1);
+    const relocationInfo = new RelocationInfo(
+      community0.population[0],
+      null,
+      1
+    );
     expect(() => relocationUtil._removeRelocationInfo(relocationInfo)).toThrow(
       Error
     );
   });
 
   test('_removeRelocationInfo should remove relocation if it exists', () => {
-    const relocationInfo = new RelocationInfo(community0.population[0], null, 1);
+    const relocationInfo = new RelocationInfo(
+      community0.population[0],
+      null,
+      1
+    );
     relocationUtil.relocations.push(relocationInfo);
     const lengthBefore = relocationUtil.relocations.length;
     relocationUtil._removeRelocationInfo(relocationInfo);
@@ -81,11 +82,11 @@ describe('RelocationUtil tests', () => {
 
     expect(relocationUtil.getStats()).toEqual(
       new Stats(
-        stats.susceptible * 2,
-        stats.noninfectious * 2,
-        stats.infectious * 2,
-        stats.immune * 2,
-        stats.dead * 2
+        stats.susceptible,
+        stats.noninfectious,
+        stats.infectious,
+        stats.immune,
+        stats.dead
       )
     );
   });
