@@ -1,12 +1,13 @@
 export const INITIAL_SUSCEPTIBLE = 300;
 export const INITIAL_NONINFECTIOUS = 0;
-export const INITAL_INFECTIOUS = 20;
+export const INITIAL_INFECTIOUS = 20;
 export const INITIAL_IMMUNE = 0;
 export const INITIAL_DEAD = 0;
 export const REPULSION_FORCE = 0;
 export const ATTRACTION_FORCE = 0;
 export const PERSON_RADIUS = 5;
 export const POPULATION_SPEED = 4;
+export const INTERACTION_RANGE = 20;
 export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
 export const MOVEMENT_TIME_SCALAR = 10;
 export const TRANSMISSION_PROB = 0.9;

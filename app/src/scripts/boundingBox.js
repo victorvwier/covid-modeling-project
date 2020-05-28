@@ -14,12 +14,12 @@ export class BoundingBox {
     }
   }
 
-  query(person) {
+  query(person, range) {
     const contacts = [];
     let i;
     for (i = 0; i < this.people.length; i++) {
       const other = this.people[i];
-      if (other !== person && other.metWith(person)) {
+      if (other !== person && other.isInRange(person, range)) {
         contacts.push(other);
       }
     }
@@ -59,15 +59,19 @@ export class Column {
     this.boxes[index].remove(person);
   }
 
-  query(person) {
+  query(person, range) {
     const index = this.getIndex(person);
-    let result = this.boxes[index].query(person);
-    if (index > 0) {
-      result = result.concat(this.boxes[index - 1].query(person));
+    let result = [];
+    const maxOffset = Math.ceil(range/this.size);
+    for(let i = index - maxOffset; i < index + maxOffset; i++) {
+      if (i >= 0 && i < this.boxes.length) {
+        if( this.boxes[i] === undefined) {
+          throw new Error("Boundingbox Error");          
+        }
+        result = result.concat(this.boxes[i].query(person, range));
+      }
     }
-    if (index + 1 < this.boxes.length) {
-      result = result.concat(this.boxes[index + 1].query(person));
-    }
+    
     return result;
   }
 }
@@ -106,14 +110,21 @@ export default class BoundingBoxStructure {
     this.columns[index].remove(person);
   }
 
-  query(person) {
-    const index = this.getIndex(person);
-    let result = this.columns[index].query(person);
-    if (index > 0) {
-      result = result.concat(this.columns[index - 1].query(person));
+  query(person, range) {
+    if(range === undefined) { 
+      throw new Error("No range was specified in the query"); 
     }
-    if (index + 1 < this.columns.length) {
-      result = result.concat(this.columns[index + 1].query(person));
+    const index = this.getIndex(person);
+    let result = [];
+    const maxOffset = Math.ceil(range/this.size);
+    let i;
+    for(i = index - maxOffset; i < index + maxOffset; i++) {
+      if (i >= 0 && i < this.columns.length) {
+        if( this.columns[i] === undefined) {
+          throw new Error("Boundingbox error");          
+        }
+        result = result.concat(this.columns[i].query(person, range));
+      }       
     }
     return result;
   }
