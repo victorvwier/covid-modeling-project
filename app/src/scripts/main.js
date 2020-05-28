@@ -7,6 +7,7 @@ import {
   getInitialNumInfectious,
   getInitialNumSusceptible,
   updateTheStatistics,
+  getNumCommunities,
 } from './DOM/domValues';
 
 // Creates chart and graph internally
@@ -47,6 +48,8 @@ export default class Main {
     this.numImmune = numImmune;
     this.numDead = numDead;
     this.numNonInfectious = numNonInfectious;
+
+    this.numCommunities = getNumCommunities();
 
     // Create chart and model (setup)
     this.chart = new Chart(
@@ -110,7 +113,7 @@ export default class Main {
     const stats = this.createCurrentStats();
     console.log(stats);
     this.model = new Model(
-      4, // TODO determine the number of communities
+      this.numCommunities, // TODO determine the number of communities
       this.agentView,
       this.width,
       this.height,
@@ -139,6 +142,14 @@ export default class Main {
     this.numNonInfectious = 0;
     this.numImmune = 0;
     this.numDead = 0;
+
+    this.numCommunities = getNumCommunities();
+
+    if (this.numCommunities !== this.model.numCommunities) {
+      this.model.numCommunities = this.numCommunities;
+      this.model.communities = {};
+      this.model.setupCommunity();
+    }
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
     this.model.resetModel(this.createCurrentStats());

@@ -16,7 +16,7 @@ describe('Community test', () => {
   const stats = new Stats(1, 1, 1, 1, 1);
 
   beforeEach(() => {
-    community = new Model(7, agentChart, width, height, stats, () => {});
+    community = new Model(4, agentChart, width, height, stats, () => {});
     relocationUtil = new RelocationUtil(community);
     community.relocationUtil = relocationUtil;
     community.setupCommunity();

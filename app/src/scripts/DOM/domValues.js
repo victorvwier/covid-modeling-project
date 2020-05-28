@@ -1,6 +1,6 @@
 /**
  * A function returning the initial amount of susceptible people as set in the UI.
- * 
+ *
  * @returns {number} The initial amount of susceptible people as set with the slider.
  */
 export function getInitialNumSusceptible() {
@@ -9,7 +9,7 @@ export function getInitialNumSusceptible() {
 
 /**
  * A function returning the initial amount of infectious people as set in the UI.
- * 
+ *
  * @returns {number} The initial amount of infectious people as set with the slider.
  */
 export function getInitialNumInfectious() {
@@ -17,8 +17,16 @@ export function getInitialNumInfectious() {
 }
 
 /**
+ * A function to get the number of communities selected by the user
+ * @returns {Number} number of communities
+ */
+export function getNumCommunities() {
+  return parseInt(document.getElementById('numCommunities').value, 10);
+}
+
+/**
  * A function updating the displayed values on the page to the corresponding values.
- * 
+ *
  * @param {number} numSusceptible The amount of susceptible people.
  * @param {number} numNonInfectious The amount of non-infectious people.
  * @param {number} numInfectious The amount of infectious people.

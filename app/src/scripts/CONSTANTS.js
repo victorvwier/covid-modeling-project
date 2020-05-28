@@ -47,6 +47,9 @@ export const MAX_TIME_UNTIL_DEAD = 30;
 /** @constant DAYS_PER_SECOND Amount of days that are simulated every second. */
 export const DAYS_PER_SECOND = 2;
 
+/** @constant NUM_COMMUNITIES The initial number of communities */
+export const NUM_COMMUNITIES = 4;
+
 /**
  * Enum for the colors related to the states a person can be in.
  * @readonly
