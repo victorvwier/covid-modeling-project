@@ -385,36 +385,43 @@
     </script>
 
     <main id="main">
-      <div id="left-panel">
-        <div id="chart-container">
-          <canvas id="chart-canvas" width="600px" height="300px"></canvas>
+      <div>
+        <div style="display: flex">
+          <div id="left-panel">
+            <div id="chart-container">
+              <canvas id="chart-canvas" width="600px" height="300px"></canvas>
+            </div>
+            <div class="statrow">
+              <div class="stat" style="background-color: #05befc;">
+                <h3>Susceptible</h3>
+                <p id="s1"></p>
+              </div>
+              <div class="stat" style="background-color: #c9e265;">
+                <h3>Non-Infectious</h3>
+                <p id="s2"></p>
+              </div>
+              <div class="stat" style="background-color: #fd7e65;">
+                <h3>Infectious</h3>
+                <p id="s3"></p>
+              </div>
+              <div class="stat" style="background-color: #a6a6a6;">
+                <h3>Immune</h3>
+                <p id="s4"></p>
+              </div>
+              <div class="stat" style="background-color: #000000ff;">
+                <h3>Dead</h3>
+                <p id="s5"></p>
+              </div>
+            </div>
+          </div>
+          <!-- </div> -->
+          <div id="glcanvas-container">
+            <canvas id="glCanvas" width="600px" height="600px"></canvas>
+          </div>
         </div>
-        <div class="statrow">
-          <div class="stat" style="background-color: #05befc;">
-            <h3>Susceptible</h3>
-            <p id="s1"></p>
-          </div>
-          <div class="stat" style="background-color: #c9e265;">
-            <h3>Non-Infectious</h3>
-            <p id="s2"></p>
-          </div>
-          <div class="stat" style="background-color: #fd7e65;">
-            <h3>Infectious</h3>
-            <p id="s3"></p>
-          </div>
-          <div class="stat" style="background-color: #a6a6a6;">
-            <h3>Immune</h3>
-            <p id="s4"></p>
-          </div>
-          <div class="stat" style="background-color: #000000ff;">
-            <h3>Dead</h3>
-            <p id="s5"></p>
-          </div>
+        <div id="timeline">
+          <span id="timeline-element"> Days: 0 </span>
         </div>
-      </div>
-      <!-- </div> -->
-      <div id="glcanvas-container">
-        <canvas id="glCanvas" width="600px" height="600px"></canvas>
       </div>
     </main>
   </body>

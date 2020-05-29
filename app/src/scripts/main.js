@@ -9,6 +9,7 @@ import {
   updateTheStatistics,
   getNumCommunities,
 } from './DOM/domValues';
+import Timeline from './timeline';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -56,6 +57,8 @@ export default class Main {
       this.chartContext,
       this.createCurrentStats.bind(this)
     );
+
+    this.timeline = new Timeline(document.getElementById("timeline-element"));
     this.agentView = new AgentChart(context);
     this.model = null;
     this.setupMain();
@@ -89,14 +92,15 @@ export default class Main {
    *
    * @param {Stats} stats the new stats.
    */
-  receiveNewStatsAndUpdateChart(stats) {
+  receiveNewStatsAndUpdateChart(stats, timestamp) {
     this.numSusceptible = stats.susceptible;
     this.numNonInfectious = stats.noninfectious;
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
 
-    this.chart.updateValues(this.createCurrentStats());
+    this.chart.updateValues(this.createCurrentStats(), timestamp);
+    this.timeline.setTime(timestamp);
     updateTheStatistics(
       this.numSusceptible,
       this.numNonInfectious,

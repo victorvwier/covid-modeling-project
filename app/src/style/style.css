@@ -52,6 +52,11 @@ button {
   width: 55vw;
   height: 80vh;
 }
+#timeline {
+  background-color: navy;
+  color: black;
+  font-size: 4rem;
+}
 
 #glcanvas {
   background: #d9d9d9;

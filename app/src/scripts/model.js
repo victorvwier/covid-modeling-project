@@ -2,7 +2,7 @@ import wireSlidersToHandlers from './DOM/parameters';
 import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
-import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
+import { SPACE_BETWEEN_COMMUNITIES, DAYS_PER_SECOND } from './CONSTANTS';
 import RelocationUtil from './relocationUtil';
 
 /** @class Model representing a simulation of one or multiple communities. */
@@ -29,6 +29,7 @@ export default class Model {
     this._chartInterval = null;
 
     this.lastTimestamp = 0;
+    this.daysPerSecond = DAYS_PER_SECOND;
 
     this._passDrawInfoAnimationFrame = null;
     this.relocationUtil = new RelocationUtil(this);
@@ -97,32 +98,6 @@ export default class Model {
   }
 
   /**
-   * A function to pause the execution of the model.
-   */
-  pauseExecution() {
-    // Cancel animation frame
-    cancelAnimationFrame(this._passDrawInfoAnimationFrame);
-    this._passDrawInfoAnimationFrame = null;
-    // clearInterval(this._chartInterval);
-    // this._chartInterval = null;
-    // Cancel all community intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.pauseExecution());
-  }
-
-  /**
-   * A function to resume the execution of the model.
-   */
-  resumeExecution() {
-    // Resume animationFrame
-    this._animationFunction();
-    // if(this._chartInterval === null) {
-    //   this._chartInterval = setInterval(this.compileStats.bind(this), 500);
-    // }
-    // Resume community intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.resumeExecution());
-  }
-
-  /**
    * A function to populate each of the communities in the model.
    */
   populateCommunities() {
@@ -138,7 +113,9 @@ export default class Model {
     wireSlidersToHandlers(this);
     this.populateCommunities();
 
-    this._animationFunction();
+    requestAnimationFrame(
+      this._animationFunction.bind(this)
+    );
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
@@ -148,14 +125,17 @@ export default class Model {
    * @param {number} timestamp The timestamp of the current moment.
    */
   _animationFunction(timestamp) {
-    let dt = 0;
-    if (this.lastTimestamp && timestamp) {
-      dt = timestamp - this.lastTimestamp;
-    } // The time passed since running the last step.
-    this.lastTimestamp = timestamp;
+    if (isNaN(timestamp) || timestamp === 0) {
+      throw Error("Stop calling this thing with Nan maybe");
+    }
+    // Scale the timestamp to days
+    timestamp = (timestamp / 1000) * this.daysPerSecond;
+    const dt = timestamp - this.lastTimestamp || 0;
+    this.lastTimestamp = timestamp || 0;
+    
 
     this.passDrawInfoToAgentChart();
-    Object.values(this.communities).forEach((mod) => mod.step(dt));
+    Object.values(this.communities).forEach((com) => com.step(dt));
     // Check all relocations
     this.relocationUtil.handleAllRelocations();
   }
@@ -285,7 +265,7 @@ export default class Model {
     const finalStats = Stats.joinStats(stats, relocationStats);
 
     this._setValuesFromStatsToLocal(finalStats);
-    this.updateStats(finalStats);
+    this.updateStats(finalStats, this.lastTimestamp);
   }
 
   /**

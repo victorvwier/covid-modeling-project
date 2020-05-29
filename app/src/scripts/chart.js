@@ -15,7 +15,7 @@ export default class Chart {
     this.ctx = ctx;
     this.getStats = getStats;
 
-    this.x = 1; // TODO use a timescale instead at some point
+    
     this.chart = null;
     this.susceptible = [];
     this.noninfectious = [];
@@ -41,7 +41,7 @@ export default class Chart {
    * @param {number} newInitInfectious The initial amount of infectious people.
    */
   resetChart(newInitSusceptible, newInitInfectious) {
-    this.x = 1;
+
     this.susceptible = [newInitSusceptible];
     this.noninfectious = [];
     this.infectious = [newInitInfectious];
@@ -58,7 +58,7 @@ export default class Chart {
    * 
    * @param {Stats} stats a stats object holding the new values.
    */
-  updateValues(stats) {
+  updateValues(stats, timestamp) {
     this.chart.data.datasets[0].data.push(stats.susceptible);
     this.susceptible.push(stats.susceptible);
     this.chart.data.datasets[1].data.push(stats.noninfectious);
@@ -70,8 +70,8 @@ export default class Chart {
     this.chart.data.datasets[4].data.push(stats.dead);
     this.dead.push(stats.dead);
     // What is x?
-    this.chart.data.labels.push(this.x++);
-    this.xValues.push(this.x - 1);
+    this.chart.data.labels.push(timestamp);
+    this.xValues.push(timestamp);
     this.chart.update();
   }
 
@@ -166,6 +166,15 @@ export default class Chart {
               stacked: true,
             },
           ],
+          xAxes: [
+            {
+              ticks: {
+                callback: function(value, index, values) {
+                  return Math.round(value);
+                }
+              }
+            }
+          ]
         },
         animation: {
           duration: 750,

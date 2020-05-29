@@ -26,7 +26,6 @@ export default class RelocationUtil {
       const relocation = this.relocations[i];
       relocation.takeStep();
       if (relocation.hasArrived()) {
-        this.model.pauseExecution();
 
         relocation.person.relocating = false;
         this.model.communities[relocation.destId].handlePersonJoining(
@@ -34,7 +33,7 @@ export default class RelocationUtil {
         );
         this._removeRelocationInfo(relocation);
 
-        this.model.resumeExecution();
+        
       }
     }
   }
@@ -45,9 +44,7 @@ export default class RelocationUtil {
    * @param {Person} person The person to start relocating.
    */
   insertRelocation(person) {
-    console.log('He wanted to relocate');
-    // Pause
-    this.model.pauseExecution();
+    
     // Move person
     const sourceId = person.communityId;
     // Get models which very high density and exclude them from models being relocated to
@@ -77,8 +74,6 @@ export default class RelocationUtil {
 
     // Do it via this
     this.relocations.push(new RelocationInfo(person, distCoords, destId));
-    // Resume
-    this.model.resumeExecution();
   }
 
   /**

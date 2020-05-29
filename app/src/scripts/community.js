@@ -79,7 +79,7 @@ export default class Community {
     this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
 
     this.maxSpeed = POPULATION_SPEED;
-    this.daysPerSecond = DAYS_PER_SECOND;
+    
     this.relocationProbability = RELOCATION_PROBABILITY;
 
     this.totalPopulation =
@@ -549,7 +549,8 @@ export default class Community {
    * @param {number} dt The timestep for which to step.
    */
   step(dt) {
-    const daysPassed = (dt / 1000) * this.daysPerSecond;
+    if( dt < 0) {throw Error("Can't go back in time"); }
+    const daysPassed = dt;
     this.updatePopulation(daysPassed);
     this.interactPopulation(daysPassed);
   }
