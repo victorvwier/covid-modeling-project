@@ -16,7 +16,7 @@ export const ATTRACTION_FORCE = 0;
 export const PERSON_RADIUS = 5;
 /** @constant POPULATION_SPEED Default value of the maxSpeed attribute of a community and person. */
 export const POPULATION_SPEED = 4;
-/** @constant INTERACTION_RANGE the infectious range of a person */
+/** @constant INTERACTION_RANGE the interaction range of a person (for social distancing) */
 export const INTERACTION_RANGE = 20;
 /** @constant INFECTION_RADIUS Default value of the infectionRadius attribute of a person. */
 export const INFECTION_RADIUS = PERSON_RADIUS + Math.floor(PERSON_RADIUS / 3);
