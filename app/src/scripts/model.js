@@ -125,12 +125,18 @@ export default class Model {
    * @param {number} timestamp The timestamp of the current moment.
    */
   _animationFunction(timestamp) {
-    if (isNaN(timestamp) || timestamp === 0) {
+    this._passDrawInfoAnimationFrame = requestAnimationFrame(
+      this._animationFunction.bind(this)
+    );
+    if (!timestamp) {
       throw Error("Stop calling this thing with Nan maybe");
     }
-    // Scale the timestamp to days
-    timestamp = (timestamp / 1000) * this.daysPerSecond;
-    const dt = timestamp - this.lastTimestamp || 0;
+    if (!this.timeZero) {
+      this.timeZero = timestamp;
+      return;
+    }
+    
+    const dt = (timestamp - this.lastTimestamp) / 1000 * this.daysPerSecond || 0;
     this.lastTimestamp = timestamp || 0;
     
 
@@ -144,10 +150,6 @@ export default class Model {
    * A function to pass all info to AgentChart to allow drawing the model.
    */
   passDrawInfoToAgentChart() {
-    this._passDrawInfoAnimationFrame = requestAnimationFrame(
-      this._animationFunction.bind(this)
-    );
-
     const allData = Object.values(this.communities)
       .map((com) => com.getDrawInfo())
       .reduce((acc, cur) => ({
@@ -263,9 +265,9 @@ export default class Model {
 
     const relocationStats = this.relocationUtil.getStats();
     const finalStats = Stats.joinStats(stats, relocationStats);
-
+    const timeInDays = (this.lastTimestamp - this.timeZero) / 1000;
     this._setValuesFromStatsToLocal(finalStats);
-    this.updateStats(finalStats, this.lastTimestamp);
+    this.updateStats(finalStats, timeInDays);
   }
 
   /**
@@ -276,7 +278,7 @@ export default class Model {
   resetModel(stats) {
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
-
+    this.timeZero = null;
     for (let i = 0; i < this.numCommunities; i++) {
       const dividedStats = this._createDividedStats(i);
 

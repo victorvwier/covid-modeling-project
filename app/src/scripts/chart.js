@@ -169,7 +169,7 @@ export default class Chart {
           xAxes: [
             {
               ticks: {
-                callback: function(value, index, values) {
+                callback: function(value) {
                   return Math.round(value);
                 }
               }
