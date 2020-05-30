@@ -110,6 +110,11 @@ export default class Main {
     );
   }
 
+  updateDemographicChart() {
+    const population = this.model.getAllPopulation();
+    this.demographicsChart.recieveUpdate(population);
+  }
+
   /**
    * A function to setup the main class.
    */
@@ -122,7 +127,8 @@ export default class Main {
       this.width,
       this.height,
       stats,
-      this.receiveNewStatsAndUpdateChart.bind(this)
+      this.receiveNewStatsAndUpdateChart.bind(this),
+      this.updateDemographicChart.bind(this)
     );
   }
 
@@ -130,12 +136,10 @@ export default class Main {
    * A function to run the model and the chart.
    */
   run() {
-    this.model.setupCommunity();
-
-    this.model.run();
-
     this.chart.drawChart();
-    this.demographicsChart.drawChart(this.model.getAllPopulation());
+    this.demographicsChart.drawChart();
+    this.model.setupCommunity();
+    this.model.run();
   }
 
   /**

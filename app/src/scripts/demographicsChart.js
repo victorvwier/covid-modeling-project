@@ -1,6 +1,5 @@
 import Chart from 'chart.js';
-import { agesMin, agesMax } from './data/demographic';
-import { GENDERS } from './CONSTANTS';
+import { GENDERS, AGE } from './CONSTANTS';
 
 export default class DemographicsChart {
   /**
@@ -8,18 +7,42 @@ export default class DemographicsChart {
    * @param {Context} ctx the context of the canvas where the chart will be drawn
    */
   constructor(ctx) {
+    this.demographicChart = null;
     this.ctx = ctx;
-    this.labels = agesMin.map((val, idx) => `${val} - ${agesMax[idx]}`);
-    this.data = {};
-    agesMin.forEach(
-      (val, idx) =>
-        (this.data[this._formatLabel(val, agesMax[idx])] = {
-          male: 0,
-          female: 0,
-        })
-    );
+    this.labels = AGE.map((val) => this._formatLabel(val.min, val.max));
 
-    console.log(this.data);
+    // data
+    this.maleData = new Array(AGE.length).fill(0);
+    this.femaleData = new Array(AGE.length).fill(0);
+
+    // DEBUG
+    window.demographic = this;
+  }
+
+  recieveUpdate(population) {
+    // Do logic
+    // num dead per age per gender
+    this.labels.forEach((label, idx) => {
+      const [min, max] = this._getMinMaxFromLabel(label);
+
+      // Get the dead people of this age range
+      const deadPeopleInAgeRange = population
+        .filter((p) => p.isDead())
+        .filter((p) => min <= p.age && p.age <= max);
+
+      const maleCount = deadPeopleInAgeRange.filter(
+        (p) => p.gender === GENDERS.MALE
+      ).length;
+
+      this.maleData[idx] = maleCount;
+      this.demographicChart.data.datasets[0].data[idx] = maleCount;
+      const femaleCount = deadPeopleInAgeRange.filter(
+        (p) => p.gender === GENDERS.FEMALE
+      ).length;
+      this.femaleData[idx] = -femaleCount;
+      this.demographicChart.data.datasets[1].data[idx] = -femaleCount;
+    });
+    this.demographicChart.update();
   }
 
   /**
@@ -41,30 +64,12 @@ export default class DemographicsChart {
     return label.split(' - ').map((item) => parseInt(item, 10));
   }
 
-  _setupDataMaleFemale(population) {
-    Object.keys(this.data).forEach((label) => {
-      const [min, max] = this._getMinMaxFromLabel(label);
-      // TODO check range <= and <
-      const thisAgeRange = population.filter((p) => min < p.age <= max);
-      const maleCount = thisAgeRange
-        .filter((p) => (p.gender = GENDERS.MALE))
-        .length();
-      const femaleCount = thisAgeRange
-        .filter((p) => (p.gender = GENDERS.FEMALE))
-        .length();
-
-      this.data[label].male = maleCount;
-      this.data[label].female = femaleCount;
-    });
-  }
-
   /**
    * A function that draws the demographics chart given the population of the model
    * @param {Array.<Person>} population the population of all communities combined
    */
-  drawChart(population) {
-    // this._setupDataMaleFemale(population);
-    return new Chart(this.ctx, {
+  drawChart() {
+    this.demographicChart = new Chart(this.ctx, {
       type: 'horizontalBar',
 
       data: {
@@ -74,15 +79,17 @@ export default class DemographicsChart {
             label: 'Female',
             backgroundColor: 'rgb(255, 99, 132)',
             borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45],
+            data: this.femaleData,
+            // data: Object.values(this.data).map((item) => item.female),
             stack: 'a',
           },
           {
             label: 'Male',
             backgroundColor: 'rgb(2, 99, 132)',
             borderColor: 'rgb(2, 99, 132)',
-            data: [-10, -110, -15, -12, -120, -130, -145],
-            stack: 'b',
+            data: this.maleData,
+            // data: Object.values(this.data).map((item) => -item.male),
+            stack: 'a',
           },
         ],
       },

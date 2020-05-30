@@ -371,10 +371,6 @@ export default class Community {
       );
       const newPerson = new Person(type, x, y, this.id);
       assignDemographic(newPerson);
-      console.log(newPerson.age, newPerson.gender);
-      // if (type !== TYPES.DEAD) {
-      //   // newPerson.dead = true;
-      // }
       this.population.push(newPerson);
       this.boundingBoxStruct.insert(newPerson);
     }

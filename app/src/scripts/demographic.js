@@ -27,5 +27,5 @@ export function assignDemographic(person) {
     person.gender = GENDER.FEMALE;
   }
 
-  person.mortalityRate = MORTALITY_RATE[index];
+  person.mortalityRate = 1;
 }

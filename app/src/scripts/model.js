@@ -17,7 +17,15 @@ export default class Model {
    * @param {Stats} stats The stats object used by the model.
    * @param {function} updateStats A function to update the displayed stats and chart.
    */
-  constructor(numCommunities, agentView, width, height, stats, updateStats) {
+  constructor(
+    numCommunities,
+    agentView,
+    width,
+    height,
+    stats,
+    updateStats,
+    updateDemographicChart
+  ) {
     this.numCommunities = numCommunities;
     this.communities = {};
     this.height = height;
@@ -25,6 +33,7 @@ export default class Model {
     this.stats = stats;
     this.agentView = agentView;
     this.updateStats = updateStats;
+    this.updateDemographicChart = updateDemographicChart;
 
     this._chartInterval = null;
 
@@ -45,15 +54,11 @@ export default class Model {
    */
   getAllPopulation() {
     const allPopulation = [];
-    console.log('model now');
-    console.log(this.communities);
     Object.values(this.communities)
       .map((com) => com.population)
       .forEach((item) => {
-        console.log(`item ${item.length}`);
         allPopulation.push(...item);
       });
-    console.log(allPopulation);
     return allPopulation;
   }
 
@@ -176,6 +181,8 @@ export default class Model {
     Object.values(this.communities).forEach((mod) => mod.step(dt));
     // Check all relocations
     this.relocationUtil.handleAllRelocations();
+
+    this.updateDemographicChart();
   }
 
   /**
