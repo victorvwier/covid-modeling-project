@@ -23,7 +23,7 @@ export function assignDemographic(person) {
     previous = DEMOGRAPHIC[i];
   }
 
-  const age = getRandomInt(AGE[index % 19].min, AGE[index % 19].max);
+  const age = getRandomInt(AGE[index % 20].min, AGE[index % 20].max);
   person.age = age;
 
   if (index < 20) {
@@ -32,5 +32,5 @@ export function assignDemographic(person) {
     person.gender = GENDER.FEMALE;
   }
 
-  person.mortalityRate = 1;
+  person.mortalityRate = MORTALITY_RATE[index];
 }

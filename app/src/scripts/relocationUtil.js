@@ -49,6 +49,7 @@ export default class RelocationUtil {
     // Pause
     this.model.pauseExecution();
     // Move person
+
     const sourceId = person.communityId;
     // Get models which very high density and exclude them from models being relocated to
 

@@ -47,10 +47,10 @@ export default class DemographicsChart {
       }
 
       this.maleData[index] = maleCount;
-      this.femaleData[index] = -femaleCount;
+      this.femaleData[index] = femaleCount;
 
       this.demographicChart.data.datasets[0].data[index] = maleCount;
-      this.demographicChart.data.datasets[1].data[index] = -femaleCount;
+      this.demographicChart.data.datasets[1].data[index] = femaleCount;
       index++;
     });
     this.demographicChart.update();
@@ -87,19 +87,20 @@ export default class DemographicsChart {
         labels: this.labels,
         datasets: [
           {
-            label: 'Female',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: this.femaleData,
-            // data: Object.values(this.data).map((item) => item.female),
-            stack: 'a',
-          },
-          {
             label: 'Male',
-            backgroundColor: 'rgb(2, 99, 132)',
+            backgroundColor: 'white',
             borderColor: 'rgb(2, 99, 132)',
             data: this.maleData,
             // data: Object.values(this.data).map((item) => -item.male),
+            stack: 'a',
+          },
+
+          {
+            label: 'Female',
+            backgroundColor: 'black',
+            borderColor: 'rgb(255, 99, 132)',
+            data: this.femaleData,
+            // data: Object.values(this.data).map((item) => item.female),
             stack: 'a',
           },
         ],
@@ -111,9 +112,9 @@ export default class DemographicsChart {
           xAxes: [
             {
               stacked: true,
-              // ticks: {
-              //   callback: (value) => 0,
-              // },
+              ticks: {
+                callback: (value) => Math.abs(value),
+              },
             },
           ],
           yAxes: [

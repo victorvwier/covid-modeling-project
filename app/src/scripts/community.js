@@ -419,8 +419,11 @@ export default class Community {
       // }
 
       if (Math.random() < RELOCATION_PROBABILITY && !currentPerson.relocating) {
-        currentPerson.relocating = true;
-        this.registerRelocation(currentPerson);
+        if (currentPerson.type !== TYPES.DEAD) {
+          this.relocationUtil.insertRelocation(currentPerson);
+          currentPerson.relocating = true;
+          this.registerRelocation(currentPerson);
+        }
       } else if (!currentPerson.relocating) {
         this.boundingBoxStruct.remove(currentPerson);
         currentPerson.maxSpeed = this.maxSpeed;
@@ -512,7 +515,7 @@ export default class Community {
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
         if (
-          person.mortalityStat !== 0 &&
+          person.mortalityRate !== 0 &&
           Math.random() <= person.mortalityRate
         ) {
           person.destinyDead = true;
