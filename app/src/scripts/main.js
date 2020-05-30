@@ -162,6 +162,7 @@ export default class Main {
     }
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
+    this.demographicsChart.reset();
     this.model.resetModel(this.createCurrentStats());
   }
 }

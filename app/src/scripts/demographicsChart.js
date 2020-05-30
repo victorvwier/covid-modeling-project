@@ -22,7 +22,8 @@ export default class DemographicsChart {
   recieveUpdate(population) {
     // Do logic
     // num dead per age per gender
-    this.labels.forEach((label, idx) => {
+    let index = 0;
+    this.labels.forEach((label) => {
       const [min, max] = this._getMinMaxFromLabel(label);
 
       // Get the dead people of this age range
@@ -30,17 +31,27 @@ export default class DemographicsChart {
         .filter((p) => p.isDead())
         .filter((p) => min <= p.age && p.age <= max);
 
-      const maleCount = deadPeopleInAgeRange.filter(
-        (p) => p.gender === GENDERS.MALE
-      ).length;
+      // const maleCount = deadPeopleInAgeRange.filter(
+      //   (p) => p.gender === GENDERS.MALE
+      // ).length;
 
-      this.maleData[idx] = maleCount;
-      this.demographicChart.data.datasets[0].data[idx] = maleCount;
-      const femaleCount = deadPeopleInAgeRange.filter(
-        (p) => p.gender === GENDERS.FEMALE
-      ).length;
-      this.femaleData[idx] = -femaleCount;
-      this.demographicChart.data.datasets[1].data[idx] = -femaleCount;
+      let maleCount = 0;
+      let femaleCount = 0;
+
+      for (let i = 0; i < deadPeopleInAgeRange.length; i++) {
+        if (deadPeopleInAgeRange[i].gender === GENDERS.MALE) {
+          maleCount++;
+        } else {
+          femaleCount++;
+        }
+      }
+
+      this.maleData[index] = maleCount;
+      this.femaleData[index] = -femaleCount;
+
+      this.demographicChart.data.datasets[0].data[index] = maleCount;
+      this.demographicChart.data.datasets[1].data[index] = -femaleCount;
+      index++;
     });
     this.demographicChart.update();
   }
@@ -100,9 +111,9 @@ export default class DemographicsChart {
           xAxes: [
             {
               stacked: true,
-              ticks: {
-                callback: (value) => Math.abs(value),
-              },
+              // ticks: {
+              //   callback: (value) => 0,
+              // },
             },
           ],
           yAxes: [

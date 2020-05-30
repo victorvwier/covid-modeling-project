@@ -10,12 +10,17 @@ import { getRandomInt } from './util';
 export function assignDemographic(person) {
   const rand = Math.random();
 
+  // demographic has 40 people
+  // 0-39 are the values
+
   let index = 0;
-  for (let i = 0; i < DEMOGRAPHIC.length - 1; i++) {
-    if (rand > DEMOGRAPHIC[i] && rand <= DEMOGRAPHIC[i + 1]) {
+  let previous = 0;
+  for (let i = 0; i < DEMOGRAPHIC.length; i++) {
+    if (rand <= DEMOGRAPHIC[i] && rand > previous) {
       index = i;
       break;
     }
+    previous = DEMOGRAPHIC[i];
   }
 
   const age = getRandomInt(AGE[index % 19].min, AGE[index % 19].max);
