@@ -1,5 +1,7 @@
 import Person from './person';
-import { getRandom, gaussianRand, mortalityStat } from './util';
+import { getRandom, gaussianRand } from './util';
+
+import { assignDemographic } from './demographic';
 
 import {
   PERSON_RADIUS,
@@ -368,6 +370,8 @@ export default class Community {
         this.endY - this.personRadius
       );
       const newPerson = new Person(type, x, y, this.id);
+      assignDemographic(newPerson);
+      console.log(newPerson.age, newPerson.gender);
       // if (type !== TYPES.DEAD) {
       //   // newPerson.dead = true;
       // }
@@ -511,7 +515,10 @@ export default class Community {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
-        if (Math.random() <= mortalityStat(person.age)) {
+        if (
+          person.mortalityStat !== 0 &&
+          Math.random() <= person.mortalityRate
+        ) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
             gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
