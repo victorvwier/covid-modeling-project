@@ -58,8 +58,12 @@ export default class DemographicsChart {
     });
   }
 
+  /**
+   * A function that draws the demographics chart given the population of the model
+   * @param {Array.<Person>} population the population of all communities combined
+   */
   drawChart(population) {
-    this._setupDataMaleFemale(population);
+    // this._setupDataMaleFemale(population);
     return new Chart(this.ctx, {
       type: 'horizontalBar',
 
