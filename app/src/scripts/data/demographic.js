@@ -1,4 +1,4 @@
-const agesMin = [
+export const agesMin = [
   0,
   5,
   10,
@@ -21,7 +21,7 @@ const agesMin = [
   95,
 ];
 
-const agesMax = [
+export const agesMax = [
   4,
   9,
   14,

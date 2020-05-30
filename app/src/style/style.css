@@ -169,3 +169,8 @@ h3 {
   display: table;
   clear: both;
 }
+
+#demographics {
+  width: 750px;
+  height: 500px;
+}

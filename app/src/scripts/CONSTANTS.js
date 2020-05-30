@@ -75,6 +75,15 @@ export const TYPES = {
   DEAD: 'd',
   IMMUNE: 'im',
 };
+/**
+ * Enum for the gender of a person.
+ * @readonly
+ * @enum {string}
+ */
+export const GENDERS = {
+  MALE: 'm',
+  FEMALE: 'f',
+};
 
 /** @constant SPACE_BETWEEN_COMMUNITIES The amount of pixels used as spacing inbetween communities. */
 export const SPACE_BETWEEN_COMMUNITIES = 20;

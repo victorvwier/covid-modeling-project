@@ -3,6 +3,7 @@ import Model from './model';
 import Chart from './chart';
 import AgentChart from './agentChart';
 import { wireReloadButtonToMain } from './DOM/parameters';
+import DemographicsChart from './demographicsChart';
 import {
   getInitialNumInfectious,
   getInitialNumSusceptible,
@@ -19,6 +20,7 @@ export default class Main {
    * @constructor
    * @param {Object} context The webGL context of our HTML.
    * @param {Object} chartContext The 2D context we use to draw our chart.
+   * @param {Object} demographicsCtx The 2D context we use to draw our demographics chart.
    * @param {number} width The width of our glCanvas.
    * @param {number} height The height of our glCanvas.
    * @param {number} numSusceptible The initial number of Susceptible people.
@@ -30,6 +32,7 @@ export default class Main {
   constructor(
     context,
     chartContext,
+    demographicsCtx,
     width,
     height,
     numSusceptible,
@@ -40,7 +43,7 @@ export default class Main {
   ) {
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
-
+    this.demographicsCtx = demographicsCtx;
     this.width = width;
     this.height = height;
     this.numSusceptible = numSusceptible;
@@ -56,6 +59,7 @@ export default class Main {
       this.chartContext,
       this.createCurrentStats.bind(this)
     );
+    this.demographicsChart = new DemographicsChart(demographicsCtx);
     this.agentView = new AgentChart(context);
     this.model = null;
     this.setupMain();
@@ -126,10 +130,12 @@ export default class Main {
    * A function to run the model and the chart.
    */
   run() {
-    this.chart.drawChart();
-
     this.model.setupCommunity();
+
     this.model.run();
+
+    this.chart.drawChart();
+    this.demographicsChart.drawChart(this.model.getAllPopulation());
   }
 
   /**

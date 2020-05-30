@@ -14,6 +14,9 @@ window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
+  const demographicsCtx = document
+    .getElementById('demographics')
+    .getContext('2d');
 
   if (context === null) {
     this.alert('Please enable webGl support');
@@ -23,6 +26,7 @@ window.onload = function () {
   const main = new Main(
     context,
     chartCtx,
+    demographicsCtx,
     glCanvas.width,
     glCanvas.height,
     INITIAL_SUSCEPTIBLE,

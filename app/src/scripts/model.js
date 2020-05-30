@@ -40,6 +40,24 @@ export default class Model {
   }
 
   /**
+   * A function that returns an array of the whole population in all models
+   * @returns array containing all the population
+   */
+  getAllPopulation() {
+    const allPopulation = [];
+    console.log('model now');
+    console.log(this.communities);
+    Object.values(this.communities)
+      .map((com) => com.population)
+      .forEach((item) => {
+        console.log(`item ${item.length}`);
+        allPopulation.push(...item);
+      });
+    console.log(allPopulation);
+    return allPopulation;
+  }
+
+  /**
    * A function to distribute the stats between the communitites
    * @param {Number} total the total number of people of a specific category (infectious, immune...).
    * @param {Number} index the index of the model being created.
