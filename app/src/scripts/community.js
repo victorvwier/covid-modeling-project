@@ -1,5 +1,5 @@
 import Person from './person';
-import { getRandom, gaussianRand, mortalityStat } from './util';
+import { getRandom, gaussianRand } from './util';
 
 import { assignDemographic } from './demographic';
 

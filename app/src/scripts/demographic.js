@@ -2,6 +2,11 @@ import { AGE, MORTALITY_RATE, DEMOGRAPHIC, GENDER } from './CONSTANTS';
 import Person from './person';
 import { getRandomInt } from './util';
 
+/**
+ * Sets the age, gender and mortality rate for a given person based on real distirbution data.
+ *
+ * @param {Person} person the person whose demographic will be assigned.
+ */
 export function assignDemographic(person) {
   const rand = Math.random();
 
