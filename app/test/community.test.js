@@ -25,7 +25,12 @@ describe('community.js test suite', () => {
   test('getDrawInfo should not do anything if all existing are susceptible', () => {
     const stats = new Stats(1, 0, 0, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, null);
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, null, borderContext);
+
     community.populateCanvas();
     const info = community.getDrawInfo();
 
@@ -45,7 +50,12 @@ describe('community.js test suite', () => {
   test('updatePopulation should change speed if person not dead', () => {
     const stats = new Stats(1, 0, 0, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, null);
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, null, borderContext);
+
     community.populateCanvas();
     const person = community.population[0];
     const personOldX = person.x;
@@ -62,7 +72,13 @@ describe('community.js test suite', () => {
   test('updatePopulation should set person to relocating', () => {
     const stats = new Stats(0, 1, 0, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, () => {});
+    const registerRelocation = jest.fn(() => {});
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, registerRelocation, borderContext);
+
     const dt = 1;
 
     mockRandom(RELOCATION_PROBABILITY - 0.01);
@@ -78,7 +94,12 @@ describe('community.js test suite', () => {
   test('interactPopulation should do nothing if same person', () => {
     const stats = new Stats(1, 0, 0, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, null);
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, null, borderContext);
+
     community.populateCanvas();
     const symptomaticCountOld = community.population[0].symptomaticTime;
     community.interactPopulation();
@@ -88,7 +109,12 @@ describe('community.js test suite', () => {
   test('interactPopulation should increase symptomaticcount', () => {
     const stats = new Stats(1, 0, 1, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, null);
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, null, borderContext);
+
     community.populateCanvas();
     // Let them be at the same location.
     community.population.forEach((x) => {
@@ -107,11 +133,17 @@ describe('community.js test suite', () => {
   });
 
   test('update a non infectious with incubationTime !== incubationPeriod should do nothing', () => {
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+
     const community = new Community(
       1,
       new Bounds(0, 100, 0, 100),
       new Stats(0, 1, 0, 0, 0),
-      null
+      null,
+      borderContext
     );
 
     community.populateCanvas();
@@ -137,11 +169,16 @@ describe('community.js test suite', () => {
   // Test Suites: 2 failed, 1 passed, 3 total
   // Tests:       6 failed, 30 passed, 36 total
   test('update a non infectious should turn him infectious', () => {
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
     const community = new Community(
       1,
       new Bounds(0, 100, 0, 100),
       new Stats(0, 1, 0, 0, 0),
-      null
+      null,
+      borderContext
     );
     community.populateCanvas();
     const nonInfectiousPerson = community.population[0];
@@ -167,11 +204,17 @@ describe('community.js test suite', () => {
   });
 
   test('update a non infectious should turn him immune', () => {
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+
     const community = new Community(
       1,
       new Bounds(0, 100, 0, 100),
       new Stats(0, 1, 0, 0, 0),
-      null
+      null,
+      borderContext
     );
 
     community.populateCanvas();
@@ -198,11 +241,17 @@ describe('community.js test suite', () => {
   });
 
   test('calling update on susceptible person should have no effect', () => {
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+
     const community = new Community(
       1,
       new Bounds(0, 100, 0, 100),
       new Stats(1, 0, 0, 0, 0),
-      null
+      null,
+      borderContext
     );
 
     community.populateCanvas();
@@ -225,11 +274,17 @@ describe('community.js test suite', () => {
   });
 
   test('infectious person who is destined to immunity should become immune cause it is time', () => {
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+
     const community = new Community(
       1,
       new Bounds(0, 100, 0, 100),
       new Stats(0, 0, 1, 0, 0),
-      null
+      null,
+      borderContext
     );
     community.populateCanvas();
     const infectiousPerson = community.population[0];
@@ -253,11 +308,17 @@ describe('community.js test suite', () => {
   });
 
   test('infectious person who is destined to immunity should not become immune cause it is not time yet', () => {
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+
     const community = new Community(
       1,
       new Bounds(0, 100, 0, 100),
       new Stats(0, 0, 1, 0, 0),
-      null
+      null,
+      borderContext
     );
 
     community.populateCanvas();
@@ -340,11 +401,17 @@ describe('community.js test suite', () => {
   // });
 
   test('infectious person who is neither dead nor immune should be destined to immunity', () => {
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+
     const community = new Community(
       1,
       new Bounds(0, 100, 0, 100),
       new Stats(0, 0, 1, 0, 0),
-      null
+      null,
+      borderContext
     );
     community.populateCanvas();
     const infectiousPerson = community.population[0];
@@ -363,11 +430,17 @@ describe('community.js test suite', () => {
   });
 
   test('infectious person who is neither dead nor immune should be destined to death', () => {
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+
     const community = new Community(
       1,
       new Bounds(0, 100, 0, 100),
       new Stats(0, 0, 1, 0, 0),
-      null
+      null,
+      borderContext
     );
     community.populateCanvas();
     const infectiousPerson = community.population[0];

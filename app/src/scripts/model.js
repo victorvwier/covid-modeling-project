@@ -246,7 +246,7 @@ export default class Model {
   /**
    * A function to initialize all communities.
    */
-  setupCommunity() {
+  setupCommunity(ctx) {
     const bounds = this._createIncrementals();
 
     for (let i = 0; i < this.numCommunities; i++) {
@@ -256,7 +256,8 @@ export default class Model {
         i,
         bounds[i],
         dividedStats,
-        this.registerRelocation.bind(this)
+        this.registerRelocation.bind(this),
+        ctx
       );
 
       // DEBUG
