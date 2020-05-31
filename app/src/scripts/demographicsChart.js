@@ -46,10 +46,10 @@ export default class DemographicsChart {
         }
       }
 
-      this.maleData[index] = maleCount;
+      this.maleData[index] = -maleCount;
       this.femaleData[index] = femaleCount;
 
-      this.demographicChart.data.datasets[0].data[index] = maleCount;
+      this.demographicChart.data.datasets[0].data[index] = -maleCount;
       this.demographicChart.data.datasets[1].data[index] = femaleCount;
       index++;
     });
@@ -108,11 +108,18 @@ export default class DemographicsChart {
 
       // Configuration options go here
       options: {
+        responsive: false,
+        tooltips: { enabled: false },
+        hover: { mode: null },
         scales: {
           xAxes: [
             {
               stacked: true,
               ticks: {
+                beginAtZero: true,
+                stepValue: 5,
+                max: 20,
+                min: -20,
                 callback: (value) => Math.abs(value),
               },
             },
