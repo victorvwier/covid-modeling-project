@@ -414,15 +414,10 @@ export default class Community {
       const currentPerson = this.population[i];
       this.update(currentPerson, dt);
 
-      // if (currentPerson.type === TYPES.DEAD) {
-      //   return;
-      // }
-
       if (Math.random() < RELOCATION_PROBABILITY && !currentPerson.relocating) {
         if (currentPerson.type !== TYPES.DEAD) {
-          this.relocationUtil.insertRelocation(currentPerson);
-          currentPerson.relocating = true;
           this.registerRelocation(currentPerson);
+          currentPerson.relocating = true;
         }
       } else if (!currentPerson.relocating) {
         this.boundingBoxStruct.remove(currentPerson);

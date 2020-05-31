@@ -15,7 +15,15 @@ describe('RelocationUtil tests', () => {
   let relocationUtil;
 
   beforeEach(() => {
-    model = new Model(2, new AgentChart(null), 100, 100, stats, () => {});
+    model = new Model(
+      2,
+      new AgentChart(null),
+      100,
+      100,
+      stats,
+      () => {},
+      () => {}
+    );
     model.setupCommunity();
     model.populateCommunities();
     community0 = model.communities[0];

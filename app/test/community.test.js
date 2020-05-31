@@ -1,7 +1,6 @@
 import Community from '../src/scripts/community';
 import Stats from '../src/scripts/data/stats';
 import { mockRandom } from './testHelpers';
-import { mortalityStat } from '../src/scripts/util';
 import {
   COLORS,
   TYPES,
@@ -352,7 +351,7 @@ describe('community.js test suite', () => {
     infectiousPerson.destinyImmune = false;
 
     // Mock random to be greater than mortality rate of that person
-    mockRandom(mortalityStat(infectiousPerson.age) + 0.01, true);
+    mockRandom(infectiousPerson.mortalityRate + 0.01, true);
 
     // Call method
     community.update(infectiousPerson);
@@ -375,7 +374,7 @@ describe('community.js test suite', () => {
     infectiousPerson.destinyImmune = false;
 
     // Mock random to be less than or equal to mortality rate of that person
-    mockRandom(mortalityStat(infectiousPerson.age), true);
+    mockRandom(infectiousPerson.mortalityRate, true);
 
     // Call method
     community.update(infectiousPerson);

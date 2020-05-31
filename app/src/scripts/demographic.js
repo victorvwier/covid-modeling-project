@@ -1,5 +1,4 @@
 import { AGE, MORTALITY_RATE, DEMOGRAPHIC, GENDER } from './CONSTANTS';
-import Person from './person';
 import { getRandomInt } from './util';
 
 /**

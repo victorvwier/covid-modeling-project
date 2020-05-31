@@ -75,20 +75,28 @@ export default class DemographicsChart {
     return label.split(' - ').map((item) => parseInt(item, 10));
   }
 
+  resetChart(populationSize) {
+    this.demographicChart.destroy();
+    this.maleData = new Array(this.maleData.length).fill(0);
+    this.femaleData = new Array(this.femaleData.length).fill(0);
+    this.drawChart(populationSize);
+  }
+
   /**
    * A function that draws the demographics chart given the population of the model
    * @param {Array.<Person>} population the population of all communities combined
    */
-  drawChart() {
+  drawChart(populationSize) {
+    const onePercent =
+      Math.ceil(Math.round((populationSize * 0.5) / 100) / 10) * 10;
     this.demographicChart = new Chart(this.ctx, {
       type: 'horizontalBar',
-
       data: {
         labels: this.labels,
         datasets: [
           {
             label: 'Male',
-            backgroundColor: 'white',
+            backgroundColor: 'rgb(2, 99, 132)',
             borderColor: 'rgb(2, 99, 132)',
             data: this.maleData,
             // data: Object.values(this.data).map((item) => -item.male),
@@ -97,7 +105,7 @@ export default class DemographicsChart {
 
           {
             label: 'Female',
-            backgroundColor: 'black',
+            backgroundColor: 'rgb(255, 99, 132)',
             borderColor: 'rgb(255, 99, 132)',
             data: this.femaleData,
             // data: Object.values(this.data).map((item) => item.female),
@@ -108,6 +116,12 @@ export default class DemographicsChart {
 
       // Configuration options go here
       options: {
+        title: {
+          display: true,
+          text: 'Mortality rate',
+          position: 'bottom',
+          fontSize: 24,
+        },
         responsive: false,
         tooltips: { enabled: false },
         hover: { mode: null },
@@ -118,8 +132,8 @@ export default class DemographicsChart {
               ticks: {
                 beginAtZero: true,
                 stepValue: 5,
-                max: 20,
-                min: -20,
+                max: onePercent,
+                min: -onePercent,
                 callback: (value) => Math.abs(value),
               },
             },

@@ -3,7 +3,7 @@ export const INITIAL_SUSCEPTIBLE = 100;
 /** @constant INITAL_NONINFECTIOUS Default initial amount of Non-Infectious people in the model. */
 export const INITIAL_NONINFECTIOUS = 0;
 /** @constant INITIAL_INFECTIOUS Default initial amount of Infectious people in the model. */
-export const INITIAL_INFECTIOUS = 120;
+export const INITIAL_INFECTIOUS = 200;
 /** @constant INITIAL_IMMUNE Default initial amount of Immune people in the model. */
 export const INITIAL_IMMUNE = 0;
 /** @constant INITIAL_DEAD Default initial amount of Dead people in the model. */
@@ -48,7 +48,7 @@ export const MAX_TIME_UNTIL_DEAD = 30;
 export const DAYS_PER_SECOND = 2;
 
 /** @constant NUM_COMMUNITIES The initial number of communities */
-export const NUM_COMMUNITIES = 4;
+export const NUM_COMMUNITIES = 1;
 
 /**
  * Enum for the colors related to the states a person can be in.

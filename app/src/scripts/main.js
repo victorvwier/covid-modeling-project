@@ -137,7 +137,7 @@ export default class Main {
    */
   run() {
     this.chart.drawChart();
-    this.demographicsChart.drawChart();
+    this.demographicsChart.drawChart(this.createCurrentStats().sum());
     this.model.setupCommunity();
     this.model.run();
   }
@@ -162,7 +162,7 @@ export default class Main {
     }
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.demographicsChart.drawChart();
+    this.demographicsChart.resetChart(this.createCurrentStats().sum());
     this.model.resetModel(this.createCurrentStats());
   }
 }
