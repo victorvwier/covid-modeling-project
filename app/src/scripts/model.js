@@ -24,7 +24,8 @@ export default class Model {
     height,
     stats,
     updateStats,
-    updateDemographicChart
+    updateDemographicChart,
+    borderCtx
   ) {
     this.numCommunities = numCommunities;
     this.communities = {};
@@ -34,6 +35,7 @@ export default class Model {
     this.agentView = agentView;
     this.updateStats = updateStats;
     this.updateDemographicChart = updateDemographicChart;
+    this.borderCtx = borderCtx;
 
     this._chartInterval = null;
 
@@ -271,7 +273,7 @@ export default class Model {
   /**
    * A function to initialize all communities.
    */
-  setupCommunity(ctx) {
+  setupCommunity() {
     const bounds = this._createIncrementals();
 
     for (let i = 0; i < this.numCommunities; i++) {
@@ -282,7 +284,7 @@ export default class Model {
         bounds[i],
         dividedStats,
         this.registerRelocation.bind(this),
-        ctx
+        this.borderCtx
       );
 
       // DEBUG
@@ -320,6 +322,8 @@ export default class Model {
    * @param {Stats} stats New initial stats.
    */
   resetModel(stats) {
+    const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
+    this.borderCtx.clearRect(0, 0, width * 2, height * 2);
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
 

@@ -20,6 +20,7 @@ export default class Main {
    * @constructor
    * @param {Object} context The webGL context of our HTML.
    * @param {Object} chartContext The 2D context we use to draw our chart.
+   * @param {Object} borderCtx The 2D context we use to draw the borders around our commuinities.
    * @param {Object} demographicsCtx The 2D context we use to draw our demographics chart.
    * @param {number} width The width of our glCanvas.
    * @param {number} height The height of our glCanvas.
@@ -32,6 +33,7 @@ export default class Main {
   constructor(
     context,
     chartContext,
+    borderCtx,
     demographicsCtx,
     width,
     height,
@@ -43,6 +45,7 @@ export default class Main {
   ) {
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
+    this.borderCtx = borderCtx;
     this.demographicsCtx = demographicsCtx;
     this.width = width;
     this.height = height;
@@ -120,7 +123,6 @@ export default class Main {
    */
   setupMain() {
     const stats = this.createCurrentStats();
-    console.log(stats);
     this.model = new Model(
       this.numCommunities, // TODO determine the number of communities
       this.agentView,
@@ -128,18 +130,18 @@ export default class Main {
       this.height,
       stats,
       this.receiveNewStatsAndUpdateChart.bind(this),
-      this.updateDemographicChart.bind(this)
+      this.updateDemographicChart.bind(this),
+      this.borderCtx
     );
   }
 
   /**
    * A function to run the model and the chart.
    */
-  run(ctx) {
+  run() {
     this.chart.drawChart();
     this.demographicsChart.drawChart(this.createCurrentStats().sum());
-
-    this.model.setupCommunity(ctx);
+    this.model.setupCommunity();
     this.model.run();
   }
 
@@ -157,6 +159,8 @@ export default class Main {
     this.numCommunities = getNumCommunities();
 
     if (this.numCommunities !== this.model.numCommunities) {
+      // const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
+      // this.borderCtx.clearRect(0, 0, width * 2, height * 2);
       this.model.numCommunities = this.numCommunities;
       this.model.communities = {};
       this.model.setupCommunity();

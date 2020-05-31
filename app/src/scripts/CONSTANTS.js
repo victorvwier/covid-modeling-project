@@ -48,7 +48,7 @@ export const MAX_TIME_UNTIL_DEAD = 30;
 export const DAYS_PER_SECOND = 2;
 
 /** @constant NUM_COMMUNITIES The initial number of communities */
-export const NUM_COMMUNITIES = 1;
+export const NUM_COMMUNITIES = 4;
 
 /**
  * Enum for the colors related to the states a person can be in.

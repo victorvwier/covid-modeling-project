@@ -17,8 +17,7 @@ window.onload = function () {
   const demographicsCtx = document
     .getElementById('demographics')
     .getContext('2d');
-  const c = document.getElementById('BorderCanvas');
-  const ctx = c.getContext('2d');
+  const borderCtx = document.getElementById('BorderCanvas').getContext('2d');
 
   if (context === null) {
     this.alert('Please enable webGl support');
@@ -28,6 +27,7 @@ window.onload = function () {
   const main = new Main(
     context,
     chartCtx,
+    borderCtx,
     demographicsCtx,
     glCanvas.width,
     glCanvas.height,
@@ -38,5 +38,5 @@ window.onload = function () {
     INITIAL_IMMUNE
   );
 
-  main.run(ctx);
+  main.run();
 };

@@ -45,7 +45,6 @@ export default class RelocationUtil {
    * @param {Person} person The person to start relocating.
    */
   insertRelocation(person) {
-    console.log('He wanted to relocate');
     // Pause
     this.model.pauseExecution();
     // Move person
