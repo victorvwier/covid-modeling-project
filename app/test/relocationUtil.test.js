@@ -24,7 +24,12 @@ describe('RelocationUtil tests', () => {
       () => {},
       () => {}
     );
-    model.setupCommunity();
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    model.setupCommunity(borderContext);
+
     model.populateCommunities();
     community0 = model.communities[0];
     community1 = model.communities[1];

@@ -17,6 +17,8 @@ window.onload = function () {
   const demographicsCtx = document
     .getElementById('demographics')
     .getContext('2d');
+  const c = document.getElementById('BorderCanvas');
+  const ctx = c.getContext('2d');
 
   if (context === null) {
     this.alert('Please enable webGl support');
@@ -36,5 +38,5 @@ window.onload = function () {
     INITIAL_IMMUNE
   );
 
-  main.run();
+  main.run(ctx);
 };

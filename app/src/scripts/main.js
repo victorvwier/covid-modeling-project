@@ -135,10 +135,11 @@ export default class Main {
   /**
    * A function to run the model and the chart.
    */
-  run() {
+  run(ctx) {
     this.chart.drawChart();
     this.demographicsChart.drawChart(this.createCurrentStats().sum());
-    this.model.setupCommunity();
+
+    this.model.setupCommunity(ctx);
     this.model.run();
   }
 

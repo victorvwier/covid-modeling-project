@@ -27,7 +27,11 @@ describe('Community test', () => {
     );
     relocationUtil = new RelocationUtil(community);
     community.relocationUtil = relocationUtil;
-    community.setupCommunity();
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    community.setupCommunity(borderContext);
     community.populateCommunities();
   });
 

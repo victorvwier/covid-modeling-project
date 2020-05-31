@@ -40,7 +40,7 @@ export default class Community {
    * @param {Stats} stats The stats object for the community.
    * @param {function} registerRelocation A function to call when a person is relocating.
    */
-  constructor(id, bounds, stats, registerRelocation) {
+  constructor(id, bounds, stats, registerRelocation, ctx) {
     this.registerRelocation = registerRelocation;
 
     // Intervals
@@ -98,6 +98,23 @@ export default class Community {
       this.endY,
       INFECTION_RADIUS
     );
+
+    // These lines are drawm from the edge coordinates of the model and make up the boundary of the
+    // communities which are drawn on a canvas other than the agent canvas and can be drawn
+    // automatically regardless of how many models there are.
+    ctx.strokeStyle = 'white';
+    ctx.moveTo(this.startX, this.startY);
+    ctx.lineTo(this.startX, this.endY);
+    ctx.stroke();
+    ctx.moveTo(this.startX, this.endY);
+    ctx.lineTo(this.endX, this.endY);
+    ctx.stroke();
+    ctx.moveTo(this.endX, this.endY);
+    ctx.lineTo(this.endX, this.startY);
+    ctx.stroke();
+    ctx.moveTo(this.endX, this.startY);
+    ctx.lineTo(this.startX, this.startY);
+    ctx.stroke();
   }
 
   /**
