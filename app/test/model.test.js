@@ -19,7 +19,11 @@ describe('Community test', () => {
     community = new Model(4, agentChart, width, height, stats, () => {});
     relocationUtil = new RelocationUtil(community);
     community.relocationUtil = relocationUtil;
-    community.setupCommunity();
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    community.setupCommunity(borderContext);
     community.populateCommunities();
   });
 

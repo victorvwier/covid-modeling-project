@@ -14,6 +14,9 @@ window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
+  const c = document.getElementById("BorderCanvas");
+  const ctx = c.getContext("2d");
+
 
   if (context === null) {
     this.alert('Please enable webGl support');
@@ -32,5 +35,5 @@ window.onload = function () {
     INITIAL_IMMUNE
   );
 
-  main.run();
+  main.run(ctx);
 };

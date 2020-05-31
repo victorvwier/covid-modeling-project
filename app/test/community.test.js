@@ -25,7 +25,12 @@ describe('community.js test suite', () => {
   test('getDrawInfo should not do anything if all existing are susceptible', () => {
     const stats = new Stats(1, 0, 0, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, null);
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, null, borderContext);
+
     community.populateCanvas();
     const info = community.getDrawInfo();
 
@@ -45,7 +50,12 @@ describe('community.js test suite', () => {
   test('updatePopulation should change speed if person not dead', () => {
     const stats = new Stats(1, 0, 0, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, null);
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, null, borderContext);
+
     community.populateCanvas();
     const person = community.population[0];
     const personOldX = person.x;
@@ -62,7 +72,13 @@ describe('community.js test suite', () => {
   test('updatePopulation should set person to relocating', () => {
     const stats = new Stats(0, 1, 0, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, () => {});
+    const registerRelocation = jest.fn(() => {});
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, registerRelocation, borderContext);
+
     const dt = 1;
 
     mockRandom(RELOCATION_PROBABILITY - 0.01);
@@ -78,7 +94,12 @@ describe('community.js test suite', () => {
   test('interactPopulation should do nothing if same person', () => {
     const stats = new Stats(1, 0, 0, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, null);
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, null, borderContext);
+
     community.populateCanvas();
     const symptomaticCountOld = community.population[0].symptomaticTime;
     community.interactPopulation();
@@ -88,7 +109,12 @@ describe('community.js test suite', () => {
   test('interactPopulation should increase symptomaticcount', () => {
     const stats = new Stats(1, 0, 1, 0, 0);
     const bounds = new Bounds(0, 100, 0, 100);
-    const community = new Community(1, bounds, stats, null);
+    const borderContext = {};
+    borderContext.moveTo = jest.fn(() => {});
+    borderContext.lineTo = jest.fn(() => {});
+    borderContext.stroke = jest.fn(() => {});
+    const community = new Community(1, bounds, stats, null, borderContext);
+
     community.populateCanvas();
     // Let them be at the same location.
     community.population.forEach((x) => {

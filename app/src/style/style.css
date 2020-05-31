@@ -39,6 +39,13 @@ body {
   font-size: 20px;
 }
 
+/* Styling the canvas which overlaps the model canvas so that borders computed in Model.js constructor can be added on top of the communities.  */
+#BorderCanvas{
+  position: relative;
+  left:-600px;
+}
+
+
 button {
   color: white;
   text-align: center;
@@ -51,6 +58,10 @@ button {
   align-items: center;
   width: 55vw;
   height: 80vh;
+  position: relative;
+  top:50px;
+  left:300px;
+
 }
 
 #glcanvas {
