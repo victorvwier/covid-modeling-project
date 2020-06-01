@@ -18,6 +18,8 @@ window.onload = function () {
     .getElementById('demographics')
     .getContext('2d');
   const borderCtx = document.getElementById('BorderCanvas').getContext('2d');
+  const { height } = borderCtx.canvas.getBoundingClientRect();
+  borderCtx.transform(1, 0, 0, -1, 0, height);
 
   if (context === null) {
     this.alert('Please enable webGl support');

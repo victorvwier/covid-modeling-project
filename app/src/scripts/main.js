@@ -163,9 +163,9 @@ export default class Main {
     this.numCommunities = getNumCommunities();
     if (this.numCommunities !== this.model.numCommunities) {
       this.model.numCommunities = this.numCommunities;
-      this.model.communities = {};
-      this.model.setupCommunity();
     }
+    this.model.communities = {};
+    this.model.setupCommunity();
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
     this.demographicsChart.resetChart(this.createCurrentStats().sum());
