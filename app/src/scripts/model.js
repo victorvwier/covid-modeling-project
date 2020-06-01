@@ -2,11 +2,16 @@ import wireSlidersToHandlers from './DOM/parameters';
 import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
-import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
+import { SPACE_BETWEEN_COMMUNITIES,INITIAL_INFECTIOUS } from './CONSTANTS';
 import RelocationUtil from './relocationUtil';
 
+let INITIAL_TESTED;
+
+
+
 /** @class Model representing a simulation of one or multiple communities. */
-export default class Model {
+export default class Model {  
+
   /**
    * Instantiates a model.
    *
@@ -38,6 +43,9 @@ export default class Model {
     // DEBUG
     window.community = this;
   }
+
+
+
 
   /**
    * A function to distribute the stats between the communitites
@@ -438,4 +446,18 @@ export default class Model {
       community.setAttractionToCenter(newValue)
     );
   }
+
+  calculateInitialTested(){
+    let tested=0;
+    for(let i=0;i<INITIAL_INFECTIOUS;i++){
+      if (Math.random() < TESTED_POSITIVE_PROBABILITY) {
+        tested+=1;
+      }
+    }
+    console.log("Initial tested = ");
+    console.log(tested);
+    return tested;
+  }
+
+
 }
