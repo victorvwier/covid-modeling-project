@@ -452,17 +452,24 @@ export default class Model {
     );
   }
 
+  /**
+   * Calculates with how many positive tested agents the model starts off with-depending on the 
+   * initial number of infectious.Those persons who are testedPositive have the corresponding boolean field in person.js
+   * set to True so that they have a lesser likelihood of infected someone
+   */
   calculateInitialTested(){
     INITIAL_TESTED=0;
 
       for(let j=0;j<this.communities[j];j++){
         for(let k=0;k<this.communities[j].totalPopulation;k++){
           // Only infectious people will be tested positive
-          if(this.communities[j].totalPopulation[k].type === )
-          if (Math.random() < TESTED_POSITIVE_PROBABILITY) {
-            this.communities[j].totalPopulation[k].setTestedPositive(true);
-            INITIAL_TESTED+=1;
+          if(this.communities[j].totalPopulation[k].type === 'i') {
+            if (Math.random() < TESTED_POSITIVE_PROBABILITY) {
+              this.communities[j].totalPopulation[k].setTestedPositive(true);
+              INITIAL_TESTED+=1;
+            }
           }
+          
         }
 
       }
