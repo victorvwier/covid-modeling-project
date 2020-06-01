@@ -168,7 +168,7 @@ export default class Main {
     this.model.setupCommunity();
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.demographicsChart.resetChart(this.createCurrentStats().sum());
     this.model.resetModel(this.createCurrentStats());
+    this.demographicsChart.resetChart(this.createCurrentStats().sum());
   }
 }

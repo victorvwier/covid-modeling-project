@@ -1,5 +1,5 @@
 import Chart from 'chart.js';
-import { GENDERS, AGE } from './CONSTANTS';
+import { GENDERS, AGE, TYPES, COLORS } from './CONSTANTS';
 
 export default class DemographicsChart {
   /**
@@ -12,8 +12,8 @@ export default class DemographicsChart {
     this.labels = AGE.map((val) => this._formatLabel(val.min, val.max));
 
     // data
-    this.maleData = new Array(AGE.length).fill(0);
-    this.femaleData = new Array(AGE.length).fill(0);
+    // this.maleData = new Array(AGE.length).fill(0);
+    // this.femaleData = new Array(AGE.length).fill(0);
 
     // DEBUG
     window.demographic = this;
@@ -26,34 +26,80 @@ export default class DemographicsChart {
     this.labels.forEach((label) => {
       const [min, max] = this._getMinMaxFromLabel(label);
 
-      // Get the dead people of this age range
+      const susceptiblePeopleInAgeRange = population
+        .filter((p) => p.type === TYPES.SUSCEPTIBLE)
+        .filter((p) => min <= p.age && p.age <= max);
+
+      const nonInfectiousPeopleInAgeRange = population
+        .filter((p) => p.type === TYPES.NONINFECTIOUS)
+        .filter((p) => min <= p.age && p.age <= max);
+
+      const infectiousPeopleInAgeRange = population
+        .filter((p) => p.type === TYPES.INFECTIOUS)
+        .filter((p) => min <= p.age && p.age <= max);
+
+      const immunePeopleInAgeRange = population
+        .filter((p) => p.type === TYPES.IMMUNE)
+        .filter((p) => min <= p.age && p.age <= max);
+
       const deadPeopleInAgeRange = population
         .filter((p) => p.isDead())
         .filter((p) => min <= p.age && p.age <= max);
 
-      // const maleCount = deadPeopleInAgeRange.filter(
-      //   (p) => p.gender === GENDERS.MALE
-      // ).length;
+      this.demographicChart.data.datasets[0].data[index] = -this._getMaleCount(
+        susceptiblePeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[1].data[index] = this._getFemaleCount(
+        susceptiblePeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[2].data[index] = -this._getMaleCount(
+        nonInfectiousPeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[3].data[index] = this._getFemaleCount(
+        nonInfectiousPeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[4].data[index] = -this._getMaleCount(
+        infectiousPeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[5].data[index] = this._getFemaleCount(
+        infectiousPeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[6].data[index] = -this._getMaleCount(
+        immunePeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[7].data[index] = this._getFemaleCount(
+        immunePeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[8].data[index] = -this._getMaleCount(
+        deadPeopleInAgeRange
+      );
+      this.demographicChart.data.datasets[9].data[index] = this._getFemaleCount(
+        deadPeopleInAgeRange
+      );
 
-      let maleCount = 0;
-      let femaleCount = 0;
-
-      for (let i = 0; i < deadPeopleInAgeRange.length; i++) {
-        if (deadPeopleInAgeRange[i].gender === GENDERS.MALE) {
-          maleCount++;
-        } else {
-          femaleCount++;
-        }
-      }
-
-      this.maleData[index] = -maleCount;
-      this.femaleData[index] = femaleCount;
-
-      this.demographicChart.data.datasets[0].data[index] = -maleCount;
-      this.demographicChart.data.datasets[1].data[index] = femaleCount;
       index++;
     });
     this.demographicChart.update();
+  }
+
+  _getMaleCount(population) {
+    let maleCount = 0;
+    for (let i = 0; i < population.length; i++) {
+      if (population[i].gender === GENDERS.MALE) {
+        maleCount++;
+      }
+    }
+    return maleCount;
+  }
+
+  _getFemaleCount(population) {
+    let femaleCount = 0;
+    for (let i = 0; i < population.length; i++) {
+      if (population[i].gender === GENDERS.FEMALE) {
+        femaleCount++;
+      }
+    }
+    return femaleCount;
   }
 
   /**
@@ -77,8 +123,6 @@ export default class DemographicsChart {
 
   resetChart(populationSize) {
     this.demographicChart.destroy();
-    this.maleData = new Array(this.maleData.length).fill(0);
-    this.femaleData = new Array(this.femaleData.length).fill(0);
     this.drawChart(populationSize);
   }
 
@@ -87,28 +131,79 @@ export default class DemographicsChart {
    * @param {Array.<Person>} population the population of all communities combined
    */
   drawChart(populationSize) {
-    const onePercent =
-      Math.ceil(Math.round((populationSize * 0.5) / 100) / 10) * 10;
+    const onePercent = Math.ceil(populationSize / (20 * 10)) * 10;
     this.demographicChart = new Chart(this.ctx, {
       type: 'horizontalBar',
       data: {
         labels: this.labels,
         datasets: [
           {
-            label: 'Male',
-            backgroundColor: 'rgb(2, 99, 132)',
-            borderColor: 'rgb(2, 99, 132)',
-            data: this.maleData,
-            // data: Object.values(this.data).map((item) => -item.male),
+            label: 'Male Susceptible',
+            backgroundColor: COLORS.SUSCEPTIBLE,
+            borderColor: COLORS.SUSCEPTIBLE,
             stack: 'a',
           },
 
           {
-            label: 'Female',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: this.femaleData,
-            // data: Object.values(this.data).map((item) => item.female),
+            label: 'Female Susceptible',
+            backgroundColor: COLORS.SUSCEPTIBLE,
+            borderColor: COLORS.SUSCEPTIBLE,
+            stack: 'a',
+          },
+
+          {
+            label: 'Male Non-Infectious',
+            backgroundColor: COLORS.NONINFECTIOUS,
+            borderColor: COLORS.NONINFECTIOUS,
+            stack: 'a',
+          },
+
+          {
+            label: 'Female Non-Infectious',
+            backgroundColor: COLORS.NONINFECTIOUS,
+            borderColor: COLORS.NONINFECTIOUS,
+            stack: 'a',
+          },
+
+          {
+            label: 'Male Infectious',
+            backgroundColor: COLORS.INFECTIOUS,
+            borderColor: COLORS.INFECTIOUS,
+            stack: 'a',
+          },
+
+          {
+            label: 'Female Infectious',
+            backgroundColor: COLORS.INFECTIOUS,
+            borderColor: COLORS.INFECTIOUS,
+            stack: 'a',
+          },
+
+          {
+            label: 'Male Immune',
+            backgroundColor: COLORS.IMMUNE,
+            borderColor: COLORS.IMMUNE,
+            stack: 'a',
+          },
+
+          {
+            label: 'Female Immune',
+            backgroundColor: COLORS.IMMUNE,
+            borderColor: COLORS.IMMUNE,
+            stack: 'a',
+          },
+
+          {
+            label: 'Male Dead',
+            backgroundColor: COLORS.DEAD,
+            borderColor: COLORS.DEAD,
+            stack: 'a',
+          },
+
+          {
+            label: 'Female Dead',
+            backgroundColor: COLORS.DEAD,
+            borderColor: COLORS.DEAD,
             stack: 'a',
           },
         ],
@@ -116,15 +211,18 @@ export default class DemographicsChart {
 
       // Configuration options go here
       options: {
+        legend: {
+          display: false,
+        },
         title: {
           display: true,
-          text: 'Mortality rate',
-          position: 'bottom',
+          text: 'M.           F.',
+          position: 'top',
           fontSize: 24,
         },
-        responsive: false,
-        tooltips: { enabled: false },
-        hover: { mode: null },
+        // responsive: false,
+        // tooltips: { enabled: false },
+        // hover: { animationDuration: 0, mode: 'single' },
         scales: {
           xAxes: [
             {
