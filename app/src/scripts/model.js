@@ -274,12 +274,8 @@ export default class Model {
    * A function to initialize all communities.
    */
   setupCommunity() {
-    // const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
-    // this.borderCtx.clearRect(0, 0, width * 2, height * 2);
-    // if (this.wat) {
-    //   this.bla.push(2);
-    // }
-    // this.wat = true;
+    const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
+    this.borderCtx.clearRect(0, 0, width * 2, height * 2);
     const bounds = this._createIncrementals();
 
     for (let i = 0; i < this.numCommunities; i++) {

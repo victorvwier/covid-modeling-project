@@ -107,18 +107,12 @@ export default class Community {
     // communities which are drawn on a canvas other than the agent canvas and can be drawn
     // automatically regardless of how many models there are.
     borderCtx.strokeStyle = 'white';
-    borderCtx.moveTo(this.startX, this.startY);
-    borderCtx.lineTo(this.startX, this.endY);
-    borderCtx.stroke();
-    borderCtx.moveTo(this.startX, this.endY);
-    borderCtx.lineTo(this.endX, this.endY);
-    borderCtx.stroke();
-    borderCtx.moveTo(this.endX, this.endY);
-    borderCtx.lineTo(this.endX, this.startY);
-    borderCtx.stroke();
-    borderCtx.moveTo(this.endX, this.startY);
-    borderCtx.lineTo(this.startX, this.startY);
-    borderCtx.stroke();
+    borderCtx.strokeRect(
+      this.startX,
+      this.startY,
+      this.endX - this.startX,
+      this.endY - this.startY
+    );
   }
 
   /**
