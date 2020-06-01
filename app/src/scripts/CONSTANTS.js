@@ -50,6 +50,9 @@ export const DAYS_PER_SECOND = 2;
 /** @constant NUM_COMMUNITIES The initial number of communities */
 export const NUM_COMMUNITIES = 4;
 
+export const TESTED_POSITIVE_PROBABILITY=0.5;
+export const TRANSMISSION_PROB_REDUCTION_FACTOR=3;
+
 /**
  * Enum for the colors related to the states a person can be in.
  * @readonly

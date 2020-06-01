@@ -2,7 +2,9 @@ import wireSlidersToHandlers from './DOM/parameters';
 import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
-import { SPACE_BETWEEN_COMMUNITIES,INITIAL_INFECTIOUS } from './CONSTANTS';
+// MIGHT NEED TO REPLACE STATS.INFECTIOUS IN CONSTRUCTOR BEING SENT TO GETINITIAL TESTED WITH INITIAL_INFECTIOUS FROM CONSTANTS.JS
+import { SPACE_BETWEEN_COMMUNITIES,INITIAL_INFECTIOUS,TESTED_POSITIVE_PROBABILITY,
+TRANSMISSION_PROB_REDUCTION_FACTOR } from './CONSTANTS';
 import RelocationUtil from './relocationUtil';
 
 let INITIAL_TESTED;
@@ -28,6 +30,7 @@ export default class Model {
     this.height = height;
     this.width = width;
     this.stats = stats;
+    this.calculateInitialTested(this.stats.infectious);
     this.agentView = agentView;
     this.updateStats = updateStats;
 
@@ -447,16 +450,15 @@ export default class Model {
     );
   }
 
-  calculateInitialTested(){
-    let tested=0;
-    for(let i=0;i<INITIAL_INFECTIOUS;i++){
+  calculateInitialTested(infectious){
+    INITIAL_TESTED=0;
+    for(let i=0;i<infectious;i++){
       if (Math.random() < TESTED_POSITIVE_PROBABILITY) {
-        tested+=1;
+        INITIAL_TESTED+=1;
       }
     }
     console.log("Initial tested = ");
-    console.log(tested);
-    return tested;
+    console.log(INITIAL_TESTED);
   }
 
 
