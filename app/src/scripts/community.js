@@ -384,7 +384,7 @@ export default class Community {
         this.startY + this.personRadius,
         this.endY - this.personRadius
       );
-      const newPerson = new Person(type, x, y, this.id);
+      const newPerson = new Person(type, x, y, this.id,false);
       // if (type !== TYPES.DEAD) {
       //   // newPerson.dead = true;
       // }
@@ -489,7 +489,7 @@ export default class Community {
         this.population[i].repel(met[j]);
         // }
 
-        // Infection
+        // Infection-once an agent is infected there is a chance they will be tested positive.
         if (
           this.population[i].canInfect(met[j]) &&
           Math.random() <= this.transmissionProb * dt

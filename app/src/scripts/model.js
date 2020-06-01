@@ -148,7 +148,9 @@ export default class Model {
   run() {
     wireSlidersToHandlers(this);
     this.populateCommunities();
-
+    // At this point all the people in communites have been initialized and now we can call getInitialTested to 
+    // assign a true/false to all people in all communities.
+    this.calculateInitialTested();
     this._animationFunction();
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
@@ -450,13 +452,21 @@ export default class Model {
     );
   }
 
-  calculateInitialTested(infectious){
+  calculateInitialTested(){
     INITIAL_TESTED=0;
-    for(let i=0;i<infectious;i++){
-      if (Math.random() < TESTED_POSITIVE_PROBABILITY) {
-        INITIAL_TESTED+=1;
+
+      for(let j=0;j<this.communities[j];j++){
+        for(let k=0;k<this.communities[j].totalPopulation;k++){
+          // Only infectious people will be tested positive
+          if(this.communities[j].totalPopulation[k].type === )
+          if (Math.random() < TESTED_POSITIVE_PROBABILITY) {
+            this.communities[j].totalPopulation[k].setTestedPositive(true);
+            INITIAL_TESTED+=1;
+          }
+        }
+
       }
-    }
+    
     console.log("Initial tested = ");
     console.log(INITIAL_TESTED);
   }
