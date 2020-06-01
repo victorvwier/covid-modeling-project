@@ -22,6 +22,8 @@ import {
   MOVEMENT_TIME_SCALAR,
   RELOCATION_ERROR_MARGIN,
   INTERACTION_RANGE,
+  TESTED_POSITIVE_PROBABILITY,
+  TRANSMISSION_PROB_REDUCTION_FACTOR,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -384,7 +386,7 @@ export default class Community {
         this.startY + this.personRadius,
         this.endY - this.personRadius
       );
-      const newPerson = new Person(type, x, y, this.id,false);
+      const newPerson = new Person(type, x, y, this.id);
       // if (type !== TYPES.DEAD) {
       //   // newPerson.dead = true;
       // }
@@ -556,6 +558,10 @@ export default class Community {
           this.numInfectious -= 1;
           this.numDead += 1;
         }
+      }
+      if (!person.testedPositive && Math.random() < TESTED_POSITIVE_PROBABILITY * dt) {
+        person.testedPositive = true;
+        person.infectionRadius /= TRANSMISSION_PROB_REDUCTION_FACTOR;
       }
     }
   }

@@ -50,7 +50,9 @@ export const DAYS_PER_SECOND = 2;
 /** @constant NUM_COMMUNITIES The initial number of communities */
 export const NUM_COMMUNITIES = 4;
 
+/** @constant TESTED_POSITIVE_PROBABILITY The probability an Infectious person will be tested positive. */
 export const TESTED_POSITIVE_PROBABILITY=0.5;
+/** @constant TRANSMISSION_PROB_REDUCTION_FACTOR The factor with with the transmission probability is reduced for a positive person. */
 export const TRANSMISSION_PROB_REDUCTION_FACTOR=3;
 
 /**

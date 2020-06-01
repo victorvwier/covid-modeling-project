@@ -18,9 +18,8 @@ export default class Person {
    * @param {number} x The initial X coordinate of the person.
    * @param {number} y The initial Y coordinate of the person.
    * @param {number} communityId The ID referring to the community the person starts in.
-   * @param {bollean} testedPositive True is person is tested positive false otherwise.
    */
-  constructor(type, x, y, communityId,testedPositive) {
+  constructor(type, x, y, communityId) {
     this.communityId = communityId;
     this.type = type;
     this.radius = PERSON_RADIUS;
@@ -52,7 +51,7 @@ export default class Person {
     else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
     else if (type === TYPES.DEAD) this.color = COLORS.DEAD;
     else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
-    this.testedPositive=testedPositive;
+    this.testedPositive = false;
   }
 
   /**
@@ -72,11 +71,6 @@ export default class Person {
    */
   isDead() {
     return this.type === TYPES.DEAD;
-  }
-
-
-  setTestedPositive(b){
-    this.testedPositive=b;
   }
 
   /**
@@ -268,7 +262,8 @@ export default class Person {
    * @returns {Boolean} A boolean representing if the other person can be infected.
    */
   canInfect(p) {
-    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
+    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE &&
+     Math.sqrt((p.x - this.x) ** 2 + (p.y - this.y) ** 2) <= p.infectionRadius + this.infectionRadius;
   }
 
   /**

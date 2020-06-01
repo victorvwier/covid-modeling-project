@@ -3,13 +3,8 @@ import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
 // MIGHT NEED TO REPLACE STATS.INFECTIOUS IN CONSTRUCTOR BEING SENT TO GETINITIAL TESTED WITH INITIAL_INFECTIOUS FROM CONSTANTS.JS
-import { SPACE_BETWEEN_COMMUNITIES,INITIAL_INFECTIOUS,TESTED_POSITIVE_PROBABILITY,
-TRANSMISSION_PROB_REDUCTION_FACTOR } from './CONSTANTS';
+import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
 import RelocationUtil from './relocationUtil';
-
-let INITIAL_TESTED;
-
-
 
 /** @class Model representing a simulation of one or multiple communities. */
 export default class Model {  
@@ -30,7 +25,6 @@ export default class Model {
     this.height = height;
     this.width = width;
     this.stats = stats;
-    this.calculateInitialTested(this.stats.infectious);
     this.agentView = agentView;
     this.updateStats = updateStats;
 
@@ -46,9 +40,6 @@ export default class Model {
     // DEBUG
     window.community = this;
   }
-
-
-
 
   /**
    * A function to distribute the stats between the communitites
@@ -150,7 +141,6 @@ export default class Model {
     this.populateCommunities();
     // At this point all the people in communites have been initialized and now we can call getInitialTested to 
     // assign a true/false to all people in all communities.
-    this.calculateInitialTested();
     this._animationFunction();
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
@@ -451,32 +441,4 @@ export default class Model {
       community.setAttractionToCenter(newValue)
     );
   }
-
-  /**
-   * Calculates with how many positive tested agents the model starts off with-depending on the 
-   * initial number of infectious.Those persons who are testedPositive have the corresponding boolean field in person.js
-   * set to True so that they have a lesser likelihood of infected someone
-   */
-  calculateInitialTested(){
-    INITIAL_TESTED=0;
-
-      for(let j=0;j<this.communities[j];j++){
-        for(let k=0;k<this.communities[j].totalPopulation;k++){
-          // Only infectious people will be tested positive
-          if(this.communities[j].totalPopulation[k].type === 'i') {
-            if (Math.random() < TESTED_POSITIVE_PROBABILITY) {
-              this.communities[j].totalPopulation[k].setTestedPositive(true);
-              INITIAL_TESTED+=1;
-            }
-          }
-          
-        }
-
-      }
-    
-    console.log("Initial tested = ");
-    console.log(INITIAL_TESTED);
-  }
-
-
 }
