@@ -39,31 +39,30 @@ body {
   font-size: 20px;
 }
 
-/* Styling the canvas which overlaps the model canvas so that borders computed in Model.js constructor can be added on top of the communities.  */
-#BorderCanvas{
-  position: relative;
-  left:-600px;
-}
-
-
 button {
   color: white;
   text-align: center;
   background-color: #666666;
 }
 
-#glcanvas-container {
+#right-side-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 55vw;
-  height: 80vh;
-  position: relative;
-  top:50px;
-  left:300px;
-
 }
 
+#model-border-canvases-container {
+  width: 600px;
+  height: 600px;
+  position: relative;
+}
+
+/* Styling the canvas which overlaps the model canvas so that borders computed in Model.js constructor can be added on top of the communities.  */
+#BorderCanvas {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
 #glcanvas {
   background: #d9d9d9;
   border: white 4px solid;
@@ -102,6 +101,7 @@ button {
 #main {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
 }
 
 #left-panel {
