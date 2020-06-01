@@ -40,7 +40,7 @@ export default class Community {
    * @param {Stats} stats The stats object for the community.
    * @param {function} registerRelocation A function to call when a person is relocating.
    */
-  constructor(id, bounds, stats, registerRelocation, borderCtx) {
+  constructor(id, bounds, stats, registerRelocation) {
     this.registerRelocation = registerRelocation;
 
     // Intervals
@@ -99,28 +99,26 @@ export default class Community {
       INFECTION_RADIUS
     );
 
-    this.borderCtx = borderCtx;
-    console.log('asdas');
     // this._drawBorderLines();
   }
 
-  _drawBorderLines() {
+  _drawBorderLines(borderCtx) {
     // These lines are drawm from the edge coordinates of the model and make up the boundary of the
     // communities which are drawn on a canvas other than the agent canvas and can be drawn
     // automatically regardless of how many models there are.
-    this.borderCtx.strokeStyle = 'white';
-    this.borderCtx.moveTo(this.startX, this.startY);
-    this.borderCtx.lineTo(this.startX, this.endY);
-    this.borderCtx.stroke();
-    this.borderCtx.moveTo(this.startX, this.endY);
-    this.borderCtx.lineTo(this.endX, this.endY);
-    this.borderCtx.stroke();
-    this.borderCtx.moveTo(this.endX, this.endY);
-    this.borderCtx.lineTo(this.endX, this.startY);
-    this.borderCtx.stroke();
-    this.borderCtx.moveTo(this.endX, this.startY);
-    this.borderCtx.lineTo(this.startX, this.startY);
-    this.borderCtx.stroke();
+    borderCtx.strokeStyle = 'white';
+    borderCtx.moveTo(this.startX, this.startY);
+    borderCtx.lineTo(this.startX, this.endY);
+    borderCtx.stroke();
+    borderCtx.moveTo(this.startX, this.endY);
+    borderCtx.lineTo(this.endX, this.endY);
+    borderCtx.stroke();
+    borderCtx.moveTo(this.endX, this.endY);
+    borderCtx.lineTo(this.endX, this.startY);
+    borderCtx.stroke();
+    borderCtx.moveTo(this.endX, this.startY);
+    borderCtx.lineTo(this.startX, this.startY);
+    borderCtx.stroke();
   }
 
   /**
@@ -369,8 +367,6 @@ export default class Community {
    * A function to create a population
    */
   populateCanvas() {
-    this._drawBorderLines();
-
     this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
     this.populateCanvasWithType(TYPES.INFECTIOUS, this.numInfectious);
     this.populateCanvasWithType(TYPES.DEAD, this.numDead);

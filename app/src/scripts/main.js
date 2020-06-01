@@ -157,15 +157,15 @@ export default class Main {
     this.numDead = 0;
 
     this.numCommunities = getNumCommunities();
-
+    const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
+    this.borderCtx.clearRect(0, 0, width * 2, height * 2);
     if (this.numCommunities !== this.model.numCommunities) {
-      // const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
-      // this.borderCtx.clearRect(0, 0, width * 2, height * 2);
       this.model.numCommunities = this.numCommunities;
       this.model.communities = {};
       this.model.setupCommunity();
     }
-
+    // const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
+    // this.borderCtx.clearRect(0, 0, width * 2, height * 2);
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
     this.demographicsChart.resetChart(this.createCurrentStats().sum());
     this.model.resetModel(this.createCurrentStats());

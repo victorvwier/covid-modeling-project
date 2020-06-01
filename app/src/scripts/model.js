@@ -274,6 +274,12 @@ export default class Model {
    * A function to initialize all communities.
    */
   setupCommunity() {
+    // const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
+    // this.borderCtx.clearRect(0, 0, width * 2, height * 2);
+    // if (this.wat) {
+    //   this.bla.push(2);
+    // }
+    // this.wat = true;
     const bounds = this._createIncrementals();
 
     for (let i = 0; i < this.numCommunities; i++) {
@@ -283,9 +289,10 @@ export default class Model {
         i,
         bounds[i],
         dividedStats,
-        this.registerRelocation.bind(this),
-        this.borderCtx
+        this.registerRelocation.bind(this)
       );
+
+      this.communities[i]._drawBorderLines(this.borderCtx);
 
       // DEBUG
       window.model = this;
@@ -322,8 +329,6 @@ export default class Model {
    * @param {Stats} stats New initial stats.
    */
   resetModel(stats) {
-    const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
-    this.borderCtx.clearRect(0, 0, width * 2, height * 2);
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
 
