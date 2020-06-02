@@ -60,6 +60,7 @@ button {
 /* Styling the canvas which overlaps the model canvas so that borders computed in Model.js constructor can be added on top of the communities.  */
 #BorderCanvas {
   position: absolute;
+  right: -1% !important;
   top: 0;
   bottom: 0;
 }
