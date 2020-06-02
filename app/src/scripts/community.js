@@ -179,7 +179,7 @@ export default class Community {
     this.totalPopulation++;
 
     if (this.population.includes(person)) {
-      console.log('But im already here');
+      throw Error('But im already here');
     }
 
     person._handleXOutOfBounds(this.startX, this.endX);
@@ -206,7 +206,6 @@ export default class Community {
         this.numDead++;
         break;
       default:
-        console.log('What type am i');
         throw new Error('Person of unknown type was encountered');
     }
   }

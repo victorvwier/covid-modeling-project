@@ -423,4 +423,106 @@ describe('community.js test suite', () => {
 
     expect(() => community.handlePersonLeaving(unknownTypePerson)).toThrow();
   });
+
+  test('handlePersonJoining person already exists throws error', () => {
+    const susCount = 1;
+    const community = new Community(
+      1,
+      new Bounds(0, 100, 0, 100),
+      new Stats(susCount, 0, 0, 0, 0),
+      null
+    );
+    community.populateCanvas();
+
+    const susPerson = community.population[0];
+    expect(() => community.handlePersonJoining(susPerson)).toThrow();
+  });
+
+  test('handlePersonJoining susceptilbe person increments numSusceptible', () => {
+    const susCount = 0;
+    const community = new Community(
+      1,
+      new Bounds(0, 100, 0, 100),
+      new Stats(susCount, 0, 0, 0, 0),
+      null
+    );
+    community.populateCanvas();
+
+    const susPerson = new Person(TYPES.SUSCEPTIBLE, 1, 1);
+    community.handlePersonJoining(susPerson);
+    expect(community.numSusceptible).toBe(susCount + 1);
+  });
+
+  test('handlePersonJoining nonInfectious person increments numNonInfectious', () => {
+    const nonInfectiousCount = 0;
+    const community = new Community(
+      1,
+      new Bounds(0, 100, 0, 100),
+      new Stats(0, nonInfectiousCount, 0, 0, 0),
+      null
+    );
+    community.populateCanvas();
+
+    const nonInfectiousPerson = new Person(TYPES.NONINFECTIOUS, 1, 1);
+    community.handlePersonJoining(nonInfectiousPerson);
+    expect(community.numNonInfectious).toBe(nonInfectiousCount + 1);
+  });
+
+  test('handlePersonJoining infectious person increments numInfectious', () => {
+    const infectiousCount = 0;
+    const community = new Community(
+      1,
+      new Bounds(0, 100, 0, 100),
+      new Stats(0, 0, infectiousCount, 0, 0),
+      null
+    );
+    community.populateCanvas();
+
+    const infectiousPerson = new Person(TYPES.INFECTIOUS, 1, 1);
+    community.handlePersonJoining(infectiousPerson);
+    expect(community.numInfectious).toBe(infectiousCount + 1);
+  });
+
+  test('handlePersonJoining immune person increments numImmune', () => {
+    const immuneCount = 0;
+    const community = new Community(
+      1,
+      new Bounds(0, 100, 0, 100),
+      new Stats(0, 0, 0, immuneCount, 0),
+      null
+    );
+    community.populateCanvas();
+
+    const immunePerson = new Person(TYPES.IMMUNE, 1, 1);
+    community.handlePersonJoining(immunePerson);
+    expect(community.numImmune).toBe(immuneCount + 1);
+  });
+
+  test('handlePersonJoining dead person increments numDead', () => {
+    const deadCount = 0;
+    const community = new Community(
+      1,
+      new Bounds(0, 100, 0, 100),
+      new Stats(0, 0, 0, 0, deadCount),
+      null
+    );
+    community.populateCanvas();
+
+    const deadPerson = new Person(TYPES.DEAD, 1, 1);
+    community.handlePersonJoining(deadPerson);
+    expect(community.numDead).toBe(deadCount + 1);
+  });
+
+  test('handlePersonJoining unknown type throws error', () => {
+    const community = new Community(
+      1,
+      new Bounds(0, 100, 0, 100),
+      new Stats(0, 0, 0, 0, 0),
+      null
+    );
+    community.populateCanvas();
+
+    const unknownTypePerson = new Person('blablalbal', 1, 1);
+    expect(() => community.handlePersonJoining(unknownTypePerson)).toThrow();
+  });
 });
