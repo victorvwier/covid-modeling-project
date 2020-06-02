@@ -166,7 +166,7 @@ export default class Community {
         this.numDead--;
         break;
       default:
-        console.log('What type am i');
+        throw new Error('Person of unknown type was encountered');
     }
   }
 
@@ -207,6 +207,7 @@ export default class Community {
         break;
       default:
         console.log('What type am i');
+        throw new Error('Person of unknown type was encountered');
     }
   }
 
