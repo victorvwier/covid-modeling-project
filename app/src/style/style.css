@@ -47,6 +47,7 @@ button {
 
 #right-side-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -180,6 +181,7 @@ h3 {
   content: '';
   display: table;
   clear: both;
+  margin-bottom: 20px;
 }
 
 #demographics {
