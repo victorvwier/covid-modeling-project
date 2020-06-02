@@ -3,9 +3,10 @@ import RelocationUtil from '../src/scripts/relocationUtil';
 import AgentChart from '../src/scripts/agentChart';
 import Stats from '../src/scripts/data/stats';
 
-// jest.mock('../src/scripts/model')
-// jest.mock('../src/scripts/relocationUtil');
 jest.mock('../src/scripts/agentChart');
+
+// const borderCtxMock = jest.createMockFromModule('./canvasContextMock.js')
+//   .default;
 
 describe('Community test', () => {
   let community;
@@ -16,6 +17,16 @@ describe('Community test', () => {
   const stats = new Stats(1, 1, 1, 1, 1);
 
   beforeEach(() => {
+    const borderCtxMock = {
+      clearRect: jest.fn(() => {}),
+      strokeRect: jest.fn(() => {}),
+      canvas: {
+        getBoundingClientRect: jest.fn(() => ({
+          width,
+          height,
+        })),
+      },
+    };
     community = new Model(
       4,
       agentChart,
@@ -23,15 +34,13 @@ describe('Community test', () => {
       height,
       stats,
       () => {},
-      () => {}
+      () => {},
+      borderCtxMock
     );
     relocationUtil = new RelocationUtil(community);
     community.relocationUtil = relocationUtil;
-    const borderContext = {};
-    borderContext.moveTo = jest.fn(() => {});
-    borderContext.lineTo = jest.fn(() => {});
-    borderContext.stroke = jest.fn(() => {});
-    community.setupCommunity(borderContext);
+
+    community.setupCommunity();
     community.populateCommunities();
   });
 
