@@ -524,10 +524,7 @@ export default class Community {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
-        if (
-          person.mortalityRate !== 0 &&
-          Math.random() <= person.mortalityRate
-        ) {
+        if (person.mortalityRate > 0 && Math.random() <= person.mortalityRate) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
             gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
