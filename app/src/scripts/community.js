@@ -1,5 +1,7 @@
 import Person from './person';
-import { getRandom, gaussianRand, mortalityStat } from './util';
+import { getRandom, gaussianRand } from './util';
+
+import { assignDemographic } from './demographic';
 
 import {
   PERSON_RADIUS,
@@ -96,6 +98,21 @@ export default class Community {
       this.endY,
       INFECTION_RADIUS
     );
+
+    // this._drawBorderLines();
+  }
+
+  _drawBorderLines(borderCtx) {
+    // These lines are drawm from the edge coordinates of the model and make up the boundary of the
+    // communities which are drawn on a canvas other than the agent canvas and can be drawn
+    // automatically regardless of how many models there are.
+    borderCtx.strokeStyle = 'white';
+    borderCtx.strokeRect(
+      this.startX,
+      this.startY,
+      this.endX - this.startX,
+      this.endY - this.startY
+    );
   }
 
   /**
@@ -149,7 +166,7 @@ export default class Community {
         this.numDead--;
         break;
       default:
-        console.log('What type am i');
+        throw new Error('Person of unknown type was encountered');
     }
   }
 
@@ -162,7 +179,7 @@ export default class Community {
     this.totalPopulation++;
 
     if (this.population.includes(person)) {
-      console.log('But im already here');
+      throw Error('But im already here');
     }
 
     person._handleXOutOfBounds(this.startX, this.endX);
@@ -189,7 +206,7 @@ export default class Community {
         this.numDead++;
         break;
       default:
-        console.log('What type am i');
+        throw new Error('Person of unknown type was encountered');
     }
   }
 
@@ -368,9 +385,7 @@ export default class Community {
         this.endY - this.personRadius
       );
       const newPerson = new Person(type, x, y, this.id);
-      // if (type !== TYPES.DEAD) {
-      //   // newPerson.dead = true;
-      // }
+      assignDemographic(newPerson);
       this.population.push(newPerson);
       this.boundingBoxStruct.insert(newPerson);
     }
@@ -414,13 +429,11 @@ export default class Community {
       const currentPerson = this.population[i];
       this.update(currentPerson, dt);
 
-      // if (currentPerson.type === TYPES.DEAD) {
-      //   return;
-      // }
-
       if (Math.random() < RELOCATION_PROBABILITY && !currentPerson.relocating) {
-        currentPerson.relocating = true;
-        this.registerRelocation(currentPerson);
+        if (currentPerson.type !== TYPES.DEAD) {
+          this.registerRelocation(currentPerson);
+          currentPerson.relocating = true;
+        }
       } else if (!currentPerson.relocating) {
         this.boundingBoxStruct.remove(currentPerson);
         currentPerson.maxSpeed = this.maxSpeed;
@@ -511,7 +524,7 @@ export default class Community {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
-        if (Math.random() <= mortalityStat(person.age)) {
+        if (person.mortalityRate > 0 && Math.random() <= person.mortalityRate) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
             gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
@@ -605,6 +618,7 @@ export default class Community {
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numNonInfectious = stats.noninfectious;
+    this.numDead = stats.dead;
     this.totalPopulation = stats.susceptible + stats.infectious;
 
     // clear the canvas
@@ -613,5 +627,6 @@ export default class Community {
     this.populateCanvas();
     this.updateInfectionRadius(this.infectionRadius);
     this.updateRadius(this.personRadius);
+    // this._drawBorderLines();
   }
 }

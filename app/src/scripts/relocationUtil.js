@@ -46,6 +46,7 @@ export default class RelocationUtil {
   insertRelocation(person) {
     
     // Move person
+
     const sourceId = person.communityId;
     // Get models which very high density and exclude them from models being relocated to
 

@@ -25,14 +25,16 @@
         >&times;</a
       >
       <div id="sliderDIV">
-        <div class="row">
-          <h2>Parameters</h2>
+        <h2>Parameters</h2>
+
+        <button class="accordion">Interaction Parameters</button>
+        <div class="panel">
           <div class="col-sm">
-            <p>Repulsion:</p>
+            <p>Social Distancing:</p>
             <input
               type="range"
               min="0"
-              max="100"
+              max="1"
               value="0"
               step="0.05"
               class="slider"
@@ -48,7 +50,7 @@
             <input
               type="range"
               min="0"
-              max="100"
+              max="1"
               value="0"
               step="0.05"
               class="slider"
@@ -60,6 +62,10 @@
               </output>
             </div>
           </div>
+        </div>
+
+        <button class="accordion">Agent Parameters</button>
+        <div class="panel">
           <div class="col-sm">
             <p>
               Probability a collision will result in infection (transmission
@@ -307,7 +313,8 @@
           </div>
         </div>
 
-        <div class="row">
+        <button class="accordion">Initial Model Setup</button>
+        <div class="panel">
           <div class="col-sm">
             <p>Initial number of susceptibles:</p>
             <input
@@ -338,26 +345,21 @@
               id="initInfectious"
             />
             <div class="outputContainer">
-              <div class="outputContainer">
-                <output id="initInfectiousCount" for="initInfectious">3</output>
-              </div>
+              <output id="initInfectiousCount" for="initInfectious">3</output>
             </div>
             <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
           </div>
-        </div>
-
-        <div class="col-sm">
-          <p>Number of communities:</p>
-          <input
-            type="range"
-            min="1"
-            max="12"
-            value="4"
-            step="1"
-            class="slider"
-            id="numCommunities"
-          />
-          <div class="outputContainer">
+          <div class="col-sm">
+            <p>Number of communities:</p>
+            <input
+              type="range"
+              min="1"
+              max="12"
+              value="4"
+              step="1"
+              class="slider"
+              id="numCommunities"
+            />
             <div class="outputContainer">
               <output id="numCommunitiesOut" for="numCommunities">4</output>
             </div>
@@ -365,11 +367,9 @@
         </div>
 
         <div class="row p-3">
-          <div class="col-sm">
-            <button type="button" id="reload" class="btn btn-secondary">
-              Reload
-            </button>
-          </div>
+          <button type="button" id="reload" class="btn btn-secondary">
+            Reload
+          </button>
         </div>
       </div>
     </div>
@@ -384,40 +384,59 @@
       }
     </script>
 
+    <script>
+      var acc = document.getElementsByClassName('accordion');
+      var i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener('click', function () {
+          this.classList.toggle('active');
+          var panel = this.nextElementSibling;
+          if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+          } else {
+            panel.style.maxHeight = panel.scrollHeight + 'px';
+          }
+        });
+      }
+    </script>
+
     <main id="main">
-      <div>
-        <div style="display: flex;">
-          <div id="left-panel">
-            <div id="chart-container">
-              <canvas id="chart-canvas" width="600px" height="300px"></canvas>
-            </div>
-            <div class="statrow">
-              <div class="stat" style="background-color: #05befc;">
-                <h3>Susceptible</h3>
-                <p id="s1"></p>
-              </div>
-              <div class="stat" style="background-color: #c9e265;">
-                <h3>Non-Infectious</h3>
-                <p id="s2"></p>
-              </div>
-              <div class="stat" style="background-color: #fd7e65;">
-                <h3>Infectious</h3>
-                <p id="s3"></p>
-              </div>
-              <div class="stat" style="background-color: #a6a6a6;">
-                <h3>Immune</h3>
-                <p id="s4"></p>
-              </div>
-              <div class="stat" style="background-color: #000000ff;">
-                <h3>Dead</h3>
-                <p id="s5"></p>
-              </div>
-            </div>
+      <div id="left-panel">
+        <div id="chart-container">
+          <canvas id="chart-canvas" width="600px" height="300px"></canvas>
+        </div>
+        <div id="demographics-container">
+          <canvas id="demographics" width="600px" height="400px"></canvas>
+        </div>
+      </div>
+      <div id="right-side-container">
+        <div class="statrow">
+          <div class="stat" style="background-color: #05befc;">
+            <h3>Susceptible</h3>
+            <p id="s1"></p>
           </div>
-          <!-- </div> -->
-          <div id="glcanvas-container">
-            <canvas id="glCanvas" width="600px" height="600px"></canvas>
+          <div class="stat" style="background-color: #c9e265;">
+            <h3>Non-Infectious</h3>
+            <p id="s2"></p>
           </div>
+          <div class="stat" style="background-color: #fd7e65;">
+            <h3>Infectious</h3>
+            <p id="s3"></p>
+          </div>
+          <div class="stat" style="background-color: #a6a6a6;">
+            <h3>Immune</h3>
+            <p id="s4"></p>
+          </div>
+          <div class="stat" style="background-color: #000000;">
+            <h3>Dead</h3>
+            <p id="s5"></p>
+          </div>
+        </div>
+        <div id="model-border-canvases-container">
+          <canvas id="glCanvas" width="600px" height="600px"></canvas>
+          <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
+          <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
         </div>
         <div id="timeline">
           <div>
@@ -440,7 +459,6 @@
             </div>
             <button id="timeline-add-rule">+</button>
           </div>
-          
         </div>
       </div>
     </main>

@@ -10,13 +10,35 @@ jest.mock('../src/scripts/agentChart.js');
 describe('RelocationUtil tests', () => {
   const stats = new Stats(1, 1, 1, 1, 1);
   let model;
+  const width = 100;
+  const height = 100;
   let community0;
   let community1;
   let relocationUtil;
 
   beforeEach(() => {
-    model = new Model(2, new AgentChart(null), 100, 100, stats, () => {});
+    const borderCtxMock = {
+      clearRect: jest.fn(() => {}),
+      strokeRect: jest.fn(() => {}),
+      canvas: {
+        getBoundingClientRect: jest.fn(() => ({
+          width,
+          height,
+        })),
+      },
+    };
+    model = new Model(
+      2,
+      new AgentChart(null),
+      width,
+      height,
+      stats,
+      () => {},
+      () => {},
+      borderCtxMock
+    );
     model.setupCommunity();
+
     model.populateCommunities();
     community0 = model.communities[0];
     community1 = model.communities[1];
