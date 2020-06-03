@@ -52,8 +52,10 @@ export const NUM_COMMUNITIES = 4;
 
 /** @constant TESTED_POSITIVE_PROBABILITY The probability an Infectious person will be tested positive. */
 export const TESTED_POSITIVE_PROBABILITY=0.5;
-/** @constant TRANSMISSION_PROB_REDUCTION_FACTOR The factor with with the transmission probability is reduced for a positive person. */
-export const TRANSMISSION_PROB_REDUCTION_FACTOR=3;
+/** @constant INFECTION_RADIUS_REDUCTION_FACTOR The factor with with the infection radius is reduced for a positive person. */
+export const INFECTION_RADIUS_REDUCTION_FACTOR=3;
+/** @constant TESTED_POSITIVE_PROBABILITY The probability that a person who is tested positive will be admitted to the ICU */
+export const ICU_ADMISSION_PROBABILITY=0.2;
 
 /**
  * Enum for the colors related to the states a person can be in.
