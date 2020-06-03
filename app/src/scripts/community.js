@@ -23,9 +23,9 @@ import {
   RELOCATION_ERROR_MARGIN,
   INTERACTION_RANGE,
   TESTED_POSITIVE_PROBABILITY,
-  TRANSMISSION_PROB_REDUCTION_FACTOR,
   ICU_PROBABILITY,
   ICU_CAPACITY,
+  INFECTION_RADIUS_REDUCTION_FACTOR,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -534,6 +534,7 @@ export default class Community {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
+        // Calculate the proabability that a person will die according to real life data according to their age.
         if (Math.random() <= mortalityStat(person.age)) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
@@ -569,9 +570,10 @@ export default class Community {
           }
         }
       }
+      // There is a chance that a infected person gets tested,the higher the TESTED_POSITIVE_PROBABILITY the higher the chance they will get tested.
       if (!person.testedPositive && Math.random() < TESTED_POSITIVE_PROBABILITY * dt) {
         person.testedPositive = true;
-        person.infectionRadius /= TRANSMISSION_PROB_REDUCTION_FACTOR;
+        person.infectionRadius /= INFECTION_RADIUS_REDUCTION_FACTOR;
         if (Math.random() < ICU_PROBABILITY) {
           if (this.icuCount >= ICU_CAPACITY) {
             person.type = TYPES.DEAD;

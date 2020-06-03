@@ -4,9 +4,9 @@ Make sure `npm` is installed on your computer.
 
 Notice that in `index.html` no script tags or link:css tags are present, these will all be handled by webpack when you run one of the following commands. Webpack will transpile js to convert ECMAScript 2015+ code into a backwards compatible version of JavaScript in current and older browsers or environments and it will link modules together so that we don't need to worry about which script tag comes first.
 
-### Installing dependancies
+### Installing dependencies
 
-run this at the beginning to install required dependencies.
+run this i  the terminal/command prompt at the beginning to install required dependencies.
 
 ```
   npm install
@@ -26,9 +26,9 @@ Will spin up a development server that implements hot reloading whenever a file 
   npm run test
 ```
 
-Would run all the tests. Tests are recognized by having a name of the format `[FILE_NAME].test.js`
+Would run all the tests. Tests are recognized by having a name of the format `[FILE_NAME].test.js`,where FILE_NAME is the name of file being tested.
 
-You can als use the watch mode to interactively keep running the tests while coding to make them pass.
+You can also use the watch mode to interactively keep running the tests while coding to make them pass.
 
 ```
   npm run test:watch
