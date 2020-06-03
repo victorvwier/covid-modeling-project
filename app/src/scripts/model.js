@@ -2,8 +2,10 @@ import wireSlidersToHandlers from './DOM/parameters';
 import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
-import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
+import presetsManager from './presetsManager';
 import RelocationUtil from './relocationUtil';
+
+const { SPACE_BETWEEN_COMMUNITIES } = presetsManager.loadPreset();
 
 /** @class Model representing a simulation of one or multiple communities. */
 export default class Model {

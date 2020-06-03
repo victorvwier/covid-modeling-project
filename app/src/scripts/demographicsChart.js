@@ -1,5 +1,7 @@
 import Chart from 'chart.js';
-import { GENDERS, AGE, TYPES, COLORS } from './CONSTANTS';
+import presetsManager from './presetsManager';
+
+const { AGE, GENDERS, TYPES, COLORS } = presetsManager.loadPreset();
 
 export default class DemographicsChart {
   /**

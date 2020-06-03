@@ -1,11 +1,13 @@
-import {
+import presetManager from './scripts/presetsManager';
+import Main from './scripts/main';
+
+const {
   INITIAL_SUSCEPTIBLE,
   INITIAL_NONINFECTIOUS,
   INITIAL_INFECTIOUS,
   INITIAL_IMMUNE,
   INITIAL_DEAD,
-} from './scripts/CONSTANTS';
-import Main from './scripts/main';
+} = presetManager.loadPreset();
 
 /**
  * A function to initialize our program when the page is loaded.

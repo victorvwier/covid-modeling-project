@@ -2,13 +2,15 @@ import Community from '../src/scripts/community';
 import Stats from '../src/scripts/data/stats';
 import Person from '../src/scripts/person';
 import { mockRandom } from './testHelpers';
-import {
+import presetsManager from '../src/scripts/presetsManager';
+import Bounds from '../src/scripts/data/bounds';
+
+const {
   COLORS,
   TYPES,
   POPULATION_SPEED,
   RELOCATION_PROBABILITY,
-} from '../src/scripts/CONSTANTS';
-import Bounds from '../src/scripts/data/bounds';
+} = presetsManager.loadPreset();
 
 describe('community.js test suite', () => {
   test('getDrawInfo should not do anything if all existing are susceptible', () => {

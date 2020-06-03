@@ -3,7 +3,9 @@ import BoundingBoxStructure, {
   BoundingBox,
 } from '../src/scripts/boundingBox';
 import Person from '../src/scripts/person';
-import { TYPES } from '../src/scripts/CONSTANTS';
+import presetsManager from '../src/scripts/presetsManager';
+
+const { TYPES } = presetsManager.loadPreset();
 
 describe('Bounding box test suite', () => {
   test('Bounding box insert', () => {
@@ -213,11 +215,7 @@ describe('Bounding box test suite', () => {
     struct.insert(person8);
     struct.insert(person9);
     const query = struct.query(person2, 5.9).sort();
-    const expected = [person1,
-      person3,
-      person4,
-      person5,
-      person6,].sort();
+    const expected = [person1, person3, person4, person5, person6].sort();
     expect(query).toStrictEqual(expected);
   });
 
@@ -276,13 +274,7 @@ describe('Bounding box test suite', () => {
     struct.insert(person8);
     struct.insert(person9);
     const query = struct.query(person8, 5.9).sort();
-    const expected = [
-      person4,
-      person5,
-      person6,
-      person7,
-      person9,
-    ].sort();
+    const expected = [person4, person5, person6, person7, person9].sort();
     expect(query).toStrictEqual(expected);
   });
 

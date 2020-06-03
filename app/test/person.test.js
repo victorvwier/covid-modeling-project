@@ -1,5 +1,7 @@
 import Person from '../src/scripts/person';
-import { TYPES, COLORS } from '../src/scripts/CONSTANTS';
+import presetsManager from '../src/scripts/presetsManager';
+
+const { TYPES, COLORS } = presetsManager.loadPreset();
 
 describe('Testing person initialization', () => {
   const X = 1;
