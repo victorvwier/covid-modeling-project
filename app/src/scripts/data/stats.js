@@ -10,7 +10,7 @@ export default class Stats {
 
   /**
    * A function summing all of the stats, giving the total number of people represented.
-   * 
+   *
    * @returns {number} The total number of people.
    */
   sum() {
@@ -25,7 +25,7 @@ export default class Stats {
 
   /**
    * A function allowing us to add together two stats objects.
-   * 
+   *
    * @param {Stats} one An instance of a Stats object to be added.
    * @param {Stats} other An instance of a Stats object to be added.
    * @returns {Stats} An instance of a Stats objects representing both parameters added together.

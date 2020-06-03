@@ -45,10 +45,10 @@ export default class RelocationUtil {
    * @param {Person} person The person to start relocating.
    */
   insertRelocation(person) {
-    console.log('He wanted to relocate');
     // Pause
     this.model.pauseExecution();
     // Move person
+
     const sourceId = person.communityId;
     // Get models which very high density and exclude them from models being relocated to
 

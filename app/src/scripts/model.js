@@ -17,7 +17,16 @@ export default class Model {
    * @param {Stats} stats The stats object used by the model.
    * @param {function} updateStats A function to update the displayed stats and chart.
    */
-  constructor(numCommunities, agentView, width, height, stats, updateStats) {
+  constructor(
+    numCommunities,
+    agentView,
+    width,
+    height,
+    stats,
+    updateStats,
+    updateDemographicChart,
+    borderCtx
+  ) {
     this.numCommunities = numCommunities;
     this.communities = {};
     this.height = height;
@@ -25,6 +34,8 @@ export default class Model {
     this.stats = stats;
     this.agentView = agentView;
     this.updateStats = updateStats;
+    this.updateDemographicChart = updateDemographicChart;
+    this.borderCtx = borderCtx;
 
     this._chartInterval = null;
 
@@ -37,6 +48,20 @@ export default class Model {
 
     // DEBUG
     window.community = this;
+  }
+
+  /**
+   * A function that returns an array of the whole population in all models
+   * @returns array containing all the population
+   */
+  getAllPopulation() {
+    const allPopulation = [];
+    Object.values(this.communities)
+      .map((com) => com.population)
+      .forEach((item) => {
+        allPopulation.push(...item);
+      });
+    return allPopulation;
   }
 
   /**
@@ -138,6 +163,8 @@ export default class Model {
     wireSlidersToHandlers(this);
     this.populateCommunities();
 
+    this.updateAgentSize(this.getAgentSize(this.stats.sum()));
+
     this._animationFunction();
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
@@ -158,6 +185,8 @@ export default class Model {
     Object.values(this.communities).forEach((mod) => mod.step(dt));
     // Check all relocations
     this.relocationUtil.handleAllRelocations();
+
+    this.updateDemographicChart();
   }
 
   /**
@@ -246,7 +275,9 @@ export default class Model {
   /**
    * A function to initialize all communities.
    */
-  setupCommunity(ctx) {
+  setupCommunity() {
+    const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
+    this.borderCtx.clearRect(0, 0, width * 2, height * 2);
     const bounds = this._createIncrementals();
 
     for (let i = 0; i < this.numCommunities; i++) {
@@ -256,12 +287,25 @@ export default class Model {
         i,
         bounds[i],
         dividedStats,
-        this.registerRelocation.bind(this),
-        ctx
+        this.registerRelocation.bind(this)
       );
+
+      this.communities[i]._drawBorderLines(this.borderCtx);
 
       // DEBUG
       window.model = this;
+    }
+  }
+
+  getAgentSize(population) {
+    if (population > 2000) {
+      return 1.5;
+    } else if (population > 1000) {
+      return 2.5;
+    } else if (population > 600) {
+      return 3.5;
+    } else {
+      return 5;
     }
   }
 
@@ -303,6 +347,8 @@ export default class Model {
 
       this.communities[i].resetCommunity(dividedStats);
     }
+
+    this.updateAgentSize(this.getAgentSize(stats.sum()));
   }
 
   // SLIDER HANDLER METHODS

@@ -3,6 +3,7 @@ import Model from './model';
 import Chart from './chart';
 import AgentChart from './agentChart';
 import { wireReloadButtonToMain } from './DOM/parameters';
+import DemographicsChart from './demographicsChart';
 import {
   getInitialNumInfectious,
   getInitialNumSusceptible,
@@ -19,6 +20,8 @@ export default class Main {
    * @constructor
    * @param {Object} context The webGL context of our HTML.
    * @param {Object} chartContext The 2D context we use to draw our chart.
+   * @param {Object} borderCtx The 2D context we use to draw the borders around our commuinities.
+   * @param {Object} demographicsCtx The 2D context we use to draw our demographics chart.
    * @param {number} width The width of our glCanvas.
    * @param {number} height The height of our glCanvas.
    * @param {number} numSusceptible The initial number of Susceptible people.
@@ -30,6 +33,8 @@ export default class Main {
   constructor(
     context,
     chartContext,
+    borderCtx,
+    demographicsCtx,
     width,
     height,
     numSusceptible,
@@ -40,7 +45,8 @@ export default class Main {
   ) {
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
-
+    this.borderCtx = borderCtx;
+    this.demographicsCtx = demographicsCtx;
     this.width = width;
     this.height = height;
     this.numSusceptible = numSusceptible;
@@ -56,6 +62,7 @@ export default class Main {
       this.chartContext,
       this.createCurrentStats.bind(this)
     );
+    this.demographicsChart = new DemographicsChart(demographicsCtx);
     this.agentView = new AgentChart(context);
     this.model = null;
     this.setupMain();
@@ -106,29 +113,35 @@ export default class Main {
     );
   }
 
+  updateDemographicChart() {
+    const population = this.model.getAllPopulation();
+    this.demographicsChart.receiveUpdate(population);
+  }
+
   /**
    * A function to setup the main class.
    */
   setupMain() {
     const stats = this.createCurrentStats();
-    console.log(stats);
     this.model = new Model(
       this.numCommunities, // TODO determine the number of communities
       this.agentView,
       this.width,
       this.height,
       stats,
-      this.receiveNewStatsAndUpdateChart.bind(this)
+      this.receiveNewStatsAndUpdateChart.bind(this),
+      this.updateDemographicChart.bind(this),
+      this.borderCtx
     );
   }
 
   /**
    * A function to run the model and the chart.
    */
-  run(ctx) {
+  run() {
     this.chart.drawChart();
-
-    this.model.setupCommunity(ctx);
+    this.demographicsChart.drawChart(this.createCurrentStats().sum());
+    this.model.setupCommunity();
     this.model.run();
   }
 
@@ -143,15 +156,20 @@ export default class Main {
     this.numImmune = 0;
     this.numDead = 0;
 
-    this.numCommunities = getNumCommunities();
+    // Clear the border context
+    const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
+    this.borderCtx.clearRect(0, 0, width * 2, height * 2);
 
+    this.numCommunities = getNumCommunities();
     if (this.numCommunities !== this.model.numCommunities) {
       this.model.numCommunities = this.numCommunities;
-      this.model.communities = {};
-      this.model.setupCommunity();
     }
 
+    this.model.communities = {};
+    this.model.setupCommunity();
+
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
+    this.demographicsChart.resetChart(this.createCurrentStats().sum());
     this.model.resetModel(this.createCurrentStats());
   }
 }
