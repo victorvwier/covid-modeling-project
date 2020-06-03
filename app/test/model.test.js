@@ -58,4 +58,17 @@ describe('Community test', () => {
     community._animationFunction(thisTimeStamp);
     expect(community.lastTimestamp).toBe(thisTimeStamp);
   });
+
+  test('getAgentSize should return 1.5 if the population is over 2000', () => {
+    expect(community.getAgentSize(2500)).toEqual(1.5);
+  });
+  test('getAgentSize should return 2.5 if the population is over 1000', () => {
+    expect(community.getAgentSize(1500)).toEqual(2.5);
+  });
+  test('getAgentSize should return 3.5 if the population is over 600', () => {
+    expect(community.getAgentSize(700)).toEqual(3.5);
+  });
+  test('getAgentSize should return 1.5 if the population is over 200', () => {
+    expect(community.getAgentSize(100)).toEqual(5);
+  });
 });
