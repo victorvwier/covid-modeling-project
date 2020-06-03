@@ -76,6 +76,14 @@ export const TYPES = {
   IMMUNE: 'im',
 };
 
+/** 
+ * Enum for the parameters controllable by the timeline
+ * @readonly
+ * @enum {string}
+ */
+export const TIMELINE_PARAMETERS = {
+  SOCIAL_DISTANCING: 'soc'
+}
 /** @constant SPACE_BETWEEN_COMMUNITIES The amount of pixels used as spacing inbetween communities. */
 export const SPACE_BETWEEN_COMMUNITIES = 20;
 

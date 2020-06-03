@@ -10,6 +10,7 @@ import {
   getNumCommunities,
 } from './DOM/domValues';
 import Timeline from './timeline';
+import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -60,7 +61,7 @@ export default class Main {
       this.createCurrentStats.bind(this)
     );
 
-    this.timeline = new Timeline(timelineCanvas);
+    this.timeline = new Timeline(timelineCanvas, this.timelineCallback.bind(this));
     this.agentView = new AgentChart(context);
     this.model = null;
     this.setupMain();
@@ -86,6 +87,19 @@ export default class Main {
       this.numDead,
       this.numImmune
     );
+  }
+
+  /**
+   * A callback for the timeline to set parameters in the model.
+   * @param {TIMELINE_PARAMETERS} timelineParam
+   * @param {*} value 
+   */
+  timelineCallback(timelineParam, value) {
+    if(timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+      this.model.updateRepulsionForce(value);
+      console.log(`Callback called: ${value}`);
+
+    }
   }
 
   // Assume only model calls this one so update chart

@@ -1,27 +1,39 @@
 import TimelineRule from './data/timelinerule';
+import {TIMELINE_PARAMETERS} from './CONSTANTS';
 
 const RULE_HEIGHT = 100;
 const TIMELINE_X_OFFSET = 200;
 const RULE_MARGINS = 10;
 
 export default class Timeline {
-  constructor(canvas) {
+  constructor(canvas, setruleCb) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.rules = [];
-    
-    this.rules.push(new TimelineRule('Social distancing', 15, 100, 5));
-    this.rules.push(new TimelineRule('Social distancing', 25, 200, 5));
 
+    this.rules.push(new TimelineRule(TIMELINE_PARAMETERS.SOCIAL_DISTANCING, 3, 100, 1));
+    this.setRuleCallback = setruleCb;
   }
 
   setTime(time) {
     this.time = time;
     this.redrawTimeline();
+    this.enforceRules(time);
+  }
+
+  
+
+  enforceRules(time) {
+    for(let i = 0; i < this.rules.length; i++) {
+      const rule = this.rules[i];
+      if( rule.isActive(time) ) {
+        this.setRuleCallback(rule.type, rule.value);
+      }
+    }
   }
 
   redrawTimeline() {
-    // Set canvas to the right width
+    // Set canvas to the right height
     this.canvas.height = RULE_HEIGHT * this.rules.length;
 
     // Draw background first
