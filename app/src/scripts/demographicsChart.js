@@ -11,15 +11,11 @@ export default class DemographicsChart {
     this.ctx = ctx;
     this.labels = AGE.map((val) => this._formatLabel(val.min, val.max));
 
-    // data
-    // this.maleData = new Array(AGE.length).fill(0);
-    // this.femaleData = new Array(AGE.length).fill(0);
-
     // DEBUG
     window.demographic = this;
   }
 
-  recieveUpdate(population) {
+  receiveUpdate(population) {
     // Do logic
     // num dead per age per gender
     let index = 0;
@@ -43,7 +39,7 @@ export default class DemographicsChart {
         .filter((p) => min <= p.age && p.age <= max);
 
       const deadPeopleInAgeRange = population
-        .filter((p) => p.isDead())
+        .filter((p) => p.type === TYPES.DEAD)
         .filter((p) => min <= p.age && p.age <= max);
 
       this.demographicChart.data.datasets[0].data[index] = -this._getMaleCount(

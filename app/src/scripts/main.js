@@ -115,7 +115,7 @@ export default class Main {
 
   updateDemographicChart() {
     const population = this.model.getAllPopulation();
-    this.demographicsChart.recieveUpdate(population);
+    this.demographicsChart.receiveUpdate(population);
   }
 
   /**
