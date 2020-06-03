@@ -220,9 +220,9 @@ export default class DemographicsChart {
           position: 'top',
           fontSize: 24,
         },
-        // responsive: false,
-        // tooltips: { enabled: false },
-        // hover: { animationDuration: 0, mode: 'single' },
+        responsive: false,
+        tooltips: { enabled: false },
+        hover: { mode: null },
         scales: {
           xAxes: [
             {
