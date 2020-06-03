@@ -34,6 +34,12 @@ You can als use the watch mode to interactively keep running the tests while cod
   npm run test:watch
 ```
 
+Adanced option if you also want to see the test coverage information
+
+```
+  npm run test:coverage:watch
+```
+
 ## lint
 
 ```
@@ -52,4 +58,4 @@ If you're using vscode you can install extensions for `prettier` and `eslint` wh
   npm run build
 ```
 
-This would run the tests, if all pass it will run the linter and if no errors create a directory `dist/` with all the files in it. js is uglified and css is minified (for optimization reasons) it will also get all the assets used and change the imports so that `dist` would effectively be what we deploy (when we want to)
+This will create a build directory in this path with in it one html file, one js file with all the minified/transpiled code and one minified css file ready for deployment

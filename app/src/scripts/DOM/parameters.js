@@ -5,7 +5,7 @@ import {
   MAX_INCUBATION_TIME,
   INFECTION_RADIUS,
   // PERSON_RADIUS,
-  INITAL_INFECTIOUS,
+  INITIAL_INFECTIOUS,
   INITIAL_SUSCEPTIBLE,
   MIN_INFECTIOUS_TIME,
   MAX_INFECTIOUS_TIME,
@@ -13,10 +13,21 @@ import {
   MAX_TIME_UNTIL_DEAD,
   REPULSION_FORCE,
   ATTRACTION_FORCE,
+  NUM_COMMUNITIES,
 } from '../CONSTANTS';
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
 // Otherwise the default is just a function that returns the variable itself
+/**
+ * A function linking the output numbers to the sliders and their relevant values inside the model.
+ *
+ * @param {string} inputId The name given to the slider in the HTML.
+ * @param {string} outputId The name given to the output value in the HTML.
+ * @param {number} initial The default value of the output.
+ * @param {string} suffix A string representing the unit of the value.
+ * @param {function} setter A setter function inside the model which should be passed the value of the slider.
+ * @param {function} outValOp A function applied between the slider and output value if these don't correspond.
+ */
 function wireInput(
   inputId,
   outputId,
@@ -37,6 +48,11 @@ function wireInput(
   });
 }
 
+/**
+ * A function binding the sliders to a specific model.
+ *
+ * @param {Model} community The model to bind the sliders to.
+ */
 export default function (community) {
   // TimeToSymptoms
   wireInput(
@@ -154,12 +170,25 @@ export default function (community) {
   wireInput(
     'initInfectious',
     'initInfectiousCount',
-    INITAL_INFECTIOUS,
+    INITIAL_INFECTIOUS,
     '',
     (x) => x // Don't need a setter
   );
+
+  wireInput(
+    'numCommunities',
+    'numCommunitiesOut',
+    NUM_COMMUNITIES,
+    '',
+    (x) => x
+  );
 }
 
+/**
+ * A function binding the reload button to our main class.
+ *
+ * @param {Main} main The instance of the main class to bind our reload button to.
+ */
 export function wireReloadButtonToMain(main) {
   // Reset button
   document

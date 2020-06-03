@@ -1,6 +1,6 @@
 import { mat4 } from 'gl-matrix';
 
-// Vector shader source code
+/** @constant vSource The source code of our vertex shader. */
 export const vSource = `
     attribute vec4 aVertexColor;
     attribute vec4 aVertexPosition;
@@ -16,7 +16,7 @@ export const vSource = `
     }
   `;
 
-// Fragment shader source code
+/** @constant fSource The source code of our fragment shader. */
 export const fSource = `
   varying lowp vec4 vColor;
   void main() {
@@ -24,7 +24,14 @@ export const fSource = `
   }
 `;
 
-// Creates, loads and compiles a shader with a given type
+/**
+ * A function to create, load and compile a shader.
+ * 
+ * @param {Object} gl A reference to our gl instance.
+ * @param {Object} type The type of shader.
+ * @param {string} source The source code of the shader program.
+ * @returns {Object} The compiled shader.
+ */
 export function loadShader(gl, type, source) {
   const shader = gl.createShader(type);   // Create empty shader of the given type 
   gl.shaderSource(shader, source);        // Load the source into the shader
@@ -40,7 +47,14 @@ export function loadShader(gl, type, source) {
   return shader;                          // Return the compiled shader
 }
 
-// This function loads the shader program, the program incorporates both shaders.
+/**
+ * A function to load the shader program.
+ * 
+ * @param {Object} gl A reference to our gl instance.
+ * @param {string} vsSource The source code of the vertex shader.
+ * @param {string} fsSource The source code of the fragment shader.
+ * @returns {Object} the fully linked shader program.
+ */
 export function initShaderProgram(gl, vsSource, fsSource) {
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
@@ -61,8 +75,15 @@ export function initShaderProgram(gl, vsSource, fsSource) {
   return shaderProgram;
 }
 
-// Represents the webgl canvas we'll use to draw the agents.
+/** @class Agentchart describing the canvas displaying the people. */
 export default class AgentChart {
+
+  /**
+   * Instantiates an AgentChart.
+   * 
+   * @constructor
+   * @param {Object} gl A reference to the context we will draw the AgentChart in.
+   */
   constructor(gl) {
     this.gl = gl;
 
@@ -95,12 +116,23 @@ export default class AgentChart {
   // For n agents:
   // Expects positions as an array like this: [X0, Y0, X1, Y1..... Xn, Yn].
   // Expects colors in the same fashion: [R0, G0, B0, A0, R1, G1, B1, A1... Rn, Gn, Bn, An].
+  /**
+   * A function to draw the people on the canvas.
+   * 
+   * @param {Object} drawinfo An object containing the relevant information for all people to be drawn.
+   */
   draw(drawinfo){
     const buffers = this.initBuffers(drawinfo.positions, drawinfo.colors);
     this.drawScene(buffers, drawinfo.count, drawinfo.size);
   }
 
-  // This function is responsible for binding the incoming data to the actual gl buffers used for drawing.
+  /**
+   * A function binding the incoming data into buffers for GL.
+   * 
+   * @param {Array{number}} positions An array containing the positions of the people.
+   * @param {Array{number}} colors An array containing the colors of the people.
+   * @returns {Object} An object containing the buffers.
+   */
   initBuffers(positions, colors) {
     const positionBuffer =  this.initGlBuffer(positions); // Get a gl buffer for the positions
     const colorBuffer =     this.initGlBuffer(colors);    // Get a gl buffer for the colors
@@ -110,6 +142,12 @@ export default class AgentChart {
     };
   }
   
+  /**
+   * A function to bind an array to a buffer in GL.
+   * 
+   * @param {Array{number}} data The javascript array with data.
+   * @returns {Object} A buffer for GL containing the data.
+   */
   initGlBuffer(data) {
     const buffer = this.gl.createBuffer();
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
@@ -121,7 +159,13 @@ export default class AgentChart {
     return buffer;
   }
 
-  // This function is responsible for drawing the scene using the buffers.
+  /**
+   * A function to draw the scene using our buffers.
+   * 
+   * @param {Object} buffers An object containing the buffers.
+   * @param {number} count The amount of people to draw.
+   * @param {number} pointSize The size of a person in the drawing.
+   */
   drawScene(buffers, count, pointSize) {
     this.gl.clearColor(0.8, 0.8, 0.8, 1.0);   // Set background color
     this.gl.clearDepth(1.0);                  // Clear everything

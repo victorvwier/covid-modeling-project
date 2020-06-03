@@ -8,9 +8,19 @@ import {
   REPULSION_FORCE,
 } from './CONSTANTS';
 
+/** @class Person describing a person in the model. */
 export default class Person {
-  constructor(type, x, y, modelId) {
-    this.modelId = modelId;
+  /**
+   * Instantiates a person.
+   *
+   * @constructor
+   * @param {TYPE} type The state the person starts in.
+   * @param {number} x The initial X coordinate of the person.
+   * @param {number} y The initial Y coordinate of the person.
+   * @param {number} communityId The ID referring to the community the person starts in.
+   */
+  constructor(type, x, y, communityId) {
+    this.communityId = communityId;
     this.type = type;
     this.radius = PERSON_RADIUS;
     this.infectionRadius = INFECTION_RADIUS;
@@ -30,7 +40,9 @@ export default class Person {
     this.destinyImmune = false;
     this.incubationPeriod = 0;
     this.infectiousPeriod = 0;
-    this.age = Math.round(Math.random() * 100);
+    this.age = null;
+    this.gender = null;
+    this.mortalityRate = null;
 
     this.relocating = false;
 
@@ -43,11 +55,31 @@ export default class Person {
     else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
   }
 
+  /**
+   * A function applying a force to the person.
+   *
+   * @param {number} forceX The component of the force parallel to the X axis.
+   * @param {number} forceY The component of the force parallel to the Y axis.
+   */
   applyForce(forceX, forceY) {
     this.accX += forceX; // Plus symbol because we're adding forces together
     this.accY += forceY;
   }
 
+  /**
+   * A function to check if this person is dead
+   * @returns {Boolean} boolean representing whether a person is dead
+   */
+  isDead() {
+    return this.type === TYPES.DEAD;
+  }
+
+  /**
+   * A function handling a person attempting to move out of bounds along the X axis.
+   *
+   * @param {number} startX The lower bound on the X axis.
+   * @param {number} endX The upper bound on the X axis.
+   */
   _handleXOutOfBounds(startX, endX) {
     if (this.x > endX - 2 * this.radius || this.x < startX + 2 * this.radius) {
       if (this.x > endX - 2 * this.radius) this.x = endX - 2 * this.radius;
@@ -57,6 +89,12 @@ export default class Person {
     }
   }
 
+  /**
+   * A function handling a person attempting to move out of bounds along the Y axis.
+   *
+   * @param {number} startY The lower bound on the Y axis.
+   * @param {number} endY The upper bound on the Y axis.
+   */
   _handleYOutOfBounds(startY, endY) {
     if (this.y > endY - 2 * this.radius || this.y < startY + 2 * this.radius) {
       if (this.y > endY - 2 * this.radius) this.y = endY - 2 * this.radius;
@@ -66,6 +104,9 @@ export default class Person {
     }
   }
 
+  /**
+   * A function checking if this person exceeds the maximum allowed speed.
+   */
   _checkIfExceededMaxSpeed() {
     if (Math.abs(this.speedX) > this.maxSpeed)
       this.speedX = Math.sign(this.speedX) * this.maxSpeed;
@@ -74,9 +115,16 @@ export default class Person {
       this.speedY = Math.sign(this.speedY) * this.maxSpeed;
   }
 
-  // TODO model should call with start and end
+  /**
+   * A function moving a person for a given timestep.
+   *
+   * @param {number} startX The lower bound along the X axis.
+   * @param {number} endX The upper bound along the X axis.
+   * @param {number} startY The lower bound along the Y axis.
+   * @param {number} endY The upper bound along the Y axis.
+   * @param {number} dt The amount of time which passes for this movement.
+   */
   move(startX, endX, startY, endY, dt) {
-    // if (this.type !== TYPES.DEAD) {
     this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
 
     this.speedX += this.accX * dt;
@@ -96,13 +144,24 @@ export default class Person {
 
     this.accX *= 0;
     this.accY *= 0;
-    // }
   }
 
+  /**
+   * A function retrieving the step a person will take towards its destination.
+   *
+   * @param {number} current The current coordinate of the person.
+   * @param {number} destination The coordinate of the persons destination.
+   * @returns {number} The step a person will take towards its destination.
+   */
   getStep(current, destination) {
     return (destination - current) / this.step;
   }
 
+  /**
+   * A function moving a relocating person.
+   *
+   * @param {Object} destination An object containing the coordinates of the destination of the person.
+   */
   relocateMove({ x: destX, y: destY }) {
     this.applyForce(this.getStep(this.x, destX), this.getStep(this.y, destY));
     this.speedX += this.accX;
@@ -119,36 +178,67 @@ export default class Person {
     this.speedX *= 0.95;
   }
 
-  metWith(p) {
+  /**
+   * A function determining if a person is within the distance to infect another person.
+   *
+   * @param {Person} p The other person the check is made over.
+   * @param {Number} range the infectious range of a person to determing if the other person is close enough for an infection.
+   * @returns {Boolean} A boolean representing whether the two people are within each others infection radius.
+   */
+  isInRange(p, range) {
     const deltaX = this.x - p.x;
     const deltaY = this.y - p.y;
     const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    return dist < this.infectionRadius + p.infectionRadius; // Collide on infectionraduis
+    return dist < range; // Collide on infectionraduis
   }
 
+  /**
+   * A function setting the proper attributes for a Non-Infectious person.
+   */
   startIncubation() {
     this.type = TYPES.NONINFECTIOUS;
     this.color = COLORS.NONINFECTIOUS;
   }
 
+  /**
+   * A function to set the incubation time of the person.
+   *
+   * @param {number} val The new incubation time.
+   */
   setIncubationPeriod(val) {
     this.incubationPeriod = val;
   }
 
+  /**
+   * A function to set the infectious time of the person.
+   *
+   * @param {number} val The new infectious period.
+   */
   setInfectiousPeriod(val) {
     this.infectiousPeriod = val;
   }
 
+  /**
+   * A function to set the proper attributes of an immune person.
+   */
   becomesImmune() {
     this.type = TYPES.IMMUNE;
     this.color = COLORS.IMMUNE;
   }
 
+  /**
+   * A function to set the proper attributes of an infectious person.
+   */
   becomesInfectious() {
     this.type = TYPES.INFECTIOUS;
     this.color = COLORS.INFECTIOUS;
   }
 
+  /**
+   * A function pushing this person away from another person.
+   *
+   * @param {Person} p The person to be repelled.
+   */
   repel(p) {
     const delta = { x: this.x - p.x, y: this.y - p.y };
     const dist = Math.sqrt(delta.x * delta.x + delta.y * delta.y);
@@ -166,10 +256,21 @@ export default class Person {
     }
   }
 
+  /**
+   * A function saying if we can infect a person.
+   *
+   * @param {Person} p The person which we want to know can be infected.
+   * @returns {Boolean} A boolean representing if the other person can be infected.
+   */
   canInfect(p) {
     return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
   }
 
+  /**
+   * A function setting the age of a person.
+   *
+   * @param {number} value The new age of the person.
+   */
   initializeAge(value) {
     this.age = value;
   }

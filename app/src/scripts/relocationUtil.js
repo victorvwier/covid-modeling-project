@@ -3,64 +3,91 @@ import { TYPES } from './CONSTANTS';
 import RelocationInfo from './data/relocationInfo';
 import Stats from './data/stats';
 
+/** @class RelocationUtil handling relocating people. */
 export default class RelocationUtil {
-  constructor(community) {
-    this.community = community;
+  /**
+   * Instantiates an Object to keep track of relocations.
+   *
+   * @param {Model} model The model in which to keep track of relocations.
+   */
+  constructor(model) {
+    this.model = model;
     this.relocations = [];
 
     // DEBUG
     window.relocationUtil = this;
   }
 
+  /**
+   * A function to handle a step of all current relocations in the model.
+   */
   handleAllRelocations() {
     for (let i = 0; i < this.relocations.length; i++) {
       const relocation = this.relocations[i];
       relocation.takeStep();
       if (relocation.hasArrived()) {
-        this.community.pauseExecution();
+        this.model.pauseExecution();
 
         relocation.person.relocating = false;
-        this.community.communities[relocation.destId].handlePersonJoining(
+        this.model.communities[relocation.destId].handlePersonJoining(
           relocation.person
         );
         this._removeRelocationInfo(relocation);
 
-        this.community.resumeExecution();
+        this.model.resumeExecution();
       }
     }
   }
 
+  /**
+   * A function handling a person starting to relocate.
+   *
+   * @param {Person} person The person to start relocating.
+   */
   insertRelocation(person) {
-    console.log('He watned to relocate');
     // Pause
-    this.community.pauseExecution();
+    this.model.pauseExecution();
     // Move person
-    const sourceId = person.modelId;
+
+    const sourceId = person.communityId;
     // Get models which very high density and exclude them from models being relocated to
-    const maxTotalPopulation = Math.round(
-      (this.community.stats.sum() / this.community.numModels) * 1.5
-    );
-    const exclude = Object.values(this.community.communities)
-      .filter((mod) => mod.totalPopulation > maxTotalPopulation)
-      .map((mod) => mod.id)
-      .concat([sourceId]);
-    // Destination Id
+
+    // TODO now we're not using this (find a way to do it)
+    // const maxTotalPopulation = Math.round(
+    //   (this.model.stats.sum() / this.model.numCommunities) * 1.5
+    // );
+    // const exclude = Object.values(this.model.communities)
+    //   .filter((mod) => mod.totalPopulation > maxTotalPopulation)
+    //   .map((mod) => mod.id)
+    //   .concat([sourceId]);
+    // // Destination Id
+
+    // Only exclude the source if there are more than one community
+    const excludedIds = this.model.numCommunities > 1 ? [sourceId] : [];
     const destId = getRandomIntExceptForValue(
       0,
-      this.community.numModels - 1,
-      exclude
+      this.model.numCommunities - 1,
+      excludedIds
     );
-    this.community.communities[sourceId].handlePersonLeaving(person);
-    // Change modelId of person
-    person.modelId = destId;
-    const distCoords = this.community.communities[destId].getRandomPoint();
+
+    this.model.communities[sourceId].handlePersonLeaving(person);
+    // Change communityId of person
+    person.communityId = destId;
+    const distCoords = this.model.communities[destId].getRandomPoint();
 
     // Do it via this
     this.relocations.push(new RelocationInfo(person, distCoords, destId));
     // Resume
-    this.community.resumeExecution();
+    this.model.resumeExecution();
   }
 
+  /**
+   * A function to remove the RelocationInfo from the ones we are tracking.
+   *
+   * @param {RelocationInfo} relocationInfo The relocationInfo to remove.
+   *
+   * @throws When no element is removed from tracked relocations.
+   */
   _removeRelocationInfo(relocationInfo) {
     const lengthBefore = this.relocations.length;
     this.relocations = this.relocations.filter((rel) => rel !== relocationInfo);
@@ -71,6 +98,20 @@ export default class RelocationUtil {
     }
   }
 
+  /**
+   * A function to cancel all ongoing relocations if the model is reset by the user
+   */
+  clearAllRelocationsForReset() {
+    this.relocations = [];
+  }
+
+  /**
+   * A function to get the stats of all relocating people.
+   *
+   * @returns {Stats} The stats of all combined relocating people.
+   *
+   * @throws If a person of an invalid type is found.
+   */
   getStats() {
     const stats = new Stats(0, 0, 0, 0, 0);
     this.relocations.forEach(({ person }) => {

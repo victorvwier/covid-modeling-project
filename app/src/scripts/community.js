@@ -1,290 +1,631 @@
-import wireSlidersToHandlers from './DOM/parameters';
-import Model from './model';
+import Person from './person';
+import { getRandom, gaussianRand } from './util';
+
+import { assignDemographic } from './demographic';
+
+import {
+  PERSON_RADIUS,
+  POPULATION_SPEED,
+  INFECTION_RADIUS,
+  TYPES,
+  NONIN_TO_IMMUNE_PROB,
+  COLORS,
+  TRANSMISSION_PROB,
+  MIN_INCUBATION_TIME,
+  MAX_INCUBATION_TIME,
+  MIN_INFECTIOUS_TIME,
+  MAX_INFECTIOUS_TIME,
+  MIN_TIME_UNTIL_DEAD,
+  MAX_TIME_UNTIL_DEAD,
+  DAYS_PER_SECOND,
+  REPULSION_FORCE,
+  ATTRACTION_FORCE,
+  RELOCATION_PROBABILITY,
+  MOVEMENT_TIME_SCALAR,
+  RELOCATION_ERROR_MARGIN,
+  INTERACTION_RANGE,
+} from './CONSTANTS';
 import Stats from './data/stats';
-import Bounds from './data/bounds';
-import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
-import RelocationUtil from './relocationUtil';
+import BoundingBoxStructure from './boundingBox';
+import Coordinate from './data/coordinate';
 
+/** @class Community describing a single community within the model. */
 export default class Community {
-  constructor(numModels, agentView, width, height, stats, updateStats) {
-    this.numModels = numModels;
-    this.communities = {};
-    this.height = height;
-    this.width = width;
-    this.stats = stats;
-    this.agentView = agentView;
-    this.updateStats = updateStats;
+  /**
+   * Instatiates a Community.
+   *
+   * @constructor
+   * @param {number} id The ID which can be used to refer to the community.
+   * @param {Bounds} bounds An object representing the bounds of the community.
+   * @param {Stats} stats The stats object for the community.
+   * @param {function} registerRelocation A function to call when a person is relocating.
+   */
+  constructor(id, bounds, stats, registerRelocation) {
+    this.registerRelocation = registerRelocation;
 
-    this._chartInterval = null;
+    // Intervals
+    this._updatePopulationInterval = null;
 
-    this.lastTimestamp = 0;
+    // this._animationFrame = null; TODO you removed this!
+    this.lastTimestamp = null;
 
-    this._passDrawInfoAnimationFrame = null;
-    this.relocationUtil = new RelocationUtil(this);
+    // state methods from main
+    this.id = id;
+    this.spareRandom = null;
 
-    this._setValuesFromStatsToLocal(stats);
+    this.startX = bounds.startX;
+    this.endX = bounds.endX;
+    this.startY = bounds.startY;
+    this.endY = bounds.endY;
 
-    // DEBUG
-    window.community = this;
-  }
-
-  _createDividedStats() {
-    return new Stats(
-      Math.round(this.numSusceptible / this.numModels),
-      Math.round(this.numNonInfectious / this.numModels),
-      Math.round(this.numInfectious / this.numModels),
-      Math.round(this.numDead / this.numModels),
-      Math.round(this.numImmune / this.numModels)
-    );
-  }
-
-  _setValuesFromStatsToLocal(stats) {
+    this.population = [];
     this.numSusceptible = stats.susceptible;
     this.numInfectious = stats.infectious;
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+
+    this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
+    this.infectionRadius = INFECTION_RADIUS;
+    this.personRadius = PERSON_RADIUS;
+    this.transmissionProb = TRANSMISSION_PROB;
+    this.repulsionForce = REPULSION_FORCE;
+    this.attractionToCenter = ATTRACTION_FORCE;
+    this.minIncubationTime = MIN_INCUBATION_TIME;
+    this.maxIncubationTime = MAX_INCUBATION_TIME;
+
+    this.minInfectiousTime = MIN_INFECTIOUS_TIME;
+    this.maxInfectiousTime = MAX_INFECTIOUS_TIME;
+
+    this.minTimeUntilDead = MIN_TIME_UNTIL_DEAD;
+    this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
+
+    this.maxSpeed = POPULATION_SPEED;
+    this.daysPerSecond = DAYS_PER_SECOND;
+    this.relocationProbability = RELOCATION_PROBABILITY;
+
+    this.totalPopulation =
+      this.numSusceptible +
+      this.numInfectious +
+      this.numDead +
+      this.numImmune +
+      this.numNonInfectious;
+
+    this.boundingBoxStruct = new BoundingBoxStructure(
+      this.startX,
+      this.endX,
+      this.startY,
+      this.endY,
+      INFECTION_RADIUS
+    );
+
+    // this._drawBorderLines();
   }
 
-  registerRelocation(person) {
-    this.relocationUtil.insertRelocation(person);
+  _drawBorderLines(borderCtx) {
+    // These lines are drawm from the edge coordinates of the model and make up the boundary of the
+    // communities which are drawn on a canvas other than the agent canvas and can be drawn
+    // automatically regardless of how many models there are.
+    borderCtx.strokeStyle = 'white';
+    borderCtx.strokeRect(
+      this.startX,
+      this.startY,
+      this.endX - this.startX,
+      this.endY - this.startY
+    );
   }
+
+  /**
+   * A function setting the attraction to the center.
+   *
+   * @param {number} newValue The new attraction to the center in the community.
+   */
+  setAttractionToCenter(newValue) {
+    this.attractionToCenter = newValue;
+  }
+
+  /**
+   * A function setting the force with which people repel each other.
+   *
+   * @param {number} newValue The new Repulsion force.
+   */
+  setRepulsionForce(newValue) {
+    this.repulsionForce = newValue;
+    this.updateRepulsionForce(newValue);
+  }
+
+  /**
+   * A function to handle a person relocating to another community.
+   *
+   * @param {Person} person The person leaving the community.
+   */
+  handlePersonLeaving(person) {
+    this.totalPopulation--;
+
+    this.population = this.population.filter((p) => p !== person);
+
+    this.boundingBoxStruct.remove(person);
+
+    switch (person.type) {
+      case TYPES.SUSCEPTIBLE:
+        if (this.numSusceptible < 0) {
+          throw Error('Why?');
+        }
+        this.numSusceptible--;
+        break;
+      case TYPES.NONINFECTIOUS:
+        this.numNonInfectious--;
+        break;
+      case TYPES.INFECTIOUS:
+        this.numInfectious--;
+        break;
+      case TYPES.IMMUNE:
+        this.numImmune--;
+        break;
+      case TYPES.DEAD:
+        this.numDead--;
+        break;
+      default:
+        throw new Error('Person of unknown type was encountered');
+    }
+  }
+
+  /**
+   * A function to handle a person relocating to this Community.
+   *
+   * @param {Person} person The person joining this community.
+   */
+  handlePersonJoining(person) {
+    this.totalPopulation++;
+
+    if (this.population.includes(person)) {
+      throw Error('But im already here');
+    }
+
+    person._handleXOutOfBounds(this.startX, this.endX);
+    person._handleYOutOfBounds(this.startY, this.endY);
+
+    this.boundingBoxStruct.insert(person);
+
+    this.population.push(person);
+
+    switch (person.type) {
+      case TYPES.SUSCEPTIBLE:
+        this.numSusceptible++;
+        break;
+      case TYPES.NONINFECTIOUS:
+        this.numNonInfectious++;
+        break;
+      case TYPES.INFECTIOUS:
+        this.numInfectious++;
+        break;
+      case TYPES.IMMUNE:
+        this.numImmune++;
+        break;
+      case TYPES.DEAD:
+        this.numDead++;
+        break;
+      default:
+        throw new Error('Person of unknown type was encountered');
+    }
+  }
+
+  /**
+   * A function to set the probability of transmission between people.
+   *
+   * @param {number} newValue The new probability of transmission.
+   */
+  setTransmissionProb(newValue) {
+    this.transmissionProb = newValue;
+  }
+
+  /**
+   * A function to set the probability for a person to move from the Non-Infectious state to the Immune state.
+   *
+   * @param {number} newValue The new probability for this state transition.
+   */
+  setNonInToImmuneProb(newValue) {
+    this.nonInfectiousToImmuneProb = newValue;
+  }
+
+  /**
+   * A function to set the minimum time to move from the Non-Infectious state to the Infectious state in this community.
+   *
+   * @param {number} newValue The new minimum incubation time.
+   */
+  setMinIncubationTime(newValue) {
+    this.minIncubationTime = newValue;
+  }
+
+  /**
+   * A function to set the maximum time to move from the Non-Infectious state to the Infectious state in this community.
+   *
+   * @param {number} newValue The new maximum incubation time.
+   */
+  setMaxIncubationTime(newValue) {
+    this.maxIncubationTime = newValue;
+  }
+
+  /**
+   * A function to set the minimum time to move from the Infectious state to the Immune state in this community.
+   *
+   * @param {number} newValue The new minimum infectious period.
+   */
+  setMinInfectiousTime(newValue) {
+    this.minInfectiousTime = newValue;
+  }
+
+  /**
+   * A function to set the maximum time to move from the Infectious state to the Immune state in this community.
+   *
+   * @param {number} newValue The new maximum infectious period.
+   */
+  setMaxInfectiousTime(newValue) {
+    this.maxInfectiousTime = newValue;
+  }
+
+  /**
+   * A function to set the minimum time to move from the Infectious state to the Dead state in this community.
+   *
+   * @param {number} newValue The new minimum time to death.
+   */
+  setMinTimeUntilDead(newValue) {
+    this.minTimeUntilDead = newValue;
+  }
+
+  /**
+   * A function to set the maximum time to move from the Infectious state to the Dead state in this community.
+   *
+   * @param {*} newValue The new maximum time to death.
+   */
+  setMaxTimeUntilDead(newValue) {
+    this.maxTimeUntilDead = newValue;
+  }
+
+  /**
+   * A function to set the infection radius in this community.
+   *
+   * @param {number} newValue The new Infection radius.
+   */
+  setInfectionRadius(newValue) {
+    this.infectionRadius = newValue;
+    this.updateInfectionRadius(newValue);
+  }
+
+  /**
+   * A function to set the person radius in this community.
+   *
+   * @param {number} newValue The new radius of the people.
+   */
+  setPersonRadius(newValue) {
+    this.personRadius = newValue;
+    this.updateRadius(newValue);
+  }
+
+  /**
+   * Method used to update the stats in main
+   */
+  exportStats() {
+    const stats = new Stats(
+      this.numSusceptible,
+      this.numNonInfectious,
+      this.numInfectious,
+      this.numDead,
+      this.numImmune
+    );
+    return stats;
+  }
+
+  /**
+   * Update the radius of people in this community.
+   *
+   * @param {number} newValue The new radius.
+   */
+  updateRadius(newValue) {
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].radius = newValue;
+    }
+  }
+
+  /**
+   * Update the infection radius of people in this community.
+   *
+   * @param {number} newValue The new infection radius.
+   */
+  updateInfectionRadius(newValue) {
+    this.boundingBoxStruct = new BoundingBoxStructure(
+      this.startX,
+      this.endX,
+      this.startY,
+      this.endY,
+      newValue
+    );
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].infectionRadius = newValue;
+      this.boundingBoxStruct.insert(this.population[i]);
+    }
+  }
+
+  /**
+   * Update the repulsion force of the people in this community.
+   *
+   * @param {number} newValue The new repulsion force.
+   */
+  updateRepulsionForce(newValue) {
+    for (let i = 0; i < this.totalPopulation; i++) {
+      this.population[i].repulsionForce = newValue;
+    }
+  }
+
+  /**
+   * A function to create a population
+   */
+  populateCanvas() {
+    this.populateCanvasWithType(TYPES.SUSCEPTIBLE, this.numSusceptible);
+    this.populateCanvasWithType(TYPES.INFECTIOUS, this.numInfectious);
+    this.populateCanvasWithType(TYPES.DEAD, this.numDead);
+    this.populateCanvasWithType(TYPES.IMMUNE, this.numImmune);
+    this.populateCanvasWithType(TYPES.NONINFECTIOUS, this.numNonInfectious);
+  }
+
+  /**
+   * A function to create the part of the population which consists of one type
+   *
+   * @param {TYPES} type The initial state of this part of the population.
+   * @param {number} count The amount of people in this part of the population.
+   */
+  populateCanvasWithType(type, count) {
+    for (let i = 0; i < count; i++) {
+      const x = getRandom(
+        this.startX + this.personRadius,
+        this.endX - this.personRadius
+      );
+      const y = getRandom(
+        this.startY + this.personRadius,
+        this.endY - this.personRadius
+      );
+      const newPerson = new Person(type, x, y, this.id);
+      assignDemographic(newPerson);
+      this.population.push(newPerson);
+      this.boundingBoxStruct.insert(newPerson);
+    }
+  }
+
+  /**
+   * A function to get the info required to render this community.
+   *
+   * @returns {Object} An object containing all necessary information for rendering this community.
+   */
+  getDrawInfo() {
+    const positions = [];
+    const colors = [];
+    let count = 0;
+    for (let i = 0; i < this.totalPopulation; i++) {
+      if (!(this.population[i].type === TYPES.DEAD)) {
+        positions.push(this.population[i].x);
+        positions.push(this.population[i].y);
+        colors.push(parseInt(this.population[i].color.slice(1, 3), 16) / 255.0);
+        colors.push(parseInt(this.population[i].color.slice(3, 5), 16) / 255.0);
+        colors.push(parseInt(this.population[i].color.slice(5, 7), 16) / 255.0);
+        colors.push(1);
+        count++;
+      }
+    }
+    return {
+      positions: positions,
+      colors: colors,
+      size: this.personRadius,
+      count: count,
+    };
+  }
+
+  /**
+   * A function to handle all necessary actions to advance this community in time.
+   *
+   * @param {number} dt The timestep over which to update the population.
+   */
+  updatePopulation(dt) {
+    for (let i = 0; i < this.totalPopulation; i += 1) {
+      const currentPerson = this.population[i];
+      this.update(currentPerson, dt);
+
+      if (Math.random() < RELOCATION_PROBABILITY && !currentPerson.relocating) {
+        if (currentPerson.type !== TYPES.DEAD) {
+          this.registerRelocation(currentPerson);
+          currentPerson.relocating = true;
+        }
+      } else if (!currentPerson.relocating) {
+        this.boundingBoxStruct.remove(currentPerson);
+        currentPerson.maxSpeed = this.maxSpeed;
+        this.attractToCenter(currentPerson);
+        currentPerson.move(
+          this.startX,
+          this.endX,
+          this.startY,
+          this.endY,
+          dt * MOVEMENT_TIME_SCALAR
+        ); // TODO: make slider to
+        this.boundingBoxStruct.insert(currentPerson);
+      }
+    }
+  }
+
+  /**
+   * A function returning a random point in this community.
+   *
+   * @returns {Coordinate} A random coordinate within this model and the margin of error for relocation
+   */
+  getRandomPoint() {
+    return new Coordinate(
+      getRandom(
+        this.startX + RELOCATION_ERROR_MARGIN,
+        this.endX - RELOCATION_ERROR_MARGIN
+      ),
+      getRandom(
+        this.startY + RELOCATION_ERROR_MARGIN,
+        this.endY - RELOCATION_ERROR_MARGIN
+      )
+    );
+  }
+
+  /**
+   * A function handling the interactions between the people of the population
+   *
+   * @param {number} dt The timestep over which the interactions take place.
+   */
+  interactPopulation(dt) {
+    for (let i = 0; i < this.totalPopulation; i += 1) {
+      const met = this.boundingBoxStruct.query(
+        this.population[i],
+        INTERACTION_RANGE
+      );
+      for (let j = 0; j < met.length; j += 1) {
+        // Social distancing
+        // if (this.population[i].type !== TYPES.DEAD && met[j] !== TYPES.DEAD) {
+        this.population[i].repel(met[j]);
+        // }
+
+        // Infection
+        if (
+          this.population[i].canInfect(met[j]) &&
+          Math.random() <= this.transmissionProb * dt
+        ) {
+          met[j].startIncubation();
+          met[j].setIncubationPeriod(
+            gaussianRand(this.minIncubationTime, this.maxIncubationTime)
+          );
+          this.numNonInfectious += 1;
+          this.numSusceptible -= 1;
+        }
+      }
+    }
+  }
+
+  // Decided to implement this in model, but could move to person
+  /**
+   * A function handling the updates for a person.
+   *
+   * @param {Person} person The person for which the update is to be done.
+   * @param {number} dt The timestep over which the update is to be calculated.
+   */
+  update(person, dt) {
+    if (person.type === TYPES.NONINFECTIOUS) {
+      person.incubationTime += dt;
+      if (person.incubationTime >= person.incubationPeriod) {
+        if (Math.random() < this.nonInfectiousToImmuneProb) {
+          person.becomesImmune();
+          this.numNonInfectious -= 1;
+          this.numImmune += 1;
+        } else {
+          person.becomesInfectious();
+          this.numNonInfectious -= 1;
+          this.numInfectious += 1;
+        }
+      }
+    } else if (person.type === TYPES.INFECTIOUS) {
+      if (!person.destinyDead && !person.destinyImmune) {
+        if (person.mortalityRate > 0 && Math.random() <= person.mortalityRate) {
+          person.destinyDead = true;
+          person.setInfectiousPeriod(
+            gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
+          );
+        } else {
+          person.destinyImmune = true;
+          person.setInfectiousPeriod(
+            gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
+          );
+        }
+      } else if (person.destinyImmune) {
+        person.infectiousTime += dt;
+        if (person.infectiousTime >= person.infectiousPeriod) {
+          person.type = TYPES.IMMUNE;
+          person.color = COLORS.IMMUNE;
+          this.numInfectious -= 1;
+          this.numImmune += 1;
+        }
+      } else {
+        person.infectiousTime += dt;
+        if (person.infectiousTime >= person.infectiousPeriod) {
+          // person.dead = true;
+          person.type = TYPES.DEAD;
+          person.color = COLORS.DEAD;
+          this.numInfectious -= 1;
+          this.numDead += 1;
+        }
+      }
+    }
+  }
+
+  /**
+   * A function to step through the community with a timestep.
+   *
+   * @param {number} dt The timestep for which to step.
+   */
+  step(dt) {
+    const daysPassed = (dt / 1000) * this.daysPerSecond;
+    this.updatePopulation(daysPassed);
+    this.interactPopulation(daysPassed);
+  }
+
+  /**
+   * A function to pause execution of the community.
+   */
 
   pauseExecution() {
-    // Cancel animation frame
-    cancelAnimationFrame(this._passDrawInfoAnimationFrame);
-    this._passDrawInfoAnimationFrame = null;
-    // clearInterval(this._chartInterval);
-    // this._chartInterval = null;
-    // Cancel all model intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.pauseExecution());
+    clearInterval(this._updatePopulationInterval);
+    this._updatePopulationInterval = null;
   }
 
+  /**
+   * A function to resume execution of the community.
+   */
   resumeExecution() {
-    // Resume animationFrame
-    this._animationFunction();
-    // if(this._chartInterval === null) {
-    //   this._chartInterval = setInterval(this.compileStats.bind(this), 500);
-    // }
-    // Resume models intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.resumeExecution());
+    this.step(0); // TODO what is the value of timestamp parameter
   }
 
-  populateCommunities() {
-    for (let i = 0; i < this.numModels; i++) {
-      this.communities[i].populateCanvas();
-    }
-  }
-
-  run() {
-    wireSlidersToHandlers(this);
-    this.populateCommunities();
-
-    this._animationFunction();
-    this._chartInterval = setInterval(this.compileStats.bind(this), 500);
-  }
-
-  _animationFunction(timestamp) {
-    let dt = 0;
-    if (this.lastTimestamp && timestamp) {
-      dt = timestamp - this.lastTimestamp;
-    } // The time passed since running the last step.
-    this.lastTimestamp = timestamp;
-
-    this.passDrawInfoToAgentChart();
-    Object.values(this.communities).forEach((mod) => mod.step(dt));
-    // Check all relocations
-    this.relocationUtil.handleAllRelocations();
-  }
-
-  passDrawInfoToAgentChart() {
-    this._passDrawInfoAnimationFrame = requestAnimationFrame(
-      this._animationFunction.bind(this)
+  /**
+   * A function to attract a person in the community to its center
+   * @param {Person} person The person to be attracted to the center of the community.
+   */
+  attractToCenter(person) {
+    // get vector to center
+    let forceX = (this.startX + this.endX) / 2.0 - person.x;
+    let forceY = (this.startY + this.endY) / 2.0 - person.y;
+    // normalize vector to center
+    const maxDistance = Math.sqrt(
+      ((this.startX + this.endX) / 2) ** 2 +
+        ((this.startY + this.endY) / 2) ** 2
     );
+    forceX /= maxDistance;
+    forceY /= maxDistance;
 
-    const allData = Object.values(this.communities)
-      .map((com) => com.getDrawInfo())
-      .reduce((acc, cur) => ({
-        positions: acc.positions.concat(cur.positions),
-        colors: acc.colors.concat(cur.colors),
-        size: this.communities[0].personRadius,
-        count: acc.count + cur.count,
-      }));
-
-    // TODO remove this and refactor person to get his own drawInfo
-    this.relocationUtil.relocations.forEach(({ person }) => {
-      allData.positions.push(person.x);
-      allData.positions.push(person.y);
-      allData.colors.push(parseInt(person.color.slice(1, 3), 16) / 255.0);
-      allData.colors.push(parseInt(person.color.slice(3, 5), 16) / 255.0);
-      allData.colors.push(parseInt(person.color.slice(5, 7), 16) / 255.0);
-      allData.colors.push(1);
-      allData.count++;
-    });
-    this.agentView.draw(allData);
-  }
-
-  _createIncrementals() {
-    // return [new Bounds(0, 100, 0, 100), new Bounds(120, 220, 0, 100)];
-    const listOfBounds = [];
-    // Space between each of the models + 2 on the sides
-    let widthFactor = 1;
-    let heightFactor = 1;
-    if (this.numModels <= 6) {
-      widthFactor = 2;
-      heightFactor = Math.ceil(this.numModels / widthFactor);
-    } else if (this.numModels <= 12) {
-      widthFactor = 3;
-      heightFactor = Math.ceil(this.numModels / widthFactor);
-    }
-
-    const oneModelWidth = Math.round(
-      (this.width - (widthFactor + 1) * SPACE_BETWEEN_COMMUNITIES) / widthFactor
+    person.applyForce(
+      this.attractionToCenter * forceX,
+      this.attractionToCenter * forceY
     );
-
-    const oneModelHeight = Math.round(
-      (this.height - (heightFactor + 1) * SPACE_BETWEEN_COMMUNITIES) /
-        heightFactor
-    );
-    let currentX = 0;
-    let currentY = 0;
-    let nextY = 0;
-
-    for (let i = 0; i < this.numModels; i++) {
-      if (
-        (this.numModels <= 6 && i % 2 === 0) ||
-        (this.numModels <= 12 && this.numModels >= 7 && i % 3 === 0)
-      ) {
-        currentX = SPACE_BETWEEN_COMMUNITIES;
-        currentY = nextY + SPACE_BETWEEN_COMMUNITIES;
-        nextY = currentY + oneModelHeight;
-      }
-      listOfBounds.push(
-        new Bounds(currentX, currentX + oneModelWidth, currentY, nextY)
-      );
-      currentX += oneModelWidth;
-      currentX += SPACE_BETWEEN_COMMUNITIES;
-    }
-
-    return listOfBounds;
   }
 
-  setupCommunity() {
-    const dividedStats = this._createDividedStats();
-    const bounds = this._createIncrementals();
-
-    for (let i = 0; i < this.numModels; i++) {
-      this.communities[i] = new Model(
-        i,
-        bounds[i],
-        dividedStats,
-        this.registerRelocation.bind(this)
-      );
-
-      // DEBUG
-      window.model = this.communities[i];
-    }
-  }
-
-  compileStats() {
-    const stats = Object.values(this.communities)
-      .map((m) => m.exportStats())
-      .reduce(
-        (acc, cur) =>
-          new Stats(
-            acc.susceptible + cur.susceptible,
-            acc.noninfectious + cur.noninfectious,
-            acc.infectious + cur.infectious,
-            acc.dead + cur.dead,
-            acc.immune + cur.immune
-          )
-      );
-
-    const relocationStats = this.relocationUtil.getStats();
-    const finalStats = Stats.joinStats(stats, relocationStats);
-
-    this._setValuesFromStatsToLocal(finalStats);
-    this.updateStats(finalStats);
-  }
-
+  /**
+   * A function to reset the community.
+   *
+   * @param {Stats} stats the new Initial stats for the Community.
+   */
   resetCommunity(stats) {
-    this._setValuesFromStatsToLocal(stats);
+    // Set new values and reset to init
+    this.population = [];
+    this.numSusceptible = stats.susceptible;
+    this.numInfectious = stats.infectious;
+    this.numImmune = stats.immune;
+    this.numNonInfectious = stats.noninfectious;
+    this.numDead = stats.dead;
+    this.totalPopulation = stats.susceptible + stats.infectious;
 
-    const dividedStats = this._createDividedStats();
-    Object.values(this.communities).forEach((m) => m.resetModel(dividedStats));
-  }
+    // clear the canvas
 
-  // SLIDER HANDLER METHODS
-
-  updateAgentSize(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setPersonRadius(newValue)
-    );
-  }
-
-  updateInfectionRadius(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setInfectionRadius(newValue)
-    );
-  }
-
-  updateMinTimeUntilDead(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setMinTimeUntilDead(newValue)
-    );
-  }
-
-  updateMaxTimeUntilDead(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setMaxTimeUntilDead(newValue)
-    );
-  }
-
-  updateMinInfectiousTime(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setMinInfectiousTime(newValue)
-    );
-  }
-
-  updateMaxInfectiousTime(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setMaxInfectiousTime(newValue)
-    );
-  }
-
-  updateMinIncubationTime(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setMinIncubationTime(newValue)
-    );
-  }
-
-  updateMaxIncubationTime(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setMaxIncubationTime(newValue)
-    );
-  }
-
-  updateTransmissionProb(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setTransmissionProb(newValue)
-    );
-  }
-
-  updateNonInToImmuneProb(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setNonInToImmuneProb(newValue)
-    );
-  }
-
-  updateRepulsionForce(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setRepulsionForce(newValue)
-    );
-  }
-
-  updateAttractionToCenter(newValue) {
-    Object.values(this.communities).forEach((model) =>
-      model.setAttractionToCenter(newValue)
-    );
+    // start the loop again
+    this.populateCanvas();
+    this.updateInfectionRadius(this.infectionRadius);
+    this.updateRadius(this.personRadius);
+    // this._drawBorderLines();
   }
 }

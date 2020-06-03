@@ -1,7 +1,15 @@
 import ChartJS from 'chart.js';
 import { COLORS } from './CONSTANTS';
 
+/** @class Chart describing the line chart used to represent our data. */
 export default class Chart {
+  /**
+   * Instantiates a Chart.
+   *
+   * @constructor
+   * @param {Object} ctx The context in which the chart is displayed.
+   * @param {function} getStats A function allowing us to retrieve a stats object which we want to graph.
+   */
   constructor(ctx, getStats) {
     this.ctx = ctx;
     this.getStats = getStats;
@@ -16,10 +24,21 @@ export default class Chart {
     this.xValues = [];
   }
 
+  /**
+   * A function getting the size of the total population represented in the chart.
+   *
+   * @returns {number} The size of the total population.
+   */
   getTotalPopulation() {
     return this.getStats().sum();
   }
 
+  /**
+   * A function allowing us to reset the chart to a new starting state.
+   *
+   * @param {number} newInitSusceptible The initial amount of susceptible people.
+   * @param {number} newInitInfectious The initial amount of infectious people.
+   */
   resetChart(newInitSusceptible, newInitInfectious) {
     this.x = 1;
     this.susceptible = [newInitSusceptible];
@@ -33,6 +52,11 @@ export default class Chart {
     this.drawChart();
   }
 
+  /**
+   * A function updating the values in the chart.
+   *
+   * @param {Stats} stats a stats object holding the new values.
+   */
   updateValues(stats) {
     this.chart.data.datasets[0].data.push(stats.susceptible);
     this.susceptible.push(stats.susceptible);
@@ -50,6 +74,9 @@ export default class Chart {
     this.chart.update();
   }
 
+  /**
+   * A function to initially draw the chart on the screen.
+   */
   drawChart() {
     this.chart = new ChartJS(this.ctx, {
       type: 'line',
