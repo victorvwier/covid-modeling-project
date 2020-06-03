@@ -11,7 +11,6 @@ export default class Timeline {
     this.context = canvas.getContext('2d');
     this.rules = [];
 
-    this.rules.push(new TimelineRule(TIMELINE_PARAMETERS.SOCIAL_DISTANCING, 3, 100, 1));
     this.setRuleCallback = setruleCb;
   }
 
@@ -21,7 +20,24 @@ export default class Timeline {
     this.enforceRules(time);
   }
 
-  
+  addRule(paramType, start, end, value) {
+    if(Number.isNaN(start) || Number.isNaN(end) || Number.isNaN(value)) {
+      throw new Error("Stop doing that");
+    }
+    let found = false;
+    for(let i = 0; i < this.rules.length; i++) {
+      if(this.rules[i].type === paramType) {
+        found = true;
+        this.rules[i].start = start;
+        this.rules[i].end = end;
+        this.rules[i].value = value;
+      }
+    }
+
+    if(!found) {
+      this.rules.push(new TimelineRule(paramType, start, end, value));
+    }
+  }
 
   enforceRules(time) {
     for(let i = 0; i < this.rules.length; i++) {
@@ -60,9 +76,9 @@ export default class Timeline {
     const X_coords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
     this.context.font = '15px Georgia';
     this.context.fillStyle = 'black';
-    this.context.fillText(rule.name, 0, y_offset + RULE_HEIGHT/2);
+    this.context.fillText(`${rule.name}: ${rule.value}`, 0, y_offset + RULE_HEIGHT/2);
     this.context.beginPath();
-    this.context.rect(X_coords[0], y_offset + RULE_MARGINS, X_coords[1], RULE_HEIGHT - RULE_MARGINS * 2);
+    this.context.rect(X_coords[0], y_offset + RULE_MARGINS, X_coords[1] - X_coords[0], RULE_HEIGHT - RULE_MARGINS * 2);
     this.context.fillStyle = 'grey';
     this.context.fill();
   }

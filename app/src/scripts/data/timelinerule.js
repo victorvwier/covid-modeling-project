@@ -10,7 +10,10 @@ export default class TimelineRule
         
 
         if (type === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
-            this.name = "Social distancing"
+            this.name = "Social distancing";
+        }
+        if (type === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+            this.name = "Attraction to center";
         }
     }
 
