@@ -2,7 +2,10 @@ import Stats from './data/stats';
 import Model from './model';
 import Chart from './chart';
 import AgentChart from './agentChart';
-import { wireReloadButtonToMain } from './DOM/parameters';
+import {
+  wireReloadButtonToMain,
+  wireReloadPresetToMain,
+} from './DOM/parameters';
 import DemographicsChart from './demographicsChart';
 import {
   getInitialNumInfectious,
@@ -10,6 +13,7 @@ import {
   updateTheStatistics,
   getNumCommunities,
 } from './DOM/domValues';
+import presetsManager from './presetsManager';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -69,6 +73,7 @@ export default class Main {
 
     // Wire reload button
     wireReloadButtonToMain(this);
+    wireReloadPresetToMain(this);
 
     // DEBUG
     window.chart = this.chart;
@@ -116,6 +121,11 @@ export default class Main {
   updateDemographicChart() {
     const population = this.model.getAllPopulation();
     this.demographicsChart.receiveUpdate(population);
+  }
+
+  changePreset(presetName) {
+    presetsManager.changePreset(presetName);
+    this.reset();
   }
 
   /**

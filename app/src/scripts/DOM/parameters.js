@@ -196,3 +196,9 @@ export function wireReloadButtonToMain(main) {
     .getElementById('reload')
     .addEventListener('click', () => main.reset());
 }
+
+export function wireReloadPresetToMain(main) {
+  document.getElementById('preset-list').addEventListener('click', function () {
+    main.changePreset(this.value);
+  });
+}
