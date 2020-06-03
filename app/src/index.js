@@ -25,7 +25,6 @@ window.onload = function () {
     this.alert('Please enable webGl support');
     return;
   }
-  console.log('started');
   const main = new Main(
     context,
     chartCtx,

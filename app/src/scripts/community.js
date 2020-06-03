@@ -525,8 +525,6 @@ export default class Community {
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
         if (person.mortalityRate > 0 && Math.random() <= person.mortalityRate) {
-          console.log(person.age);
-          console.log(person.gender);
           person.destinyDead = true;
           person.setInfectiousPeriod(
             gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
@@ -619,6 +617,7 @@ export default class Community {
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numNonInfectious = stats.noninfectious;
+    this.numDead = stats.dead;
     this.totalPopulation = stats.susceptible + stats.infectious;
 
     // clear the canvas

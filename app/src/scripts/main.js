@@ -164,11 +164,12 @@ export default class Main {
     if (this.numCommunities !== this.model.numCommunities) {
       this.model.numCommunities = this.numCommunities;
     }
+
     this.model.communities = {};
     this.model.setupCommunity();
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.model.resetModel(this.createCurrentStats());
     this.demographicsChart.resetChart(this.createCurrentStats().sum());
+    this.model.resetModel(this.createCurrentStats());
   }
 }
