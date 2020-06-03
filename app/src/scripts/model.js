@@ -163,6 +163,8 @@ export default class Model {
     wireSlidersToHandlers(this);
     this.populateCommunities();
 
+    this.updateAgentSize(this.getAgentSize(this.stats.sum()));
+
     this._animationFunction();
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
@@ -295,6 +297,18 @@ export default class Model {
     }
   }
 
+  getAgentSize(population) {
+    if (population > 2000) {
+      return 1.5;
+    } else if (population > 1000) {
+      return 2.5;
+    } else if (population > 600) {
+      return 3.5;
+    } else {
+      return 5;
+    }
+  }
+
   /**
    * A function to combine the stats of all communities.
    */
@@ -333,6 +347,8 @@ export default class Model {
 
       this.communities[i].resetCommunity(dividedStats);
     }
+
+    this.updateAgentSize(this.getAgentSize(stats.sum()));
   }
 
   // SLIDER HANDLER METHODS
