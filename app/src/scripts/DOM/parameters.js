@@ -1,10 +1,11 @@
-import {
+import presetsManager from '../presetsManager';
+
+const {
   TRANSMISSION_PROB,
   NONIN_TO_IMMUNE_PROB,
   MIN_INCUBATION_TIME,
   MAX_INCUBATION_TIME,
   INFECTION_RADIUS,
-  // PERSON_RADIUS,
   INITIAL_INFECTIOUS,
   INITIAL_SUSCEPTIBLE,
   MIN_INFECTIOUS_TIME,
@@ -14,7 +15,7 @@ import {
   REPULSION_FORCE,
   ATTRACTION_FORCE,
   NUM_COMMUNITIES,
-} from '../CONSTANTS';
+} = presetsManager.loadPreset();
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
 // Otherwise the default is just a function that returns the variable itself

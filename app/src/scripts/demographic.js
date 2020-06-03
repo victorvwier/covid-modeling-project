@@ -1,5 +1,12 @@
-import { AGE, MORTALITY_RATE, DEMOGRAPHIC, GENDER } from './CONSTANTS';
 import { getRandomInt } from './util';
+import presetsManager from './presetsManager';
+
+const {
+  AGE,
+  MORTALITY_RATE,
+  DEMOGRAPHIC,
+  GENDER,
+} = presetsManager.loadPreset();
 
 /**
  * Sets the age, gender and mortality rate for a given person based on real distirbution data.

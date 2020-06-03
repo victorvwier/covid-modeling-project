@@ -1,5 +1,7 @@
 import ChartJS from 'chart.js';
-import { COLORS } from './CONSTANTS';
+import presetManager from './presetsManager';
+
+const { COLORS } = presetManager.loadPreset();
 
 /** @class Chart describing the line chart used to represent our data. */
 export default class Chart {

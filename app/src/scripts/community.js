@@ -1,9 +1,12 @@
 import Person from './person';
 import { getRandom, gaussianRand } from './util';
-
 import { assignDemographic } from './demographic';
+import presetsManager from './presetsManager';
+import Stats from './data/stats';
+import BoundingBoxStructure from './boundingBox';
+import Coordinate from './data/coordinate';
 
-import {
+const {
   PERSON_RADIUS,
   POPULATION_SPEED,
   INFECTION_RADIUS,
@@ -24,10 +27,7 @@ import {
   MOVEMENT_TIME_SCALAR,
   RELOCATION_ERROR_MARGIN,
   INTERACTION_RANGE,
-} from './CONSTANTS';
-import Stats from './data/stats';
-import BoundingBoxStructure from './boundingBox';
-import Coordinate from './data/coordinate';
+} = presetsManager.loadPreset();
 
 /** @class Community describing a single community within the model. */
 export default class Community {

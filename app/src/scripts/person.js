@@ -1,4 +1,6 @@
-import {
+import presetsManager from './presetsManager';
+
+const {
   PERSON_RADIUS,
   COLORS,
   POPULATION_SPEED,
@@ -6,7 +8,7 @@ import {
   INFECTION_RADIUS,
   RELOCATION_STEP_SIZE,
   REPULSION_FORCE,
-} from './CONSTANTS';
+} = presetsManager.loadPreset();
 
 /** @class Person describing a person in the model. */
 export default class Person {
