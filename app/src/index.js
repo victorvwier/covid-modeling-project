@@ -14,7 +14,7 @@ window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
-  const timelineCtx = document.getElementById('timeline-element').getContext('2d');
+  const timelineCanvas = document.getElementById('timeline-element');
 
   if (context === null) {
     this.alert('Please enable webGl support');
@@ -24,7 +24,7 @@ window.onload = function () {
   const main = new Main(
     context,
     chartCtx,
-    timelineCtx,
+    timelineCanvas,
     glCanvas.width,
     glCanvas.height,
     INITIAL_SUSCEPTIBLE,

@@ -20,7 +20,7 @@ export default class Main {
    * @constructor
    * @param {Object} context The webGL context of our HTML.
    * @param {Object} chartContext The 2D context we use to draw our chart.
-   * @param {Object} timelineContext the 2d context we use to draw the timeline.
+   * @param {Object} timelineCanvas the 2d canvas we use to draw the timeline.
    * @param {number} width The width of our glCanvas.
    * @param {number} height The height of our glCanvas.
    * @param {number} numSusceptible The initial number of Susceptible people.
@@ -32,7 +32,7 @@ export default class Main {
   constructor(
     context,
     chartContext,
-    timelineContext,
+    timelineCanvas,
     width,
     height,
     numSusceptible,
@@ -60,7 +60,7 @@ export default class Main {
       this.createCurrentStats.bind(this)
     );
 
-    this.timeline = new Timeline(timelineContext);
+    this.timeline = new Timeline(timelineCanvas);
     this.agentView = new AgentChart(context);
     this.model = null;
     this.setupMain();
