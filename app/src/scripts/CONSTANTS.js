@@ -55,6 +55,11 @@ export const TESTED_POSITIVE_PROBABILITY=0.5;
 /** @constant TRANSMISSION_PROB_REDUCTION_FACTOR The factor with with the transmission probability is reduced for a positive person. */
 export const TRANSMISSION_PROB_REDUCTION_FACTOR=3;
 
+/** @constant ICU_PROBABILITY The probability a person goes to the ICU when tested positive. */
+export const ICU_PROBABILITY = 0.1;
+/** @constant ICU_CAPACITY The capacity of the ICU of a single community. */
+export const ICU_CAPACITY = 20;
+
 /**
  * Enum for the colors related to the states a person can be in.
  * @readonly

@@ -24,6 +24,8 @@ import {
   INTERACTION_RANGE,
   TESTED_POSITIVE_PROBABILITY,
   TRANSMISSION_PROB_REDUCTION_FACTOR,
+  ICU_PROBABILITY,
+  ICU_CAPACITY,
 } from './CONSTANTS';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
@@ -83,6 +85,8 @@ export default class Community {
     this.maxSpeed = POPULATION_SPEED;
     this.daysPerSecond = DAYS_PER_SECOND;
     this.relocationProbability = RELOCATION_PROBABILITY;
+
+    this.icuCount = 0;
 
     this.totalPopulation =
       this.numSusceptible +
@@ -548,6 +552,9 @@ export default class Community {
           person.color = COLORS.IMMUNE;
           this.numInfectious -= 1;
           this.numImmune += 1;
+          if (person.inIcu) {
+            this.icuCount -= 1;
+          }
         }
       } else {
         person.infectiousTime += dt;
@@ -557,11 +564,25 @@ export default class Community {
           person.color = COLORS.DEAD;
           this.numInfectious -= 1;
           this.numDead += 1;
+          if (person.inIcu) {
+            this.icuCount -= 1;
+          }
         }
       }
       if (!person.testedPositive && Math.random() < TESTED_POSITIVE_PROBABILITY * dt) {
         person.testedPositive = true;
         person.infectionRadius /= TRANSMISSION_PROB_REDUCTION_FACTOR;
+        if (Math.random() < ICU_PROBABILITY) {
+          if (this.icuCount >= ICU_CAPACITY) {
+            person.type = TYPES.DEAD;
+            person.color = COLORS.DEAD;
+            this.numInfectious -= 1;
+            this.numDead += 1;
+          } else {
+            person.inIcu = true;
+            this.icuCount += 1;
+          }
+        }
       }
     }
   }

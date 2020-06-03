@@ -42,6 +42,8 @@ export default class Person {
     this.infectiousPeriod = 0;
     this.age = Math.round(Math.random() * 100);
 
+    this.inIcu = false;
+
     this.relocating = false;
 
     this.step = RELOCATION_STEP_SIZE;
