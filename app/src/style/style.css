@@ -46,15 +46,30 @@ button {
 }
 
 #glcanvas-container {
-  display: flex;
   justify-content: center;
-  align-items: center;
-  width: 55vw;
-  height: 80vh;
 }
+
 #timeline {
+  display: flex;
   color: black;
-  font-size: 4rem;
+}
+
+#timeline-form {
+  padding: 10px;
+  display: flex;
+  height: 200px;
+  width: 200px;
+}
+
+#timeline-add-rule {
+  height:inherit;
+}
+
+#timeline-buttons {
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 #glcanvas {

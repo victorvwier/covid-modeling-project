@@ -588,8 +588,8 @@ export default class Community {
     forceY /= maxDistance;
 
     person.applyForce(
-      this.attractionToCenter * forceX,
-      this.attractionToCenter * forceY
+      this.attractionToCenter * forceX / 100,
+      this.attractionToCenter * forceY / 100
     );
   }
 

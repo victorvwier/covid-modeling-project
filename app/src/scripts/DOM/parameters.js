@@ -14,6 +14,7 @@ import {
   REPULSION_FORCE,
   ATTRACTION_FORCE,
   NUM_COMMUNITIES,
+  TIMELINE_PARAMETERS,
 } from '../CONSTANTS';
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
@@ -144,7 +145,7 @@ export default function (community) {
     REPULSION_FORCE,
     '%',
     community.updateRepulsionForce.bind(community),
-    (x) => x * 100
+    (x) => x 
   );
 
   wireInput(
@@ -153,7 +154,7 @@ export default function (community) {
     ATTRACTION_FORCE,
     '%',
     community.updateAttractionToCenter.bind(community),
-    (x) => x * 100
+    (x) => x
   );
 
   // initial number of susceptibles
@@ -194,4 +195,19 @@ export function wireReloadButtonToMain(main) {
   document
     .getElementById('reload')
     .addEventListener('click', () => main.reset());
+}
+
+/**
+ * A function binding the addRule button to our main class.
+ * 
+ * @param {Timeline} timeline The corresponding timeline class;
+ */
+export function wireTimelineButtontoTimeline(timeline) {
+  document.getElementById('timeline-add-rule').addEventListener('click', () => {
+    const type = document.getElementById('timelineform-type').value;
+    const start = document.getElementById('timelineform-start').value;
+    const end = document.getElementById('timelineform-end').value;
+    const value = document.getElementById('timelineform-value').value;
+    timeline.addRule(type, parseFloat(start), parseFloat(end), parseFloat(value))
+  });
 }

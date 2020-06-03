@@ -2,7 +2,7 @@ import Stats from './data/stats';
 import Model from './model';
 import Chart from './chart';
 import AgentChart from './agentChart';
-import { wireReloadButtonToMain } from './DOM/parameters';
+import { wireReloadButtonToMain, wireTimelineButtontoTimeline } from './DOM/parameters';
 import {
   getInitialNumInfectious,
   getInitialNumSusceptible,
@@ -62,6 +62,7 @@ export default class Main {
     );
 
     this.timeline = new Timeline(timelineCanvas, this.timelineCallback.bind(this));
+    wireTimelineButtontoTimeline(this.timeline);
     this.agentView = new AgentChart(context);
     this.model = null;
     this.setupMain();
@@ -97,8 +98,9 @@ export default class Main {
   timelineCallback(timelineParam, value) {
     if(timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
       this.model.updateRepulsionForce(value);
-      console.log(`Callback called: ${value}`);
-
+    }
+    if(timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+      this.model.updateAttractionToCenter(value);
     }
   }
 

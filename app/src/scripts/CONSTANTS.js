@@ -82,7 +82,9 @@ export const TYPES = {
  * @enum {string}
  */
 export const TIMELINE_PARAMETERS = {
-  SOCIAL_DISTANCING: 'soc'
+  SOCIAL_DISTANCING: 'soc',
+  ATTRACTION_TO_CENTER: 'atc',
+  
 }
 /** @constant SPACE_BETWEEN_COMMUNITIES The amount of pixels used as spacing inbetween communities. */
 export const SPACE_BETWEEN_COMMUNITIES = 20;

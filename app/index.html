@@ -32,7 +32,7 @@
             <input
               type="range"
               min="0"
-              max="1"
+              max="100"
               value="0"
               step="0.05"
               class="slider"
@@ -48,7 +48,7 @@
             <input
               type="range"
               min="0"
-              max="1"
+              max="100"
               value="0"
               step="0.05"
               class="slider"
@@ -386,7 +386,7 @@
 
     <main id="main">
       <div>
-        <div style="display: flex">
+        <div style="display: flex;">
           <div id="left-panel">
             <div id="chart-container">
               <canvas id="chart-canvas" width="600px" height="300px"></canvas>
@@ -420,8 +420,27 @@
           </div>
         </div>
         <div id="timeline">
-          <canvas id="timeline-element" width="1000px" height="200px"> Days: 0 </canvas>
-          <button id="timeline-add-rule">+</button>
+          <div>
+            <canvas id="timeline-element" width="1200" height="100%">
+              Days: 0
+            </canvas>
+          </div>
+          <div id="timeline-form">
+            <div id="timeline-buttons">
+              <select id="timelineform-type">
+                <option value="soc">Social distancing</option>
+                <option value="atc">Attraction to the center</option>
+              </select>
+              <label for="timelineform-start">Start: </label>
+              <input type="text" id="timelineform-start" />
+              <label for="timelineform-end">End: </label>
+              <input type="text" id="timelineform-end" />
+              <label for="timelineform-value">value: </label>
+              <input type="text" id="timelineform-value" />
+            </div>
+            <button id="timeline-add-rule">+</button>
+          </div>
+          
         </div>
       </div>
     </main>
