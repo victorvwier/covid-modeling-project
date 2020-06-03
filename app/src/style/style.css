@@ -75,13 +75,15 @@ button {
   margin-top: 30px;
   color: black;
   padding: 10px;
-  width: 580px;
+  /* width: 580px; */
   margin-bottom: 100px;
 }
 
 .col-sm {
-  color: white;
+  color: black;
   margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 .slider {
@@ -121,7 +123,7 @@ button {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #111;
+  background-color: white;
   overflow-x: hidden;
   transition: 0.5s;
 }
@@ -158,8 +160,9 @@ button {
 }
 
 h2 {
-  color: white;
-  padding-left: 20px;
+  color: rgb(41, 41, 41);
+  padding-left: 5px;
+  font-size: 38px;
 }
 
 h3 {
@@ -187,4 +190,55 @@ h3 {
 #demographics {
   width: 750px;
   height: 500px;
+}
+
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 20px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 20px;
+  font-weight: 500;
+  transition: 0.4s;
+}
+
+.active,
+.accordion:hover {
+  background-color: #ccc;
+}
+
+.panel {
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.btn {
+  background-color: #05befc;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+.btn-secondary {
+  background-color: white;
+  color: black;
+  border: 2px solid #05befc;
+}
+
+.btn-secondary:hover {
+  background-color: #05befc;
+  color: white;
 }
