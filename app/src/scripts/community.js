@@ -662,8 +662,4 @@ export default class Community {
     this.updateInfectionRadius(this.infectionRadius);
     this.updateRadius(this.personRadius);
   }
-
-  updateICUCountOnScreen(icuCount){
-
-  }
 }
