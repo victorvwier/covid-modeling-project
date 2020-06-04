@@ -3,6 +3,7 @@ import {
   setInitialNumInfectious,
   setInitialNumSusceptible,
   setNumCommunities,
+  setAttractionForce,
 } from './domValues';
 
 const {

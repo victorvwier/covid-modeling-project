@@ -44,6 +44,8 @@ export default class Model {
 
     this.lastTimestamp = 0;
 
+    this.presetInProcess = false;
+
     this._passDrawInfoAnimationFrame = null;
     this.relocationUtil = new RelocationUtil(this);
 
@@ -165,9 +167,7 @@ export default class Model {
     } = presetsManager.loadPreset();
     this.spaceBetweenCommunities = NEW_SPACE_BETWEEN_COMMUNITIES;
 
-    for (let i = 0; i < this.numCommunities; i++) {
-      this.communities[i].reloadPreset();
-    }
+    this.presetInProcess = true;
   }
 
   /**
@@ -307,9 +307,15 @@ export default class Model {
 
       this.communities[i]._drawBorderLines(this.borderCtx);
 
+      if (this.presetInProcess) {
+        this.communities[i].reloadPreset();
+      }
+
       // DEBUG
       window.model = this;
     }
+
+    this.presetInProcess = false;
   }
 
   getAgentSize(population) {

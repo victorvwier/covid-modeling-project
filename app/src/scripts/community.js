@@ -116,6 +116,8 @@ export default class Community {
   }
 
   reloadPreset() {
+    console.log(this.attractionToCenter);
+
     const {
       PERSON_RADIUS: NEW_PERSON_RADIUS,
       NONIN_TO_IMMUNE_PROB: NEW_NONIN_TO_IMMUNE_PROB,
@@ -152,6 +154,8 @@ export default class Community {
     this.maxSpeed = NEW_POPULATION_SPEED;
     this.daysPerSecond = NEW_DAYS_PER_SECOND;
     this.relocationProbability = NEW_RELOCATION_PROBABILITY;
+
+    console.log(this.attractionToCenter);
   }
 
   /**
