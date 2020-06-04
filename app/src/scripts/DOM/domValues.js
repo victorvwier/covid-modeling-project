@@ -8,6 +8,13 @@ export function getInitialNumSusceptible() {
 }
 
 /**
+ * A function setting the initial amount of susceptible people.
+ */
+export function setInitialNumSusceptible(newValue) {
+  document.getElementById('initSusceptibleCount').value = newValue;
+}
+
+/**
  * A function returning the initial amount of infectious people as set in the UI.
  *
  * @returns {number} The initial amount of infectious people as set with the slider.
@@ -17,11 +24,25 @@ export function getInitialNumInfectious() {
 }
 
 /**
+ * A function setting the initial amount of infectious people.
+ */
+export function setInitialNumInfectious(newValue) {
+  document.getElementById('initInfectiousCount').value = newValue;
+}
+
+/**
  * A function to get the number of communities selected by the user
  * @returns {Number} number of communities
  */
 export function getNumCommunities() {
   return parseInt(document.getElementById('numCommunities').value, 10);
+}
+
+/**
+ * A function setting the initial amount of infectious people.
+ */
+export function setNumCommunities(newValue) {
+  document.getElementById('numCommunities').value = newValue;
 }
 
 /**

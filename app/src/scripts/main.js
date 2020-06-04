@@ -13,7 +13,6 @@ import {
   updateTheStatistics,
   getNumCommunities,
 } from './DOM/domValues';
-import presetsManager from './presetsManager';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -123,8 +122,8 @@ export default class Main {
     this.demographicsChart.receiveUpdate(population);
   }
 
-  changePreset(presetName) {
-    presetsManager.changePreset(presetName);
+  changePreset() {
+    this.model.reloadPreset();
     this.reset();
   }
 

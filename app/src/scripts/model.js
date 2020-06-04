@@ -29,6 +29,7 @@ export default class Model {
     updateDemographicChart,
     borderCtx
   ) {
+    this.spaceBetweenCommunities = SPACE_BETWEEN_COMMUNITIES;
     this.numCommunities = numCommunities;
     this.communities = {};
     this.height = height;
@@ -158,6 +159,17 @@ export default class Model {
     }
   }
 
+  reloadPreset() {
+    const {
+      SPACE_BETWEEN_COMMUNITIES: NEW_SPACE_BETWEEN_COMMUNITIES,
+    } = presetsManager.loadPreset();
+    this.spaceBetweenCommunities = NEW_SPACE_BETWEEN_COMMUNITIES;
+
+    for (let i = 0; i < this.numCommunities; i++) {
+      this.communities[i].reloadPreset();
+    }
+  }
+
   /**
    * A function to start execution of the model.
    */
@@ -244,11 +256,12 @@ export default class Model {
     }
 
     const oneCommunityWidth = Math.round(
-      (this.width - (widthFactor + 1) * SPACE_BETWEEN_COMMUNITIES) / widthFactor
+      (this.width - (widthFactor + 1) * this.spaceBetweenCommunities) /
+        widthFactor
     );
 
     const oneCommunityHeight = Math.round(
-      (this.height - (heightFactor + 1) * SPACE_BETWEEN_COMMUNITIES) /
+      (this.height - (heightFactor + 1) * this.spaceBetweenCommunities) /
         heightFactor
     );
     let currentX = 0;
@@ -260,15 +273,15 @@ export default class Model {
         (this.numCommunities <= 6 && i % 2 === 0) ||
         (this.numCommunities <= 12 && this.numCommunities >= 7 && i % 3 === 0)
       ) {
-        currentX = SPACE_BETWEEN_COMMUNITIES;
-        currentY = nextY + SPACE_BETWEEN_COMMUNITIES;
+        currentX = this.spaceBetweenCommunities;
+        currentY = nextY + this.spaceBetweenCommunities;
         nextY = currentY + oneCommunityHeight;
       }
       listOfBounds.push(
         new Bounds(currentX, currentX + oneCommunityWidth, currentY, nextY)
       );
       currentX += oneCommunityWidth;
-      currentX += SPACE_BETWEEN_COMMUNITIES;
+      currentX += this.spaceBetweenCommunities;
     }
 
     return listOfBounds;

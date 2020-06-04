@@ -1,4 +1,9 @@
 import presetsManager from '../presetsManager';
+import {
+  setInitialNumInfectious,
+  setInitialNumSusceptible,
+  setNumCommunities,
+} from './domValues';
 
 const {
   TRANSMISSION_PROB,
@@ -197,8 +202,29 @@ export function wireReloadButtonToMain(main) {
     .addEventListener('click', () => main.reset());
 }
 
+// export function wireReloadPresetToMain() {
+//   document.getElementById('preset-list').addEventListener('click', function () {
+//     if (this.value === '0') return;
+//     presetsManager.changePreset(this.value);
+//   });
+// }
+
 export function wireReloadPresetToMain(main) {
-  document.getElementById('preset-list').addEventListener('click', function () {
-    main.changePreset(this.value);
+  document.getElementById('select').addEventListener('click', function () {
+    const val = document.getElementById('preset-list').value;
+    if (val === '0') return;
+    presetsManager.changePreset(val);
+
+    const {
+      INITIAL_INFECTIOUS,
+      INITIAL_SUSCEPTIBLE,
+      NUM_COMMUNITIES,
+    } = presetsManager.loadPreset();
+
+    setInitialNumSusceptible(INITIAL_SUSCEPTIBLE);
+    setInitialNumInfectious(INITIAL_INFECTIOUS);
+    setNumCommunities(NUM_COMMUNITIES);
+
+    main.changePreset();
   });
 }

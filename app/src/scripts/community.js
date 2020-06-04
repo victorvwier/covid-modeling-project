@@ -115,6 +115,45 @@ export default class Community {
     );
   }
 
+  reloadPreset() {
+    const {
+      PERSON_RADIUS: NEW_PERSON_RADIUS,
+      NONIN_TO_IMMUNE_PROB: NEW_NONIN_TO_IMMUNE_PROB,
+      INFECTION_RADIUS: NEW_INFECTION_RADIUS,
+      TRANSMISSION_PROB: NEW_TRANSMISSION_PROB,
+      REPULSION_FORCE: NEW_REPULSION_FORCE,
+      ATTRACTION_FORCE: NEW_ATTRACTION_FORCE,
+      MIN_INCUBATION_TIME: NEW_MIN_INCUBATION_TIME,
+      MAX_INCUBATION_TIME: NEW_MAX_INCUBATION_TIME,
+      MIN_INFECTIOUS_TIME: NEW_MIN_INFECTIOUS_TIME,
+      MAX_INFECTIOUS_TIME: NEW_MAX_INFECTIOUS_TIME,
+      MIN_TIME_UNTIL_DEAD: NEW_MIN_TIME_UNTIL_DEAD,
+      MAX_TIME_UNTIL_DEAD: NEW_MAX_TIME_UNTIL_DEAD,
+      POPULATION_SPEED: NEW_POPULATION_SPEED,
+      DAYS_PER_SECOND: NEW_DAYS_PER_SECOND,
+      RELOCATION_PROBABILITY: NEW_RELOCATION_PROBABILITY,
+    } = presetsManager.loadPreset();
+
+    this.personRadius = NEW_PERSON_RADIUS;
+    this.nonInfectiousToImmuneProb = NEW_NONIN_TO_IMMUNE_PROB;
+    this.infectionRadius = NEW_INFECTION_RADIUS;
+    this.transmissionProb = NEW_TRANSMISSION_PROB;
+    this.repulsionForce = NEW_REPULSION_FORCE;
+    this.attractionToCenter = NEW_ATTRACTION_FORCE;
+    this.minIncubationTime = NEW_MIN_INCUBATION_TIME;
+    this.maxIncubationTime = NEW_MAX_INCUBATION_TIME;
+
+    this.minInfectiousTime = NEW_MIN_INFECTIOUS_TIME;
+    this.maxInfectiousTime = NEW_MAX_INFECTIOUS_TIME;
+
+    this.minTimeUntilDead = NEW_MIN_TIME_UNTIL_DEAD;
+    this.maxTimeUntilDead = NEW_MAX_TIME_UNTIL_DEAD;
+
+    this.maxSpeed = NEW_POPULATION_SPEED;
+    this.daysPerSecond = NEW_DAYS_PER_SECOND;
+    this.relocationProbability = NEW_RELOCATION_PROBABILITY;
+  }
+
   /**
    * A function setting the attraction to the center.
    *
