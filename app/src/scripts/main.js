@@ -26,6 +26,7 @@ export default class Main {
    * @param {*} numInfectious The initial number of Infectious people.
    * @param {*} numDead The initial number of Dead people.
    * @param {*} numImmune The initial number of Immune people.
+   * @param {HTMLElement} icuID The html id of the stat used for displaying he ICU count.
    */
   constructor(
     context,
@@ -36,7 +37,8 @@ export default class Main {
     numNonInfectious,
     numInfectious,
     numDead,
-    numImmune
+    numImmune,
+    icuID
   ) {
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
@@ -58,7 +60,7 @@ export default class Main {
     );
     this.agentView = new AgentChart(context);
     this.model = null;
-    this.setupMain();
+    this.setupMain(icuID);
 
     // Wire reload button
     wireReloadButtonToMain(this);
@@ -108,8 +110,9 @@ export default class Main {
 
   /**
    * A function to setup the main class.
+   * @param {HTMLElement} icuID The html id of the stat used for displaying he ICU count.
    */
-  setupMain() {
+  setupMain(icuID) {
     const stats = this.createCurrentStats();
     console.log(stats);
     this.model = new Model(
@@ -118,7 +121,8 @@ export default class Main {
       this.width,
       this.height,
       stats,
-      this.receiveNewStatsAndUpdateChart.bind(this)
+      this.receiveNewStatsAndUpdateChart.bind(this),
+      icuID
     );
   }
 

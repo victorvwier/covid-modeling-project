@@ -555,6 +555,7 @@ export default class Community {
           this.numImmune += 1;
           if (person.inIcu) {
             this.icuCount -= 1;
+            this.updateICUCountOnScreen(this.icuCount);
           }
         }
       } else {
@@ -567,6 +568,7 @@ export default class Community {
           this.numDead += 1;
           if (person.inIcu) {
             this.icuCount -= 1;
+            this.updateICUCountOnScreen(this.icuCount);
           }
         }
       }
@@ -583,6 +585,7 @@ export default class Community {
           } else {
             person.inIcu = true;
             this.icuCount += 1;
+            this.updateICUCuntOnScreen(this.icuCount);
           }
         }
       }
@@ -658,5 +661,9 @@ export default class Community {
     this.populateCanvas();
     this.updateInfectionRadius(this.infectionRadius);
     this.updateRadius(this.personRadius);
+  }
+
+  updateICUCountOnScreen(icuCount){
+
   }
 }

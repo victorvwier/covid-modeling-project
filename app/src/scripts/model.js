@@ -18,8 +18,9 @@ export default class Model {
    * @param {number} height The height of the model.
    * @param {Stats} stats The stats object used by the model.
    * @param {function} updateStats A function to update the displayed stats and chart.
+   * @param {HTMLElement} icuID The html id of the stat used for displaying he ICU count.
    */
-  constructor(numCommunities, agentView, width, height, stats, updateStats) {
+  constructor(numCommunities, agentView, width, height, stats, updateStats,icuID) {
     this.numCommunities = numCommunities;
     this.communities = {};
     this.height = height;
@@ -39,6 +40,8 @@ export default class Model {
 
     // DEBUG
     window.community = this;
+    this.total_icu=0;
+    this.icuID=icuID;
   }
 
   /**
@@ -111,6 +114,8 @@ export default class Model {
     Object.values(this.communities).forEach((com) => com.pauseExecution());
   }
 
+
+
   /**
    * A function to resume the execution of the model.
    */
@@ -122,6 +127,9 @@ export default class Model {
     // }
     // Resume community intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.resumeExecution());
+    // Resume execution method has updated the induvisual communities' icuCount and now this method is used to 
+    // calculate the new sum total and print it on the screen.
+    this.updateTotalICUAdmissions();
   }
 
   /**
@@ -441,4 +449,21 @@ export default class Model {
       community.setAttractionToCenter(newValue)
     );
   }
+
+  /**
+   * This method iterates over all the communities in the model object and adds the current ICU 
+   * counts of the communities to get a sum total number of agents admitted in ICU,which is then printed onto the screen as a statsitic.
+   */
+  updateTotalICUAdmissions(){
+    this.total_icu=0;
+    Object.values(this.communities).forEach(com=>this.total_icu+=com.icuCount);
+    // for(let i=0;i<this.numCommunities;i++){
+    //   this.total_icu+=this.communities[i];
+    // }
+    console.log("Admitted to ICU ");
+    console.log(this.total_icu);
+
+    this.icuID.innerHTML = this.total_icu;
+  }
+
 }

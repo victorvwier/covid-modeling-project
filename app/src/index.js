@@ -16,6 +16,7 @@ window.onload = function () {
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
   const c = document.getElementById("BorderCanvas");
   const ctx = c.getContext("2d");
+  const icuID=document.getElementById("s6");
 
 
   if (context === null) {
@@ -32,7 +33,8 @@ window.onload = function () {
     INITIAL_NONINFECTIOUS,
     INITIAL_INFECTIOUS,
     INITIAL_DEAD,
-    INITIAL_IMMUNE
+    INITIAL_IMMUNE,
+    icuID
   );
 
   main.run(ctx);
