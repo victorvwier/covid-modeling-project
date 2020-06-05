@@ -1,5 +1,6 @@
 import presetManager from './scripts/presetsManager';
 import Main from './scripts/main';
+import { createPresetsDropdown } from './scripts/DOM/domValues';
 
 const {
   INITIAL_SUSCEPTIBLE,
@@ -13,6 +14,7 @@ const {
  * A function to initialize our program when the page is loaded.
  */
 window.onload = function () {
+  createPresetsDropdown();
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');

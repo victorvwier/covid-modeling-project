@@ -1,4 +1,4 @@
 export const PRESET_TYPES = {
-  RIVM: 'rivm',
-  HIGH_POP: 'highPop',
+  RIVM: 'Netherlands RIVM Data',
+  HIGH_POP: 'High population',
 };
