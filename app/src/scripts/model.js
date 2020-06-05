@@ -4,6 +4,19 @@ import Stats from './data/stats';
 import Bounds from './data/bounds';
 import presetsManager from './presetsManager';
 import RelocationUtil from './relocationUtil';
+import {
+  getTransmissionProb,
+  getAttractionToCenter,
+  getRepulsionForce,
+  getNonInToImmuneProb,
+  getMinIncubationTime,
+  getMaxIncubationTime,
+  getMinInfectiousTime,
+  getMaxInfectiousTime,
+  getMinTimeUntilDead,
+  getMaxTimeUntilDead,
+  getInfectionRadius,
+} from './DOM/domValues';
 
 const { SPACE_BETWEEN_COMMUNITIES } = presetsManager.loadPreset();
 
@@ -52,7 +65,7 @@ export default class Model {
     this._setValuesFromStatsToLocal(stats);
 
     // DEBUG
-    window.community = this;
+    window.model = this;
   }
 
   /**
@@ -166,8 +179,6 @@ export default class Model {
       SPACE_BETWEEN_COMMUNITIES: NEW_SPACE_BETWEEN_COMMUNITIES,
     } = presetsManager.loadPreset();
     this.spaceBetweenCommunities = NEW_SPACE_BETWEEN_COMMUNITIES;
-
-    this.presetInProcess = true;
   }
 
   /**
@@ -305,17 +316,24 @@ export default class Model {
         this.registerRelocation.bind(this)
       );
 
-      this.communities[i]._drawBorderLines(this.borderCtx);
+      if (!this.presetInProcess) {
+        console.log('Here');
 
-      if (this.presetInProcess) {
-        this.communities[i].reloadPreset();
+        this.updateTransmissionProb(getTransmissionProb());
+        this.updateAttractionToCenter(getAttractionToCenter());
+        this.updateRepulsionForce(getRepulsionForce());
+        this.updateNonInToImmuneProb(getNonInToImmuneProb());
+        this.updateMinIncubationTime(getMinIncubationTime());
+        this.updateMaxIncubationTime(getMaxIncubationTime());
+        this.updateMinInfectiousTime(getMinInfectiousTime());
+        this.updateMaxInfectiousTime(getMaxInfectiousTime());
+        this.updateMinTimeUntilDead(getMinTimeUntilDead());
+        this.updateMaxTimeUntilDead(getMaxTimeUntilDead());
+        this.updateInfectionRadius(getInfectionRadius());
       }
 
-      // DEBUG
-      window.model = this;
+      this.communities[i]._drawBorderLines(this.borderCtx);
     }
-
-    this.presetInProcess = false;
   }
 
   getAgentSize(population) {

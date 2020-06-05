@@ -67,3 +67,61 @@ export function updateTheStatistics(
   document.getElementById('s4').innerHTML = `${numImmune}`;
   document.getElementById('s5').innerHTML = `${numDead}`;
 }
+
+export function getAttractionToCenter() {
+  return parseFloat(document.getElementById('attractionForce').value, 10);
+}
+
+export function getRepulsionForce() {
+  return parseFloat(document.getElementById('repulsionForce').value, 10);
+}
+
+// updateTransmissionProb
+export function getTransmissionProbability() {
+  return parseFloat(document.getElementById('transmissionProb').value, 10);
+}
+
+// updateNonInToImmuneProb
+export function getNonInToImmuneProb() {
+  return parseFloat(document.getElementById('nonInToImmuneProb').value, 10);
+}
+
+// updateMinIncubationTime
+export function getMinIncubationTime() {
+  return parseFloat(document.getElementById('minIncubationTime').value, 10);
+}
+
+// updateMaxIncubationTime
+export function getMaxIncubationTime() {
+  return parseFloat(document.getElementById('maxIncubationTime').value, 10);
+}
+
+// updateMinInfectiousTime
+export function getMinInfectiousTime() {
+  return parseFloat(document.getElementById('minInfectiousTime').value, 10);
+}
+
+// updateMaxInfectiousTime
+export function getMaxInfectiousTime() {
+  return parseFloat(document.getElementById('maxInfectiousTime').value, 10);
+}
+
+// updateMinTimeUntilDead
+export function getMinTimeUntilDead() {
+  return parseFloat(document.getElementById('minTimeUntilDead').value, 10);
+}
+
+// updateMaxTimeUntilDead
+export function getMaxTimeUntilDead() {
+  return parseFloat(document.getElementById('maxTimeUntilDead').value, 10);
+}
+
+// updateInfectionRadius
+export function getInfectionRadius() {
+  return parseFloat(document.getElementById('infectionCircleRadius').value, 10);
+}
+
+// updateTransmissionProb
+export function getTransmissionProb() {
+  return parseFloat(document.getElementById('transmissionProb').value, 10);
+}

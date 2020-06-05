@@ -123,8 +123,10 @@ export default class Main {
   }
 
   changePreset() {
+    this.model.presetInProcess = true;
     this.model.reloadPreset();
     this.reset();
+    this.model.presetInProcess = false;
   }
 
   /**

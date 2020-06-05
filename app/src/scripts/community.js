@@ -323,8 +323,8 @@ export default class Community {
    * @param {number} newValue The new radius.
    */
   updateRadius(newValue) {
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].radius = newValue;
+    for (const person of this.population) {
+      person.radius = newValue;
     }
   }
 
@@ -341,9 +341,9 @@ export default class Community {
       this.endY,
       newValue
     );
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].infectionRadius = newValue;
-      this.boundingBoxStruct.insert(this.population[i]);
+    for (const person of this.population) {
+      person.infectionRadius = newValue;
+      this.boundingBoxStruct.insert(person);
     }
   }
 
@@ -353,8 +353,8 @@ export default class Community {
    * @param {number} newValue The new repulsion force.
    */
   updateRepulsionForce(newValue) {
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].repulsionForce = newValue;
+    for (const person of this.population) {
+      person.repulsionForce = newValue;
     }
   }
 
@@ -401,13 +401,13 @@ export default class Community {
     const positions = [];
     const colors = [];
     let count = 0;
-    for (let i = 0; i < this.totalPopulation; i++) {
-      if (!(this.population[i].type === TYPES.DEAD)) {
-        positions.push(this.population[i].x);
-        positions.push(this.population[i].y);
-        colors.push(parseInt(this.population[i].color.slice(1, 3), 16) / 255.0);
-        colors.push(parseInt(this.population[i].color.slice(3, 5), 16) / 255.0);
-        colors.push(parseInt(this.population[i].color.slice(5, 7), 16) / 255.0);
+    for (const person of this.population) {
+      if (!(person.type === TYPES.DEAD)) {
+        positions.push(person.x);
+        positions.push(person.y);
+        colors.push(parseInt(person.color.slice(1, 3), 16) / 255.0);
+        colors.push(parseInt(person.color.slice(3, 5), 16) / 255.0);
+        colors.push(parseInt(person.color.slice(5, 7), 16) / 255.0);
         colors.push(1);
         count++;
       }
