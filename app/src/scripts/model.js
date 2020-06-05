@@ -5,7 +5,7 @@ import Bounds from './data/bounds';
 import presetsManager from './presetsManager';
 import RelocationUtil from './relocationUtil';
 import {
-  getTransmissionProb,
+  getTransmissionProbability,
   getAttractionToCenter,
   getRepulsionForce,
   getNonInToImmuneProb,
@@ -319,7 +319,7 @@ export default class Model {
       if (!this.presetInProcess) {
         console.log('Here');
 
-        this.updateTransmissionProb(getTransmissionProb());
+        this.updateTransmissionProb(getTransmissionProbability());
         this.updateAttractionToCenter(getAttractionToCenter());
         this.updateRepulsionForce(getRepulsionForce());
         this.updateNonInToImmuneProb(getNonInToImmuneProb());

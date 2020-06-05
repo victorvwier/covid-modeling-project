@@ -120,8 +120,3 @@ export function getMaxTimeUntilDead() {
 export function getInfectionRadius() {
   return parseFloat(document.getElementById('infectionCircleRadius').value, 10);
 }
-
-// updateTransmissionProb
-export function getTransmissionProb() {
-  return parseFloat(document.getElementById('transmissionProb').value, 10);
-}
