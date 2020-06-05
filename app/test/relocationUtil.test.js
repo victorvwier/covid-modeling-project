@@ -38,7 +38,7 @@ describe('RelocationUtil tests', () => {
       () => {},
       borderCtxMock
     );
-    model.presetInProcess = false;
+    model.presetInProcess = true;
     model.setupCommunity();
 
     model.populateCommunities();
