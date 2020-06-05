@@ -12,6 +12,7 @@ export function getInitialNumSusceptible() {
  */
 export function setInitialNumSusceptible(newValue) {
   document.getElementById('initSusceptibleCount').value = newValue;
+  document.getElementById('initSusceptible').value = newValue;
 }
 
 /**
@@ -28,6 +29,7 @@ export function getInitialNumInfectious() {
  */
 export function setInitialNumInfectious(newValue) {
   document.getElementById('initInfectiousCount').value = newValue;
+  document.getElementById('initInfectious').value = newValue;
 }
 
 /**
@@ -43,6 +45,7 @@ export function getNumCommunities() {
  */
 export function setNumCommunities(newValue) {
   document.getElementById('numCommunities').value = newValue;
+  document.getElementById('numCommunitiesOut').value = newValue;
 }
 
 /**
@@ -72,8 +75,20 @@ export function getAttractionToCenter() {
   return parseFloat(document.getElementById('attractionForce').value, 10);
 }
 
+// TODO
+export function setAttractionToCenter(newValue) {
+  document.getElementById('attractionForce').value = newValue;
+  document.getElementById('attractionForceOut').value = newValue;
+}
+
 export function getRepulsionForce() {
   return parseFloat(document.getElementById('repulsionForce').value, 10);
+}
+
+// TODO
+export function setRepulsionForce(newValue) {
+  document.getElementById('repulsionForce').value = newValue;
+  document.getElementById('repulsionForceOut').value = newValue;
 }
 
 // updateTransmissionProb
@@ -81,9 +96,21 @@ export function getTransmissionProbability() {
   return parseFloat(document.getElementById('transmissionProb').value, 10);
 }
 
+// TODO
+export function setTransmissionProbability(newValue) {
+  document.getElementById('transmissionProb').value = newValue;
+  document.getElementById('transmissionProbOut').value = newValue;
+}
+
 // updateNonInToImmuneProb
 export function getNonInToImmuneProb() {
   return parseFloat(document.getElementById('nonInToImmuneProb').value, 10);
+}
+
+// TODO
+export function setNonInToImmuneProb(newValue) {
+  document.getElementById('nonInToImmuneProb').value = newValue;
+  document.getElementById('transmissionProbOut').value = newValue;
 }
 
 // updateMinIncubationTime
@@ -91,9 +118,21 @@ export function getMinIncubationTime() {
   return parseFloat(document.getElementById('minIncubationTime').value, 10);
 }
 
+// TODO
+export function setMinIncubationTime(newValue) {
+  document.getElementById('minIncubationTime').value = newValue;
+  document.getElementById('minIncubationTimeOut').value = newValue;
+}
+
 // updateMaxIncubationTime
 export function getMaxIncubationTime() {
   return parseFloat(document.getElementById('maxIncubationTime').value, 10);
+}
+
+// TODO
+export function setMaxIncubationTime(newValue) {
+  document.getElementById('maxIncubationTime').value = newValue;
+  document.getElementById('maxIncubationTimeOut').value = newValue;
 }
 
 // updateMinInfectiousTime
@@ -101,9 +140,21 @@ export function getMinInfectiousTime() {
   return parseFloat(document.getElementById('minInfectiousTime').value, 10);
 }
 
+// TODO
+export function setMinInfectiousTime(newValue) {
+  document.getElementById('minInfectiousTime').value = newValue;
+  document.getElementById('minInfectiousTimeOut').value = newValue;
+}
+
 // updateMaxInfectiousTime
 export function getMaxInfectiousTime() {
   return parseFloat(document.getElementById('maxInfectiousTime').value, 10);
+}
+
+// TODO
+export function setMaxInfectiousTime(newValue) {
+  document.getElementById('maxInfectiousTime').value = newValue;
+  document.getElementById('minInfectiousTimeOut').value = newValue;
 }
 
 // updateMinTimeUntilDead
@@ -111,12 +162,30 @@ export function getMinTimeUntilDead() {
   return parseFloat(document.getElementById('minTimeUntilDead').value, 10);
 }
 
+// TODO
+export function setMinTimeUntilDead(newValue) {
+  document.getElementById('minTimeUntilDead').value = newValue;
+  document.getElementById('minTimeUntilDeadOut').value = newValue;
+}
+
 // updateMaxTimeUntilDead
 export function getMaxTimeUntilDead() {
   return parseFloat(document.getElementById('maxTimeUntilDead').value, 10);
 }
 
+// TODO
+export function setMaxTimeUntilDead(newValue) {
+  document.getElementById('maxTimeUntilDead').value = newValue;
+  document.getElementById('maxTimeUntilDeadOut').value = newValue;
+}
+
 // updateInfectionRadius
 export function getInfectionRadius() {
   return parseFloat(document.getElementById('infectionCircleRadius').value, 10);
+}
+
+// TODO
+export function setInfectionRadius(newValue) {
+  document.getElementById('infectionCircleRadius').value = newValue;
+  document.getElementById('infectionRadiusOut').value = newValue;
 }

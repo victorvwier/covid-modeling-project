@@ -6,6 +6,7 @@ import AgentChart from '../src/scripts/agentChart';
 import Person from '../src/scripts/person';
 
 jest.mock('../src/scripts/agentChart.js');
+jest.mock('../src/scripts/DOM/domValues.js');
 
 describe('RelocationUtil tests', () => {
   const stats = new Stats(1, 1, 1, 1, 1);
@@ -37,6 +38,7 @@ describe('RelocationUtil tests', () => {
       () => {},
       borderCtxMock
     );
+    model.presetInProcess = false;
     model.setupCommunity();
 
     model.populateCommunities();

@@ -37,6 +37,7 @@ describe('Community test', () => {
       () => {},
       borderCtxMock
     );
+    community.presetInProcess = false;
     relocationUtil = new RelocationUtil(community);
     community.relocationUtil = relocationUtil;
 

@@ -4,6 +4,17 @@ import {
   setInitialNumInfectious,
   setInitialNumSusceptible,
   setNumCommunities,
+  setAttractionToCenter,
+  setRepulsionForce,
+  setTransmissionProbability,
+  setNonInToImmuneProb,
+  setMinIncubationTime,
+  setMaxIncubationTime,
+  setMinInfectiousTime,
+  setMaxInfectiousTime,
+  setMinTimeUntilDead,
+  setMaxTimeUntilDead,
+  setInfectionRadius,
 } from './domValues';
 
 const {
@@ -213,11 +224,33 @@ export function wireReloadPresetToMain(main) {
       INITIAL_INFECTIOUS,
       INITIAL_SUSCEPTIBLE,
       NUM_COMMUNITIES,
+      ATTRACTION_FORCE,
+      REPULSION_FORCE,
+      TRANSMISSION_PROB,
+      NONIN_TO_IMMUNE_PROB,
+      MIN_INCUBATION_TIME,
+      MAX_INCUBATION_TIME,
+      MIN_INFECTIOUS_TIME,
+      MAX_INFECTIOUS_TIME,
+      MIN_TIME_UNTIL_DEAD,
+      MAX_TIME_UNTIL_DEAD,
+      INFECTION_RADIUS,
     } = presetsManager.loadPreset();
 
     setInitialNumSusceptible(INITIAL_SUSCEPTIBLE);
     setInitialNumInfectious(INITIAL_INFECTIOUS);
     setNumCommunities(NUM_COMMUNITIES);
+    setAttractionToCenter(ATTRACTION_FORCE);
+    setRepulsionForce(REPULSION_FORCE);
+    setTransmissionProbability(TRANSMISSION_PROB);
+    setNonInToImmuneProb(NONIN_TO_IMMUNE_PROB);
+    setMinIncubationTime(MIN_INCUBATION_TIME);
+    setMaxIncubationTime(MAX_INCUBATION_TIME);
+    setMinInfectiousTime(MIN_INFECTIOUS_TIME);
+    setMaxInfectiousTime(MAX_INFECTIOUS_TIME);
+    setMinTimeUntilDead(MIN_TIME_UNTIL_DEAD);
+    setMaxTimeUntilDead(MAX_TIME_UNTIL_DEAD);
+    setInfectionRadius(INFECTION_RADIUS);
 
     main.changePreset();
   });

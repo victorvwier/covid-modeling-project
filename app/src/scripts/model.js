@@ -317,8 +317,6 @@ export default class Model {
       );
 
       if (!this.presetInProcess) {
-        console.log('Here');
-
         this.updateTransmissionProb(getTransmissionProbability());
         this.updateAttractionToCenter(getAttractionToCenter());
         this.updateRepulsionForce(getRepulsionForce());
