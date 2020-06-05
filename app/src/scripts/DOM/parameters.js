@@ -1,9 +1,9 @@
+/* eslint-disable no-shadow */
 import presetsManager from '../presetsManager';
 import {
   setInitialNumInfectious,
   setInitialNumSusceptible,
   setNumCommunities,
-  setAttractionForce,
 } from './domValues';
 
 const {
@@ -202,13 +202,6 @@ export function wireReloadButtonToMain(main) {
     .getElementById('reload')
     .addEventListener('click', () => main.reset());
 }
-
-// export function wireReloadPresetToMain() {
-//   document.getElementById('preset-list').addEventListener('click', function () {
-//     if (this.value === '0') return;
-//     presetsManager.changePreset(this.value);
-//   });
-// }
 
 export function wireReloadPresetToMain(main) {
   document.getElementById('select').addEventListener('click', function () {

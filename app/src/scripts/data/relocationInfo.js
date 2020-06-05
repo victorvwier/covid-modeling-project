@@ -1,7 +1,5 @@
 import presetsManager from '../presetsManager';
 
-const { RELOCATION_ERROR_MARGIN } = presetsManager.loadPreset();
-
 /** @class RelocationInfo describing all relevant information of a person relocating. */
 export default class RelocationInfo {
   /**
@@ -16,7 +14,7 @@ export default class RelocationInfo {
     this.person = person;
     this.destination = destination;
     this.destId = destId;
-    this.distDiffMargin = RELOCATION_ERROR_MARGIN;
+    this.distDiffMargin = presetsManager.loadPreset().RELOCATION_ERROR_MARGIN;
   }
 
   /**

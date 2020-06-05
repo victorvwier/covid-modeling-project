@@ -1,14 +1,6 @@
 import presetsManager from './presetsManager';
 
-const {
-  PERSON_RADIUS,
-  COLORS,
-  POPULATION_SPEED,
-  TYPES,
-  INFECTION_RADIUS,
-  RELOCATION_STEP_SIZE,
-  REPULSION_FORCE,
-} = presetsManager.loadPreset();
+const { COLORS, TYPES } = presetsManager.loadPreset();
 
 /** @class Person describing a person in the model. */
 export default class Person {
@@ -24,12 +16,12 @@ export default class Person {
   constructor(type, x, y, communityId) {
     this.communityId = communityId;
     this.type = type;
-    this.radius = PERSON_RADIUS;
-    this.infectionRadius = INFECTION_RADIUS;
+    this.radius = presetsManager.loadPreset().PERSON_RADIUS;
+    this.infectionRadius = presetsManager.loadPreset().INFECTION_RADIUS;
     this.x = x;
     this.y = y;
-    this.maxSpeed = POPULATION_SPEED;
-    this.repulsionForce = REPULSION_FORCE;
+    this.maxSpeed = presetsManager.loadPreset().POPULATION_SPEED;
+    this.repulsionForce = presetsManager.loadPreset().REPULSION_FORCE;
     this.speedX = 3 * (Math.floor(Math.random() * 2) || -1);
     this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
     this.accX = 0;
@@ -48,7 +40,7 @@ export default class Person {
 
     this.relocating = false;
 
-    this.step = RELOCATION_STEP_SIZE;
+    this.step = presetsManager.loadPreset().RELOCATION_STEP_SIZE;
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
