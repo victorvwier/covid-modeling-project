@@ -1,6 +1,6 @@
 export const PRESET_TYPES = {
-  RIVM: 'rivm',
-  HIGH_POP: 'highPopulation',
-  CANADA: 'canada',
-  LOW_POP: 'oneCommunity',
+  CANADA: 'Canada Data',
+  LOW_POP: 'Low population',
+  RIVM: 'Netherlands RIVM Data',
+  HIGH_POP: 'High population',
 };
