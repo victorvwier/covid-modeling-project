@@ -242,3 +242,31 @@ h3 {
   background-color: #05befc;
   color: white;
 }
+
+.tooltip {
+  position: relative;
+  background-color: pink;
+  color:black;
+  opacity: 0.75;
+  display: inline-block;
+  top:-770px;
+  left:-1020px;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
