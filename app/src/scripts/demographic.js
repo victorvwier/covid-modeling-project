@@ -29,10 +29,12 @@ export function assignDemographic(person) {
     previous = DEMOGRAPHIC[i];
   }
 
-  const age = getRandomInt(AGE[index % 20].min, AGE[index % 20].max);
+  const limit = AGE.length;
+
+  const age = getRandomInt(AGE[index % limit].min, AGE[index % limit].max);
   person.age = age;
 
-  if (index < 20) {
+  if (index < limit) {
     person.gender = GENDER.MALE;
   } else {
     person.gender = GENDER.FEMALE;

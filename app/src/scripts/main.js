@@ -180,7 +180,15 @@ export default class Main {
     this.model.setupCommunity();
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
+
     this.demographicsChart.resetChart(this.createCurrentStats().sum());
+
+    const {
+      width1,
+      height2,
+    } = this.demographicsCtx.canvas.getBoundingClientRect();
+    this.demographicsCtx.clearRect(0, 0, width1 * 2, height2 * 2);
+
     this.model.resetModel(this.createCurrentStats());
   }
 }
