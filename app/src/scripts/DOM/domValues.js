@@ -1,3 +1,20 @@
+import { PRESET_TYPES } from '../CONSTANTS';
+
+export function createPresetsDropdown() {
+  // <option value="0">Select preset:</option>
+  // <option value="RIVM">Netherlands RIVM Data</option>
+  // <option value="HIGH_POP">High population</option>
+  // <option value="3">Empty</option>
+  const html = `
+  <option value="0">Select preset:</option>
+  ${Object.keys(PRESET_TYPES).map(
+    (key) => `<option value="${key}">${PRESET_TYPES[key]}</option>`
+  )}
+  `;
+
+  // document.getElementById('preset-list').innerHTML = html;
+}
+
 /**
  * A function returning the initial amount of susceptible people as set in the UI.
  *
