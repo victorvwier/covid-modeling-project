@@ -26,7 +26,6 @@ export default class Main {
    * @param {*} numInfectious The initial number of Infectious people.
    * @param {*} numDead The initial number of Dead people.
    * @param {*} numImmune The initial number of Immune people.
-   * @param {HTMLElement} icuID The html id of the stat used for displaying he ICU count.
    */
   constructor(
     context,
@@ -37,8 +36,7 @@ export default class Main {
     numNonInfectious,
     numInfectious,
     numDead,
-    numImmune,
-    icuID
+    numImmune
   ) {
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
@@ -50,6 +48,7 @@ export default class Main {
     this.numImmune = numImmune;
     this.numDead = numDead;
     this.numNonInfectious = numNonInfectious;
+    this.numIcu = 0;
 
     this.numCommunities = getNumCommunities();
 
@@ -60,7 +59,7 @@ export default class Main {
     );
     this.agentView = new AgentChart(context);
     this.model = null;
-    this.setupMain(icuID);
+    this.setupMain();
 
     // Wire reload button
     wireReloadButtonToMain(this);
@@ -81,7 +80,8 @@ export default class Main {
       this.numNonInfectious,
       this.numInfectious,
       this.numDead,
-      this.numImmune
+      this.numImmune,
+      this.numIcu
     );
   }
 
@@ -97,6 +97,7 @@ export default class Main {
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.numIcu = stats.icu;
 
     this.chart.updateValues(this.createCurrentStats());
     updateTheStatistics(
@@ -104,15 +105,15 @@ export default class Main {
       this.numNonInfectious,
       this.numInfectious,
       this.numImmune,
-      this.numDead
+      this.numDead,
+      this.numIcu
     );
   }
 
   /**
    * A function to setup the main class.
-   * @param {HTMLElement} icuID The html id of the stat used for displaying he ICU count.
    */
-  setupMain(icuID) {
+  setupMain() {
     const stats = this.createCurrentStats();
     console.log(stats);
     this.model = new Model(
@@ -121,8 +122,7 @@ export default class Main {
       this.width,
       this.height,
       stats,
-      this.receiveNewStatsAndUpdateChart.bind(this),
-      icuID
+      this.receiveNewStatsAndUpdateChart.bind(this)
     );
   }
 
@@ -146,6 +146,7 @@ export default class Main {
     this.numNonInfectious = 0;
     this.numImmune = 0;
     this.numDead = 0;
+    this.numIcu = 0;
 
     this.numCommunities = getNumCommunities();
 

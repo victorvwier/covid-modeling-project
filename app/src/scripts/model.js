@@ -18,9 +18,8 @@ export default class Model {
    * @param {number} height The height of the model.
    * @param {Stats} stats The stats object used by the model.
    * @param {function} updateStats A function to update the displayed stats and chart.
-   * @param {HTMLElement} icuID The html id of the stat used for displaying he ICU count.
    */
-  constructor(numCommunities, agentView, width, height, stats, updateStats,icuID) {
+  constructor(numCommunities, agentView, width, height, stats, updateStats) {
     this.numCommunities = numCommunities;
     this.communities = {};
     this.height = height;
@@ -40,8 +39,6 @@ export default class Model {
 
     // DEBUG
     window.community = this;
-    this.total_icu=0;
-    this.icuID=icuID;
   }
 
   /**
@@ -75,8 +72,9 @@ export default class Model {
     const valInf = this._distributeStats(this.numInfectious, index);
     const valDead = this._distributeStats(this.numDead, index);
     const valImm = this._distributeStats(this.numImmune, index);
+    const valIcu = this._distributeStats(this.numIcu, index);
 
-    return new Stats(valSus, valNonInf, valInf, valDead, valImm);
+    return new Stats(valSus, valNonInf, valInf, valDead, valImm, valIcu);
   }
 
   /**
@@ -90,6 +88,7 @@ export default class Model {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.numIcu = stats.icu;
   }
 
   /**
@@ -129,7 +128,6 @@ export default class Model {
     Object.values(this.communities).forEach((com) => com.resumeExecution());
     // Resume execution method has updated the induvisual communities' icuCount and now this method is used to 
     // calculate the new sum total and print it on the screen.
-    this.updateTotalICUAdmissions();
   }
 
   /**
@@ -289,7 +287,8 @@ export default class Model {
             acc.noninfectious + cur.noninfectious,
             acc.infectious + cur.infectious,
             acc.dead + cur.dead,
-            acc.immune + cur.immune
+            acc.immune + cur.immune,
+            acc.icu + cur.icu
           )
       );
 
@@ -449,21 +448,4 @@ export default class Model {
       community.setAttractionToCenter(newValue)
     );
   }
-
-  /**
-   * This method iterates over all the communities in the model object and adds the current ICU 
-   * counts of the communities to get a sum total number of agents admitted in ICU,which is then printed onto the screen as a statsitic.
-   */
-  updateTotalICUAdmissions(){
-    this.total_icu=0;
-    Object.values(this.communities).forEach(com=>this.total_icu+=com.icuCount);
-    // for(let i=0;i<this.numCommunities;i++){
-    //   this.total_icu+=this.communities[i];
-    // }
-    console.log("Admitted to ICU ");
-    console.log(this.total_icu);
-
-    this.icuID.innerHTML = this.total_icu;
-  }
-
 }

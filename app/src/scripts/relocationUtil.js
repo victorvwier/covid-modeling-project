@@ -113,8 +113,12 @@ export default class RelocationUtil {
    * @throws If a person of an invalid type is found.
    */
   getStats() {
-    const stats = new Stats(0, 0, 0, 0, 0);
+    const stats = new Stats(0, 0, 0, 0, 0, 0);
     this.relocations.forEach(({ person }) => {
+      if(person.inIcu) {
+        stats.icu++;
+      }
+      
       switch (person.type) {
         case TYPES.SUSCEPTIBLE:
           stats.susceptible++;

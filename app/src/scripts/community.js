@@ -42,7 +42,7 @@ export default class Community {
    * @param {Stats} stats The stats object for the community.
    * @param {function} registerRelocation A function to call when a person is relocating.
    */
-  constructor(id, bounds, stats, registerRelocation,ctx) {
+  constructor(id, bounds, stats, registerRelocation, ctx) {
     this.registerRelocation = registerRelocation;
 
     // Intervals
@@ -66,6 +66,7 @@ export default class Community {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.icuCount = stats.icu;
 
     this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = INFECTION_RADIUS;
@@ -85,8 +86,6 @@ export default class Community {
     this.maxSpeed = POPULATION_SPEED;
     this.daysPerSecond = DAYS_PER_SECOND;
     this.relocationProbability = RELOCATION_PROBABILITY;
-
-    this.icuCount = 0;
 
     this.totalPopulation =
       this.numSusceptible +
@@ -152,6 +151,10 @@ export default class Community {
 
     this.boundingBoxStruct.remove(person);
 
+    if(person.inIcu) {
+      this.icuCount--;
+    }
+
     switch (person.type) {
       case TYPES.SUSCEPTIBLE:
         if (this.numSusceptible < 0) {
@@ -194,6 +197,10 @@ export default class Community {
     this.boundingBoxStruct.insert(person);
 
     this.population.push(person);
+
+    if (person.inIcu) {
+      this.icuCount++;
+    }
 
     switch (person.type) {
       case TYPES.SUSCEPTIBLE:
@@ -317,7 +324,8 @@ export default class Community {
       this.numNonInfectious,
       this.numInfectious,
       this.numDead,
-      this.numImmune
+      this.numImmune,
+      this.icuCount
     );
     return stats;
   }
@@ -555,7 +563,6 @@ export default class Community {
           this.numImmune += 1;
           if (person.inIcu) {
             this.icuCount -= 1;
-            this.updateICUCountOnScreen(this.icuCount);
           }
         }
       } else {
@@ -568,7 +575,6 @@ export default class Community {
           this.numDead += 1;
           if (person.inIcu) {
             this.icuCount -= 1;
-            this.updateICUCountOnScreen(this.icuCount);
           }
         }
       }
@@ -585,7 +591,6 @@ export default class Community {
           } else {
             person.inIcu = true;
             this.icuCount += 1;
-            this.updateICUCuntOnScreen(this.icuCount);
           }
         }
       }
@@ -653,6 +658,7 @@ export default class Community {
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numNonInfectious = stats.noninfectious;
+    this.icuCount = stats.icu;
     this.totalPopulation = stats.susceptible + stats.infectious;
 
     // clear the canvas

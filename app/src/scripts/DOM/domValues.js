@@ -32,17 +32,20 @@ export function getNumCommunities() {
  * @param {number} numInfectious The amount of infectious people.
  * @param {number} numImmune The amount of immune people.
  * @param {number} numDead The amount of dead people.
+ * @param {number} numIcu The amount of people in the ICU.
  */
 export function updateTheStatistics(
   numSusceptible,
   numNonInfectious,
   numInfectious,
   numImmune,
-  numDead
+  numDead,
+  numIcu
 ) {
   document.getElementById('s1').innerHTML = `${numSusceptible}`;
   document.getElementById('s2').innerHTML = `${numNonInfectious}`;
   document.getElementById('s3').innerHTML = `${numInfectious}`;
   document.getElementById('s4').innerHTML = `${numImmune}`;
   document.getElementById('s5').innerHTML = `${numDead}`;
+  document.getElementById('s6').innerHTML = `${numIcu}`;
 }
