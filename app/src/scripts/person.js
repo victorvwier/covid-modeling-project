@@ -1,6 +1,5 @@
 import presetsManager from './presetsManager';
-
-const { COLORS, TYPES } = presetsManager.loadPreset();
+import { COLORS, TYPES } from './CONSTANTS';
 
 /** @class Person describing a person in the model. */
 export default class Person {

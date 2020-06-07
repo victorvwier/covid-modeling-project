@@ -26,28 +26,6 @@
   "RELOCATION_PROBABILITY": 0.00003,
   "RELOCATION_ERROR_MARGIN": 20,
   "RELOCATION_STEP_SIZE": 80,
-  "COLORS": {
-    "SUSCEPTIBLE": "#05befc",
-    "NONINFECTIOUS": "#c9e265",
-    "INFECTIOUS": "#fd7e65",
-    "DEAD": "black",
-    "IMMUNE": "#a6a6a6"
-  },
-  "TYPES": {
-    "SUSCEPTIBLE": "s",
-    "NONINFECTIOUS": "a",
-    "INFECTIOUS": "i",
-    "DEAD": "d",
-    "IMMUNE": "im"
-  },
-  "GENDERS": {
-    "MALE": "m",
-    "FEMALE": "f"
-  },
-  "GENDER": {
-    "MALE": "m",
-    "FEMALE": "f"
-  },
   "AGE": [
     { "min": 0, "max": 4 },
     { "min": 5, "max": 9 },

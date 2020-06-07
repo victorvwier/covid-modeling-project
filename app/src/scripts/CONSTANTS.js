@@ -4,3 +4,24 @@ export const PRESET_TYPES = {
   RIVM: 'Netherlands RIVM Data',
   HIGH_POP: 'High population',
 };
+
+export const COLORS = {
+  SUSCEPTIBLE: '#05befc',
+  NONINFECTIOUS: '#c9e265',
+  INFECTIOUS: '#fd7e65',
+  DEAD: 'black',
+  IMMUNE: '#a6a6a6',
+};
+
+export const TYPES = {
+  SUSCEPTIBLE: 's',
+  NONINFECTIOUS: 'a',
+  INFECTIOUS: 'i',
+  DEAD: 'd',
+  IMMUNE: 'im',
+};
+
+export const GENDERS = {
+  MALE: 'm',
+  FEMALE: 'f',
+};

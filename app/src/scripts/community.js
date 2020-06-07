@@ -5,8 +5,7 @@ import presetsManager from './presetsManager';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
 import Coordinate from './data/coordinate';
-
-const { TYPES, COLORS } = presetsManager.loadPreset();
+import { TYPES, COLORS } from './CONSTANTS';
 
 /** @class Community describing a single community within the model. */
 export default class Community {

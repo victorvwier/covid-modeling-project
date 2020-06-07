@@ -3,9 +3,7 @@ import BoundingBoxStructure, {
   BoundingBox,
 } from '../src/scripts/boundingBox';
 import Person from '../src/scripts/person';
-import presetsManager from '../src/scripts/presetsManager';
-
-const { TYPES } = presetsManager.loadPreset();
+import { TYPES } from '../src/scripts/CONSTANTS';
 
 describe('Bounding box test suite', () => {
   test('Bounding box insert', () => {

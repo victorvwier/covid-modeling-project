@@ -22,7 +22,7 @@ class PresetsManager {
   }
 
   loadPreset() {
-    return this.presets[PRESET_TYPES[this.selectedPreset]];
+    return this.presets[this.selectedPreset];
   }
 }
 

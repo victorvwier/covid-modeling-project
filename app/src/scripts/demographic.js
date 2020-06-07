@@ -1,12 +1,8 @@
 import { getRandomInt } from './util';
 import presetsManager from './presetsManager';
+import { GENDERS } from './CONSTANTS';
 
-const {
-  AGE,
-  MORTALITY_RATE,
-  DEMOGRAPHIC,
-  GENDER,
-} = presetsManager.loadPreset();
+const { AGE, MORTALITY_RATE, DEMOGRAPHIC } = presetsManager.loadPreset();
 
 /**
  * Sets the age, gender and mortality rate for a given person based on real distirbution data.
@@ -35,9 +31,9 @@ export function assignDemographic(person) {
   person.age = age;
 
   if (index < limit) {
-    person.gender = GENDER.MALE;
+    person.gender = GENDERS.MALE;
   } else {
-    person.gender = GENDER.FEMALE;
+    person.gender = GENDERS.FEMALE;
   }
 
   person.mortalityRate = MORTALITY_RATE[index];

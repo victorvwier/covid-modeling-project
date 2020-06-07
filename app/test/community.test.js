@@ -4,10 +4,9 @@ import Person from '../src/scripts/person';
 import { mockRandom } from './testHelpers';
 import presetsManager from '../src/scripts/presetsManager';
 import Bounds from '../src/scripts/data/bounds';
+import { COLORS, TYPES } from '../src/scripts/CONSTANTS';
 
 const {
-  COLORS,
-  TYPES,
   POPULATION_SPEED,
   RELOCATION_PROBABILITY,
 } = presetsManager.loadPreset();
