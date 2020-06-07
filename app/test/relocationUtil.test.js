@@ -8,7 +8,7 @@ import Person from '../src/scripts/person';
 jest.mock('../src/scripts/agentChart.js');
 
 describe('RelocationUtil tests', () => {
-  const stats = new Stats(1, 1, 1, 1, 1);
+  const stats = new Stats(1, 1, 1, 1, 1, 0);
   let model;
   const width = 100;
   const height = 100;
@@ -108,7 +108,8 @@ describe('RelocationUtil tests', () => {
         stats.noninfectious,
         stats.infectious,
         stats.immune,
-        stats.dead
+        stats.dead,
+        stats.icu
       )
     );
   });
