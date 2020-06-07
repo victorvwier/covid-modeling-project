@@ -169,7 +169,8 @@ export default class Chart {
           ],
         },
         animation: {
-          duration: 750,
+          duration: 500,
+          easing: 'linear',
         },
       },
     });
