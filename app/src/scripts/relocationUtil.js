@@ -1,9 +1,7 @@
 import { getRandomIntExceptForValue } from './util';
-import presetsManager from './presetsManager';
 import RelocationInfo from './data/relocationInfo';
 import Stats from './data/stats';
-
-const { TYPES } = presetsManager.loadPreset();
+import { TYPES } from './CONSTANTS';
 
 /** @class RelocationUtil handling relocating people. */
 export default class RelocationUtil {
