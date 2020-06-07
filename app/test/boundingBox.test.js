@@ -213,11 +213,7 @@ describe('Bounding box test suite', () => {
     struct.insert(person8);
     struct.insert(person9);
     const query = struct.query(person2, 5.9).sort();
-    const expected = [person1,
-      person3,
-      person4,
-      person5,
-      person6,].sort();
+    const expected = [person1, person3, person4, person5, person6].sort();
     expect(query).toStrictEqual(expected);
   });
 
@@ -276,13 +272,7 @@ describe('Bounding box test suite', () => {
     struct.insert(person8);
     struct.insert(person9);
     const query = struct.query(person8, 5.9).sort();
-    const expected = [
-      person4,
-      person5,
-      person6,
-      person7,
-      person9,
-    ].sort();
+    const expected = [person4, person5, person6, person7, person9].sort();
     expect(query).toStrictEqual(expected);
   });
 

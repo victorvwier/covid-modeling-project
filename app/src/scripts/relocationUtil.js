@@ -1,7 +1,7 @@
 import { getRandomIntExceptForValue } from './util';
-import { TYPES } from './CONSTANTS';
 import RelocationInfo from './data/relocationInfo';
 import Stats from './data/stats';
+import { TYPES } from './CONSTANTS';
 
 /** @class RelocationUtil handling relocating people. */
 export default class RelocationUtil {

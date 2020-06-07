@@ -2,8 +2,23 @@ import wireSlidersToHandlers from './DOM/parameters';
 import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
-import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
+import presetsManager from './presetsManager';
 import RelocationUtil from './relocationUtil';
+import {
+  getTransmissionProbability,
+  getAttractionToCenter,
+  getRepulsionForce,
+  getNonInToImmuneProb,
+  getMinIncubationTime,
+  getMaxIncubationTime,
+  getMinInfectiousTime,
+  getMaxInfectiousTime,
+  getMinTimeUntilDead,
+  getMaxTimeUntilDead,
+  getInfectionRadius,
+} from './DOM/domValues';
+
+const { SPACE_BETWEEN_COMMUNITIES } = presetsManager.loadPreset();
 
 /** @class Model representing a simulation of one or multiple communities. */
 export default class Model {
@@ -27,6 +42,7 @@ export default class Model {
     updateDemographicChart,
     borderCtx
   ) {
+    this.spaceBetweenCommunities = SPACE_BETWEEN_COMMUNITIES;
     this.numCommunities = numCommunities;
     this.communities = {};
     this.height = height;
@@ -41,13 +57,15 @@ export default class Model {
 
     this.lastTimestamp = 0;
 
+    this.presetInProcess = false;
+
     this._passDrawInfoAnimationFrame = null;
     this.relocationUtil = new RelocationUtil(this);
 
     this._setValuesFromStatsToLocal(stats);
 
     // DEBUG
-    window.community = this;
+    window.model = this;
   }
 
   /**
@@ -156,6 +174,13 @@ export default class Model {
     }
   }
 
+  reloadPreset() {
+    const {
+      SPACE_BETWEEN_COMMUNITIES: NEW_SPACE_BETWEEN_COMMUNITIES,
+    } = presetsManager.loadPreset();
+    this.spaceBetweenCommunities = NEW_SPACE_BETWEEN_COMMUNITIES;
+  }
+
   /**
    * A function to start execution of the model.
    */
@@ -242,11 +267,12 @@ export default class Model {
     }
 
     const oneCommunityWidth = Math.round(
-      (this.width - (widthFactor + 1) * SPACE_BETWEEN_COMMUNITIES) / widthFactor
+      (this.width - (widthFactor + 1) * this.spaceBetweenCommunities) /
+        widthFactor
     );
 
     const oneCommunityHeight = Math.round(
-      (this.height - (heightFactor + 1) * SPACE_BETWEEN_COMMUNITIES) /
+      (this.height - (heightFactor + 1) * this.spaceBetweenCommunities) /
         heightFactor
     );
     let currentX = 0;
@@ -258,15 +284,15 @@ export default class Model {
         (this.numCommunities <= 6 && i % 2 === 0) ||
         (this.numCommunities <= 12 && this.numCommunities >= 7 && i % 3 === 0)
       ) {
-        currentX = SPACE_BETWEEN_COMMUNITIES;
-        currentY = nextY + SPACE_BETWEEN_COMMUNITIES;
+        currentX = this.spaceBetweenCommunities;
+        currentY = nextY + this.spaceBetweenCommunities;
         nextY = currentY + oneCommunityHeight;
       }
       listOfBounds.push(
         new Bounds(currentX, currentX + oneCommunityWidth, currentY, nextY)
       );
       currentX += oneCommunityWidth;
-      currentX += SPACE_BETWEEN_COMMUNITIES;
+      currentX += this.spaceBetweenCommunities;
     }
 
     return listOfBounds;
@@ -290,10 +316,21 @@ export default class Model {
         this.registerRelocation.bind(this)
       );
 
-      this.communities[i]._drawBorderLines(this.borderCtx);
+      if (!this.presetInProcess) {
+        this.updateTransmissionProb(getTransmissionProbability());
+        this.updateAttractionToCenter(getAttractionToCenter());
+        this.updateRepulsionForce(getRepulsionForce());
+        this.updateNonInToImmuneProb(getNonInToImmuneProb());
+        this.updateMinIncubationTime(getMinIncubationTime());
+        this.updateMaxIncubationTime(getMaxIncubationTime());
+        this.updateMinInfectiousTime(getMinInfectiousTime());
+        this.updateMaxInfectiousTime(getMaxInfectiousTime());
+        this.updateMinTimeUntilDead(getMinTimeUntilDead());
+        this.updateMaxTimeUntilDead(getMaxTimeUntilDead());
+        this.updateInfectionRadius(getInfectionRadius());
+      }
 
-      // DEBUG
-      window.model = this;
+      this.communities[i]._drawBorderLines(this.borderCtx);
     }
   }
 

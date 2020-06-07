@@ -242,3 +242,22 @@ h3 {
   background-color: #05befc;
   color: white;
 }
+
+.btn-preset {
+  background-color: white;
+  color: black;
+  border: 2px solid #05befc;
+  margin-top: 0;
+  text-align: center;
+
+  height: 50px;
+}
+
+.btn-preset:hover {
+  background-color: #05befc;
+  color: white;
+}
+
+.preset-panel {
+  flex-direction: row;
+}

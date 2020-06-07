@@ -1,16 +1,20 @@
-import {
+import presetManager from './scripts/presetsManager';
+import Main from './scripts/main';
+import { createPresetsDropDown } from './scripts/DOM/domValues';
+
+const {
   INITIAL_SUSCEPTIBLE,
   INITIAL_NONINFECTIOUS,
   INITIAL_INFECTIOUS,
   INITIAL_IMMUNE,
   INITIAL_DEAD,
-} from './scripts/CONSTANTS';
-import Main from './scripts/main';
+} = presetManager.loadPreset();
 
 /**
  * A function to initialize our program when the page is loaded.
  */
 window.onload = function () {
+  createPresetsDropDown();
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
