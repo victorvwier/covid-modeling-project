@@ -14,18 +14,22 @@ window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
-  const c = document.getElementById("BorderCanvas");
-  const ctx = c.getContext("2d");
-
+  const demographicsCtx = document
+    .getElementById('demographics')
+    .getContext('2d');
+  const borderCtx = document.getElementById('BorderCanvas').getContext('2d');
+  const { height } = borderCtx.canvas.getBoundingClientRect();
+  borderCtx.transform(1, 0, 0, -1, 0, height);
 
   if (context === null) {
     this.alert('Please enable webGl support');
     return;
   }
-
   const main = new Main(
     context,
     chartCtx,
+    borderCtx,
+    demographicsCtx,
     glCanvas.width,
     glCanvas.height,
     INITIAL_SUSCEPTIBLE,
@@ -35,5 +39,5 @@ window.onload = function () {
     INITIAL_IMMUNE,
   );
 
-  main.run(ctx);
+  main.run();
 };

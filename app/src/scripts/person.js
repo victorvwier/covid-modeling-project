@@ -40,7 +40,9 @@ export default class Person {
     this.destinyImmune = false;
     this.incubationPeriod = 0;
     this.infectiousPeriod = 0;
-    this.age = Math.round(Math.random() * 100);
+    this.age = null;
+    this.gender = null;
+    this.mortalityRate = null;
 
     this.inIcu = false;
 

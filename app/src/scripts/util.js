@@ -56,31 +56,3 @@ export function gaussianRand(min, max) {
   num += min;
   return num;
 }
-
-/**
- * Returns the mortality rate coupled to the age.
- *
- * @param {number} age The age for which the mortality rate is to be retrieved.
- * @returns {number} The mortality rate of people that age.
- */
-export function mortalityStat(age) {
-  if (0 <= age && age <= 9) {
-    return 0;
-  } else if (10 <= age && age <= 19) {
-    return 0.002;
-  } else if (20 <= age && age <= 29) {
-    return 0.002;
-  } else if (30 <= age && age <= 39) {
-    return 0.002;
-  } else if (40 <= age && age <= 49) {
-    return 0.004;
-  } else if (50 <= age && age <= 59) {
-    return 0.013;
-  } else if (60 <= age && age <= 69) {
-    return 0.036;
-  } else if (70 <= age && age <= 79) {
-    return 0.08;
-  } else {
-    return 0.148;
-  }
-}
