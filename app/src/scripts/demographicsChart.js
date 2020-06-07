@@ -215,7 +215,7 @@ export default class DemographicsChart {
         },
         title: {
           display: true,
-          text: 'M.           F.',
+          text: 'Male           Female',
           position: 'top',
           fontSize: 24,
         },
@@ -225,6 +225,10 @@ export default class DemographicsChart {
         scales: {
           xAxes: [
             {
+              scaleLabel: {
+                display: true,
+                labelString: 'Number of people',
+              },
               stacked: true,
               ticks: {
                 beginAtZero: true,
@@ -237,6 +241,10 @@ export default class DemographicsChart {
           ],
           yAxes: [
             {
+              scaleLabel: {
+                display: true,
+                labelString: 'Age category',
+              },
               stacked: true,
               ticks: {
                 callback: (value) => (value < 0 ? -value : value),
