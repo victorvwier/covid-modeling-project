@@ -1,3 +1,5 @@
+import { PRESET_TYPES } from '../CONSTANTS';
+
 /**
  * A function returning the initial amount of susceptible people as set in the UI.
  *
@@ -188,4 +190,15 @@ export function getInfectionRadius() {
 export function setInfectionRadius(newValue) {
   document.getElementById('infectionCircleRadius').value = newValue;
   document.getElementById('infectionRadiusOut').value = newValue;
+}
+
+export function createPresetsDropDown() {
+  const options = `
+  <option value="0">Select preset:</option>
+  ${Object.keys(PRESET_TYPES).map(
+    (key) => `<option value="${key}">${PRESET_TYPES[key]}</option>`
+  )}
+  `;
+
+  document.getElementById('preset-list').innerHTML = options;
 }

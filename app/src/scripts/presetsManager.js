@@ -6,7 +6,7 @@ class PresetsManager {
   constructor(initialPreset = 'RIVM') {
     this.selectedPreset = initialPreset;
     this.presets = {};
-    Object.values(PRESET_TYPES).forEach((presetType) => {
+    Object.keys(PRESET_TYPES).forEach((presetType) => {
       this.presets[presetType] = require(`./presetsData/${presetType}.json`);
     });
 
@@ -22,7 +22,7 @@ class PresetsManager {
   }
 
   loadPreset() {
-    return this.presets[PRESET_TYPES[this.selectedPreset]];
+    return this.presets[this.selectedPreset];
   }
 }
 
