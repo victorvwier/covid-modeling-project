@@ -218,6 +218,13 @@ h3 {
   transition: max-height 0.2s ease-out;
 }
 
+.preset-panel {
+  flex-flow: row;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
 .btn {
   background-color: #05befc;
   border: none;
@@ -247,9 +254,8 @@ h3 {
   background-color: white;
   color: black;
   border: 2px solid #05befc;
-  margin-top: 0;
   text-align: center;
-
+  margin-top: 0;
   height: 50px;
 }
 
