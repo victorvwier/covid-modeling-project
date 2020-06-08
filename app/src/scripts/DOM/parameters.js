@@ -14,6 +14,10 @@ import {
   REPULSION_FORCE,
   ATTRACTION_FORCE,
   NUM_COMMUNITIES,
+  TESTED_POSITIVE_PROBABILITY,
+  INFECTION_RADIUS_REDUCTION_FACTOR,
+  ICU_PROBABILITY,
+  ICU_CAPACITY,
 } from '../CONSTANTS';
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
@@ -125,6 +129,40 @@ export default function (community) {
     INFECTION_RADIUS,
     'people',
     community.updateInfectionRadius.bind(community)
+  );
+  // TestedPositiveProbability
+  wireInput(
+    'testedPositiveProb',
+    'testedPositiveProbOut',
+    TESTED_POSITIVE_PROBABILITY,
+    '%',
+    community.updateTestedPositiveProbability.bind(community),
+    (x) => x * 100
+  );
+  // InfectionRadiusReductionFactor
+  wireInput(
+    'InfectionRadiusRedFactor',
+    'InfectionRadiusRedFactorOut',
+    INFECTION_RADIUS_REDUCTION_FACTOR,
+    '',
+    community.updateInfectionRadiusReductionFactor.bind(community)
+  );
+  // IcuProbability
+  wireInput(
+    'IcuProb',
+    'IcuProbOut',
+    ICU_PROBABILITY,
+    '%',
+    community.updateIcuProbability.bind(community),
+    (x) => x * 100
+  );
+  // IcuCapacity
+  wireInput(
+    'IcuCapacity',
+    'IcuCapacityOut',
+    ICU_CAPACITY,
+    '',
+    community.updateIcuCapacity.bind(community)
   );
 
   // const PERSON_RADIUS=5

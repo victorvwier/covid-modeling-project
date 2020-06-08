@@ -89,6 +89,11 @@ export default class Community {
     this.daysPerSecond = DAYS_PER_SECOND;
     this.relocationProbability = RELOCATION_PROBABILITY;
 
+    this.testedPositiveProbability = TESTED_POSITIVE_PROBABILITY;
+    this.infectionRadiusReductionFactor = INFECTION_RADIUS_REDUCTION_FACTOR;
+    this.icuProbability = ICU_PROBABILITY;
+    this.icuCapacity = ICU_CAPACITY;
+
     this.totalPopulation =
       this.numSusceptible +
       this.numInfectious +
@@ -313,6 +318,42 @@ export default class Community {
   setPersonRadius(newValue) {
     this.personRadius = newValue;
     this.updateRadius(newValue);
+  }
+
+  /**
+   * A function to set the probability an Infectious person tests positive in this community.
+   * 
+   * @param {number} newValue The new probability for testing positive.
+   */
+  setTestedPositiveProbability(newValue) {
+    this.testedPositiveProbability = newValue;
+  }
+
+  /**
+   * A function to set the factor by which the infection radius of a tested person is reduced.
+   * 
+   * @param {number} newValue The new reduction factor.
+   */
+  setInfectionRadiusReductionFactor(newValue) {
+    this.infectionRadiusReductionFactor = newValue;
+  }
+
+  /**
+   * A function to set the probabilty a tested person moves to the ICU.
+   * 
+   * @param {number} newValue The new probability of a person moving to the ICU.
+   */
+  setIcuProbability(newValue) {
+    this.icuProbability = newValue;
+  }
+
+  /**
+   * A function to set the capacity of the ICU for this community.
+   * 
+   * @param {number} newValue The new capacity of the ICU.
+   */
+  setIcuCapacity(newValue) {
+    this.icuCapacity = newValue;
   }
 
   /**
@@ -574,11 +615,11 @@ export default class Community {
         }
       }
       // There is a chance that a infected person gets tested,the higher the TESTED_POSITIVE_PROBABILITY the higher the chance they will get tested.
-      if (!person.testedPositive && Math.random() < TESTED_POSITIVE_PROBABILITY * dt) {
+      if (!person.testedPositive && Math.random() < this.testedPositiveProbability) {
         person.testedPositive = true;
-        person.infectionRadius /= INFECTION_RADIUS_REDUCTION_FACTOR;
-        if (Math.random() < ICU_PROBABILITY) {
-          if (this.icuCount >= ICU_CAPACITY) {
+        person.infectionRadius /= this.infectionRadiusReductionFactor;
+        if (Math.random() < this.icuProbability) {
+          if (this.icuCount >= this.icuCapacity) {
             person.type = TYPES.DEAD;
             person.color = COLORS.DEAD;
             this.numInfectious -= 1;
