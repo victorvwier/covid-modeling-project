@@ -2,7 +2,11 @@ import Chart from 'chart.js';
 import presetsManager from './presetsManager';
 import { COLORS, TYPES, GENDERS } from './CONSTANTS';
 
-const { AGE } = presetsManager.loadPreset();
+// const { AGE } = presetsManager.loadPreset();
+
+function getAge() {
+  return presetsManager.loadPreset().AGE;
+}
 
 export default class DemographicsChart {
   /**
@@ -12,7 +16,7 @@ export default class DemographicsChart {
   constructor(ctx) {
     this.demographicChart = null;
     this.ctx = ctx;
-    this.labels = AGE.map((val) => this._formatLabel(val.min, val.max));
+    this.labels = getAge().map((val) => this._formatLabel(val.min, val.max));
 
     // DEBUG
     window.demographic = this;
@@ -122,6 +126,7 @@ export default class DemographicsChart {
 
   resetChart(populationSize) {
     this.demographicChart.destroy();
+    this.labels = getAge().map((val) => this._formatLabel(val.min, val.max));
     this.drawChart(populationSize);
   }
 

@@ -181,13 +181,13 @@ export default class Main {
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
 
+    this.model.resetModel(this.createCurrentStats());
+
     const {
       width1,
       height2,
     } = this.demographicsCtx.canvas.getBoundingClientRect();
     this.demographicsCtx.clearRect(0, 0, width1 * 2, height2 * 2);
     this.demographicsChart.resetChart(this.createCurrentStats().sum());
-
-    this.model.resetModel(this.createCurrentStats());
   }
 }
