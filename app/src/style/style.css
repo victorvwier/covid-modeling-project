@@ -244,18 +244,47 @@ h3 {
 }
 
 .tooltip {
-  position: relative;
   background-color: pink;
   color:black;
-  opacity: 0.75;
   display: inline-block;
-  top:-770px;
-  left:-1030px;
+  cursor:pointer;
 }
 
+#t2{
+  position: relative;
+  top:-770px;
+  left:-1030px;
+  opacity: 0.75;
+}
+
+#t1{
+  position: relative;
+  top:80px;
+  left:210px;
+  opacity: 0.75;
+}
+
+#t3{
+  position:relative;
+  left:150px;
+  top:25px;
+  opacity: 1;
+}
+
+#t4{
+  position:relative;
+  top:115px;
+  left:75px;
+}
+
+#t5{
+  position:relative;
+  left:10px;
+  top:10px;
+}
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
+  width: 400px;
   background-color: black;
   color: #fff;
   text-align: center;
@@ -269,4 +298,15 @@ h3 {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
 }
