@@ -3,7 +3,7 @@ import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
 // MIGHT NEED TO REPLACE STATS.INFECTIOUS IN CONSTRUCTOR BEING SENT TO GETINITIAL TESTED WITH INITIAL_INFECTIOUS FROM CONSTANTS.JS
-import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
+import { SPACE_BETWEEN_COMMUNITIES,ICU_CAPACITY } from './CONSTANTS';
 import RelocationUtil from './relocationUtil';
 
 /** @class Model representing a simulation of one or multiple communities. */
@@ -27,7 +27,7 @@ export default class Model {
     stats,
     updateStats,
     updateDemographicChart,
-    borderCtx
+    borderCtx,icuDIV
   ) {
     this.numCommunities = numCommunities;
     this.communities = {};
@@ -50,7 +50,9 @@ export default class Model {
 
     // DEBUG
     window.community = this;
+    this.icuDIV=icuDIV;
   }
+
 
   /**
    * A function that returns an array of the whole population in all models
@@ -339,6 +341,15 @@ export default class Model {
 
     this._setValuesFromStatsToLocal(finalStats);
     this.updateStats(finalStats);
+    if(finalStats.icu<0.75 * ICU_CAPACITY){
+      this.icuDIV.style.backgroundColor="green";
+    }
+    if(finalStats.icu>0.75 * ICU_CAPACITY && finalStats.icu<ICU_CAPACITY){
+      this.icuDIV.style.backgroundColor="orange";
+    }
+    else if(finalStats.icu===ICU_CAPACITY || finalStats.icu>ICU_CAPACITY){
+      this.icuDIV.style.backgroundColor="red";
+    }
   }
 
   /**

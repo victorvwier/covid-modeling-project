@@ -41,7 +41,7 @@ export default class Main {
     numNonInfectious,
     numInfectious,
     numDead,
-    numImmune
+    numImmune,icuDIV
   ) {
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
@@ -55,6 +55,7 @@ export default class Main {
     this.numDead = numDead;
     this.numNonInfectious = numNonInfectious;
     this.numIcu = 0;
+    this.icuDIV=icuDIV;
 
     this.numCommunities = getNumCommunities();
 
@@ -115,6 +116,8 @@ export default class Main {
       this.numDead,
       this.numIcu
     );
+
+
   }
 
   updateDemographicChart() {
@@ -135,7 +138,8 @@ export default class Main {
       stats,
       this.receiveNewStatsAndUpdateChart.bind(this),
       this.updateDemographicChart.bind(this),
-      this.borderCtx
+      this.borderCtx,
+      this.icuDIV
     );
   }
 

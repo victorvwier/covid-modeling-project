@@ -41,4 +41,9 @@ export default class Stats {
       one.icu + other.icu
     );
   }
+
+
+  getICUCount(){
+    return this.icu;
+  }
 }
