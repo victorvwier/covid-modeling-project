@@ -18,6 +18,7 @@ export default class Model {
    * @param {number} height The height of the model.
    * @param {Stats} stats The stats object used by the model.
    * @param {function} updateStats A function to update the displayed stats and chart.
+   * @param {HTMLElement} icuDIV is the div element whose color is changed as icu start filling up with patients.
    */
   constructor(
     numCommunities,

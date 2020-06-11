@@ -29,6 +29,7 @@ export default class Main {
    * @param {*} numInfectious The initial number of Infectious people.
    * @param {*} numDead The initial number of Dead people.
    * @param {*} numImmune The initial number of Immune people.
+   * @param {HTMLElement} icuDIV It is the div element whose color is changed as icu start filling up with patients.
    */
   constructor(
     context,
