@@ -43,8 +43,9 @@ export default class Community {
    * @param {Bounds} bounds An object representing the bounds of the community.
    * @param {Stats} stats The stats object for the community.
    * @param {function} registerRelocation A function to call when a person is relocating.
+   * @param {*} totalICU paragraph tag to display total ICU capacity along with statistics.
    */
-  constructor(id, bounds, stats, registerRelocation) {
+  constructor(id, bounds, stats, registerRelocation,totalICU) {
     this.registerRelocation = registerRelocation;
 
     // Intervals
@@ -93,6 +94,7 @@ export default class Community {
     this.infectionRadiusReductionFactor = INFECTION_RADIUS_REDUCTION_FACTOR;
     this.icuProbability = ICU_PROBABILITY;
     this.icuCapacity = ICU_CAPACITY;
+    totalICU.innerHTML="/".concat(+this.icuCapacity.toString());
 
     this.totalPopulation =
       this.numSusceptible +

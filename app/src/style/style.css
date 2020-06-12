@@ -242,3 +242,14 @@ h3 {
   background-color: #05befc;
   color: white;
 }
+
+#totalICU{
+  position:relative;
+  top:-34px;
+  left:20px;
+}
+
+#icuDIV{
+  width:100px;
+  height:80.52px;
+}

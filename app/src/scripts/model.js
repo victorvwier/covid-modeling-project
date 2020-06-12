@@ -18,7 +18,7 @@ export default class Model {
    * @param {number} height The height of the model.
    * @param {Stats} stats The stats object used by the model.
    * @param {function} updateStats A function to update the displayed stats and chart.
-   * @param {HTMLElement} icuDIV is the div element whose color is changed as icu start filling up with patients.
+   * @param {HTMLElement} icuDIV It is the div element whose color is changed as icu start filling up with patients.
    */
   constructor(
     numCommunities,
@@ -284,8 +284,9 @@ export default class Model {
 
   /**
    * A function to initialize all communities.
+   * @param {*} totalICU paragraph tag to display total ICU capacity along with statistics.
    */
-  setupCommunity() {
+  setupCommunity(totalICU) {
     const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
     this.borderCtx.clearRect(0, 0, width * 2, height * 2);
     const bounds = this._createIncrementals();
@@ -297,7 +298,8 @@ export default class Model {
         i,
         bounds[i],
         dividedStats,
-        this.registerRelocation.bind(this)
+        this.registerRelocation.bind(this),
+        totalICU
       );
 
       this.communities[i]._drawBorderLines(this.borderCtx);
@@ -343,7 +345,7 @@ export default class Model {
     this._setValuesFromStatsToLocal(finalStats);
     this.updateStats(finalStats);
     if(finalStats.icu<0.75 * ICU_CAPACITY){
-      this.icuDIV.style.backgroundColor="green";
+      this.icuDIV.style.backgroundColor="golden";
     }
     if(finalStats.icu>0.75 * ICU_CAPACITY && finalStats.icu<ICU_CAPACITY){
       this.icuDIV.style.backgroundColor="orange";

@@ -146,11 +146,12 @@ export default class Main {
 
   /**
    * A function to run the model and the chart.
+   * @param {*} totalICU paragraph tag to display total ICU capacity along with statistics.
    */
-  run() {
+  run(totalICU) {
     this.chart.drawChart();
     this.demographicsChart.drawChart(this.createCurrentStats().sum());
-    this.model.setupCommunity();
+    this.model.setupCommunity(totalICU);
     this.model.run();
   }
 

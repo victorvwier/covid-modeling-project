@@ -21,6 +21,7 @@ window.onload = function () {
   const borderCtx = document.getElementById('BorderCanvas').getContext('2d');
   const { height } = borderCtx.canvas.getBoundingClientRect();
   borderCtx.transform(1, 0, 0, -1, 0, height);
+  const totalICU=document.getElementById('totalICU');
 
   if (context === null) {
     this.alert('Please enable webGl support');
@@ -41,5 +42,5 @@ window.onload = function () {
     icuDIV
   );
 
-  main.run();
+  main.run(totalICU);
 };
