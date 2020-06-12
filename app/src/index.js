@@ -2,7 +2,9 @@ import presetManager from './scripts/presetsManager';
 import Main from './scripts/main';
 import {
   createPresetsDropDown,
+  setAttractionToCenter,
   setNumCommunities,
+  setRepulsionForce,
 } from './scripts/DOM/domValues';
 
 const {
@@ -11,15 +13,23 @@ const {
   INITIAL_INFECTIOUS,
   INITIAL_IMMUNE,
   INITIAL_DEAD,
+  ATTRACTION_FORCE,
   NUM_COMMUNITIES,
+  REPULSION_FORCE,
 } = presetManager.loadPreset();
+
+function setPresetData() {
+  setAttractionToCenter(ATTRACTION_FORCE);
+  setNumCommunities(NUM_COMMUNITIES);
+  setRepulsionForce(REPULSION_FORCE);
+}
 
 /**
  * A function to initialize our program when the page is loaded.
  */
 window.onload = function () {
   createPresetsDropDown();
-  setNumCommunities(NUM_COMMUNITIES);
+  setPresetData();
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
