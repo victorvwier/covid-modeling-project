@@ -592,6 +592,24 @@ export default class Community {
             gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
           );
         }
+
+        // testing
+        if (Math.random() <= this.testedPositiveProbability) {
+          person.testedPositive = true;
+          person.infectionRadius /= this.infectionRadiusReductionFactor;
+        }
+        // ICU
+        if (Math.random() <= this.icuProbability) {
+          person.inIcu = true;
+          if (this.icuCount >= this.icuCapacity) {
+            person.type = TYPES.DEAD;
+            person.color = COLORS.DEAD;
+            this.numInfectious -= 1;
+            this.numDead += 1;
+          } else {
+            this.icuCount += 1;
+          }
+        }
       } else if (person.destinyImmune) {
         person.infectiousTime += dt;
         if (person.infectiousTime >= person.infectiousPeriod) {
@@ -613,22 +631,6 @@ export default class Community {
           this.numDead += 1;
           if (person.inIcu) {
             this.icuCount -= 1;
-          }
-        }
-      }
-      // There is a chance that a infected person gets tested,the higher the TESTED_POSITIVE_PROBABILITY the higher the chance they will get tested.
-      if (!person.testedPositive && Math.random() < this.testedPositiveProbability) {
-        person.testedPositive = true;
-        person.infectionRadius /= this.infectionRadiusReductionFactor;
-        if (Math.random() < this.icuProbability) {
-          if (this.icuCount >= this.icuCapacity) {
-            person.type = TYPES.DEAD;
-            person.color = COLORS.DEAD;
-            this.numInfectious -= 1;
-            this.numDead += 1;
-          } else {
-            person.inIcu = true;
-            this.icuCount += 1;
           }
         }
       }

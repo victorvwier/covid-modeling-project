@@ -25,10 +25,10 @@ export default class Main {
    * @param {number} width The width of our glCanvas.
    * @param {number} height The height of our glCanvas.
    * @param {number} numSusceptible The initial number of Susceptible people.
-   * @param {*} numNonInfectious The initial number of Non-Infectious people.
-   * @param {*} numInfectious The initial number of Infectious people.
-   * @param {*} numDead The initial number of Dead people.
-   * @param {*} numImmune The initial number of Immune people.
+   * @param {number} numNonInfectious The initial number of Non-Infectious people.
+   * @param {number} numInfectious The initial number of Infectious people.
+   * @param {number} numDead The initial number of Dead people.
+   * @param {number} numImmune The initial number of Immune people.
    * @param {HTMLElement} icuDIV It is the div element whose color is changed as icu start filling up with patients.
    */
   constructor(
