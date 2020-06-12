@@ -1,6 +1,9 @@
 import presetManager from './scripts/presetsManager';
 import Main from './scripts/main';
-import { createPresetsDropDown } from './scripts/DOM/domValues';
+import {
+  createPresetsDropDown,
+  setNumCommunities,
+} from './scripts/DOM/domValues';
 
 const {
   INITIAL_SUSCEPTIBLE,
@@ -8,6 +11,7 @@ const {
   INITIAL_INFECTIOUS,
   INITIAL_IMMUNE,
   INITIAL_DEAD,
+  NUM_COMMUNITIES,
 } = presetManager.loadPreset();
 
 /**
@@ -15,6 +19,7 @@ const {
  */
 window.onload = function () {
   createPresetsDropDown();
+  setNumCommunities(NUM_COMMUNITIES);
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
