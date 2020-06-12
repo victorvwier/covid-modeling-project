@@ -6,6 +6,7 @@ import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
 import Coordinate from './data/coordinate';
 import { TYPES, COLORS } from './CONSTANTS';
+import { getAttractionToCenter } from './DOM/domValues';
 
 /** @class Community describing a single community within the model. */
 export default class Community {
@@ -49,6 +50,10 @@ export default class Community {
     this.transmissionProb = presetsManager.loadPreset().TRANSMISSION_PROB;
     this.repulsionForce = presetsManager.loadPreset().REPULSION_FORCE;
     this.attractionToCenter = presetsManager.loadPreset().ATTRACTION_FORCE;
+
+    console.log(this.attractionToCenter);
+    console.log(getAttractionToCenter());
+
     this.minIncubationTime = presetsManager.loadPreset().MIN_INCUBATION_TIME;
     this.maxIncubationTime = presetsManager.loadPreset().MAX_INCUBATION_TIME;
 
