@@ -29,7 +29,6 @@ export default class Main {
    * @param {number} numInfectious The initial number of Infectious people.
    * @param {number} numDead The initial number of Dead people.
    * @param {number} numImmune The initial number of Immune people.
-   * @param {HTMLElement} icuDIV It is the div element whose color is changed as icu start filling up with patients.
    */
   constructor(
     context,
@@ -42,7 +41,7 @@ export default class Main {
     numNonInfectious,
     numInfectious,
     numDead,
-    numImmune,icuDIV
+    numImmune
   ) {
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
@@ -56,7 +55,6 @@ export default class Main {
     this.numDead = numDead;
     this.numNonInfectious = numNonInfectious;
     this.numIcu = 0;
-    this.icuDIV=icuDIV;
 
     this.numCommunities = getNumCommunities();
 
@@ -115,7 +113,7 @@ export default class Main {
       this.numInfectious,
       this.numImmune,
       this.numDead,
-      this.numIcu
+      this.numIcu,
     );
 
 
@@ -140,18 +138,17 @@ export default class Main {
       this.receiveNewStatsAndUpdateChart.bind(this),
       this.updateDemographicChart.bind(this),
       this.borderCtx,
-      this.icuDIV
     );
   }
 
   /**
    * A function to run the model and the chart.
-   * @param {*} totalICU paragraph tag to display total ICU capacity along with statistics.
+   * 
    */
-  run(totalICU) {
+  run() {
     this.chart.drawChart();
     this.demographicsChart.drawChart(this.createCurrentStats().sum());
-    this.model.setupCommunity(totalICU);
+    this.model.setupCommunity();
     this.model.run();
   }
 

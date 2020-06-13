@@ -1,3 +1,7 @@
+import {ICU_CAPACITY, NUM_COMMUNITIES } from '../CONSTANTS';
+// import {numCommunities} from '../model';
+
+
 /**
  * A function returning the initial amount of susceptible people as set in the UI.
  *
@@ -42,10 +46,27 @@ export function updateTheStatistics(
   numDead,
   numIcu
 ) {
+    const icuDIV=document.getElementById('icuDIV');
+
+
+  if(numIcu < (0.75 * ICU_CAPACITY * NUM_COMMUNITIES)){
+    icuDIV.style.backgroundColor="golden";
+  }
+  if(numIcu >= (0.75 * ICU_CAPACITY * NUM_COMMUNITIES) && numIcu< (0.90 * ICU_CAPACITY * NUM_COMMUNITIES)){
+    icuDIV.style.backgroundColor="orange";
+  }
+  if(numIcu >= (0.90 * ICU_CAPACITY * NUM_COMMUNITIES) && numIcu< ( ICU_CAPACITY * NUM_COMMUNITIES)){
+    // Light red if OCU is going to become full soon.
+    icuDIV.style.backgroundColor="lightred";
+  }
+  else if(numIcu>=ICU_CAPACITY*NUM_COMMUNITIES){
+    icuDIV.style.backgroundColor="red";
+  }
   document.getElementById('s1').innerHTML = `${numSusceptible}`;
   document.getElementById('s2').innerHTML = `${numNonInfectious}`;
   document.getElementById('s3').innerHTML = `${numInfectious}`;
   document.getElementById('s4').innerHTML = `${numImmune}`;
   document.getElementById('s5').innerHTML = `${numDead}`;
-  document.getElementById('s6').innerHTML = `${numIcu}`;
+  document.getElementById('s6').innerHTML = `${numIcu}/${ICU_CAPACITY*NUM_COMMUNITIES}`;
+
 }

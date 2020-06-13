@@ -14,14 +14,12 @@ window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
-  const icuDIV=document.getElementById('icuDIV');
   const demographicsCtx = document
     .getElementById('demographics')
     .getContext('2d');
   const borderCtx = document.getElementById('BorderCanvas').getContext('2d');
   const { height } = borderCtx.canvas.getBoundingClientRect();
   borderCtx.transform(1, 0, 0, -1, 0, height);
-  const totalICU=document.getElementById('totalICU');
 
   if (context === null) {
     this.alert('Please enable webGl support');
@@ -39,8 +37,7 @@ window.onload = function () {
     INITIAL_INFECTIOUS,
     INITIAL_DEAD,
     INITIAL_IMMUNE,
-    icuDIV
   );
 
-  main.run(totalICU);
+  main.run();
 };
