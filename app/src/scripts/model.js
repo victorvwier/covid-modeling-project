@@ -138,34 +138,9 @@ export default class Model {
   registerRelocation(person) {
     this.relocationUtil.insertRelocation(person);
   }
-
+  
   /**
-   * A function to pause the execution of the model.
-   */
-  pauseExecution() {
-    // Cancel animation frame
-    cancelAnimationFrame(this._passDrawInfoAnimationFrame);
-    this._passDrawInfoAnimationFrame = null;
-    // clearInterval(this._chartInterval);
-    // this._chartInterval = null;
-    // Cancel all community intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.pauseExecution());
-  }
-
-  /**
-   * A function to resume the execution of the model.
-   */
-  resumeExecution() {
-    // Resume animationFrame
-    this._animationFunction();
-    // if(this._chartInterval === null) {
-    //   this._chartInterval = setInterval(this.compileStats.bind(this), 500);
-    // }
-    // Resume community intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.resumeExecution());
-  }
-
-  /**
+   *
    * A function to populate each of the communities in the model.
    */
   populateCommunities() {

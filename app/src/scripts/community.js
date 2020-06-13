@@ -43,7 +43,6 @@ export default class Community {
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
 
-    console.log('Here');
     this.nonInfectiousToImmuneProb = presetsManager.loadPreset().NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = presetsManager.loadPreset().INFECTION_RADIUS;
     this.personRadius = presetsManager.loadPreset().PERSON_RADIUS;
@@ -52,7 +51,6 @@ export default class Community {
     this.attractionToCenter = presetsManager.loadPreset().ATTRACTION_FORCE;
     this.minIncubationTime = presetsManager.loadPreset().MIN_INCUBATION_TIME;
     this.maxIncubationTime = presetsManager.loadPreset().MAX_INCUBATION_TIME;
-    console.log('done');
 
     this.minInfectiousTime = presetsManager.loadPreset().MIN_INFECTIOUS_TIME;
     this.maxInfectiousTime = presetsManager.loadPreset().MAX_INFECTIOUS_TIME;
@@ -96,9 +94,6 @@ export default class Community {
   }
 
   reloadPreset() {
-    console.log(this.attractionToCenter);
-
-    console.log('Yo');
     this.personRadius = presetsManager.loadPreset().PERSON_RADIUS;
     this.nonInfectiousToImmuneProb = presetsManager.loadPreset().NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = presetsManager.loadPreset().INFECTION_RADIUS;
@@ -114,9 +109,6 @@ export default class Community {
     this.maxSpeed = presetsManager.loadPreset().POPULATION_SPEED;
     this.daysPerSecond = presetsManager.loadPreset().DAYS_PER_SECOND;
     this.relocationProbability = presetsManager.loadPreset().RELOCATION_PROBABILITY;
-    console.log('no');
-
-    console.log(this.attractionToCenter);
   }
 
   /**
