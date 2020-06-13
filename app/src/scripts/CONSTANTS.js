@@ -58,7 +58,7 @@ export const INFECTION_RADIUS_REDUCTION_FACTOR=3;
 /** @constant ICU_PROBABILITY The probability a person goes to the ICU when tested positive. */
 export const ICU_PROBABILITY = 0.1;
 /** @constant ICU_CAPACITY The capacity of the ICU of a single community. */
-export const ICU_CAPACITY = 5;
+export const ICU_CAPACITY = 2;
 
 /**
  * Enum for the colors related to the states a person can be in.
