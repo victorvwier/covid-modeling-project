@@ -214,6 +214,18 @@ export function wireReloadButtonToMain(main) {
     .addEventListener('click', () => main.reset());
 }
 
+/**
+ * A function binding the reload button to our main class.
+ *
+ * @param {Main} main The instance of the main class to bind our reload button to.
+ */
+export function wireDownloadDataToMain(main) {
+  // Reset button
+  document
+    .getElementById('download')
+    .addEventListener('click', () => main.downloadPdf());
+}
+
 export function wireReloadPresetToMain(main) {
   document.getElementById('select').addEventListener('click', function () {
     const val = document.getElementById('preset-list').value;

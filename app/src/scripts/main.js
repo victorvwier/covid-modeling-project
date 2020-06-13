@@ -1,10 +1,12 @@
 import Stats from './data/stats';
 import Model from './model';
 import Chart from './chart';
+import PdfDownloadService from './pdfDownloadService';
 import AgentChart from './agentChart';
 import {
   wireReloadButtonToMain,
   wireReloadPresetToMain,
+  wireDownloadDataToMain,
 } from './DOM/parameters';
 import DemographicsChart from './demographicsChart';
 import {
@@ -46,6 +48,7 @@ export default class Main {
     numDead,
     numImmune
   ) {
+    wireDownloadDataToMain(this);
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
     this.borderCtx = borderCtx;
@@ -189,5 +192,10 @@ export default class Main {
     } = this.demographicsCtx.canvas.getBoundingClientRect();
     this.demographicsCtx.clearRect(0, 0, width1 * 2, height2 * 2);
     this.demographicsChart.resetChart(this.createCurrentStats().sum());
+  }
+
+  downloadPdf() {
+    const data = this.chart.getAllDataPoints();
+    PdfDownloadService.createDownloadPdf(data);
   }
 }
