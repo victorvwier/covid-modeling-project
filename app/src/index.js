@@ -28,6 +28,9 @@ function setPresetData() {
  * A function to initialize our program when the page is loaded.
  */
 window.onload = function () {
+  const seedrandom = require('seedrandom');
+  const rand = seedrandom('hello', { global: true });
+
   createPresetsDropDown();
   setPresetData();
   const glCanvas = document.getElementById('glCanvas');

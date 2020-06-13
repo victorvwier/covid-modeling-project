@@ -78,7 +78,6 @@ export default class Community {
       this.endY,
       presetsManager.loadPreset().INFECTION_RADIUS
     );
-
     // this._drawBorderLines();
   }
 

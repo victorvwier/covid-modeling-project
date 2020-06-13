@@ -56,3 +56,10 @@ export function gaussianRand(min, max) {
   num += min;
   return num;
 }
+
+// export function seedRandomValue() {
+//   const seedrandom = require('seedrandom');
+//   const rng = seedrandom('hello.');
+
+//   return rng();
+// }
