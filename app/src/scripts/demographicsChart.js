@@ -2,7 +2,11 @@ import Chart from 'chart.js';
 import presetsManager from './presetsManager';
 import { COLORS, TYPES, GENDERS } from './CONSTANTS';
 
-const { AGE } = presetsManager.loadPreset();
+// const { AGE } = presetsManager.loadPreset();
+
+function getAge() {
+  return presetsManager.loadPreset().AGE;
+}
 
 export default class DemographicsChart {
   /**
@@ -12,7 +16,7 @@ export default class DemographicsChart {
   constructor(ctx) {
     this.demographicChart = null;
     this.ctx = ctx;
-    this.labels = AGE.map((val) => this._formatLabel(val.min, val.max));
+    this.labels = getAge().map((val) => this._formatLabel(val.min, val.max));
 
     // DEBUG
     window.demographic = this;
@@ -122,6 +126,7 @@ export default class DemographicsChart {
 
   resetChart(populationSize) {
     this.demographicChart.destroy();
+    this.labels = getAge().map((val) => this._formatLabel(val.min, val.max));
     this.drawChart(populationSize);
   }
 
@@ -215,7 +220,7 @@ export default class DemographicsChart {
         },
         title: {
           display: true,
-          text: 'M.           F.',
+          text: 'Male           Female',
           position: 'top',
           fontSize: 24,
         },
@@ -225,6 +230,10 @@ export default class DemographicsChart {
         scales: {
           xAxes: [
             {
+              scaleLabel: {
+                display: true,
+                labelString: 'Number of people',
+              },
               stacked: true,
               ticks: {
                 beginAtZero: true,
@@ -237,6 +246,10 @@ export default class DemographicsChart {
           ],
           yAxes: [
             {
+              scaleLabel: {
+                display: true,
+                labelString: 'Age category',
+              },
               stacked: true,
               ticks: {
                 callback: (value) => (value < 0 ? -value : value),
