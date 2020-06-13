@@ -41,13 +41,4 @@ export function assignDemographic(person) {
   }
 
   person.mortalityRate = MORTALITY_RATE[index];
-
-  console.log(
-    'Age: ' +
-      `${person.age} ` +
-      ' Gender: ' +
-      `${person.gender} ` +
-      ' MR: ' +
-      `${person.mortalityRate} `
-  );
 }

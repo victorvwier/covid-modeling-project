@@ -51,9 +51,6 @@ export default class Community {
     this.repulsionForce = presetsManager.loadPreset().REPULSION_FORCE;
     this.attractionToCenter = presetsManager.loadPreset().ATTRACTION_FORCE;
 
-    console.log(this.attractionToCenter);
-    console.log(getAttractionToCenter());
-
     this.minIncubationTime = presetsManager.loadPreset().MIN_INCUBATION_TIME;
     this.maxIncubationTime = presetsManager.loadPreset().MAX_INCUBATION_TIME;
 
