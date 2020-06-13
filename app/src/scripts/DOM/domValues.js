@@ -47,7 +47,7 @@ export function updateTheStatistics(
 
 
   if(numIcu < (0.75 * icuCapacity)){
-    icuDIV.style.backgroundColor="golden";
+    icuDIV.style.backgroundColor="green";
   }
   if(numIcu >= (0.75 * icuCapacity) && numIcu < (0.90 * icuCapacity)){
     icuDIV.style.backgroundColor="orange";
