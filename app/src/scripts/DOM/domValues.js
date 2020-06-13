@@ -47,14 +47,10 @@ export function updateTheStatistics(
 
 
   if(numIcu < (0.75 * icuCapacity)){
-    icuDIV.style.backgroundColor="green";
+    icuDIV.style.backgroundColor="lightgreen";
   }
-  if(numIcu >= (0.75 * icuCapacity) && numIcu < (0.90 * icuCapacity)){
+  if(numIcu >= (0.75 * icuCapacity) && numIcu < icuCapacity){
     icuDIV.style.backgroundColor="orange";
-  }
-  if(numIcu >= (0.90 * icuCapacity) && numIcu < (icuCapacity)){
-    // Light red if OCU is going to become full soon.
-    icuDIV.style.backgroundColor="lightred";
   }
   else if(numIcu >= icuCapacity){
     icuDIV.style.backgroundColor="red";
