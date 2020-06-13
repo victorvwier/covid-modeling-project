@@ -3,7 +3,7 @@ import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
 // MIGHT NEED TO REPLACE STATS.INFECTIOUS IN CONSTRUCTOR BEING SENT TO GETINITIAL TESTED WITH INITIAL_INFECTIOUS FROM CONSTANTS.JS
-import { SPACE_BETWEEN_COMMUNITIES,ICU_CAPACITY } from './CONSTANTS';
+import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
 import RelocationUtil from './relocationUtil';
 
 /** @class Model representing a simulation of one or multiple communities. */
@@ -282,7 +282,6 @@ export default class Model {
 
   /**
    * A function to initialize all communities.
-   * @param {*} totalICU paragraph tag to display total ICU capacity along with statistics.
    */
   setupCommunity() {
     const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
@@ -339,8 +338,13 @@ export default class Model {
     const relocationStats = this.relocationUtil.getStats();
     const finalStats = Stats.joinStats(stats, relocationStats);
 
+    let icuCapacity = 0;
+    for(let i = 0; i < this.numCommunities; i++) {
+      icuCapacity += this.communities[i].icuCapacity;
+    }
+
     this._setValuesFromStatsToLocal(finalStats);
-    this.updateStats(finalStats);
+    this.updateStats(finalStats, icuCapacity);
   }
 
   /**

@@ -36,7 +36,7 @@ window.onload = function () {
     INITIAL_NONINFECTIOUS,
     INITIAL_INFECTIOUS,
     INITIAL_DEAD,
-    INITIAL_IMMUNE,
+    INITIAL_IMMUNE
   );
 
   main.run();

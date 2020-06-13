@@ -6,7 +6,7 @@ Notice that in `index.html` no script tags or link:css tags are present, these w
 
 ### Installing dependencies
 
-run this i  the terminal/command prompt at the beginning to install required dependencies.
+run this in the terminal/command prompt at the beginning to install required dependencies.
 
 ```
   npm install
@@ -26,7 +26,7 @@ Will spin up a development server that implements hot reloading whenever a file 
   npm run test
 ```
 
-Would run all the tests. Tests are recognized by having a name of the format `[FILE_NAME].test.js`,where FILE_NAME is the name of file being tested.
+Would run all the tests. Tests are recognized by having a name of the format `[FILE_NAME].test.js`.
 
 You can also use the watch mode to interactively keep running the tests while coding to make them pass.
 

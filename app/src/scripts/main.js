@@ -98,7 +98,7 @@ export default class Main {
    *
    * @param {Stats} stats the new stats.
    */
-  receiveNewStatsAndUpdateChart(stats) {
+  receiveNewStatsAndUpdateChart(stats, icuCapacity) {
     this.numSusceptible = stats.susceptible;
     this.numNonInfectious = stats.noninfectious;
     this.numInfectious = stats.infectious;
@@ -114,6 +114,7 @@ export default class Main {
       this.numImmune,
       this.numDead,
       this.numIcu,
+      icuCapacity
     );
 
 
