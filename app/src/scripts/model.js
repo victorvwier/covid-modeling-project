@@ -138,7 +138,7 @@ export default class Model {
   registerRelocation(person) {
     this.relocationUtil.insertRelocation(person);
   }
-  
+
   /**
    *
    * A function to populate each of the communities in the model.
@@ -175,7 +175,7 @@ export default class Model {
    * @param {number} timestamp The timestamp of the current moment.
    */
   _animationFunction() {
-    let dt = 50;
+    const dt = 50;
     this.passDrawInfoToAgentChart();
     Object.values(this.communities).forEach((mod) => mod.step(dt));
     // Check all relocations
