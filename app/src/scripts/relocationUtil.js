@@ -26,15 +26,11 @@ export default class RelocationUtil {
       const relocation = this.relocations[i];
       relocation.takeStep();
       if (relocation.hasArrived()) {
-        this.model.pauseExecution();
-
         relocation.person.relocating = false;
         this.model.communities[relocation.destId].handlePersonJoining(
           relocation.person
         );
         this._removeRelocationInfo(relocation);
-
-        this.model.resumeExecution();
       }
     }
   }
@@ -45,8 +41,6 @@ export default class RelocationUtil {
    * @param {Person} person The person to start relocating.
    */
   insertRelocation(person) {
-    // Pause
-    this.model.pauseExecution();
     // Move person
 
     const sourceId = person.communityId;
@@ -77,8 +71,6 @@ export default class RelocationUtil {
 
     // Do it via this
     this.relocations.push(new RelocationInfo(person, distCoords, destId));
-    // Resume
-    this.model.resumeExecution();
   }
 
   /**

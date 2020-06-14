@@ -138,34 +138,9 @@ export default class Model {
   registerRelocation(person) {
     this.relocationUtil.insertRelocation(person);
   }
-
+  
   /**
-   * A function to pause the execution of the model.
-   */
-  pauseExecution() {
-    // Cancel animation frame
-    cancelAnimationFrame(this._passDrawInfoAnimationFrame);
-    this._passDrawInfoAnimationFrame = null;
-    // clearInterval(this._chartInterval);
-    // this._chartInterval = null;
-    // Cancel all community intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.pauseExecution());
-  }
-
-  /**
-   * A function to resume the execution of the model.
-   */
-  resumeExecution() {
-    // Resume animationFrame
-    this._animationFunction();
-    // if(this._chartInterval === null) {
-    //   this._chartInterval = setInterval(this.compileStats.bind(this), 500);
-    // }
-    // Resume community intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.resumeExecution());
-  }
-
-  /**
+   *
    * A function to populate each of the communities in the model.
    */
   populateCommunities() {
@@ -190,7 +165,7 @@ export default class Model {
 
     this.updateAgentSize(this.getAgentSize(this.stats.sum()));
 
-    this._animationFunction();
+    setInterval(this._animationFunction.bind(this), 50);
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
@@ -199,13 +174,8 @@ export default class Model {
    *
    * @param {number} timestamp The timestamp of the current moment.
    */
-  _animationFunction(timestamp) {
-    let dt = 0;
-    if (this.lastTimestamp && timestamp) {
-      dt = timestamp - this.lastTimestamp;
-    } // The time passed since running the last step.
-    this.lastTimestamp = timestamp;
-
+  _animationFunction() {
+    let dt = 50;
     this.passDrawInfoToAgentChart();
     Object.values(this.communities).forEach((mod) => mod.step(dt));
     // Check all relocations
@@ -218,10 +188,6 @@ export default class Model {
    * A function to pass all info to AgentChart to allow drawing the model.
    */
   passDrawInfoToAgentChart() {
-    this._passDrawInfoAnimationFrame = requestAnimationFrame(
-      this._animationFunction.bind(this)
-    );
-
     const allData = Object.values(this.communities)
       .map((com) => com.getDrawInfo())
       .reduce((acc, cur) => ({
