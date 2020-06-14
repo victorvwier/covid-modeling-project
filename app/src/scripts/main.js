@@ -77,31 +77,6 @@ export default class Main {
     // DEBUG
     window.chart = this.chart;
     window.main = this;
-
-    // rand();
-    // seedrandom('hello', { global: true });
-
-    // console.log(Math.random());
-
-    // let seedrandom = require('seedrandom');
-
-    // seedrandom('hello.', { global: true });
-    // const seedrandom = require('seedrandom');
-    // const rng = seedrandom('hello.');
-    // console.log(rng());
-
-    // const myrng = new Math.random()
-    //Math.random();
-
-    // let seedrandom = require('seedrandom');
-    // let rng = seedrandom('hello.');
-
-    // Global PRNG: set Math.random.
-
-    // seedrandom('hello.', { global: true });
-
-    // this.testSeeding(1);
-    // this.testSeeding(2);
   }
 
   /**
@@ -118,24 +93,6 @@ export default class Main {
       this.numImmune
     );
   }
-
-  // testSeeding(number) {
-  //   console.log('Run: ' + '$number');
-  //   // let seedrandom = require('seedrandom');
-  //   let rng = seedrandom('hello.');
-
-  //   console.log(rng()); // Always 0.9282578795792454
-  //   console.log(rng());
-  //   console.log(rng());
-  //   console.log(rng());
-  //   console.log(rng());
-
-  //   console.log(rng()); // Always 0.9282578795792454
-  //   console.log(rng());
-  //   console.log(rng());
-  //   console.log(rng());
-  //   console.log(rng());
-  // }
 
   // Assume only model calls this one so update chart
   /**

@@ -1,3 +1,5 @@
+require('seedrandom')('hi.', { global: true });
+
 import presetManager from './scripts/presetsManager';
 import Main from './scripts/main';
 import {
@@ -28,8 +30,8 @@ function setPresetData() {
  * A function to initialize our program when the page is loaded.
  */
 window.onload = function () {
-  const seedrandom = require('seedrandom');
-  const rand = seedrandom('hello', { global: true });
+  // const seedrandom = require('seedrandom')
+  // const rand = seedrandom('hello', { global: true });
 
   createPresetsDropDown();
   setPresetData();

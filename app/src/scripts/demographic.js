@@ -1,4 +1,6 @@
-import { getRandomInt } from './util';
+require('seedrandom')('hi.', { global: true });
+
+import { getRandomInt, getRandom } from './util';
 import presetsManager from './presetsManager';
 import { GENDERS } from './CONSTANTS';
 
@@ -14,7 +16,7 @@ function getAge() {
  * @param {Person} person the person whose demographic will be assigned.
  */
 export function assignDemographic(person) {
-  const rand = Math.random();
+  const rand = getRandom();
 
   // demographic has 40 people
   // 0-39 are the values
