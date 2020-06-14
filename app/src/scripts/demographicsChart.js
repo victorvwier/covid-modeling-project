@@ -2,8 +2,6 @@ import Chart from 'chart.js';
 import presetsManager from './presetsManager';
 import { COLORS, TYPES, GENDERS } from './CONSTANTS';
 
-// const { AGE } = presetsManager.loadPreset();
-
 function getAge() {
   return presetsManager.loadPreset().AGE;
 }
