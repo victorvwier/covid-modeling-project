@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 require('seedrandom')('hi.', { global: true });
 
 import presetManager from './scripts/presetsManager';

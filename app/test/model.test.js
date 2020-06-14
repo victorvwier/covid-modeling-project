@@ -45,20 +45,20 @@ describe('Community test', () => {
     community.populateCommunities();
   });
 
-  test('_animationFunction should make new dt if both timestamp and lasttimestamp exist', () => {
-    const oldLastTimeStamp = 1;
-    const thisTimeStamp = 2;
-    community.lastTimestamp = oldLastTimeStamp;
-    community._animationFunction(thisTimeStamp);
-    expect(community.lastTimestamp).toBe(thisTimeStamp);
-  });
+  // test('_animationFunction should make new dt if both timestamp and lasttimestamp exist', () => {
+  //   const oldLastTimeStamp = 1;
+  //   const thisTimeStamp = 2;
+  //   community.lastTimestamp = oldLastTimeStamp;
+  //   community._animationFunction(thisTimeStamp);
+  //   expect(community.lastTimestamp).toBe(thisTimeStamp);
+  // });
 
-  test('_animationFunction should not make new dt if either timestamp and lasttimestamp do not exist', () => {
-    const thisTimeStamp = 2;
-    community.lastTimestamp = null;
-    community._animationFunction(thisTimeStamp);
-    expect(community.lastTimestamp).toBe(thisTimeStamp);
-  });
+  // test('_animationFunction should not make new dt if either timestamp and lasttimestamp do not exist', () => {
+  //   const thisTimeStamp = 2;
+  //   community.lastTimestamp = null;
+  //   community._animationFunction(thisTimeStamp);
+  //   expect(community.lastTimestamp).toBe(thisTimeStamp);
+  // });
 
   test('getAgentSize should return 1.5 if the population is over 2000', () => {
     expect(community.getAgentSize(2500)).toEqual(1.5);
