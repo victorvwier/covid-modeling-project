@@ -1,10 +1,28 @@
+/* eslint-disable no-shadow */
+import presetsManager from '../presetsManager';
 import {
+  setInitialNumInfectious,
+  setInitialNumSusceptible,
+  setNumCommunities,
+  setAttractionToCenter,
+  setRepulsionForce,
+  setTransmissionProbability,
+  setNonInToImmuneProb,
+  setMinIncubationTime,
+  setMaxIncubationTime,
+  setMinInfectiousTime,
+  setMaxInfectiousTime,
+  setMinTimeUntilDead,
+  setMaxTimeUntilDead,
+  setInfectionRadius,
+} from './domValues';
+
+const {
   TRANSMISSION_PROB,
   NONIN_TO_IMMUNE_PROB,
   MIN_INCUBATION_TIME,
   MAX_INCUBATION_TIME,
   INFECTION_RADIUS,
-  // PERSON_RADIUS,
   INITIAL_INFECTIOUS,
   INITIAL_SUSCEPTIBLE,
   MIN_INFECTIOUS_TIME,
@@ -15,7 +33,8 @@ import {
   ATTRACTION_FORCE,
   NUM_COMMUNITIES,
   TIMELINE_PARAMETERS,
-} from '../CONSTANTS';
+} = presetsManager.loadPreset();
+
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
 // Otherwise the default is just a function that returns the variable itself
@@ -209,5 +228,46 @@ export function wireTimelineButtontoTimeline(timeline) {
     const end = document.getElementById('timelineform-end').value;
     const value = document.getElementById('timelineform-value').value;
     timeline.addRule(type, parseFloat(start), parseFloat(end), parseFloat(value))
+  });
+}
+export function wireReloadPresetToMain(main) {
+  document.getElementById('select').addEventListener('click', function () {
+    const val = document.getElementById('preset-list').value;
+    if (val === '0') return;
+    presetsManager.changePreset(val);
+
+    const {
+      INITIAL_INFECTIOUS,
+      INITIAL_SUSCEPTIBLE,
+      NUM_COMMUNITIES,
+      ATTRACTION_FORCE,
+      REPULSION_FORCE,
+      TRANSMISSION_PROB,
+      NONIN_TO_IMMUNE_PROB,
+      MIN_INCUBATION_TIME,
+      MAX_INCUBATION_TIME,
+      MIN_INFECTIOUS_TIME,
+      MAX_INFECTIOUS_TIME,
+      MIN_TIME_UNTIL_DEAD,
+      MAX_TIME_UNTIL_DEAD,
+      INFECTION_RADIUS,
+    } = presetsManager.loadPreset();
+
+    setInitialNumSusceptible(INITIAL_SUSCEPTIBLE);
+    setInitialNumInfectious(INITIAL_INFECTIOUS);
+    setNumCommunities(NUM_COMMUNITIES);
+    setAttractionToCenter(ATTRACTION_FORCE);
+    setRepulsionForce(REPULSION_FORCE);
+    setTransmissionProbability(TRANSMISSION_PROB);
+    setNonInToImmuneProb(NONIN_TO_IMMUNE_PROB);
+    setMinIncubationTime(MIN_INCUBATION_TIME);
+    setMaxIncubationTime(MAX_INCUBATION_TIME);
+    setMinInfectiousTime(MIN_INFECTIOUS_TIME);
+    setMaxInfectiousTime(MAX_INFECTIOUS_TIME);
+    setMinTimeUntilDead(MIN_TIME_UNTIL_DEAD);
+    setMaxTimeUntilDead(MAX_TIME_UNTIL_DEAD);
+    setInfectionRadius(INFECTION_RADIUS);
+
+    main.changePreset();
   });
 }

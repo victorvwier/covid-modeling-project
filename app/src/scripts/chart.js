@@ -58,16 +58,18 @@ export default class Chart {
    * @param {Stats} stats a stats object holding the new values.
    */
   updateValues(stats, timestamp) {
-    this.chart.data.datasets[0].data.push(stats.susceptible);
-    this.susceptible.push(stats.susceptible);
+    this.chart.data.datasets[0].data.push(stats.infectious);
     this.chart.data.datasets[1].data.push(stats.noninfectious);
-    this.noninfectious.push(stats.noninfectious);
-    this.chart.data.datasets[2].data.push(stats.infectious);
-    this.infectious.push(stats.infectious);
+    this.chart.data.datasets[2].data.push(stats.susceptible);
     this.chart.data.datasets[3].data.push(stats.immune);
-    this.immune.push(stats.immune);
     this.chart.data.datasets[4].data.push(stats.dead);
+
+    this.susceptible.push(stats.susceptible);
+    this.noninfectious.push(stats.noninfectious);
+    this.infectious.push(stats.infectious);
+    this.immune.push(stats.immune);
     this.dead.push(stats.dead);
+
     // What is x?
     this.chart.data.labels.push(timestamp);
     this.xValues.push(timestamp);
@@ -84,16 +86,17 @@ export default class Chart {
         labels: this.xValues,
         datasets: [
           {
-            label: 'Susceptible',
+            label: 'Infectious',
             fill: true,
-            backgroundColor: COLORS.SUSCEPTIBLE,
-            pointBackgroundColor: COLORS.SUSCEPTIBLE,
-            borderColor: COLORS.SUSCEPTIBLE,
-            pointHighlightStroke: COLORS.SUSCEPTIBLE,
-            borderCapStyle: 'square',
-            lineCap: 'square',
-            data: this.susceptible,
+            backgroundColor: COLORS.INFECTIOUS,
+            pointBackgroundColor: COLORS.INFECTIOUS,
+            borderColor: COLORS.INFECTIOUS,
+            pointHighlightStroke: COLORS.INFECTIOUS,
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
             pointStyle: 'line',
+            data: this.infectious,
+            lineTension: 0.2,
           },
           {
             label: 'Non-Infectious',
@@ -102,22 +105,24 @@ export default class Chart {
             pointBackgroundColor: COLORS.NONINFECTIOUS,
             borderColor: COLORS.NONINFECTIOUS,
             pointHighlightStroke: COLORS.NONINFECTIOUS,
-            borderCapStyle: 'square',
-            lineCap: 'square',
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
             pointStyle: 'line',
             data: this.noninfectious,
+            lineTension: 0.2,
           },
           {
-            label: 'Infectious',
+            label: 'Susceptible',
             fill: true,
-            backgroundColor: COLORS.INFECTIOUS,
-            pointBackgroundColor: COLORS.INFECTIOUS,
-            borderColor: COLORS.INFECTIOUS,
-            pointHighlightStroke: COLORS.INFECTIOUS,
-            borderCapStyle: 'square',
-            lineCap: 'square',
+            backgroundColor: COLORS.SUSCEPTIBLE,
+            pointBackgroundColor: COLORS.SUSCEPTIBLE,
+            borderColor: COLORS.SUSCEPTIBLE,
+            pointHighlightStroke: COLORS.SUSCEPTIBLE,
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
+            data: this.susceptible,
             pointStyle: 'line',
-            data: this.infectious,
+            lineTension: 0.2,
           },
           {
             label: 'Immune',
@@ -126,10 +131,11 @@ export default class Chart {
             pointBackgroundColor: COLORS.IMMUNE,
             borderColor: COLORS.IMMUNE,
             pointHighlightStroke: COLORS.IMMUNE,
-            borderCapStyle: 'square',
-            lineCap: 'square',
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
             pointStyle: 'line',
             data: this.immune,
+            lineTension: 0.2,
           },
           {
             label: 'Dead',
@@ -138,10 +144,11 @@ export default class Chart {
             pointBackgroundColor: COLORS.DEAD,
             borderColor: COLORS.DEAD,
             pointHighlightStroke: COLORS.DEAD,
-            borderCapStyle: 'square',
-            lineCap: 'square',
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
             pointStyle: 'line',
             data: this.dead,
+            lineTension: 0.2,
           },
         ],
       },
@@ -176,7 +183,8 @@ export default class Chart {
           ]
         },
         animation: {
-          duration: 750,
+          duration: 0,
+          easing: 'linear',
         },
       },
     });

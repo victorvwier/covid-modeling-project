@@ -245,6 +245,13 @@ h3 {
   transition: max-height 0.2s ease-out;
 }
 
+.preset-panel {
+  flex-flow: row;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
 .btn {
   background-color: #05befc;
   border: none;
@@ -268,4 +275,22 @@ h3 {
 .btn-secondary:hover {
   background-color: #05befc;
   color: white;
+}
+
+.btn-preset {
+  background-color: white;
+  color: black;
+  border: 2px solid #05befc;
+  text-align: center;
+  margin-top: 0;
+  height: 50px;
+}
+
+.btn-preset:hover {
+  background-color: #05befc;
+  color: white;
+}
+
+.preset-panel {
+  flex-direction: row;
 }

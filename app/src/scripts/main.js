@@ -2,9 +2,11 @@ import Stats from './data/stats';
 import Model from './model';
 import Chart from './chart';
 import AgentChart from './agentChart';
-
-import { wireReloadButtonToMain, wireTimelineButtontoTimeline } from './DOM/parameters';
-
+import {
+  wireReloadButtonToMain,
+  wireTimelineButtontoTimeline,
+  wireReloadPresetToMain,
+} from './DOM/parameters';
 import DemographicsChart from './demographicsChart';
 
 import {
@@ -78,6 +80,7 @@ export default class Main {
 
     // Wire reload button
     wireReloadButtonToMain(this);
+    wireReloadPresetToMain(this);
 
     // DEBUG
     window.chart = this.chart;
@@ -142,6 +145,13 @@ export default class Main {
     this.demographicsChart.receiveUpdate(population);
   }
 
+  changePreset() {
+    this.model.presetInProcess = true;
+    this.model.reloadPreset();
+    this.reset();
+    this.model.presetInProcess = false;
+  }
+
   /**
    * A function to setup the main class.
    */
@@ -193,7 +203,14 @@ export default class Main {
     this.model.setupCommunity();
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.demographicsChart.resetChart(this.createCurrentStats().sum());
+
     this.model.resetModel(this.createCurrentStats());
+
+    const {
+      width1,
+      height2,
+    } = this.demographicsCtx.canvas.getBoundingClientRect();
+    this.demographicsCtx.clearRect(0, 0, width1 * 2, height2 * 2);
+    this.demographicsChart.resetChart(this.createCurrentStats().sum());
   }
 }
