@@ -294,4 +294,30 @@ describe('Bounding box test suite', () => {
     boundingBox.remove(1);
     expect(boundingBox.people.length).toBe(lengthBefore);
   });
+
+  test('Column constructor throws error if end and start are switched', () => {
+    expect(() => {
+      const col = new Column(10, 5, 1);
+    }).toThrow();
+  });
+
+  test('BoundingBoxStructure throws error if x end and start are switched', () => {
+    expect(() => {
+      const struct = new BoundingBoxStructure(10, 0, 0, 10, 1);
+    }).toThrow();
+  });
+
+  test('BoundingBoxStructure throws error if y end and start are switched', () => {
+    expect(() => {
+      const struct = new BoundingBoxStructure(0, 10, 10, 0, 1);
+    }).toThrow();
+  });
+
+  test('query errors on undefined range', () => {
+    const struct = new BoundingBoxStructure(0, 10, 0, 10, 1);
+    const person = new Person(TYPES.SUSCEPTIBLE, 5, 5, 0);
+    expect(() => {
+      struct.query(person, undefined);
+    }).toThrow();
+  });
 });
