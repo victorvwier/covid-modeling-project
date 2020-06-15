@@ -1,11 +1,12 @@
 /** @class Stats describing the stats of a community or model. */
 export default class Stats {
-  constructor(susceptible, noninfectious, infectious, dead, immune) {
+  constructor(susceptible, noninfectious, infectious, dead, immune, icu) {
     this.susceptible = susceptible;
     this.noninfectious = noninfectious;
     this.infectious = infectious;
     this.dead = dead;
     this.immune = immune;
+    this.icu = icu;
   }
 
   /**
@@ -36,7 +37,13 @@ export default class Stats {
       one.noninfectious + other.noninfectious,
       one.infectious + other.infectious,
       one.dead + other.dead,
-      one.immune + other.immune
+      one.immune + other.immune,
+      one.icu + other.icu
     );
+  }
+
+
+  getICUCount(){
+    return this.icu;
   }
 }

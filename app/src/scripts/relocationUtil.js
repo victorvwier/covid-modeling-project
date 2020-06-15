@@ -26,14 +26,11 @@ export default class RelocationUtil {
       const relocation = this.relocations[i];
       relocation.takeStep();
       if (relocation.hasArrived()) {
-
         relocation.person.relocating = false;
         this.model.communities[relocation.destId].handlePersonJoining(
           relocation.person
         );
         this._removeRelocationInfo(relocation);
-
-        
       }
     }
   }
@@ -44,7 +41,6 @@ export default class RelocationUtil {
    * @param {Person} person The person to start relocating.
    */
   insertRelocation(person) {
-    
     // Move person
 
     const sourceId = person.communityId;
@@ -109,8 +105,12 @@ export default class RelocationUtil {
    * @throws If a person of an invalid type is found.
    */
   getStats() {
-    const stats = new Stats(0, 0, 0, 0, 0);
+    const stats = new Stats(0, 0, 0, 0, 0, 0);
     this.relocations.forEach(({ person }) => {
+      if(person.inIcu) {
+        stats.icu++;
+      }
+      
       switch (person.type) {
         case TYPES.SUSCEPTIBLE:
           stats.susceptible++;

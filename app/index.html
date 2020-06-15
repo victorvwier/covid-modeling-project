@@ -62,6 +62,74 @@
               </output>
             </div>
           </div>
+          <div class="col-sm">
+            <p>Probability of testing positive:</p>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              value="0.5"
+              step="0.05"
+              class="slider"
+              id="testedPositiveProb"
+            />
+            <div class="outputContainer">
+              <output id="testedPositiveProbOut" for="testedPositiveProb">
+                0.5
+              </output>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p>Infectivity reduction factor:</p>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value="3"
+              step="0.5"
+              class="slider"
+              id="InfectionRadiusRedFactor"
+            />
+            <div class="outputContainer">
+              <output id="InfectionRadiusRedFactorOut" for="InfectionRadiusRedFactor">
+                3
+              </output>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p>Probability of moving to ICU:</p>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              value="0.1"
+              step="0.05"
+              class="slider"
+              id="IcuProb"
+            />
+            <div class="outputContainer">
+              <output id="IcuProbOut" for="icuProb">
+                0.1
+              </output>
+            </div>
+          </div>
+          <div class="col-sm">
+            <p>ICU capacity:</p>
+            <input
+              type="range"
+              min="0"
+              max="20"
+              value="5"
+              step="1"
+              class="slider"
+              id="IcuCapacity"
+            />
+            <div class="outputContainer">
+              <output id="IcuCapacityOut" for="IcuCapacity">
+                5
+              </output>
+            </div>
+          </div>
         </div>
 
         <button class="accordion">Agent Parameters</button>
@@ -345,6 +413,7 @@
           <button type="button" id="reload" class="btn btn-secondary">
             Reload
           </button>
+          <button class="btn btn-secondary" id="download">Download Data</button>
         </div>
       </div>
     </div>
@@ -406,6 +475,10 @@
           <div class="stat" style="background-color: #000000;">
             <h3>Dead</h3>
             <p id="s5"></p>
+          </div>
+          <div class="stat" id="icuDIV" style="background-color: green">
+            <h3>In ICU</h3>
+            <p id="s6"></p>
           </div>
         </div>
         <div id="model-border-canvases-container">

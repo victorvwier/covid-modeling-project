@@ -58,19 +58,36 @@ export function setNumCommunities(newValue) {
  * @param {number} numInfectious The amount of infectious people.
  * @param {number} numImmune The amount of immune people.
  * @param {number} numDead The amount of dead people.
+ * @param {number} numIcu The amount of people in the ICU.
  */
 export function updateTheStatistics(
   numSusceptible,
   numNonInfectious,
   numInfectious,
   numImmune,
-  numDead
+  numDead,
+  numIcu,
+  icuCapacity
 ) {
+    const icuDIV=document.getElementById('icuDIV');
+
+
+  if(numIcu < (0.75 * icuCapacity)){
+    icuDIV.style.backgroundColor="lightgreen";
+  }
+  if(numIcu >= (0.75 * icuCapacity) && numIcu < icuCapacity){
+    icuDIV.style.backgroundColor="orange";
+  }
+  else if(numIcu >= icuCapacity){
+    icuDIV.style.backgroundColor="red";
+  }
   document.getElementById('s1').innerHTML = `${numSusceptible}`;
   document.getElementById('s2').innerHTML = `${numNonInfectious}`;
   document.getElementById('s3').innerHTML = `${numInfectious}`;
   document.getElementById('s4').innerHTML = `${numImmune}`;
   document.getElementById('s5').innerHTML = `${numDead}`;
+  document.getElementById('s6').innerHTML = `${numIcu}/${icuCapacity}`;
+
 }
 
 export function getAttractionToCenter() {

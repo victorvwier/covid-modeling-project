@@ -43,6 +43,7 @@ export default class Community {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.icuCount = stats.icu;
 
     this.nonInfectiousToImmuneProb = presetsManager.loadPreset().NONIN_TO_IMMUNE_PROB;
     this.infectionRadius = presetsManager.loadPreset().INFECTION_RADIUS;
@@ -64,6 +65,11 @@ export default class Community {
     this.daysPerSecond = presetsManager.loadPreset().DAYS_PER_SECOND;
     this.relocationProbability = presetsManager.loadPreset().RELOCATION_PROBABILITY;
 
+    this.testedPositiveProbability = presetsManager.loadPreset().TESTED_POSITIVE_PROBABILITY;
+    this.infectionRadiusReductionFactor = presetsManager.loadPreset().INFECTION_RADIUS_REDUCTION_FACTOR;
+    this.icuProbability = presetsManager.loadPreset().ICU_PROBABILITY;
+    this.icuCapacity = presetsManager.loadPreset().ICU_CAPACITY;
+
     this.totalPopulation =
       this.numSusceptible +
       this.numInfectious +
@@ -78,7 +84,6 @@ export default class Community {
       this.endY,
       presetsManager.loadPreset().INFECTION_RADIUS
     );
-
     // this._drawBorderLines();
   }
 
@@ -144,6 +149,10 @@ export default class Community {
 
     this.boundingBoxStruct.remove(person);
 
+    if(person.inIcu) {
+      this.icuCount--;
+    }
+
     switch (person.type) {
       case TYPES.SUSCEPTIBLE:
         if (this.numSusceptible < 0) {
@@ -186,6 +195,10 @@ export default class Community {
     this.boundingBoxStruct.insert(person);
 
     this.population.push(person);
+
+    if (person.inIcu) {
+      this.icuCount++;
+    }
 
     switch (person.type) {
       case TYPES.SUSCEPTIBLE:
@@ -301,6 +314,42 @@ export default class Community {
   }
 
   /**
+   * A function to set the probability an Infectious person tests positive in this community.
+   * 
+   * @param {number} newValue The new probability for testing positive.
+   */
+  setTestedPositiveProbability(newValue) {
+    this.testedPositiveProbability = newValue;
+  }
+
+  /**
+   * A function to set the factor by which the infection radius of a tested person is reduced.
+   * 
+   * @param {number} newValue The new reduction factor.
+   */
+  setInfectionRadiusReductionFactor(newValue) {
+    this.infectionRadiusReductionFactor = newValue;
+  }
+
+  /**
+   * A function to set the probabilty a tested person moves to the ICU.
+   * 
+   * @param {number} newValue The new probability of a person moving to the ICU.
+   */
+  setIcuProbability(newValue) {
+    this.icuProbability = newValue;
+  }
+
+  /**
+   * A function to set the capacity of the ICU for this community.
+   * 
+   * @param {number} newValue The new capacity of the ICU.
+   */
+  setIcuCapacity(newValue) {
+    this.icuCapacity = newValue;
+  }
+
+  /**
    * Method used to update the stats in main
    */
   exportStats() {
@@ -309,7 +358,8 @@ export default class Community {
       this.numNonInfectious,
       this.numInfectious,
       this.numDead,
-      this.numImmune
+      this.numImmune,
+      this.icuCount
     );
     return stats;
   }
@@ -428,7 +478,7 @@ export default class Community {
       this.update(currentPerson, dt);
 
       if (
-        Math.random() < presetsManager.loadPreset().RELOCATION_PROBABILITY &&
+        getRandom() < presetsManager.loadPreset().RELOCATION_PROBABILITY &&
         !currentPerson.relocating
       ) {
         if (currentPerson.type !== TYPES.DEAD) {
@@ -487,10 +537,10 @@ export default class Community {
         this.population[i].repel(met[j]);
         // }
 
-        // Infection
+        // Infection-once an agent is infected there is a chance they will be tested positive.
         if (
           this.population[i].canInfect(met[j]) &&
-          Math.random() <= this.transmissionProb * dt
+          getRandom() <= this.transmissionProb * dt
         ) {
           met[j].startIncubation();
           met[j].setIncubationPeriod(
@@ -514,7 +564,7 @@ export default class Community {
     if (person.type === TYPES.NONINFECTIOUS) {
       person.incubationTime += dt;
       if (person.incubationTime >= person.incubationPeriod) {
-        if (Math.random() < this.nonInfectiousToImmuneProb) {
+        if (getRandom() < this.nonInfectiousToImmuneProb) {
           person.becomesImmune();
           this.numNonInfectious -= 1;
           this.numImmune += 1;
@@ -526,7 +576,7 @@ export default class Community {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
-        if (person.mortalityRate > 0 && Math.random() <= person.mortalityRate) {
+        if (person.mortalityRate > 0 && getRandom() <= person.mortalityRate) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
             gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
@@ -537,6 +587,24 @@ export default class Community {
             gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
           );
         }
+
+        // testing
+        if (Math.random() <= this.testedPositiveProbability) {
+          person.testedPositive = true;
+          person.infectionRadius /= this.infectionRadiusReductionFactor;
+        }
+        // ICU
+        if (Math.random() <= this.icuProbability) {
+          person.inIcu = true;
+          if (this.icuCount >= this.icuCapacity) {
+            person.type = TYPES.DEAD;
+            person.color = COLORS.DEAD;
+            this.numInfectious -= 1;
+            this.numDead += 1;
+          } else {
+            this.icuCount += 1;
+          }
+        }
       } else if (person.destinyImmune) {
         person.infectiousTime += dt;
         if (person.infectiousTime >= person.infectiousPeriod) {
@@ -544,6 +612,9 @@ export default class Community {
           person.color = COLORS.IMMUNE;
           this.numInfectious -= 1;
           this.numImmune += 1;
+          if (person.inIcu) {
+            this.icuCount -= 1;
+          }
         }
       } else {
         person.infectiousTime += dt;
@@ -553,6 +624,9 @@ export default class Community {
           person.color = COLORS.DEAD;
           this.numInfectious -= 1;
           this.numDead += 1;
+          if (person.inIcu) {
+            this.icuCount -= 1;
+          }
         }
       }
     }
@@ -620,6 +694,7 @@ export default class Community {
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numNonInfectious = stats.noninfectious;
+    this.icuCount = stats.icu;
     this.numDead = stats.dead;
     this.totalPopulation = stats.susceptible + stats.infectious;
 

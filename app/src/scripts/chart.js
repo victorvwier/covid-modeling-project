@@ -24,6 +24,20 @@ export default class Chart {
     this.xValues = [];
   }
 
+  getAllDataPoints() {
+    const data = {};
+    for (let i = 0; i < this.xValues.length; i++) {
+      data[this.xValues[i]] = {
+        susceptible: this.susceptible[i],
+        infectious: this.infectious[i],
+        noninfectious: this.noninfectious[i],
+        immune: this.immune[i],
+        dead: this.dead[i],
+      };
+    }
+    return data;
+  }
+
   /**
    * A function getting the size of the total population represented in the chart.
    *

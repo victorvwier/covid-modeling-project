@@ -16,6 +16,7 @@ import {
   setMaxTimeUntilDead,
   setInfectionRadius,
 } from './domValues';
+import { TimelineRuleType } from '../data/timelinerule';
 
 const {
   TRANSMISSION_PROB,
@@ -33,8 +34,12 @@ const {
   ATTRACTION_FORCE,
   NUM_COMMUNITIES,
   TIMELINE_PARAMETERS,
+  TESTED_POSITIVE_PROBABILITY,
+  INFECTION_RADIUS_REDUCTION_FACTOR,
+  ICU_PROBABILITY,
+  ICU_CAPACITY
 } = presetsManager.loadPreset();
-import { TimelineRuleType} from '../data/timelinerule.js'
+
 
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
@@ -147,6 +152,40 @@ export default function (community) {
     'people',
     community.updateInfectionRadius.bind(community)
   );
+  // TestedPositiveProbability
+  wireInput(
+    'testedPositiveProb',
+    'testedPositiveProbOut',
+    TESTED_POSITIVE_PROBABILITY,
+    '%',
+    community.updateTestedPositiveProbability.bind(community),
+    (x) => x * 100
+  );
+  // InfectionRadiusReductionFactor
+  wireInput(
+    'InfectionRadiusRedFactor',
+    'InfectionRadiusRedFactorOut',
+    INFECTION_RADIUS_REDUCTION_FACTOR,
+    '',
+    community.updateInfectionRadiusReductionFactor.bind(community)
+  );
+  // IcuProbability
+  wireInput(
+    'IcuProb',
+    'IcuProbOut',
+    ICU_PROBABILITY,
+    '%',
+    community.updateIcuProbability.bind(community),
+    (x) => x * 100
+  );
+  // IcuCapacity
+  wireInput(
+    'IcuCapacity',
+    'IcuCapacityOut',
+    ICU_CAPACITY,
+    '',
+    community.updateIcuCapacity.bind(community)
+  );
 
   // const PERSON_RADIUS=5
   // agentRadius
@@ -239,6 +278,18 @@ export function wireTimelineButtontoTimeline(timeline) {
     timeline.addRule(TimelineRuleType.THRESHOLD,[target, param, parseFloat(trigger), parseFloat(value)]);
   });
 }
+/*
+ * A function binding the reload button to our main class.
+ *
+ * @param {Main} main The instance of the main class to bind our reload button to.
+ */
+export function wireDownloadDataToMain(main) {
+  // Reset button
+  document
+    .getElementById('download')
+    .addEventListener('click', () => main.downloadPdf());
+}
+
 export function wireReloadPresetToMain(main) {
   document.getElementById('select').addEventListener('click', function () {
     const val = document.getElementById('preset-list').value;

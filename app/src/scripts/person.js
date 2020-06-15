@@ -1,5 +1,6 @@
 import presetsManager from './presetsManager';
 import { COLORS, TYPES } from './CONSTANTS';
+import { getRandom } from './util';
 
 /** @class Person describing a person in the model. */
 export default class Person {
@@ -21,8 +22,8 @@ export default class Person {
     this.y = y;
     this.maxSpeed = presetsManager.loadPreset().POPULATION_SPEED;
     this.repulsionForce = presetsManager.loadPreset().REPULSION_FORCE;
-    this.speedX = 3 * (Math.floor(Math.random() * 2) || -1);
-    this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
+    this.speedX = 3 * (Math.floor(getRandom() * 2) || -1);
+    this.speedY = 3 * (Math.floor(getRandom() * 2) || -1);
     this.accX = 0;
     this.accY = 0;
     this.asymptomaticTime = 0;
@@ -37,6 +38,8 @@ export default class Person {
     this.gender = null;
     this.mortalityRate = null;
 
+    this.inIcu = false;
+
     this.relocating = false;
 
     this.step = presetsManager.loadPreset().RELOCATION_STEP_SIZE;
@@ -46,6 +49,7 @@ export default class Person {
     else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
     else if (type === TYPES.DEAD) this.color = COLORS.DEAD;
     else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
+    this.testedPositive = false;
   }
 
   /**
@@ -118,7 +122,7 @@ export default class Person {
    * @param {number} dt The amount of time which passes for this movement.
    */
   move(startX, endX, startY, endY, dt) {
-    this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
+    this.applyForce(getRandom() - 0.5, getRandom() - 0.5);
 
     this.speedX += this.accX * dt;
     this.speedY += this.accY * dt;
@@ -256,7 +260,8 @@ export default class Person {
    * @returns {Boolean} A boolean representing if the other person can be infected.
    */
   canInfect(p) {
-    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
+    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE &&
+     Math.sqrt((p.x - this.x) ** 2 + (p.y - this.y) ** 2) <= p.infectionRadius + this.infectionRadius;
   }
 
   /**
