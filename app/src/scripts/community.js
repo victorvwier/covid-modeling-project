@@ -84,7 +84,6 @@ export default class Community {
       this.endY,
       presetsManager.loadPreset().INFECTION_RADIUS
     );
-
     // this._drawBorderLines();
   }
 
@@ -479,7 +478,7 @@ export default class Community {
       this.update(currentPerson, dt);
 
       if (
-        Math.random() < presetsManager.loadPreset().RELOCATION_PROBABILITY &&
+        getRandom() < presetsManager.loadPreset().RELOCATION_PROBABILITY &&
         !currentPerson.relocating
       ) {
         if (currentPerson.type !== TYPES.DEAD) {
@@ -541,7 +540,7 @@ export default class Community {
         // Infection-once an agent is infected there is a chance they will be tested positive.
         if (
           this.population[i].canInfect(met[j]) &&
-          Math.random() <= this.transmissionProb * dt
+          getRandom() <= this.transmissionProb * dt
         ) {
           met[j].startIncubation();
           met[j].setIncubationPeriod(
@@ -565,7 +564,7 @@ export default class Community {
     if (person.type === TYPES.NONINFECTIOUS) {
       person.incubationTime += dt;
       if (person.incubationTime >= person.incubationPeriod) {
-        if (Math.random() < this.nonInfectiousToImmuneProb) {
+        if (getRandom() < this.nonInfectiousToImmuneProb) {
           person.becomesImmune();
           this.numNonInfectious -= 1;
           this.numImmune += 1;
@@ -577,7 +576,7 @@ export default class Community {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
-        if (person.mortalityRate > 0 && Math.random() <= person.mortalityRate) {
+        if (person.mortalityRate > 0 && getRandom() <= person.mortalityRate) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
             gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)

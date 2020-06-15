@@ -1,5 +1,6 @@
 import presetsManager from './presetsManager';
 import { COLORS, TYPES } from './CONSTANTS';
+import { getRandom } from './util';
 
 /** @class Person describing a person in the model. */
 export default class Person {
@@ -21,8 +22,8 @@ export default class Person {
     this.y = y;
     this.maxSpeed = presetsManager.loadPreset().POPULATION_SPEED;
     this.repulsionForce = presetsManager.loadPreset().REPULSION_FORCE;
-    this.speedX = 3 * (Math.floor(Math.random() * 2) || -1);
-    this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
+    this.speedX = 3 * (Math.floor(getRandom() * 2) || -1);
+    this.speedY = 3 * (Math.floor(getRandom() * 2) || -1);
     this.accX = 0;
     this.accY = 0;
     this.asymptomaticTime = 0;
@@ -121,7 +122,7 @@ export default class Person {
    * @param {number} dt The amount of time which passes for this movement.
    */
   move(startX, endX, startY, endY, dt) {
-    this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
+    this.applyForce(getRandom() - 0.5, getRandom() - 0.5);
 
     this.speedX += this.accX * dt;
     this.speedY += this.accY * dt;
