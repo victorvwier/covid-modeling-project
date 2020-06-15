@@ -25,3 +25,13 @@ export const GENDERS = {
   MALE: 'm',
   FEMALE: 'f',
 };
+
+export const TIMELINE_PARAMETERS = {
+  SOCIAL_DISTANCING: 'soc',
+  ATTRACTION_TO_CENTER: 'atc',
+}
+
+export const TIMELINE_THRESHOLDS = {
+  INFECTION_COUNT: 'inf',
+  ICU_COUNT: 'icu',
+}

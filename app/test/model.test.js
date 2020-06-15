@@ -9,7 +9,7 @@ jest.mock('../src/scripts/agentChart');
 //   .default;
 
 describe('Community test', () => {
-  let community;
+  let model;
   let relocationUtil;
   const width = 100;
   const height = 100;
@@ -27,7 +27,8 @@ describe('Community test', () => {
         })),
       },
     };
-    community = new Model(
+    
+    model = new Model(
       4,
       agentChart,
       width,
@@ -37,12 +38,12 @@ describe('Community test', () => {
       () => {},
       borderCtxMock
     );
-    community.presetInProcess = true;
-    relocationUtil = new RelocationUtil(community);
-    community.relocationUtil = relocationUtil;
+    model.presetInProcess = true;
+    relocationUtil = new RelocationUtil(model);
+    model.relocationUtil = relocationUtil;
 
-    community.setupCommunity();
-    community.populateCommunities();
+    model.setupCommunity();
+    model.populateCommunities();
   });
 
   // test('_animationFunction should make new dt if both timestamp and lasttimestamp exist', () => {
@@ -61,15 +62,15 @@ describe('Community test', () => {
   // });
 
   test('getAgentSize should return 1.5 if the population is over 2000', () => {
-    expect(community.getAgentSize(2500)).toEqual(1.5);
+    expect(model.getAgentSize(2500)).toEqual(1.5);
   });
   test('getAgentSize should return 2.5 if the population is over 1000', () => {
-    expect(community.getAgentSize(1500)).toEqual(2.5);
+    expect(model.getAgentSize(1500)).toEqual(2.5);
   });
   test('getAgentSize should return 3.5 if the population is over 600', () => {
-    expect(community.getAgentSize(700)).toEqual(3.5);
+    expect(model.getAgentSize(700)).toEqual(3.5);
   });
   test('getAgentSize should return 1.5 if the population is over 200', () => {
-    expect(community.getAgentSize(100)).toEqual(5);
+    expect(model.getAgentSize(100)).toEqual(5);
   });
 });

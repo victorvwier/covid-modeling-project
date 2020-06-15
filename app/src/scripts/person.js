@@ -242,13 +242,13 @@ export default class Person {
 
     if (delta.x !== 0) {
       const unitX = delta.x / dist;
-      const vecX = (unitX / dist) * this.repulsionForce * 4;
+      const vecX = (unitX / dist) * this.repulsionForce * 0.04;
       this.applyForce(vecX, 0);
     }
 
     if (delta.y !== 0) {
       const unitY = delta.y / dist;
-      const vecY = (unitY / dist) * this.repulsionForce * 4;
+      const vecY = (unitY / dist) * this.repulsionForce * 0.04;
       this.applyForce(0, vecY);
     }
   }

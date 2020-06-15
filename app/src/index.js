@@ -39,6 +39,7 @@ window.onload = function () {
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
+  const timelineCanvas = document.getElementById('timeline-element');
   const demographicsCtx = document
     .getElementById('demographics')
     .getContext('2d');
@@ -53,6 +54,7 @@ window.onload = function () {
   const main = new Main(
     context,
     chartCtx,
+    timelineCanvas,
     borderCtx,
     demographicsCtx,
     glCanvas.width,

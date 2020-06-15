@@ -7,10 +7,6 @@ import { GENDERS } from './CONSTANTS';
 
 const { AGE, MORTALITY_RATE, DEMOGRAPHIC } = presetsManager.loadPreset();
 
-function getAge() {
-  return presetsManager.loadPreset().AGE;
-}
-
 /**
  * Sets the age, gender and mortality rate for a given person based on real distirbution data.
  *

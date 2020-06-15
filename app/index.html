@@ -486,6 +486,44 @@
           <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
           <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
         </div>
+        <div id="timeline">
+          <div>
+            <canvas id="timeline-element" width="1200" height="100%">
+              Days: 0
+            </canvas>
+          </div>
+          <div id="timeline-form">
+            <div id="timeline-simple-form">
+              <select id="timelineform-simple-target">
+                <option value="soc">Social distancing</option>
+                <option value="atc">Attraction to the center</option>
+              </select>
+              <label for="timelineform-simple-start">Start: </label>
+              <input type="text" id="timelineform-simple-start" />
+              <label for="timelineform-simple-end">End: </label>
+              <input type="text" id="timelineform-simple-end" />
+              <label for="timelineform-simple-value">value: </label>
+              <input type="text" id="timelineform-simple-value" />
+              <button id="timeline-add-simple-rule">+</button>
+            </div>
+            <div id="timeline-threshold-form">
+              <select id="timelineform-threshold-target">
+                <option value="soc">Social distancing</option>
+                <option value="atc">Attraction to the center</option>
+              </select>
+              <select id="timelineform-threshold-param">
+                <option value="inf">Infected people</option>
+                <option value="icu">ICU </option>
+              </select>
+              <label for="timelineform-threshold-trigger">Trigger: </label>
+              <input type="text" id="timelineform-threshold-trigger"/>
+              <label for="timelineform-threshold-value">Value: </label>
+              <input type="text" id="timelineform-threshold-value"/>
+              <button id="timeline-add-threshold-rule">+</button>
+            </div>
+            
+          </div>
+        </div>
       </div>
     </main>
   </body>

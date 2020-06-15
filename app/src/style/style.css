@@ -45,6 +45,33 @@ button {
   background-color: #666666;
 }
 
+#glcanvas-container {
+  justify-content: center;
+}
+
+#timeline {
+  display: flex;
+  color: black;
+}
+
+#timeline-form {
+  padding: 10px;
+  display: flex;
+  height: 200px;
+  width: 200px;
+}
+
+#timeline-add-rule {
+  height:inherit;
+}
+
+#timeline-buttons {
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 #right-side-container {
   display: flex;
   flex-direction: column;

@@ -6,7 +6,6 @@ import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
 import Coordinate from './data/coordinate';
 import { TYPES, COLORS } from './CONSTANTS';
-import { getAttractionToCenter } from './DOM/domValues';
 
 /** @class Community describing a single community within the model. */
 export default class Community {
@@ -589,12 +588,12 @@ export default class Community {
         }
 
         // testing
-        if (Math.random() <= this.testedPositiveProbability) {
+        if (getRandom() <= this.testedPositiveProbability) {
           person.testedPositive = true;
           person.infectionRadius /= this.infectionRadiusReductionFactor;
         }
         // ICU
-        if (Math.random() <= this.icuProbability) {
+        if (getRandom() <= this.icuProbability) {
           person.inIcu = true;
           if (this.icuCount >= this.icuCapacity) {
             person.type = TYPES.DEAD;
@@ -638,7 +637,8 @@ export default class Community {
    * @param {number} dt The timestep for which to step.
    */
   step(dt) {
-    const daysPassed = (dt / 1000) * this.daysPerSecond;
+    if( dt < 0) {throw Error("Can't go back in time"); }
+    const daysPassed = dt;
     this.updatePopulation(daysPassed);
     this.interactPopulation(daysPassed);
   }
@@ -676,8 +676,8 @@ export default class Community {
     forceY /= maxDistance;
 
     person.applyForce(
-      this.attractionToCenter * forceX,
-      this.attractionToCenter * forceY
+      this.attractionToCenter * forceX / 100,
+      this.attractionToCenter * forceY / 100
     );
   }
 

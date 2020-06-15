@@ -5,16 +5,20 @@ import PdfDownloadService from './pdfDownloadService';
 import AgentChart from './agentChart';
 import {
   wireReloadButtonToMain,
+  wireTimelineButtontoTimeline,
   wireReloadPresetToMain,
   wireDownloadDataToMain,
 } from './DOM/parameters';
 import DemographicsChart from './demographicsChart';
+
 import {
   getInitialNumInfectious,
   getInitialNumSusceptible,
   updateTheStatistics,
   getNumCommunities,
 } from './DOM/domValues';
+import {Timeline} from './timeline';
+import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -38,6 +42,7 @@ export default class Main {
   constructor(
     context,
     chartContext,
+    timelineCanvas,
     borderCtx,
     demographicsCtx,
     width,
@@ -69,6 +74,9 @@ export default class Main {
       this.chartContext,
       this.createCurrentStats.bind(this)
     );
+
+    this.timeline = new Timeline(timelineCanvas, this.timelineCallback.bind(this));
+    wireTimelineButtontoTimeline(this.timeline);
     this.demographicsChart = new DemographicsChart(demographicsCtx);
     this.agentView = new AgentChart(context);
     this.model = null;
@@ -99,13 +107,27 @@ export default class Main {
     );
   }
 
+  /**
+   * A callback for the timeline to set parameters in the model.
+   * @param {TIMELINE_PARAMETERS} timelineParam
+   * @param {*} value 
+   */
+  timelineCallback(timelineParam, value) {
+    if(timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+      this.model.updateRepulsionForce(value);
+    }
+    if(timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+      this.model.updateAttractionToCenter(value);
+    }
+  }
+
   // Assume only model calls this one so update chart
   /**
    * A function to update the local stats and update the chart with them.
    *
    * @param {Stats} stats the new stats.
    */
-  receiveNewStatsAndUpdateChart(stats, icuCapacity) {
+  receiveNewStatsAndUpdateChart(stats, timestamp, icuCapacity) {
     this.numSusceptible = stats.susceptible;
     this.numNonInfectious = stats.noninfectious;
     this.numInfectious = stats.infectious;
@@ -113,7 +135,8 @@ export default class Main {
     this.numDead = stats.dead;
     this.numIcu = stats.icu;
 
-    this.chart.updateValues(this.createCurrentStats());
+    this.chart.updateValues(this.createCurrentStats(), timestamp);
+    this.timeline.update(stats, timestamp);
     updateTheStatistics(
       this.numSusceptible,
       this.numNonInfectious,
