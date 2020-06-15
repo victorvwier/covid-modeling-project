@@ -267,3 +267,13 @@ h3 {
 .preset-panel {
   flex-direction: row;
 }
+#totalICU{
+  position:relative;
+  top:-34px;
+  left:20px;
+}
+
+#icuDIV{
+  width:100px;
+  height:80.52px;
+}

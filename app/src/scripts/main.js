@@ -30,10 +30,10 @@ export default class Main {
    * @param {number} width The width of our glCanvas.
    * @param {number} height The height of our glCanvas.
    * @param {number} numSusceptible The initial number of Susceptible people.
-   * @param {*} numNonInfectious The initial number of Non-Infectious people.
-   * @param {*} numInfectious The initial number of Infectious people.
-   * @param {*} numDead The initial number of Dead people.
-   * @param {*} numImmune The initial number of Immune people.
+   * @param {number} numNonInfectious The initial number of Non-Infectious people.
+   * @param {number} numInfectious The initial number of Infectious people.
+   * @param {number} numDead The initial number of Dead people.
+   * @param {number} numImmune The initial number of Immune people.
    */
   constructor(
     context,
@@ -60,6 +60,7 @@ export default class Main {
     this.numImmune = numImmune;
     this.numDead = numDead;
     this.numNonInfectious = numNonInfectious;
+    this.numIcu = 0;
 
     this.numCommunities = getNumCommunities();
 
@@ -93,7 +94,8 @@ export default class Main {
       this.numNonInfectious,
       this.numInfectious,
       this.numDead,
-      this.numImmune
+      this.numImmune,
+      this.numIcu
     );
   }
 
@@ -103,12 +105,13 @@ export default class Main {
    *
    * @param {Stats} stats the new stats.
    */
-  receiveNewStatsAndUpdateChart(stats) {
+  receiveNewStatsAndUpdateChart(stats, icuCapacity) {
     this.numSusceptible = stats.susceptible;
     this.numNonInfectious = stats.noninfectious;
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.numIcu = stats.icu;
 
     this.chart.updateValues(this.createCurrentStats());
     updateTheStatistics(
@@ -116,8 +119,12 @@ export default class Main {
       this.numNonInfectious,
       this.numInfectious,
       this.numImmune,
-      this.numDead
+      this.numDead,
+      this.numIcu,
+      icuCapacity
     );
+
+
   }
 
   updateDemographicChart() {
@@ -145,12 +152,13 @@ export default class Main {
       stats,
       this.receiveNewStatsAndUpdateChart.bind(this),
       this.updateDemographicChart.bind(this),
-      this.borderCtx
+      this.borderCtx,
     );
   }
 
   /**
    * A function to run the model and the chart.
+   * 
    */
   run() {
     this.chart.drawChart();
@@ -169,6 +177,7 @@ export default class Main {
     this.numNonInfectious = 0;
     this.numImmune = 0;
     this.numDead = 0;
+    this.numIcu = 0;
 
     // Clear the border context
     const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
