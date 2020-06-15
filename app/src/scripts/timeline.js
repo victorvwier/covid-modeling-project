@@ -1,6 +1,5 @@
 import TimelineRule from './data/timelinerule';
 import {TIMELINE_PARAMETERS} from './CONSTANTS';
-
 const RULE_HEIGHT = 100;
 const TIMELINE_X_OFFSET = 200;
 const RULE_MARGINS = 10;
@@ -20,13 +19,13 @@ export default class Timeline {
     this.enforceRules(time);
   }
 
-  addRule(paramType, start, end, value) {
+  addSimpleRule(target, start, end, value) {
     if(Number.isNaN(start) || Number.isNaN(end) || Number.isNaN(value)) {
       throw new Error("Stop doing that");
     }
     let found = false;
     for(let i = 0; i < this.rules.length; i++) {
-      if(this.rules[i].type === paramType) {
+      if(this.rules[i].target === target) {
         found = true;
         this.rules[i].start = start;
         this.rules[i].end = end;
@@ -35,7 +34,26 @@ export default class Timeline {
     }
 
     if(!found) {
-      this.rules.push(new TimelineRule(paramType, start, end, value));
+      this.rules.push(new TimelineRule( TimelineRuleType.TIME, target, start, end, value ));
+    }
+  }
+
+  addThresholdRule(param, target, end, value) {
+    if(Number.isNaN(start) || Number.isNaN(end) || Number.isNaN(value)) {
+      throw new Error("Stop doing that");
+    }
+    let found = false;
+    for(let i = 0; i < this.rules.length; i++) {
+      if(this.rules[i].target === target) {
+        found = true;
+        this.rules[i].start = start;
+        this.rules[i].end = end;
+        this.rules[i].value = value;
+      }
+    }
+
+    if(!found) {
+      this.rules.push(new TimelineRule( TimelineRuleType.THRESHOLD, param, start, end, value ));
     }
   }
 
@@ -43,7 +61,7 @@ export default class Timeline {
     for(let i = 0; i < this.rules.length; i++) {
       const rule = this.rules[i];
       if( rule.isActive(time) ) {
-        this.setRuleCallback(rule.type, rule.value);
+        this.setRuleCallback(rule.param, rule.value);
       }
     }
   }

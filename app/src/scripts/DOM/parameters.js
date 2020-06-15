@@ -34,6 +34,7 @@ const {
   NUM_COMMUNITIES,
   TIMELINE_PARAMETERS,
 } = presetsManager.loadPreset();
+import { TimelineRuleType} from '../data/timelinerule.js'
 
 
 // The outValOp is for percentages, we can pass a function that will multiply a fraction by 100 for displaying to user
@@ -222,12 +223,20 @@ export function wireReloadButtonToMain(main) {
  * @param {Timeline} timeline The corresponding timeline class;
  */
 export function wireTimelineButtontoTimeline(timeline) {
-  document.getElementById('timeline-add-rule').addEventListener('click', () => {
-    const type = document.getElementById('timelineform-type').value;
-    const start = document.getElementById('timelineform-start').value;
-    const end = document.getElementById('timelineform-end').value;
-    const value = document.getElementById('timelineform-value').value;
-    timeline.addRule(type, parseFloat(start), parseFloat(end), parseFloat(value))
+  document.getElementById('timeline-add-simple-rule').addEventListener('click', () => {
+    const type = document.getElementById('timelineform-simple-target').value;
+    const start = document.getElementById('timelineform-simple-start').value;
+    const end = document.getElementById('timelineform-simple-end').value;
+    const value = document.getElementById('timelineform-simple-value').value;
+    timeline.addSimpleRule(type, parseFloat(start), parseFloat(end), parseFloat(value))
+  });
+
+  document.getElementById('timeline-add-threshold-rule').addEventListener('click', () => {
+    const type = document.getElementById('timelineform-threshold-target').value;
+    const start = document.getElementById('timelineform-threshold-start').value;
+    const end = document.getElementById('timelineform-threshold-end').value;
+    const value = document.getElementById('timelineform-threshold-value').value;
+    timeline.addThresholdRule(type, parseFloat(start), parseFloat(end), parseFloat(value))
   });
 }
 export function wireReloadPresetToMain(main) {
