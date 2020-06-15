@@ -1,4 +1,6 @@
-import {TimelineRule, TimelineRuleType } from './data/timelinerule';
+import { TimelineRule, TimelineRuleType } from './data/timelinerule';
+import presetsManager from './presetsManager';
+import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
 const RULE_HEIGHT = 100;
 const TIMELINE_X_OFFSET = 200;
@@ -9,7 +11,55 @@ export class Timeline {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.rules = [];
+    this.importPresetRules();
     this.setRuleCallback = setruleCb;
+  }
+
+  importPresetRules() {
+    const presetRules = presetsManager.loadPreset().RULES;
+    for (let i = 0; i < presetRules.length; i++) {
+      const rule = presetRules[i];
+      this.addPresetRule(rule);
+    }
+  }
+
+  addPresetRule(rule) {
+    if (rule.type === 'time') {
+      rule.type = TimelineRuleType.TIME;
+    } else if (rule.type === 'threshold') {
+      rule.type = TimelineRuleType.THRESHOLD;
+    }
+
+    if (rule.params[0] === 'soc') {
+      rule.params[0] === TIMELINE_PARAMETERS.SOCIAL_DISTANCING;
+    } else if (rule.params[0] === 'atc') {
+      rule.params[0] === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER;
+    }
+
+    this.addRule(rule.type, rule.params);
+  }
+
+  _addPresetRule(type, params) {
+    if (type === TimelineRuleType.TIME) {
+      const rule = TimelineRule.newSimpleRule(
+        params[0],
+        params[1],
+        params[2],
+        params[3],
+        params[4]
+      );
+      this._addRule(rule);
+    }
+    if (type === TimelineRuleType.THRESHOLD) {
+      const rule = TimelineRule.newThresholdRule(
+        params[0],
+        params[1],
+        params[2],
+        params[3],
+        params[4]
+      );
+      this._addRule(rule);
+    }
   }
 
   update(stats, time) {
@@ -18,35 +68,45 @@ export class Timeline {
     this.enforceRules(stats, time);
   }
 
-  addRule(type, params){
-    if(type === TimelineRuleType.TIME) {
-      const rule = TimelineRule.newSimpleRule(params[0], params[1], params[2], params[3]);
+  addRule(type, params) {
+    if (type === TimelineRuleType.TIME) {
+      const rule = TimelineRule.newSimpleRule(
+        params[0],
+        params[1],
+        params[2],
+        params[3]
+      );
       this._addRule(rule);
     }
-    if(type === TimelineRuleType.THRESHOLD){
-      const rule = TimelineRule.newThresholdRule(params[0], params[1], params[2], params[3]);
+    if (type === TimelineRuleType.THRESHOLD) {
+      const rule = TimelineRule.newThresholdRule(
+        params[0],
+        params[1],
+        params[2],
+        params[3]
+      );
       this._addRule(rule);
     }
   }
 
   _addRule(rule) {
     let found = false;
-    for(let i = 0; i < this.rules.length; i++) {
-      if(this.rules[i].target === rule.target) {
+    for (let i = 0; i < this.rules.length; i++) {
+      if (this.rules[i].target === rule.target) {
         found = true;
         this.rules[i] = rule;
       }
     }
 
-    if(!found) {
+    if (!found) {
       this.rules.push(rule);
     }
   }
 
   enforceRules(stats, time) {
-    for(let i = 0; i < this.rules.length; i++) {
+    for (let i = 0; i < this.rules.length; i++) {
       const rule = this.rules[i];
-      if(rule.isActive(stats, time)) {
+      if (rule.isActive(stats, time)) {
         rule.active = true;
         this.setRuleCallback(rule.target, rule.value);
       } else {
@@ -62,7 +122,12 @@ export class Timeline {
 
     // Draw background first
     this.context.beginPath();
-    this.context.rect(TIMELINE_X_OFFSET, 0, this.canvas.width, this.canvas.height);
+    this.context.rect(
+      TIMELINE_X_OFFSET,
+      0,
+      this.canvas.width,
+      this.canvas.height
+    );
     this.context.fillStyle = 'beige';
     this.context.fill();
 
@@ -85,13 +150,22 @@ export class Timeline {
     this.context.font = '15px Georgia';
     this.context.fillStyle = 'black';
 
-    if(rule.active){
+    if (rule.active) {
       this.context.fillStyle = 'red';
     }
-    
-    this.context.fillText(`${rule.name}: ${rule.value}`, 0, yOffset + RULE_HEIGHT/2);
+
+    this.context.fillText(
+      `${rule.name}: ${rule.value}`,
+      0,
+      yOffset + RULE_HEIGHT / 2
+    );
     this.context.beginPath();
-    this.context.rect(xCoords[0], yOffset + RULE_MARGINS, xCoords[1] - xCoords[0], RULE_HEIGHT - RULE_MARGINS * 2);
+    this.context.rect(
+      xCoords[0],
+      yOffset + RULE_MARGINS,
+      xCoords[1] - xCoords[0],
+      RULE_HEIGHT - RULE_MARGINS * 2
+    );
     this.context.fillStyle = 'grey';
     this.context.fill();
   }
