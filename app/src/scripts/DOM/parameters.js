@@ -228,7 +228,7 @@ export function wireTimelineButtontoTimeline(timeline) {
     const start = document.getElementById('timelineform-simple-start').value;
     const end = document.getElementById('timelineform-simple-end').value;
     const value = document.getElementById('timelineform-simple-value').value;
-    timeline.addSimpleRule(type, parseFloat(start), parseFloat(end), parseFloat(value))
+    timeline.addRule(TimelineRuleType.TIME, [type, parseFloat(start), parseFloat(end), parseFloat(value)]);
   });
 
   document.getElementById('timeline-add-threshold-rule').addEventListener('click', () => {
@@ -236,7 +236,7 @@ export function wireTimelineButtontoTimeline(timeline) {
     const param = document.getElementById('timelineform-threshold-param').value;
     const trigger = document.getElementById('timelineform-threshold-trigger').value;
     const value = document.getElementById('timelineform-threshold-value').value;
-    timeline.addThresholdRule(target, param, parseFloat(trigger), parseFloat(value))
+    timeline.addRule(TimelineRuleType.THRESHOLD,[target, param, parseFloat(trigger), parseFloat(value)]);
   });
 }
 export function wireReloadPresetToMain(main) {

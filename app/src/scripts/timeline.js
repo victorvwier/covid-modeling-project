@@ -9,7 +9,6 @@ export default class Timeline {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.rules = [];
-
     this.setRuleCallback = setruleCb;
   }
 
@@ -19,32 +18,22 @@ export default class Timeline {
     this.enforceRules(stats, time);
   }
 
-  addSimpleRule(target, start, end, value) {
-    if(Number.isNaN(start) || Number.isNaN(end) || Number.isNaN(value)) {
-      throw new Error("Stop doing that");
+  addRule(type, params){
+    if(type === TimelineRuleType.TIME) {
+      const rule = TimelineRule.newSimpleRule(params[0], params[1], params[2], params[3]);
+      this._addRule(rule);
     }
-    const rule = TimelineRule.newSimpleRule(target, start, end, value);
-    let found = false;
-    for(let i = 0; i < this.rules.length; i++) {
-      if(this.rules[i].target === target) {
-        found = true;
-        this.rules[i] = rule;
-      }
-    }
+    if(type === TimelineRuleType.THRESHOLD){
+      const rule = TimelineRule.newThresholdRule(params[0], params[1], params[2], params[3])
 
-    if(!found) {
-      this.rules.push(rule);
+      this._addRule(rule);
     }
   }
 
-  addThresholdRule(target, param, trigger, value) {
-    if(Number.isNaN(trigger)) {
-      throw new Error("Stop doing that");
-    }
+  _addRule(rule) {
     let found = false;
-    const rule = TimelineRule.newThresholdRule(target, param, trigger, value)
     for(let i = 0; i < this.rules.length; i++) {
-      if(this.rules[i].target === target) {
+      if(this.rules[i].target === rule.target) {
         found = true;
         this.rules[i] = rule;
       }
@@ -59,8 +48,10 @@ export default class Timeline {
     for(let i = 0; i < this.rules.length; i++) {
       const rule = this.rules[i];
       if(rule.isActive(stats, time)) {
+        rule.active = true;
         this.setRuleCallback(rule.target, rule.value);
       } else {
+        rule.active = false;
         this.setRuleCallback(rule.target, 0);
       }
     }
@@ -94,6 +85,11 @@ export default class Timeline {
     const X_coords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
     this.context.font = '15px Georgia';
     this.context.fillStyle = 'black';
+
+    if(rule.active){
+      this.context.fillStyle = 'red';
+    }
+    
     this.context.fillText(`${rule.name}: ${rule.value}`, 0, y_offset + RULE_HEIGHT/2);
     this.context.beginPath();
     this.context.rect(X_coords[0], y_offset + RULE_MARGINS, X_coords[1] - X_coords[0], RULE_HEIGHT - RULE_MARGINS * 2);
