@@ -6,7 +6,6 @@ import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
 import Coordinate from './data/coordinate';
 import { TYPES, COLORS } from './CONSTANTS';
-import { getAttractionToCenter } from './DOM/domValues';
 
 /** @class Community describing a single community within the model. */
 export default class Community {
@@ -589,12 +588,12 @@ export default class Community {
         }
 
         // testing
-        if (Math.random() <= this.testedPositiveProbability) {
+        if (getRandom() <= this.testedPositiveProbability) {
           person.testedPositive = true;
           person.infectionRadius /= this.infectionRadiusReductionFactor;
         }
         // ICU
-        if (Math.random() <= this.icuProbability) {
+        if (getRandom() <= this.icuProbability) {
           person.inIcu = true;
           if (this.icuCount >= this.icuCapacity) {
             person.type = TYPES.DEAD;

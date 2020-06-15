@@ -55,7 +55,7 @@ export default class Model {
 
     this._chartInterval = null;
 
-    this.lastTimestamp = 0;
+    this.timestamp = 0;
     this.daysPerSecond = DAYS_PER_SECOND;
 
     this.presetInProcess = false;
@@ -178,6 +178,7 @@ export default class Model {
    */
   _animationFunction() {
     const dt = 0.050;
+    this.timestamp += dt;
     this.passDrawInfoToAgentChart();
     Object.values(this.communities).forEach((com) => com.step(dt));
     // Check all relocations
@@ -341,7 +342,7 @@ export default class Model {
     }
 
     this._setValuesFromStatsToLocal(finalStats);
-    this.updateStats(finalStats, 0, icuCapacity);
+    this.updateStats(finalStats, this.timestamp, icuCapacity);
   }
 
   /**
@@ -352,7 +353,7 @@ export default class Model {
   resetModel(stats) {
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
-    this.timeZero = null;
+    this.timestamp = 0;
     for (let i = 0; i < this.numCommunities; i++) {
       const dividedStats = this._createDividedStats(i);
 

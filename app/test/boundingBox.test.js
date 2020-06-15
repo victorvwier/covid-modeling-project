@@ -297,19 +297,19 @@ describe('Bounding box test suite', () => {
 
   test('Column constructor throws error if end and start are switched', () => {
     expect(() => {
-      const col = new Column(10, 5, 1);
+      Column(10, 5, 1);
     }).toThrow();
   });
 
   test('BoundingBoxStructure throws error if x end and start are switched', () => {
     expect(() => {
-      const struct = new BoundingBoxStructure(10, 0, 0, 10, 1);
+      BoundingBoxStructure(10, 0, 0, 10, 1);
     }).toThrow();
   });
 
   test('BoundingBoxStructure throws error if y end and start are switched', () => {
     expect(() => {
-      const struct = new BoundingBoxStructure(0, 10, 10, 0, 1);
+      BoundingBoxStructure(0, 10, 10, 0, 1);
     }).toThrow();
   });
 

@@ -1,10 +1,10 @@
-import TimelineRule, { TimelineRuleType } from './data/timelinerule';
-import {TIMELINE_PARAMETERS} from './CONSTANTS';
+import {TimelineRule, TimelineRuleType } from './data/timelinerule';
+
 const RULE_HEIGHT = 100;
 const TIMELINE_X_OFFSET = 200;
 const RULE_MARGINS = 10;
 
-export default class Timeline {
+export class Timeline {
   constructor(canvas, setruleCb) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
@@ -24,8 +24,7 @@ export default class Timeline {
       this._addRule(rule);
     }
     if(type === TimelineRuleType.THRESHOLD){
-      const rule = TimelineRule.newThresholdRule(params[0], params[1], params[2], params[3])
-
+      const rule = TimelineRule.newThresholdRule(params[0], params[1], params[2], params[3]);
       this._addRule(rule);
     }
   }
@@ -73,16 +72,16 @@ export default class Timeline {
     }
 
     // The the progress line
-    const x_coord = this.getXforDay(this.time);
+    const xCoord = this.getXforDay(this.time);
     this.context.strokeStyle = 'red';
     this.context.beginPath();
-    this.context.moveTo(x_coord, 0);
-    this.context.lineTo(x_coord, this.canvas.height);
+    this.context.moveTo(xCoord, 0);
+    this.context.lineTo(xCoord, this.canvas.height);
     this.context.stroke();
   }
 
-  drawRule(rule, y_offset) {
-    const X_coords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
+  drawRule(rule, yOffset) {
+    const xCoords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
     this.context.font = '15px Georgia';
     this.context.fillStyle = 'black';
 
@@ -90,9 +89,9 @@ export default class Timeline {
       this.context.fillStyle = 'red';
     }
     
-    this.context.fillText(`${rule.name}: ${rule.value}`, 0, y_offset + RULE_HEIGHT/2);
+    this.context.fillText(`${rule.name}: ${rule.value}`, 0, yOffset + RULE_HEIGHT/2);
     this.context.beginPath();
-    this.context.rect(X_coords[0], y_offset + RULE_MARGINS, X_coords[1] - X_coords[0], RULE_HEIGHT - RULE_MARGINS * 2);
+    this.context.rect(xCoords[0], yOffset + RULE_MARGINS, xCoords[1] - xCoords[0], RULE_HEIGHT - RULE_MARGINS * 2);
     this.context.fillStyle = 'grey';
     this.context.fill();
   }

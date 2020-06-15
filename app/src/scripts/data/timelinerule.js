@@ -5,7 +5,7 @@ export const TimelineRuleType = {
     THRESHOLD: "threshold",
 }
 
-export default class TimelineRule 
+export class TimelineRule 
 {
     constructor(type, target) {
         this.type = type
@@ -44,16 +44,19 @@ export default class TimelineRule
             case TimelineRuleType.THRESHOLD:
                 switch(this.param){ 
                     case("inf"):
-                        return stats.infectious >  this.trigger;
-                    // case("icu"):
-
-                    // break;
+                        return stats.infectious >=  this.trigger;
+                     case("icu"):
+                        return stats.icu >= this.trigger;
+                    default:
+                        throw new Error("Something went terribly wrong");
                 }
-
-                break;
             case TimelineRuleType.TIME:
-                return time < this.end && time > this.start;
+                return time <= this.end && time >= this.start;
+            default: 
+                throw new Error("Something went terribly wrong");
+
         }
+
     }
 }
 

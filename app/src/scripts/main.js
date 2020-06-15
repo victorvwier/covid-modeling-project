@@ -17,7 +17,7 @@ import {
   updateTheStatistics,
   getNumCommunities,
 } from './DOM/domValues';
-import Timeline from './timeline';
+import {Timeline} from './timeline';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
 // Creates chart and graph internally
