@@ -9,7 +9,7 @@ jest.mock('../src/scripts/agentChart.js');
 jest.mock('../src/scripts/DOM/domValues.js');
 
 describe('RelocationUtil tests', () => {
-  const stats = new Stats(1, 1, 1, 1, 1);
+  const stats = new Stats(1, 1, 1, 1, 1, 1);
   let model;
   const width = 100;
   const height = 100;
@@ -104,13 +104,16 @@ describe('RelocationUtil tests', () => {
       );
     });
 
+    relocationUtil.relocations[0].person.inIcu = true;
+
     expect(relocationUtil.getStats()).toEqual(
       new Stats(
         stats.susceptible,
         stats.noninfectious,
         stats.infectious,
         stats.immune,
-        stats.dead
+        stats.dead,
+        stats.icu
       )
     );
   });
@@ -120,5 +123,11 @@ describe('RelocationUtil tests', () => {
       new RelocationInfo(new Person('bla', 1, 1, 1), null, 1)
     );
     expect(() => relocationUtil.getStats()).toThrow(Error);
+  });
+
+  test('clearAllRelocationsForReset should empty relocation array', () => {
+    relocationUtil.relocations.push(5);
+    relocationUtil.clearAllRelocationsForReset();
+    expect(relocationUtil.relocations).toStrictEqual([]);
   });
 });

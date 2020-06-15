@@ -37,6 +37,8 @@ export default class Person {
     this.gender = null;
     this.mortalityRate = null;
 
+    this.inIcu = false;
+
     this.relocating = false;
 
     this.step = presetsManager.loadPreset().RELOCATION_STEP_SIZE;
@@ -46,6 +48,7 @@ export default class Person {
     else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
     else if (type === TYPES.DEAD) this.color = COLORS.DEAD;
     else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
+    this.testedPositive = false;
   }
 
   /**
@@ -256,7 +259,8 @@ export default class Person {
    * @returns {Boolean} A boolean representing if the other person can be infected.
    */
   canInfect(p) {
-    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
+    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE &&
+     Math.sqrt((p.x - this.x) ** 2 + (p.y - this.y) ** 2) <= p.infectionRadius + this.infectionRadius;
   }
 
   /**

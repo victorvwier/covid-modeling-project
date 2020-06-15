@@ -21,7 +21,8 @@ import {
 const { SPACE_BETWEEN_COMMUNITIES } = presetsManager.loadPreset();
 
 /** @class Model representing a simulation of one or multiple communities. */
-export default class Model {
+export default class Model {  
+
   /**
    * Instantiates a model.
    *
@@ -68,6 +69,7 @@ export default class Model {
     window.model = this;
   }
 
+
   /**
    * A function that returns an array of the whole population in all models
    * @returns array containing all the population
@@ -113,8 +115,9 @@ export default class Model {
     const valInf = this._distributeStats(this.numInfectious, index);
     const valDead = this._distributeStats(this.numDead, index);
     const valImm = this._distributeStats(this.numImmune, index);
+    const valIcu = this._distributeStats(this.numIcu, index);
 
-    return new Stats(valSus, valNonInf, valInf, valDead, valImm);
+    return new Stats(valSus, valNonInf, valInf, valDead, valImm, valIcu);
   }
 
   /**
@@ -128,6 +131,7 @@ export default class Model {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.numIcu = stats.icu;
   }
 
   /**
@@ -152,6 +156,8 @@ export default class Model {
     Object.values(this.communities).forEach((com) => com.pauseExecution());
   }
 
+
+
   /**
    * A function to resume the execution of the model.
    */
@@ -163,6 +169,8 @@ export default class Model {
     // }
     // Resume community intervals/animationFrames
     Object.values(this.communities).forEach((com) => com.resumeExecution());
+    // Resume execution method has updated the induvisual communities' icuCount and now this method is used to 
+    // calculate the new sum total and print it on the screen.
   }
 
   /**
@@ -187,7 +195,6 @@ export default class Model {
   run() {
     wireSlidersToHandlers(this);
     this.populateCommunities();
-
     this.updateAgentSize(this.getAgentSize(this.stats.sum()));
 
     this._animationFunction();
@@ -313,7 +320,7 @@ export default class Model {
         i,
         bounds[i],
         dividedStats,
-        this.registerRelocation.bind(this)
+        this.registerRelocation.bind(this),
       );
 
       if (!this.presetInProcess) {
@@ -359,15 +366,21 @@ export default class Model {
             acc.noninfectious + cur.noninfectious,
             acc.infectious + cur.infectious,
             acc.dead + cur.dead,
-            acc.immune + cur.immune
+            acc.immune + cur.immune,
+            acc.icu + cur.icu
           )
       );
 
     const relocationStats = this.relocationUtil.getStats();
     const finalStats = Stats.joinStats(stats, relocationStats);
 
+    let icuCapacity = 0;
+    for(let i = 0; i < this.numCommunities; i++) {
+      icuCapacity += this.communities[i].icuCapacity;
+    }
+
     this._setValuesFromStatsToLocal(finalStats);
-    this.updateStats(finalStats);
+    this.updateStats(finalStats, icuCapacity);
   }
 
   /**
@@ -519,6 +532,50 @@ export default class Model {
   updateAttractionToCenter(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setAttractionToCenter(newValue)
+    );
+  }
+
+  /**
+   * A function to update the probability a person is tested positive in the model.
+   * 
+   * @param {number} newValue The new probability.
+   */
+  updateTestedPositiveProbability(newValue) {
+    Object.values(this.communities).forEach((community) => 
+      community.setTestedPositiveProbability(newValue)
+    );
+  }
+
+  /**
+   * A function to update the factor with which the Infection radius is reduced when a person tests positive.
+   * 
+   * @param {number} newValue The new factor.
+   */
+  updateInfectionRadiusReductionFactor(newValue) {
+    Object.values(this.communities).forEach((community) => 
+      community.setInfectionRadiusReductionFactor(newValue)
+    );
+  }
+
+  /**
+   * A function to update the probability a person moves to the ICU when tested positive.
+   * 
+   * @param {number} newValue The new probability.
+   */
+  updateIcuProbability(newValue) {
+    Object.values(this.communities).forEach((community) => 
+      community.setIcuProbability(newValue)
+    );
+  }
+
+  /**
+   * A function to update the capacity of the ICU in all communities.
+   * 
+   * @param {number} newValue The new ICU capacity.
+   */
+  updateIcuCapacity(newValue) {
+    Object.values(this.communities).forEach((community) => 
+      community.setIcuCapacity(newValue)
     );
   }
 }
