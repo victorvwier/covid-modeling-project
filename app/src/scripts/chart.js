@@ -64,9 +64,9 @@ export default class Chart {
     this.chart.data.datasets[3].data.push(stats.immune);
     this.chart.data.datasets[4].data.push(stats.dead);
 
-    this.susceptible.push(stats.susceptible);
     this.noninfectious.push(stats.noninfectious);
     this.infectious.push(stats.infectious);
+    this.susceptible.push(stats.susceptible);
     this.immune.push(stats.immune);
     this.dead.push(stats.dead);
 
@@ -139,6 +139,7 @@ export default class Chart {
             lineTension: 0.1,
             borderColor: 'rgba(0, 0, 0, 0.0)',
             pointRadius: 0.0,
+            data: this.immune,
           },
           {
             label: 'Dead',
