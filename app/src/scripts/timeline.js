@@ -1,6 +1,6 @@
 import { TimelineRule, TimelineRuleType } from './data/timelinerule';
 import presetsManager from './presetsManager';
-import { TIMELINE_PARAMETERS } from './CONSTANTS';
+import { TIMELINE_PARAMETERS, TIMELINE_THRESHOLDS } from './CONSTANTS';
 
 const RULE_HEIGHT = 100;
 const TIMELINE_X_OFFSET = 200;
@@ -36,6 +36,11 @@ export class Timeline {
       rule.params[0] === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER;
     }
 
+    // if (rule.params[1] === 'inf') {
+    //   rule.params[1] === TIMELINE_THRESHOLDS.INFECTION_COUNT;
+    // } else if (rule.params[1] === 'icu') {
+    //   rule.params[1] === TIMELINE_THRESHOLDS.ICU_COUNT;
+    // }
     this.addRule(rule.type, rule.params);
   }
 
