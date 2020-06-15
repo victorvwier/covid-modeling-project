@@ -130,7 +130,7 @@ export default class Main {
     this.numDead = stats.dead;
 
     this.chart.updateValues(this.createCurrentStats(), timestamp);
-    this.timeline.setTime(timestamp);
+    this.timeline.update(stats, timestamp);
     updateTheStatistics(
       this.numSusceptible,
       this.numNonInfectious,

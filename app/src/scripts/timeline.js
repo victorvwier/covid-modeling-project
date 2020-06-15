@@ -1,4 +1,4 @@
-import TimelineRule from './data/timelinerule';
+import TimelineRule, { TimelineRuleType } from './data/timelinerule';
 import {TIMELINE_PARAMETERS} from './CONSTANTS';
 const RULE_HEIGHT = 100;
 const TIMELINE_X_OFFSET = 200;
@@ -13,55 +13,55 @@ export default class Timeline {
     this.setRuleCallback = setruleCb;
   }
 
-  setTime(time) {
+  update(stats, time) {
     this.time = time;
     this.redrawTimeline();
-    this.enforceRules(time);
+    this.enforceRules(stats, time);
   }
 
   addSimpleRule(target, start, end, value) {
     if(Number.isNaN(start) || Number.isNaN(end) || Number.isNaN(value)) {
       throw new Error("Stop doing that");
     }
+    const rule = TimelineRule.newSimpleRule(target, start, end, value);
     let found = false;
     for(let i = 0; i < this.rules.length; i++) {
       if(this.rules[i].target === target) {
         found = true;
-        this.rules[i].start = start;
-        this.rules[i].end = end;
-        this.rules[i].value = value;
+        this.rules[i] = rule;
       }
     }
 
     if(!found) {
-      this.rules.push(new TimelineRule( TimelineRuleType.TIME, target, start, end, value ));
+      this.rules.push(rule);
     }
   }
 
-  addThresholdRule(param, target, end, value) {
-    if(Number.isNaN(start) || Number.isNaN(end) || Number.isNaN(value)) {
+  addThresholdRule(target, param, trigger, value) {
+    if(Number.isNaN(trigger)) {
       throw new Error("Stop doing that");
     }
     let found = false;
+    const rule = TimelineRule.newThresholdRule(target, param, trigger, value)
     for(let i = 0; i < this.rules.length; i++) {
       if(this.rules[i].target === target) {
         found = true;
-        this.rules[i].start = start;
-        this.rules[i].end = end;
-        this.rules[i].value = value;
+        this.rules[i] = rule;
       }
     }
 
     if(!found) {
-      this.rules.push(new TimelineRule( TimelineRuleType.THRESHOLD, param, start, end, value ));
+      this.rules.push(rule);
     }
   }
 
-  enforceRules(time) {
+  enforceRules(stats, time) {
     for(let i = 0; i < this.rules.length; i++) {
       const rule = this.rules[i];
-      if( rule.isActive(time) ) {
-        this.setRuleCallback(rule.param, rule.value);
+      if(rule.isActive(stats, time)) {
+        this.setRuleCallback(rule.target, rule.value);
+      } else {
+        this.setRuleCallback(rule.target, 0);
       }
     }
   }

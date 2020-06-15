@@ -232,11 +232,11 @@ export function wireTimelineButtontoTimeline(timeline) {
   });
 
   document.getElementById('timeline-add-threshold-rule').addEventListener('click', () => {
-    const type = document.getElementById('timelineform-threshold-target').value;
-    const start = document.getElementById('timelineform-threshold-start').value;
-    const end = document.getElementById('timelineform-threshold-end').value;
+    const target = document.getElementById('timelineform-threshold-target').value;
+    const param = document.getElementById('timelineform-threshold-param').value;
+    const trigger = document.getElementById('timelineform-threshold-trigger').value;
     const value = document.getElementById('timelineform-threshold-value').value;
-    timeline.addThresholdRule(type, parseFloat(start), parseFloat(end), parseFloat(value))
+    timeline.addThresholdRule(target, param, parseFloat(trigger), parseFloat(value))
   });
 }
 export function wireReloadPresetToMain(main) {
