@@ -18,7 +18,7 @@ import {
   getInfectionRadius,
 } from './DOM/domValues';
 import { MAXIMUM_DAYS } from './CONSTANTS';
-
+import { getRandom } from './util';
 const { SPACE_BETWEEN_COMMUNITIES, DAYS_PER_SECOND } = presetsManager.loadPreset();
 
 /** @class Model representing a simulation of one or multiple communities. */
@@ -164,6 +164,9 @@ export default class Model {
    * A function to start execution of the model.
    */
   run() {
+    require('seedrandom')('hi.', { global: true });
+    console.log(getRandom());
+    console.log(getRandom());console.log(getRandom());
     wireSlidersToHandlers(this);
     this.populateCommunities();
     this.updateAgentSize(this.getAgentSize(this.stats.sum()));
@@ -372,6 +375,9 @@ export default class Model {
    * @param {Stats} stats New initial stats.
    */
   resetModel(stats) {
+    require('seedrandom')('hi.', { global: true });
+    console.log(getRandom());
+    console.log(getRandom());console.log(getRandom());
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
     this.timestamp = 0;
