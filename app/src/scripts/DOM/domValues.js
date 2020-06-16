@@ -1,4 +1,4 @@
-import { PRESET_TYPES } from '../CONSTANTS';
+import { PRESET_TYPES, MAXIMUM_DAYS } from '../CONSTANTS';
 
 /**
  * A function returning the initial amount of susceptible people as set in the UI.
@@ -67,7 +67,8 @@ export function updateTheStatistics(
   numImmune,
   numDead,
   numIcu,
-  icuCapacity
+  icuCapacity, 
+  timestamp
 ) {
     const icuDIV=document.getElementById('icuDIV');
 
@@ -87,7 +88,7 @@ export function updateTheStatistics(
   document.getElementById('s4').innerHTML = `${numImmune}`;
   document.getElementById('s5').innerHTML = `${numDead}`;
   document.getElementById('s6').innerHTML = `${numIcu}/${icuCapacity}`;
-
+  document.getElementById('time-control-days-display').innerHTML = `Days passed in the model: ${timestamp.toFixed(0)}/${MAXIMUM_DAYS}`
 }
 
 export function getAttractionToCenter() {

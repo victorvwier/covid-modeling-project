@@ -146,7 +146,8 @@ export default class Main {
       this.numImmune,
       this.numDead,
       this.numIcu,
-      icuCapacity
+      icuCapacity,
+      timestamp
     );
 
 

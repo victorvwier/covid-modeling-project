@@ -49,6 +49,29 @@ button {
   justify-content: center;
 }
 
+#time-control-bar {
+  width: 600px;
+  justify-content: center;
+  
+  display: flex;
+  height: 50px;
+}
+
+#time-control-days-display {
+  color: black;
+  font-size: max-content;
+}
+
+#time-control-bar > * {
+  flex-grow: 1;
+  margin: 5px;
+}
+
+#time-control-bar > .btn {
+  height: 50px;
+  height: 50px;
+}
+
 #timeline {
   display: flex;
   color: black;
