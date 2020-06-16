@@ -17,22 +17,34 @@ export class TimelineRule {
     }
   }
 
-  static newSimpleRule(target, start, end, val, oldval) {
+  static newSimpleRule(target, start, end, val) {
     const rule = new TimelineRule(TimelineRuleType.TIME, target);
     rule.target = target;
     rule.start = start;
     rule.end = end;
     rule.value = val;
-    rule.oldval = oldval;
+
+    if (target === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+      rule.oldval = document.getElementById('repulsionForce').value;
+    } else if (target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+      rule.oldval = document.getElementById('attractionForce').value;
+    }
+
     return rule;
   }
 
-  static newThresholdRule(target, param, trigger, val, oldval) {
+  static newThresholdRule(target, param, trigger, val) {
     const rule = new TimelineRule(TimelineRuleType.THRESHOLD, target);
     rule.param = param;
     rule.trigger = trigger;
     rule.value = val;
-    rule.oldval = oldval;
+
+    if (target === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+      rule.oldval = document.getElementById('repulsionForce').value;
+    } else if (target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+      rule.oldval = document.getElementById('attractionForce').value;
+    }
+
     rule.start = 0;
     rule.end = 0;
     return rule;

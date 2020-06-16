@@ -69,17 +69,15 @@ export function updateTheStatistics(
   numIcu,
   icuCapacity
 ) {
-    const icuDIV=document.getElementById('icuDIV');
+  const icuDIV = document.getElementById('icuDIV');
 
-
-  if(numIcu < (0.75 * icuCapacity)){
-    icuDIV.style.backgroundColor="lightgreen";
+  if (numIcu < 0.75 * icuCapacity) {
+    icuDIV.style.backgroundColor = 'lightgreen';
   }
-  if(numIcu >= (0.75 * icuCapacity) && numIcu < icuCapacity){
-    icuDIV.style.backgroundColor="orange";
-  }
-  else if(numIcu >= icuCapacity){
-    icuDIV.style.backgroundColor="red";
+  if (numIcu >= 0.75 * icuCapacity && numIcu < icuCapacity) {
+    icuDIV.style.backgroundColor = 'orange';
+  } else if (numIcu >= icuCapacity) {
+    icuDIV.style.backgroundColor = 'red';
   }
   document.getElementById('s1').innerHTML = `${numSusceptible}`;
   document.getElementById('s2').innerHTML = `${numNonInfectious}`;
@@ -87,7 +85,6 @@ export function updateTheStatistics(
   document.getElementById('s4').innerHTML = `${numImmune}`;
   document.getElementById('s5').innerHTML = `${numDead}`;
   document.getElementById('s6').innerHTML = `${numIcu}/${icuCapacity}`;
-
 }
 
 export function getAttractionToCenter() {
@@ -218,4 +215,15 @@ export function createPresetsDropDown() {
   `;
 
   document.getElementById('preset-list').innerHTML = options;
+}
+
+// Dual sliders
+
+export function getTimelineRuleMinMax() {
+  const slider = document.getElementById('timelineTimeSlider').noUiSlider;
+  return [...slider.get()];
+}
+
+export function setTimelineRuleMinMax(min, max) {
+  document.getElementById('timelineTimeSlider').noUiSlider.set([min, max]);
 }

@@ -241,6 +241,39 @@ export default function (community) {
   );
 }
 
+// export function createDualSliders(id, min, max, minSetter, maxSetter) {
+//   const sliderElem = document.getElementById(id);
+//   const slider = noUiSlider.create(sliderElem, {
+//     range: {
+//       min: min,
+//       max: max,
+//     },
+//     format: wNumb({
+//       decimals: '0',
+//     }),
+//     tooltips: [true, true],
+//     connect: true,
+//     start: [min, max],
+//   });
+
+//   slider.on('change', (values) => {
+//     const minVal = parseInt(values[0], 10);
+//     const maxVal = parseInt(values[1], 10);
+//     minSetter(minVal);
+//     maxSetter(maxVal);
+//   });
+
+//   return slider;
+// }
+
+// createDualSliders(
+//   'timelineTimeSlider',
+//   0,
+//   365,
+//   model.updateMinIncubationTime.bind(model),
+//   model.updateMaxIncubationTime.bind(model)
+// );
+
 /**
  * A function binding the reload button to our main class.
  *

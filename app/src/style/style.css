@@ -62,7 +62,7 @@ button {
 }
 
 #timeline-add-rule {
-  height:inherit;
+  height: inherit;
 }
 
 #timeline-buttons {
@@ -294,13 +294,18 @@ h3 {
 .preset-panel {
   flex-direction: row;
 }
-#totalICU{
-  position:relative;
-  top:-34px;
-  left:20px;
+#totalICU {
+  position: relative;
+  top: -34px;
+  left: 20px;
 }
 
-#icuDIV{
-  width:100px;
-  height:80.52px;
+#icuDIV {
+  width: 100px;
+  height: 80.52px;
+}
+
+#timeline-element {
+  margin-top: 10px;
+  margin-bottom: 20px;
 }

@@ -10,14 +10,13 @@ import {
   wireDownloadDataToMain,
 } from './DOM/parameters';
 import DemographicsChart from './demographicsChart';
-
 import {
   getInitialNumInfectious,
   getInitialNumSusceptible,
   updateTheStatistics,
   getNumCommunities,
 } from './DOM/domValues';
-import {Timeline} from './timeline';
+import { Timeline } from './timeline';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
 // Creates chart and graph internally
@@ -75,7 +74,10 @@ export default class Main {
       this.createCurrentStats.bind(this)
     );
 
-    this.timeline = new Timeline(timelineCanvas, this.timelineCallback.bind(this));
+    this.timeline = new Timeline(
+      timelineCanvas,
+      this.timelineCallback.bind(this)
+    );
     this.timeline.importPresetRules();
     wireTimelineButtontoTimeline(this.timeline);
     this.demographicsChart = new DemographicsChart(demographicsCtx);
@@ -111,13 +113,13 @@ export default class Main {
   /**
    * A callback for the timeline to set parameters in the model.
    * @param {TIMELINE_PARAMETERS} timelineParam
-   * @param {*} value 
+   * @param {*} value
    */
   timelineCallback(timelineParam, value) {
-    if(timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+    if (timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
       this.model.updateRepulsionForce(value);
     }
-    if(timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+    if (timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
       this.model.updateAttractionToCenter(value);
     }
   }
@@ -147,8 +149,6 @@ export default class Main {
       this.numIcu,
       icuCapacity
     );
-
-
   }
 
   updateDemographicChart() {
@@ -160,6 +160,7 @@ export default class Main {
     this.model.presetInProcess = true;
     this.model.reloadPreset();
     this.reset();
+    this.timeline.changePreset();
     this.model.presetInProcess = false;
   }
 
@@ -176,13 +177,13 @@ export default class Main {
       stats,
       this.receiveNewStatsAndUpdateChart.bind(this),
       this.updateDemographicChart.bind(this),
-      this.borderCtx,
+      this.borderCtx
     );
   }
 
   /**
    * A function to run the model and the chart.
-   * 
+   *
    */
   run() {
     this.chart.drawChart();

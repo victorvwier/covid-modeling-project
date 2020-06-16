@@ -2,9 +2,13 @@ import { TimelineRule, TimelineRuleType } from './data/timelinerule';
 import presetsManager from './presetsManager';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
-const RULE_HEIGHT = 60;
+const RULE_HEIGHT = 40;
 const TIMELINE_X_OFFSET = 170;
 const RULE_MARGINS = 10;
+
+function getRules() {
+  return presetsManager.loadPreset().RULES;
+}
 
 export class Timeline {
   constructor(canvas, setruleCb) {
@@ -14,8 +18,13 @@ export class Timeline {
     this.setRuleCallback = setruleCb;
   }
 
+  changePreset() {
+    this.rules = [];
+    this.importPresetRules();
+  }
+
   importPresetRules() {
-    const presetRules = presetsManager.loadPreset().RULES;
+    const presetRules = getRules();
     for (let i = 0; i < presetRules.length; i++) {
       const rule = presetRules[i];
       this.addPresetRule(rule);
@@ -43,8 +52,7 @@ export class Timeline {
         params[0],
         params[1],
         params[2],
-        params[3],
-        params[4]
+        params[3]
       );
       this._addRule(rule);
     }
@@ -53,8 +61,7 @@ export class Timeline {
         params[0],
         params[1],
         params[2],
-        params[3],
-        params[4]
+        params[3]
       );
       this._addRule(rule);
     }
@@ -146,18 +153,18 @@ export class Timeline {
 
   drawRule(rule, yOffset) {
     const xCoords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
-    this.context.font = '15px Roboto';
+    this.context.font = '14px Roboto';
     this.context.fillStyle = 'black';
 
     if (rule.active) {
-      this.context.font = 'bold 15px Roboto';
-      //this.context.fillStyle = 'red';
+      this.context.font = 'bold 13px Roboto';
     }
 
+    this.context.fillText(`${rule.name}`, 0, yOffset + RULE_HEIGHT / 3);
     this.context.fillText(
-      `${rule.name}: ${rule.value}`,
+      `Value: ${rule.value}`,
       0,
-      yOffset + RULE_HEIGHT / 2
+      yOffset + (2.2 * RULE_HEIGHT) / 3
     );
     this.context.beginPath();
     this.context.rect(

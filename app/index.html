@@ -412,7 +412,7 @@
           </div>
         </div>
 
-        <button class="accordion">Timeline</button>
+        <button class="accordion">Add a time-based rule</button>
         <div class="panel">
           <div id="timeline-form">
             <div id="timeline-simple-form">
@@ -420,6 +420,11 @@
                 <option value="soc">Social distancing</option>
                 <option value="atc">Attraction to the center</option>
               </select>
+
+              <!-- <div class="slider-container">
+                <div class="new-slider" id="timelineTimeSlider"></div>
+              </div> -->
+
               <label for="timelineform-simple-start">Start: </label>
               <input type="text" id="timelineform-simple-start" />
               <label for="timelineform-simple-end">End: </label>
@@ -428,6 +433,12 @@
               <input type="text" id="timelineform-simple-value" />
               <button id="timeline-add-simple-rule">+</button>
             </div>
+          </div>
+        </div>
+
+        <button class="accordion">Add a threshold-based rule</button>
+        <div class="panel">
+          <div id="timeline-form">
             <div id="timeline-threshold-form">
               <select id="timelineform-threshold-target">
                 <option value="soc">Social distancing</option>
@@ -518,17 +529,18 @@
             <p id="s6"></p>
           </div>
         </div>
+        <div id="timeline">
+          <div>
+            <canvas id="timeline-element" width="600" height="50%">
+              Days: 0
+            </canvas>
+          </div>
+        </div>
+
         <div id="model-border-canvases-container">
           <canvas id="glCanvas" width="600px" height="600px"></canvas>
           <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
           <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
-        </div>
-        <div id="timeline">
-          <div>
-            <canvas id="timeline-element" width="800" height="60%">
-              Days: 0
-            </canvas>
-          </div>
         </div>
       </div>
     </main>
