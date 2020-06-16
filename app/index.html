@@ -416,21 +416,20 @@
         <div class="panel">
           <div id="timeline-form">
             <div id="timeline-simple-form">
-              <select id="timelineform-simple-target">
-                <option value="soc">Social distancing</option>
-                <option value="atc">Attraction to the center</option>
-              </select>
+              <div id="dropdown-simple-form">
+                <select id="timelineform-simple-target">
+                  <option value="soc">Social distancing</option>
+                  <option value="atc">Attraction to the center</option>
+                </select>
+              </div>
 
-              <!-- <div class="slider-container">
+              <div class="slider-container">
                 <div class="new-slider" id="timelineTimeSlider"></div>
-              </div> -->
+              </div>
 
-              <label for="timelineform-simple-start">Start: </label>
-              <input type="text" id="timelineform-simple-start" />
-              <label for="timelineform-simple-end">End: </label>
-              <input type="text" id="timelineform-simple-end" />
-              <label for="timelineform-simple-value">value: </label>
-              <input type="text" id="timelineform-simple-value" />
+              <div class="slider-container">
+                <div class="new-slider" id="timelineTimeValueSlider"></div>
+              </div>
               <button id="timeline-add-simple-rule">+</button>
             </div>
           </div>
@@ -455,6 +454,11 @@
               <button id="timeline-add-threshold-rule">+</button>
             </div>
           </div>
+        </div>
+
+        <button class="accordion">Rules list</button>
+        <div class="panel">
+          <div id="rulesDIV"></div>
         </div>
 
         <div class="row p-3">

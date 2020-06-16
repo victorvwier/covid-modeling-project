@@ -5,7 +5,6 @@ import PdfDownloadService from './pdfDownloadService';
 import AgentChart from './agentChart';
 import {
   wireReloadButtonToMain,
-  wireTimelineButtontoTimeline,
   wireReloadPresetToMain,
   wireDownloadDataToMain,
 } from './DOM/parameters';
@@ -18,6 +17,7 @@ import {
 } from './DOM/domValues';
 import { Timeline } from './timeline';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
+import { wireTimelineButtontoTimeline } from './DOM/timelineDOM';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */

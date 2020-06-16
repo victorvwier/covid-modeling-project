@@ -1,6 +1,7 @@
 import { TimelineRule, TimelineRuleType } from './data/timelinerule';
 import presetsManager from './presetsManager';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
+import { setRulesList, clearRulesList } from './DOM/timelineDOM';
 
 const RULE_HEIGHT = 40;
 const TIMELINE_X_OFFSET = 170;
@@ -20,14 +21,18 @@ export class Timeline {
 
   changePreset() {
     this.rules = [];
+    clearRulesList();
+    setRulesList(this.toStringList(this.rules));
     this.importPresetRules();
   }
 
   importPresetRules() {
     const presetRules = getRules();
-    for (let i = 0; i < presetRules.length; i++) {
-      const rule = presetRules[i];
-      this.addPresetRule(rule);
+    if (presetRules.length > 0) {
+      for (let i = 0; i < presetRules.length; i++) {
+        const rule = presetRules[i];
+        this.addPresetRule(rule);
+      }
     }
   }
 
@@ -105,6 +110,8 @@ export class Timeline {
 
     if (!found) {
       this.rules.push(rule);
+      clearRulesList();
+      setRulesList(this.toStringList(this.rules));
     }
   }
 
@@ -119,6 +126,14 @@ export class Timeline {
         this.setRuleCallback(rule.target, 0);
       }
     }
+  }
+
+  deleteRule(index) {
+    console.log(this.rules);
+    this.rules.splice(index, 1);
+    clearRulesList();
+    console.log(this.rules);
+    setRulesList(this.toStringList(this.rules));
   }
 
   redrawTimeline() {
@@ -182,5 +197,48 @@ export class Timeline {
       (dayNumber / (356 * 2)) * (this.canvas.width - TIMELINE_X_OFFSET) +
       TIMELINE_X_OFFSET
     );
+  }
+
+  toStringList() {
+    const stringList = [];
+    let type = '';
+
+    for (let i = 0; i < this.rules.length; i++) {
+      const rule = this.rules[i];
+      let target = '';
+      let returnedString = '';
+
+      if (rule.type === TimelineRuleType.TIME) {
+        type = 'Time';
+
+        if (rule.target === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+          target = 'social distancing';
+        } else if (rule.target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+          target = 'attraction to center';
+        }
+
+        //const percentVal = rule.value * 100;
+
+        returnedString = `${type} Rule: ${target} changed to ${rule.value}% from day ${rule.start} to day ${rule.end}`;
+      } else if (rule.type === TimelineRuleType.THRESHOLD) {
+        type = 'Threshold';
+        let param = '';
+        if (rule.target === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+          target = 'social distancing';
+        } else if (rule.target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+          target = 'attraction to center';
+        }
+
+        if (rule.param === 'inf') {
+          param = 'infectious agents';
+        } else if (rule.param === 'icu') {
+          param = 'agents in the ICU';
+        }
+
+        returnedString = `${type} Rule: ${target} changed to ${rule.value} when number of ${param} exceeds ${rule.trigger}`;
+      }
+      stringList.push(returnedString);
+    }
+    return stringList;
   }
 }

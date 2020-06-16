@@ -216,14 +216,3 @@ export function createPresetsDropDown() {
 
   document.getElementById('preset-list').innerHTML = options;
 }
-
-// Dual sliders
-
-export function getTimelineRuleMinMax() {
-  const slider = document.getElementById('timelineTimeSlider').noUiSlider;
-  return [...slider.get()];
-}
-
-export function setTimelineRuleMinMax(min, max) {
-  document.getElementById('timelineTimeSlider').noUiSlider.set([min, max]);
-}
