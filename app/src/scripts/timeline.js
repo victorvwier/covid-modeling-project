@@ -11,7 +11,6 @@ export class Timeline {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.rules = [];
-    this.importPresetRules();
     this.setRuleCallback = setruleCb;
   }
 

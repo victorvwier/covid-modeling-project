@@ -76,6 +76,7 @@ export default class Main {
     );
 
     this.timeline = new Timeline(timelineCanvas, this.timelineCallback.bind(this));
+    this.timeline.importPresetRules();
     wireTimelineButtontoTimeline(this.timeline);
     this.demographicsChart = new DemographicsChart(demographicsCtx);
     this.agentView = new AgentChart(context);
