@@ -17,6 +17,7 @@ import {
   getMaxTimeUntilDead,
   getInfectionRadius,
 } from './DOM/domValues';
+import { MAXIMUM_DAYS } from './CONSTANTS';
 
 const { SPACE_BETWEEN_COMMUNITIES, DAYS_PER_SECOND } = presetsManager.loadPreset();
 
@@ -60,7 +61,7 @@ export default class Model {
 
     this.presetInProcess = false;
 
-    this._passDrawInfoAnimationFrame = null;
+    this._mainLoopInterval = null;
     this.relocationUtil = new RelocationUtil(this);
 
     this._setValuesFromStatsToLocal(stats);
@@ -167,7 +168,7 @@ export default class Model {
     this.populateCommunities();
     this.updateAgentSize(this.getAgentSize(this.stats.sum()));
 
-    setInterval(this._animationFunction.bind(this), 50);
+    this._mainLoopInterval = setInterval(this._animationFunction.bind(this), 50);
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
@@ -177,7 +178,12 @@ export default class Model {
    * @param {number} timestamp The timestamp of the current moment.
    */
   _animationFunction() {
-    const dt = 0.050;
+    if(this.timestamp > MAXIMUM_DAYS){
+      clearInterval(this._mainLoopInterval);
+      clearInterval(this._chartInterval);
+      return;
+    }
+    const dt = 0.050 * DAYS_PER_SECOND;
     this.timestamp += dt;
     this.passDrawInfoToAgentChart();
     Object.values(this.communities).forEach((com) => com.step(dt));

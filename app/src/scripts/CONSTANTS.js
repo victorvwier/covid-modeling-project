@@ -1,3 +1,5 @@
+export const MAXIMUM_DAYS = 356;
+
 export const PRESET_TYPES = {
   CANADA: 'Canada Data',
   LOW_POP: 'Low population',
