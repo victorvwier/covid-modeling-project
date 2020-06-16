@@ -282,6 +282,13 @@ h3 {
   left:10px;
   top:10px;
 }
+
+#t6{
+  background-color: #cccccc;
+  position:relative;
+  top:-10px;
+  left:200px;
+}
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 400px;
