@@ -59,7 +59,7 @@ button {
 
 #time-control-days-display {
   color: black;
-  font-size: max-content;
+  line-height: 50px;
 }
 
 #time-control-bar > * {
