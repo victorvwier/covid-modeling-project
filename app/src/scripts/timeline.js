@@ -133,7 +133,7 @@ export class Timeline {
       this.canvas.width,
       this.canvas.height
     );
-    this.context.fillStyle = 'beige';
+    this.context.fillStyle = 'white';
     this.context.fill();
 
     // Draw all the rules we have in place
@@ -143,7 +143,8 @@ export class Timeline {
 
     // The the progress line
     const xCoord = this.getXforDay(this.time);
-    this.context.strokeStyle = 'red';
+    this.context.strokeStyle = 'black';
+    this.context.lineWidth = 3;
     this.context.beginPath();
     this.context.moveTo(xCoord, 0);
     this.context.lineTo(xCoord, this.canvas.height);
@@ -171,7 +172,7 @@ export class Timeline {
       xCoords[1] - xCoords[0],
       RULE_HEIGHT - RULE_MARGINS * 2
     );
-    this.context.fillStyle = 'grey';
+    this.context.fillStyle = '#dce0da';
     this.context.fill();
   }
 
