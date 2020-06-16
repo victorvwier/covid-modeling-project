@@ -132,7 +132,7 @@ export class Timeline {
       this.canvas.width,
       this.canvas.height
     );
-    this.context.fillStyle = 'white';
+    this.context.fillStyle = '#cccccc';
     this.context.fill();
 
     // Draw all the rules we have in place
@@ -142,7 +142,7 @@ export class Timeline {
 
     // The the progress line
     const xCoord = this.getXforDay(this.time);
-    this.context.strokeStyle = 'black';
+    this.context.strokeStyle = 'white';
     this.context.lineWidth = 3;
     this.context.beginPath();
     this.context.moveTo(xCoord, 0);
@@ -152,7 +152,7 @@ export class Timeline {
 
   drawRule(rule, yOffset) {
     const xCoords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
-    this.context.font = '15px Georgia';
+    this.context.font = '15px Roboto';
     this.context.fillStyle = 'black';
 
     if (rule.active) {
@@ -171,7 +171,7 @@ export class Timeline {
       xCoords[1] - xCoords[0],
       RULE_HEIGHT - RULE_MARGINS * 2
     );
-    this.context.fillStyle = '#dce0da';
+    this.context.fillStyle = '#a6a6a6';
     this.context.fill();
   }
 
