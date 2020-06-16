@@ -1,9 +1,9 @@
 import { TimelineRule, TimelineRuleType } from './data/timelinerule';
 import presetsManager from './presetsManager';
-import { TIMELINE_PARAMETERS, TIMELINE_THRESHOLDS } from './CONSTANTS';
+import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
-const RULE_HEIGHT = 100;
-const TIMELINE_X_OFFSET = 200;
+const RULE_HEIGHT = 60;
+const TIMELINE_X_OFFSET = 170;
 const RULE_MARGINS = 10;
 
 export class Timeline {
@@ -34,12 +34,6 @@ export class Timeline {
     } else if (rule.params[0] === 'atc') {
       rule.params[0] === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER;
     }
-
-    // if (rule.params[1] === 'inf') {
-    //   rule.params[1] === TIMELINE_THRESHOLDS.INFECTION_COUNT;
-    // } else if (rule.params[1] === 'icu') {
-    //   rule.params[1] === TIMELINE_THRESHOLDS.ICU_COUNT;
-    // }
     this.addRule(rule.type, rule.params);
   }
 
@@ -156,7 +150,8 @@ export class Timeline {
     this.context.fillStyle = 'black';
 
     if (rule.active) {
-      this.context.fillStyle = 'red';
+      this.context.font = 'bold 15px Roboto';
+      //this.context.fillStyle = 'red';
     }
 
     this.context.fillText(
