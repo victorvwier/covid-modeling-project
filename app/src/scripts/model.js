@@ -53,7 +53,7 @@ export default class Model {
     this.updateStats = updateStats;
     this.updateDemographicChart = updateDemographicChart;
     this.borderCtx = borderCtx;
-
+    this.paused = false;
     this._chartInterval = null;
 
     this.timestamp = 0;
@@ -193,6 +193,21 @@ export default class Model {
     this.updateDemographicChart();
   }
 
+  /**
+   * A function to pause/unpause the model;
+   */
+  togglePause() {
+    if(this.paused) {
+      // Unpause
+      this._mainLoopInterval = setInterval(this._animationFunction.bind(this), 50);
+      this._chartInterval = setInterval(this.compileStats.bind(this), 500);
+    } else {
+      // Pause
+      clearInterval(this._mainLoopInterval);
+      clearInterval(this._chartInterval);
+    }
+    this.paused = !this.paused;
+  }
   /**
    * A function to pass all info to AgentChart to allow drawing the model.
    */
