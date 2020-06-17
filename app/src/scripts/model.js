@@ -19,6 +19,7 @@ import {
 } from './DOM/domValues';
 import { MAXIMUM_DAYS } from './CONSTANTS';
 import { getRandom } from './util';
+
 const { SPACE_BETWEEN_COMMUNITIES, DAYS_PER_SECOND } = presetsManager.loadPreset();
 
 /** @class Model representing a simulation of one or multiple communities. */
@@ -219,6 +220,7 @@ export default class Model {
     }
     this.paused = !this.paused;
   }
+
   /**
    * A function to pass all info to AgentChart to allow drawing the model.
    */
