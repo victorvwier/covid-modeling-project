@@ -24,6 +24,11 @@ export default class Chart {
     this.xValues = [];
   }
 
+  /**
+   * A function to retrieve all the data represented in the chart.
+   * 
+   * @returns {Object} An object containing all data in the chart.
+   */
   getAllDataPoints() {
     const data = {};
     for (let i = 0; i < this.xValues.length; i++) {

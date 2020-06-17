@@ -277,6 +277,7 @@ export function wireTimelineButtontoTimeline(timeline) {
     timeline.addRule(TimelineRuleType.THRESHOLD,[target, param, parseFloat(trigger), parseFloat(value)]);
   });
 }
+
 /*
  * A function binding the reload button to our main class.
  *

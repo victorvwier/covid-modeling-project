@@ -108,6 +108,11 @@ export default class Model {
     return values[index + 1];
   }
 
+  /**
+   * A function to create stats divided over the different communities.
+   * 
+   * @param {number} index The index of the community.
+   */
   _createDividedStats(index) {
     const valSus = this._distributeStats(this.numSusceptible, index);
     const valNonInf = this._distributeStats(this.numNonInfectious, index);
@@ -152,6 +157,9 @@ export default class Model {
     }
   }
 
+  /**
+   * A function to reload the preset used by the model.
+   */
   reloadPreset() {
     const {
       SPACE_BETWEEN_COMMUNITIES: NEW_SPACE_BETWEEN_COMMUNITIES,
@@ -303,6 +311,11 @@ export default class Model {
     }
   }
 
+  /**
+   * A function to get the site an agent should be drawn with.
+   * 
+   * @param {number} population The size of the population.
+   */
   getAgentSize(population) {
     if (population > 2000) {
       return 1.5;
