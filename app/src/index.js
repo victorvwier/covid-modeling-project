@@ -22,6 +22,9 @@ const {
   REPULSION_FORCE,
 } = presetManager.loadPreset();
 
+/**
+ * A function to set all relevant data from the preset into the DOM.
+ */
 function setPresetData() {
   setAttractionToCenter(ATTRACTION_FORCE);
   setNumCommunities(NUM_COMMUNITIES);

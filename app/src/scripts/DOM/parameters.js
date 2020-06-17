@@ -239,6 +239,7 @@ export default function (community) {
     (x) => x
   );
 }
+
 /**
  * A function binding the reload button to our main class.
  *

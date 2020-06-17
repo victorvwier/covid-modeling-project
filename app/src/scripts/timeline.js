@@ -10,7 +10,17 @@ function getRules() {
   return presetsManager.loadPreset().RULES;
 }
 
+/** @class Timeline describing a timeline on which rules can be added. */
+
 export class Timeline {
+
+  /**
+   * Instantiates a timeline.
+   * 
+   * @constructor
+   * @param {Object} canvas The canvas the timeline is drawn on.
+   * @param {function} setruleCb A callback function to set a rule.
+   */
   constructor(canvas, setruleCb, clearRulesList, setRulesList) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
@@ -73,6 +83,12 @@ export class Timeline {
     }
   }
 
+  /**
+   * A function to update the timeline.
+   * 
+   * @param {Stats} stats The stats at the current moment.
+   * @param {number} time The number representing the current time.
+   */
   update(stats, time) {
     this.time = time;
     this.redrawTimeline();
@@ -85,6 +101,12 @@ export class Timeline {
     }
   }
 
+  /**
+   * A function to add a rule to the timeline.
+   * 
+   * @param {TimelineRuleType} type The type of rule being added.
+   * @param {number[]} params An array containing the parameters for the rule.
+   */
   addRule(type, params) {
     if (type === TimelineRuleType.TIME) {
       const rule = TimelineRule.newSimpleRule(
@@ -106,6 +128,11 @@ export class Timeline {
     }
   }
 
+  /**
+   * A function to add an existing rule to the timeline.
+   * 
+   * @param {TimelineRule} rule The rule to be added.
+   */
   _addRule(rule) {
     let found = false;
     for (let i = 0; i < this.rules.length; i++) {
@@ -122,6 +149,12 @@ export class Timeline {
     }
   }
 
+  /**
+   * A function to enforce all current rules.
+   * 
+   * @param {Stats} stats The current stats.
+   * @param {number} time The current timestamp.
+   */
   enforceRules(stats, time) {
     for (let i = 0; i < this.rules.length; i++) {
       const rule = this.rules[i];
@@ -141,6 +174,9 @@ export class Timeline {
     this.setRulesList(this.toStringList(this.rules), this);
   }
 
+  /**
+   * A function to redraw the timeline to be up to date.
+   */
   redrawTimeline() {
     // Set canvas to the right height
     this.canvas.height = RULE_HEIGHT * this.rules.length;
@@ -171,6 +207,12 @@ export class Timeline {
     this.context.stroke();
   }
 
+  /**
+   * A function to draw a rule on the timeline.
+   * 
+   * @param {TimelineRule} rule The rule to be drawn
+   * @param {number} yOffset The offset on the y-axis.
+   */
   drawRule(rule, yOffset) {
     // Draw the rule text
     this.context.font = rule.active ? 'bold 13px Roboto' : '14px Roboto';
@@ -211,6 +253,12 @@ export class Timeline {
     }
   }
 
+  /**
+   * A function to convert a day number into an x coordingate on the timeline.
+   * 
+   * @param {number} dayNumber The number of the day.
+   * @returns {number} The x coordinate on the timeline.
+   */
   getXforDay(dayNumber) {
     return (
       (dayNumber / (356 * 2)) * (this.canvas.width - TIMELINE_X_OFFSET) +

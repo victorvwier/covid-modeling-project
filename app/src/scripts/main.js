@@ -153,11 +153,17 @@ export default class Main {
     );
   }
 
+  /**
+   * A function to update the demographicsChart
+   */
   updateDemographicChart() {
     const population = this.model.getAllPopulation();
     this.demographicsChart.receiveUpdate(population);
   }
 
+  /**
+   * A function to change the current preset.
+   */
   changePreset() {
     this.model.presetInProcess = true;
     this.model.reloadPreset();
@@ -230,6 +236,9 @@ export default class Main {
     this.demographicsChart.resetChart(this.createCurrentStats().sum());
   }
 
+  /**
+   * A function to download a pdf containing all of the data.
+   */
   downloadPdf() {
     const data = this.chart.getAllDataPoints();
     PdfDownloadService.createDownloadPdf(data);

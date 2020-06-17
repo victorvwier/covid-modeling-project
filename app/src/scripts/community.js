@@ -86,6 +86,11 @@ export default class Community {
     // this._drawBorderLines();
   }
 
+  /**
+   * A function to draw the borders of the community on the screen.
+   * 
+   * @param {Object} borderCtx The context of the canvas on which the borders are drawn.
+   */
   _drawBorderLines(borderCtx) {
     // These lines are drawm from the edge coordinates of the model and make up the boundary of the
     // communities which are drawn on a canvas other than the agent canvas and can be drawn
@@ -99,6 +104,9 @@ export default class Community {
     );
   }
 
+  /**
+   * A function to reload the given preset.
+   */
   reloadPreset() {
     this.personRadius = presetsManager.loadPreset().PERSON_RADIUS;
     this.nonInfectiousToImmuneProb = presetsManager.loadPreset().NONIN_TO_IMMUNE_PROB;
@@ -148,7 +156,7 @@ export default class Community {
 
     this.boundingBoxStruct.remove(person);
 
-    if(person.inIcu) {
+    if (person.inIcu) {
       this.icuCount--;
     }
 
@@ -314,7 +322,7 @@ export default class Community {
 
   /**
    * A function to set the probability an Infectious person tests positive in this community.
-   * 
+   *
    * @param {number} newValue The new probability for testing positive.
    */
   setTestedPositiveProbability(newValue) {
@@ -323,7 +331,7 @@ export default class Community {
 
   /**
    * A function to set the factor by which the infection radius of a tested person is reduced.
-   * 
+   *
    * @param {number} newValue The new reduction factor.
    */
   setInfectionRadiusReductionFactor(newValue) {
@@ -332,7 +340,7 @@ export default class Community {
 
   /**
    * A function to set the probabilty a tested person moves to the ICU.
-   * 
+   *
    * @param {number} newValue The new probability of a person moving to the ICU.
    */
   setIcuProbability(newValue) {
@@ -341,7 +349,7 @@ export default class Community {
 
   /**
    * A function to set the capacity of the ICU for this community.
-   * 
+   *
    * @param {number} newValue The new capacity of the ICU.
    */
   setIcuCapacity(newValue) {
@@ -494,7 +502,7 @@ export default class Community {
           this.startY,
           this.endY,
           dt * presetsManager.loadPreset().MOVEMENT_TIME_SCALAR
-        ); // TODO: make slider to
+        );
         this.boundingBoxStruct.insert(currentPerson);
       }
     }
@@ -593,7 +601,7 @@ export default class Community {
           person.infectionRadius /= this.infectionRadiusReductionFactor;
         }
         // ICU
-        if (getRandom() <= this.icuProbability) {
+        if (getRandom() <= this.icuProbability && person.mortalityRate > 0) {
           person.inIcu = true;
           if (this.icuCount >= this.icuCapacity) {
             person.type = TYPES.DEAD;
@@ -637,7 +645,9 @@ export default class Community {
    * @param {number} dt The timestep for which to step.
    */
   step(dt) {
-    if( dt < 0) {throw Error("Can't go back in time"); }
+    if (dt < 0) {
+      throw Error("Can't go back in time");
+    }
     const daysPassed = dt;
     this.updatePopulation(daysPassed);
     this.interactPopulation(daysPassed);
@@ -676,8 +686,8 @@ export default class Community {
     forceY /= maxDistance;
 
     person.applyForce(
-      this.attractionToCenter * forceX / 100,
-      this.attractionToCenter * forceY / 100
+      (this.attractionToCenter * forceX) / 100,
+      (this.attractionToCenter * forceY) / 100
     );
   }
 

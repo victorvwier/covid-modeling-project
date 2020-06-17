@@ -25,6 +25,25 @@ export default class Chart {
   }
 
   /**
+   * A function to retrieve all the data represented in the chart.
+   * 
+   * @returns {Object} An object containing all data in the chart.
+   */
+  getAllDataPoints() {
+    const data = {};
+    for (let i = 0; i < this.xValues.length; i++) {
+      data[this.xValues[i]] = {
+        susceptible: this.susceptible[i],
+        infectious: this.infectious[i],
+        noninfectious: this.noninfectious[i],
+        immune: this.immune[i],
+        dead: this.dead[i],
+      };
+    }
+    return data;
+  }
+
+  /**
    * A function getting the size of the total population represented in the chart.
    *
    * @returns {number} The size of the total population.
