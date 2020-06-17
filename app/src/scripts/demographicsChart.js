@@ -2,10 +2,16 @@ import Chart from 'chart.js';
 import presetsManager from './presetsManager';
 import { COLORS, TYPES, GENDERS } from './CONSTANTS';
 
+/**
+ * A function to retrieve the age from the preset.
+ * 
+ * @returns {number} The age.
+ */
 function getAge() {
   return presetsManager.loadPreset().AGE;
 }
 
+/** @class DemographicsChart describing the chart displaying the different demographics. */
 export default class DemographicsChart {
   /**
    * Constructor for the demograpgics chart
@@ -20,6 +26,11 @@ export default class DemographicsChart {
     window.demographic = this;
   }
 
+  /**
+   * A function to update the chart.
+   * 
+   * @param {Person[]} population An array representing the population.
+   */
   receiveUpdate(population) {
     // Do logic
     // num dead per age per gender
@@ -83,6 +94,11 @@ export default class DemographicsChart {
     this.demographicChart.update();
   }
 
+  /**
+   * A function to get the amount of males in a population.
+   * 
+   * @param {Person[]} population An array representing the population.
+   */
   _getMaleCount(population) {
     let maleCount = 0;
     for (let i = 0; i < population.length; i++) {
@@ -93,6 +109,11 @@ export default class DemographicsChart {
     return maleCount;
   }
 
+  /**
+   * A function to get the amount of females in a population.
+   * 
+   * @param {Person[]} population An array representing the population.
+   */
   _getFemaleCount(population) {
     let femaleCount = 0;
     for (let i = 0; i < population.length; i++) {
@@ -122,6 +143,11 @@ export default class DemographicsChart {
     return label.split(' - ').map((item) => parseInt(item, 10));
   }
 
+  /**
+   * A function to reset the chart.
+   * 
+   * @param {number} populationSize The size of the population.
+   */
   resetChart(populationSize) {
     this.demographicChart.destroy();
     this.labels = getAge().map((val) => this._formatLabel(val.min, val.max));
