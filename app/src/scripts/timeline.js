@@ -129,10 +129,8 @@ export class Timeline {
   }
 
   deleteRule(index) {
-    //console.log(this.rules);
     this.rules.splice(index, 1);
     clearRulesList();
-    //console.log(this.rules);
     setRulesList(this.toStringList(this.rules), this);
   }
 
