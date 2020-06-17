@@ -15,6 +15,9 @@ export class TimelineRule {
     if (target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
       this.name = 'Attraction to center';
     }
+
+    // Records the past times this rule has been active
+    this.activeHistory = [];
   }
 
   static newSimpleRule(target, start, end, val) {
@@ -50,21 +53,31 @@ export class TimelineRule {
     return rule;
   }
 
+  reset() {
+    this.activeHistory = [];
+  }
+
   isActive(stats, time) {
-    switch (this.type) {
-      case TimelineRuleType.THRESHOLD:
-        switch (this.param) {
-          case 'inf':
-            return stats.infectious >= this.trigger;
-          case 'icu':
-            return stats.icu >= this.trigger;
-          default:
-            throw new Error('Something went terribly wrong');
-        }
-      case TimelineRuleType.TIME:
-        return time <= this.end && time >= this.start;
-      default:
-        throw new Error('Something went terribly wrong');
+    let ret = false;
+    
+    if(this.type === TimelineRuleType.THRESHOLD) {
+      if(this.param === 'inf') {
+        ret = stats.infectious >= this.trigger;
+      }
+
+      if(this.param === 'icu'){
+        ret = stats.icu >= this.trigger;
+      }
+    } 
+
+    if(this.type === TimelineRuleType.TIME) {
+      ret = time <= this.end && time >= this.start;
     }
+
+    if(ret) {
+      this.activeHistory.push(time);
+    }
+
+    return ret;
   }
 }

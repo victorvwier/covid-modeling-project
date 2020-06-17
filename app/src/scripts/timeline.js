@@ -78,6 +78,12 @@ export class Timeline {
     this.enforceRules(stats, time);
   }
 
+  reset() {
+    for(let i = 0; i < this.rules.length; i++) {
+      this.rules[i].reset();
+    }
+  }
+
   addRule(type, params) {
     if (type === TimelineRuleType.TIME) {
       const rule = TimelineRule.newSimpleRule(
@@ -165,29 +171,48 @@ export class Timeline {
   }
 
   drawRule(rule, yOffset) {
-    const xCoords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
-    this.context.font = '14px Roboto';
-    this.context.fillStyle = 'black';
 
-    if (rule.active) {
-      this.context.font = 'bold 13px Roboto';
+    // Draw the rule text
+    this.context.font = '14px Roboto';
+      this.context.fillStyle = 'black';
+
+      if (rule.active) {
+        this.context.font = 'bold 13px Roboto';
+      }
+
+      this.context.fillText(`${rule.name}`, 0, yOffset + RULE_HEIGHT / 3);
+      this.context.fillText(
+        `Value: ${rule.value}`,
+        0,
+        yOffset + (2.2 * RULE_HEIGHT) / 3
+      );
+
+    // Draw the rule bar
+    if (rule.type === TimelineRuleType.TIME) {
+      const xCoords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
+      
+      this.context.beginPath();
+      this.context.rect(
+        xCoords[0],
+        yOffset + RULE_MARGINS,
+        xCoords[1] - xCoords[0],
+        RULE_HEIGHT - RULE_MARGINS * 2
+      );
+      this.context.fillStyle = '#a6a6a6';
+      this.context.fill();
     }
 
-    this.context.fillText(`${rule.name}`, 0, yOffset + RULE_HEIGHT / 3);
-    this.context.fillText(
-      `Value: ${rule.value}`,
-      0,
-      yOffset + (2.2 * RULE_HEIGHT) / 3
-    );
-    this.context.beginPath();
-    this.context.rect(
-      xCoords[0],
-      yOffset + RULE_MARGINS,
-      xCoords[1] - xCoords[0],
-      RULE_HEIGHT - RULE_MARGINS * 2
-    );
-    this.context.fillStyle = '#a6a6a6';
-    this.context.fill();
+    if(rule.type === TimelineRuleType.THRESHOLD) {
+      for(let i = 0; i < rule.activeHistory.length; i++) {
+        const xCoord = this.getXforDay(rule.activeHistory[i]);
+        this.context.strokeStyle = '#a6a6a6';
+        this.context.lineWidth = 1;
+        this.context.beginPath();
+        this.context.moveTo(xCoord, yOffset + RULE_MARGINS);
+        this.context.lineTo(xCoord, RULE_HEIGHT + yOffset - RULE_MARGINS);
+        this.context.stroke();
+      }
+    }
   }
 
   getXforDay(dayNumber) {

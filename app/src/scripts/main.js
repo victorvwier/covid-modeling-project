@@ -217,7 +217,7 @@ export default class Main {
     this.model.setupCommunity();
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-
+    this.timeline.reset();
     this.model.resetModel(this.createCurrentStats());
 
     const {
