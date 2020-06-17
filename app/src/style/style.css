@@ -54,23 +54,17 @@ button {
   color: black;
 }
 
-#timeline-form {
-  padding: 10px;
-  display: flex;
-  height: 200px;
-  width: 200px;
-}
-
+/* 
 #timeline-add-rule {
   height: inherit;
-}
+} */
 
-#timeline-buttons {
+/* #timeline-buttons {
   width: inherit;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
+} */
 
 #right-side-container {
   display: flex;
@@ -310,9 +304,19 @@ h3 {
   margin-bottom: 20px;
 }
 
-#timeline-simple-form > * {
+/* #timeline-simple-form > * {
   margin-top: 30px;
-  display: flexbox;
+} */
+
+#timeline-threshold-form > * {
+  display: flex;
+  flex-direction: column;
+  display: block;
+  margin-top: 20px;
+}
+
+#parent > *:first-child {
+  margin-top: 0px;
 }
 
 /* Remove margins and padding from the list */
@@ -359,4 +363,23 @@ ul li:hover {
 .close:hover {
   background-color: #f44336;
   color: white;
+}
+
+.slider-title {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 1rem;
+  font-style: bold;
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-slider {
+  width: 90%;
 }

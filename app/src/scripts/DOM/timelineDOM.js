@@ -2,7 +2,6 @@ import 'nouislider/distribute/nouislider.css'; // Import styles
 import wNumb from 'wnumb';
 import noUiSlider from 'nouislider';
 import { TimelineRuleType } from '../data/timelinerule';
-import { Timeline } from '../timeline';
 
 export function createSingleSlider(id, start, min, max) {
   const sliderElem = document.getElementById(id);
@@ -94,11 +93,7 @@ export function wireTimelineButtontoTimeline(timeline) {
     });
 }
 
-export function deleteRuleListener(index) {
-  Timeline.deleteRule(index);
-}
-
-export function makeUL(array) {
+export function makeUL(array, timeline) {
   // Create the list element:
   const list = document.createElement('ul');
 
@@ -111,10 +106,11 @@ export function makeUL(array) {
     const txt = document.createTextNode('\u00D7');
     span.className = 'close';
     span.appendChild(txt);
-    span.addEventListener('click', deleteRuleListener.bind(i));
+    span.addEventListener('click', () => timeline.deleteRule(i));
     item.appendChild(span);
     list.appendChild(item);
   }
+
   return list;
 }
 
@@ -122,6 +118,6 @@ export function clearRulesList() {
   document.getElementById('rulesDIV').innerHTML = '';
 }
 
-export function setRulesList(rules) {
-  document.getElementById('rulesDIV').appendChild(makeUL(rules));
+export function setRulesList(rules, timeline) {
+  document.getElementById('rulesDIV').appendChild(makeUL(rules, timeline));
 }

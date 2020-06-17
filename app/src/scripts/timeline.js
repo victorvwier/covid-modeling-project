@@ -22,7 +22,7 @@ export class Timeline {
   changePreset() {
     this.rules = [];
     clearRulesList();
-    setRulesList(this.toStringList(this.rules));
+    setRulesList(this.toStringList(this.rules), this);
     this.importPresetRules();
   }
 
@@ -111,7 +111,7 @@ export class Timeline {
     if (!found) {
       this.rules.push(rule);
       clearRulesList();
-      setRulesList(this.toStringList(this.rules));
+      setRulesList(this.toStringList(this.rules), this);
     }
   }
 
@@ -129,11 +129,11 @@ export class Timeline {
   }
 
   deleteRule(index) {
-    console.log(this.rules);
+    //console.log(this.rules);
     this.rules.splice(index, 1);
     clearRulesList();
-    console.log(this.rules);
-    setRulesList(this.toStringList(this.rules));
+    //console.log(this.rules);
+    setRulesList(this.toStringList(this.rules), this);
   }
 
   redrawTimeline() {
