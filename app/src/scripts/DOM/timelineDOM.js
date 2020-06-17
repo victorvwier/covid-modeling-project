@@ -44,6 +44,7 @@ export function createDualSliders(id, min, max) {
 export function createSliders() {
   createDualSliders('timelineTimeSlider', 0, 365);
   createSingleSlider('timelineTimeValueSlider', 0, 0, 100);
+  createSingleSlider('timelineform-threshold-value', 0 , 0, 100);
 }
 
 // index 0 and index 1
@@ -53,7 +54,13 @@ export function getTimelineTimeSliderValues() {
 
 export function getTimelineTimeValueSliderValues() {
   return (
-    document.getElementById('timelineTimeValueSlider').noUiSlider.get() / 10
+    document.getElementById('timelineTimeValueSlider').noUiSlider.get()
+  );
+}
+
+export function getTimelineThresholdValueSliderValues() {
+  return (
+    document.getElementById('timelineform-threshold-value').noUiSlider.get()
   );
 }
 
@@ -82,8 +89,7 @@ export function wireTimelineButtontoTimeline(timeline) {
         .value;
       const trigger = document.getElementById('timelineform-threshold-trigger')
         .value;
-      const value = document.getElementById('timelineform-threshold-value')
-        .value;
+      const value = getTimelineThresholdValueSliderValues();
       timeline.addRule(TimelineRuleType.THRESHOLD, [
         target,
         param,
