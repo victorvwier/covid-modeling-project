@@ -5,20 +5,19 @@ import PdfDownloadService from './pdfDownloadService';
 import AgentChart from './agentChart';
 import {
   wireReloadButtonToMain,
-  wireTimelineButtontoTimeline,
   wireReloadPresetToMain,
   wireDownloadDataToMain,
 } from './DOM/parameters';
 import DemographicsChart from './demographicsChart';
-
 import {
   getInitialNumInfectious,
   getInitialNumSusceptible,
   updateTheStatistics,
   getNumCommunities,
 } from './DOM/domValues';
-import {Timeline} from './timeline';
+import { Timeline } from './timeline';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
+import { wireTimelineButtontoTimeline, setRulesList, clearRulesList } from './DOM/timelineDOM';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -75,7 +74,13 @@ export default class Main {
       this.createCurrentStats.bind(this)
     );
 
-    this.timeline = new Timeline(timelineCanvas, this.timelineCallback.bind(this));
+    this.timeline = new Timeline(
+      timelineCanvas,
+      this.timelineCallback.bind(this),
+      clearRulesList, 
+      setRulesList
+    );
+    this.timeline.importPresetRules();
     wireTimelineButtontoTimeline(this.timeline);
     this.demographicsChart = new DemographicsChart(demographicsCtx);
     this.agentView = new AgentChart(context);
@@ -110,13 +115,13 @@ export default class Main {
   /**
    * A callback for the timeline to set parameters in the model.
    * @param {TIMELINE_PARAMETERS} timelineParam
-   * @param {*} value 
+   * @param {*} value
    */
   timelineCallback(timelineParam, value) {
-    if(timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+    if (timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
       this.model.updateRepulsionForce(value);
     }
-    if(timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+    if (timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
       this.model.updateAttractionToCenter(value);
     }
   }
@@ -146,8 +151,6 @@ export default class Main {
       this.numIcu,
       icuCapacity
     );
-
-
   }
 
   /**
@@ -165,6 +168,7 @@ export default class Main {
     this.model.presetInProcess = true;
     this.model.reloadPreset();
     this.reset();
+    this.timeline.changePreset();
     this.model.presetInProcess = false;
   }
 
@@ -181,13 +185,13 @@ export default class Main {
       stats,
       this.receiveNewStatsAndUpdateChart.bind(this),
       this.updateDemographicChart.bind(this),
-      this.borderCtx,
+      this.borderCtx
     );
   }
 
   /**
    * A function to run the model and the chart.
-   * 
+   *
    */
   run() {
     this.chart.drawChart();
@@ -221,7 +225,7 @@ export default class Main {
     this.model.setupCommunity();
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-
+    this.timeline.reset();
     this.model.resetModel(this.createCurrentStats());
 
     const {

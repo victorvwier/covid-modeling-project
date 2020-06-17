@@ -30,6 +30,12 @@
   "INFECTION_RADIUS_REDUCTION_FACTOR": 3,
   "ICU_PROBABILITY": 0.1,
   "ICU_CAPACITY": 2,
+
+  "RULES": [
+    { "type": "time", "params": ["soc", 0, 100, 10] },
+    { "type": "threshold", "params": ["atc", "inf", 2, 10] }
+  ],
+
   "AGE": [
     { "min": 0, "max": 4 },
     { "min": 5, "max": 9 },

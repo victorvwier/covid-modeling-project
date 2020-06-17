@@ -9,6 +9,7 @@ import {
   setNumCommunities,
   setRepulsionForce,
 } from './scripts/DOM/domValues';
+import { createSliders } from './scripts/DOM/timelineDOM';
 
 const {
   INITIAL_SUSCEPTIBLE,
@@ -36,7 +37,6 @@ function setPresetData() {
 window.onload = function () {
   // const seedrandom = require('seedrandom')
   // const rand = seedrandom('hello', { global: true });
-
   createPresetsDropDown();
   setPresetData();
   const glCanvas = document.getElementById('glCanvas');
@@ -68,6 +68,6 @@ window.onload = function () {
     INITIAL_DEAD,
     INITIAL_IMMUNE
   );
-
+  createSliders();
   main.run();
 };

@@ -1,11 +1,19 @@
-import {TimelineRule, TimelineRuleType } from './data/timelinerule';
+import { TimelineRule, TimelineRuleType } from './data/timelinerule';
+import presetsManager from './presetsManager';
+import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
-const RULE_HEIGHT = 100;
-const TIMELINE_X_OFFSET = 200;
+const RULE_HEIGHT = 40;
+const TIMELINE_X_OFFSET = 170;
 const RULE_MARGINS = 10;
 
+function getRules() {
+  return presetsManager.loadPreset().RULES;
+}
+
 /** @class Timeline describing a timeline on which rules can be added. */
+
 export class Timeline {
+
   /**
    * Instantiates a timeline.
    * 
@@ -13,11 +21,66 @@ export class Timeline {
    * @param {Object} canvas The canvas the timeline is drawn on.
    * @param {function} setruleCb A callback function to set a rule.
    */
-  constructor(canvas, setruleCb) {
+  constructor(canvas, setruleCb, clearRulesList, setRulesList) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.rules = [];
     this.setRuleCallback = setruleCb;
+    this.clearRulesList = clearRulesList;
+    this.setRulesList = setRulesList;
+  }
+
+  changePreset() {
+    this.rules = [];
+    this.clearRulesList();
+    this.setRulesList(this.toStringList(this.rules), this);
+    this.importPresetRules();
+  }
+
+  importPresetRules() {
+    const presetRules = getRules();
+    if (presetRules.length > 0) {
+      for (let i = 0; i < presetRules.length; i++) {
+        const rule = presetRules[i];
+        this.addPresetRule(rule);
+      }
+    }
+  }
+
+  addPresetRule(rule) {
+    if (rule.type === 'time') {
+      rule.type = TimelineRuleType.TIME;
+    } else if (rule.type === 'threshold') {
+      rule.type = TimelineRuleType.THRESHOLD;
+    }
+
+    if (rule.params[0] === 'soc') {
+      rule.params[0] === TIMELINE_PARAMETERS.SOCIAL_DISTANCING;
+    } else if (rule.params[0] === 'atc') {
+      rule.params[0] === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER;
+    }
+    this.addRule(rule.type, rule.params);
+  }
+
+  _addPresetRule(type, params) {
+    if (type === TimelineRuleType.TIME) {
+      const rule = TimelineRule.newSimpleRule(
+        params[0],
+        params[1],
+        params[2],
+        params[3]
+      );
+      this._addRule(rule);
+    }
+    if (type === TimelineRuleType.THRESHOLD) {
+      const rule = TimelineRule.newThresholdRule(
+        params[0],
+        params[1],
+        params[2],
+        params[3]
+      );
+      this._addRule(rule);
+    }
   }
 
   /**
@@ -32,19 +95,35 @@ export class Timeline {
     this.enforceRules(stats, time);
   }
 
+  reset() {
+    for (let i = 0; i < this.rules.length; i++) {
+      this.rules[i].reset();
+    }
+  }
+
   /**
    * A function to add a rule to the timeline.
    * 
    * @param {TimelineRuleType} type The type of rule being added.
    * @param {number[]} params An array containing the parameters for the rule.
    */
-  addRule(type, params){
-    if(type === TimelineRuleType.TIME) {
-      const rule = TimelineRule.newSimpleRule(params[0], params[1], params[2], params[3]);
+  addRule(type, params) {
+    if (type === TimelineRuleType.TIME) {
+      const rule = TimelineRule.newSimpleRule(
+        params[0],
+        params[1],
+        params[2],
+        params[3]
+      );
       this._addRule(rule);
     }
-    if(type === TimelineRuleType.THRESHOLD){
-      const rule = TimelineRule.newThresholdRule(params[0], params[1], params[2], params[3]);
+    if (type === TimelineRuleType.THRESHOLD) {
+      const rule = TimelineRule.newThresholdRule(
+        params[0],
+        params[1],
+        params[2],
+        params[3]
+      );
       this._addRule(rule);
     }
   }
@@ -56,15 +135,17 @@ export class Timeline {
    */
   _addRule(rule) {
     let found = false;
-    for(let i = 0; i < this.rules.length; i++) {
-      if(this.rules[i].target === rule.target) {
+    for (let i = 0; i < this.rules.length; i++) {
+      if (this.rules[i].target === rule.target) {
         found = true;
         this.rules[i] = rule;
       }
     }
 
-    if(!found) {
+    if (!found) {
       this.rules.push(rule);
+      this.clearRulesList();
+      this.setRulesList(this.toStringList(this.rules), this);
     }
   }
 
@@ -75,9 +156,9 @@ export class Timeline {
    * @param {number} time The current timestamp.
    */
   enforceRules(stats, time) {
-    for(let i = 0; i < this.rules.length; i++) {
+    for (let i = 0; i < this.rules.length; i++) {
       const rule = this.rules[i];
-      if(rule.isActive(stats, time)) {
+      if (rule.isActive(stats, time)) {
         rule.active = true;
         this.setRuleCallback(rule.target, rule.value);
       } else {
@@ -85,6 +166,12 @@ export class Timeline {
         this.setRuleCallback(rule.target, 0);
       }
     }
+  }
+
+  deleteRule(index) {
+    this.rules.splice(index, 1);
+    this.clearRulesList();
+    this.setRulesList(this.toStringList(this.rules), this);
   }
 
   /**
@@ -96,8 +183,13 @@ export class Timeline {
 
     // Draw background first
     this.context.beginPath();
-    this.context.rect(TIMELINE_X_OFFSET, 0, this.canvas.width, this.canvas.height);
-    this.context.fillStyle = 'beige';
+    this.context.rect(
+      TIMELINE_X_OFFSET,
+      0,
+      this.canvas.width,
+      this.canvas.height
+    );
+    this.context.fillStyle = '#cccccc';
     this.context.fill();
 
     // Draw all the rules we have in place
@@ -107,7 +199,8 @@ export class Timeline {
 
     // The the progress line
     const xCoord = this.getXforDay(this.time);
-    this.context.strokeStyle = 'red';
+    this.context.strokeStyle = 'white';
+    this.context.lineWidth = 3;
     this.context.beginPath();
     this.context.moveTo(xCoord, 0);
     this.context.lineTo(xCoord, this.canvas.height);
@@ -121,19 +214,43 @@ export class Timeline {
    * @param {number} yOffset The offset on the y-axis.
    */
   drawRule(rule, yOffset) {
-    const xCoords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
-    this.context.font = '15px Georgia';
+    // Draw the rule text
+    this.context.font = rule.active ? 'bold 13px Roboto' : '14px Roboto';
     this.context.fillStyle = 'black';
 
-    if(rule.active){
-      this.context.fillStyle = 'red';
+    this.context.fillText(`${rule.name}`, 0, yOffset + RULE_HEIGHT / 3);
+    this.context.fillText(
+      `Value: ${rule.value}`,
+      0,
+      yOffset + (2.2 * RULE_HEIGHT) / 3
+    );
+
+    // Draw the rule bar
+    if (rule.type === TimelineRuleType.TIME) {
+      const xCoords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
+
+      this.context.beginPath();
+      this.context.rect(
+        xCoords[0],
+        yOffset + RULE_MARGINS,
+        xCoords[1] - xCoords[0],
+        RULE_HEIGHT - RULE_MARGINS * 2
+      );
+      this.context.fillStyle = '#a6a6a6';
+      this.context.fill();
     }
-    
-    this.context.fillText(`${rule.name}: ${rule.value}`, 0, yOffset + RULE_HEIGHT/2);
-    this.context.beginPath();
-    this.context.rect(xCoords[0], yOffset + RULE_MARGINS, xCoords[1] - xCoords[0], RULE_HEIGHT - RULE_MARGINS * 2);
-    this.context.fillStyle = 'grey';
-    this.context.fill();
+
+    if (rule.type === TimelineRuleType.THRESHOLD) {
+      for (let i = 0; i < rule.activeHistory.length; i++) {
+        const xCoord = this.getXforDay(rule.activeHistory[i]);
+        this.context.strokeStyle = '#a6a6a6';
+        this.context.lineWidth = 1;
+        this.context.beginPath();
+        this.context.moveTo(xCoord, yOffset + RULE_MARGINS);
+        this.context.lineTo(xCoord, RULE_HEIGHT + yOffset - RULE_MARGINS);
+        this.context.stroke();
+      }
+    }
   }
 
   /**
@@ -147,5 +264,48 @@ export class Timeline {
       (dayNumber / (356 * 2)) * (this.canvas.width - TIMELINE_X_OFFSET) +
       TIMELINE_X_OFFSET
     );
+  }
+
+  toStringList() {
+    const stringList = [];
+    let type = '';
+
+    for (let i = 0; i < this.rules.length; i++) {
+      const rule = this.rules[i];
+      let target = '';
+      let returnedString = '';
+
+      if (rule.type === TimelineRuleType.TIME) {
+        type = 'Time';
+
+        if (rule.target === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+          target = 'social distancing';
+        } else if (rule.target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+          target = 'attraction to center';
+        }
+
+        // const percentVal = rule.value * 100;
+
+        returnedString = `${type} Rule: ${target} changed to ${rule.value}% from day ${rule.start} to day ${rule.end}`;
+      } else if (rule.type === TimelineRuleType.THRESHOLD) {
+        type = 'Threshold';
+        let param = '';
+        if (rule.target === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+          target = 'social distancing';
+        } else if (rule.target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+          target = 'attraction to center';
+        }
+
+        if (rule.param === 'inf') {
+          param = 'infectious agents';
+        } else if (rule.param === 'icu') {
+          param = 'agents in the ICU';
+        }
+
+        returnedString = `${type} Rule: ${target} changed to ${rule.value} when number of ${param} exceeds ${rule.trigger}`;
+      }
+      stringList.push(returnedString);
+    }
+    return stringList;
   }
 }
