@@ -45,6 +45,33 @@ button {
   background-color: #666666;
 }
 
+#glcanvas-container {
+  justify-content: center;
+}
+
+#timeline {
+  display: flex;
+  color: black;
+}
+
+#timeline-form {
+  padding: 10px;
+  display: flex;
+  height: 200px;
+  width: 200px;
+}
+
+#timeline-add-rule {
+  height:inherit;
+}
+
+#timeline-buttons {
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 #right-side-container {
   display: flex;
   flex-direction: column;
@@ -216,6 +243,13 @@ h3 {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
+}
+
+.preset-panel {
+  flex-flow: row;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
 .btn {
@@ -456,3 +490,30 @@ h3 {
 
 
 
+.btn-preset {
+  background-color: white;
+  color: black;
+  border: 2px solid #05befc;
+  text-align: center;
+  margin-top: 0;
+  height: 50px;
+}
+
+.btn-preset:hover {
+  background-color: #05befc;
+  color: white;
+}
+
+.preset-panel {
+  flex-direction: row;
+}
+#totalICU{
+  position:relative;
+  top:-34px;
+  left:20px;
+}
+
+#icuDIV{
+  width:100px;
+  height:80.52px;
+}

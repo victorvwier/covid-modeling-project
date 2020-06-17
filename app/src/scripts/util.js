@@ -1,3 +1,5 @@
+window.randoms = [];
+
 /**
  * a function returning a random number inbetween the minimum and maximum value. Is inclusive of its bounds.
  *
@@ -5,8 +7,10 @@
  * @param {number} max the upper bound of the range.
  * @returns {number} a random number inbetween min and max.
  */
-export function getRandom(min, max) {
-  return Math.random() * (max - min) + min;
+export function getRandom(min = 0, max = 1) {
+  const rand = Math.random() * (max - min) + min;
+  window.randoms.push(rand);
+  return rand;
 }
 
 /**
@@ -18,7 +22,7 @@ export function getRandom(min, max) {
  * @returns {Int} Random integer for which min <= n <= max and n not in exceptFor.
  */
 export function getRandomIntExceptForValue(min, max, exceptFor = []) {
-  const rand = Math.round(Math.random() * (max + 1));
+  const rand = Math.round(getRandom() * (max + 1));
   return exceptFor.includes(rand) || rand > max
     ? getRandomIntExceptForValue(min, max, exceptFor)
     : rand;
@@ -33,7 +37,7 @@ export function getRandomIntExceptForValue(min, max, exceptFor = []) {
 export function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(getRandom() * (max - min + 1)) + min;
 }
 
 /**
@@ -46,8 +50,8 @@ export function getRandomInt(min, max) {
 export function gaussianRand(min, max) {
   let u = 0;
   let v = 0;
-  while (u === 0) u = Math.random();
-  while (v === 0) v = Math.random();
+  while (u === 0) u = getRandom();
+  while (v === 0) v = getRandom();
   let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 
   num = num / 10.0 + 0.5;
@@ -56,3 +60,10 @@ export function gaussianRand(min, max) {
   num += min;
   return num;
 }
+
+// export function seedRandomValue() {
+//   const seedrandom = require('seedrandom');
+//   const rng = seedrandom('hello.');
+
+//   return rng();
+// }

@@ -2,8 +2,23 @@ import wireSlidersToHandlers from './DOM/parameters';
 import Community from './community';
 import Stats from './data/stats';
 import Bounds from './data/bounds';
-import { SPACE_BETWEEN_COMMUNITIES } from './CONSTANTS';
+import presetsManager from './presetsManager';
 import RelocationUtil from './relocationUtil';
+import {
+  getTransmissionProbability,
+  getAttractionToCenter,
+  getRepulsionForce,
+  getNonInToImmuneProb,
+  getMinIncubationTime,
+  getMaxIncubationTime,
+  getMinInfectiousTime,
+  getMaxInfectiousTime,
+  getMinTimeUntilDead,
+  getMaxTimeUntilDead,
+  getInfectionRadius,
+} from './DOM/domValues';
+
+const { SPACE_BETWEEN_COMMUNITIES, DAYS_PER_SECOND } = presetsManager.loadPreset();
 
 /** @class Model representing a simulation of one or multiple communities. */
 export default class Model {
@@ -27,6 +42,7 @@ export default class Model {
     updateDemographicChart,
     borderCtx
   ) {
+    this.spaceBetweenCommunities = SPACE_BETWEEN_COMMUNITIES;
     this.numCommunities = numCommunities;
     this.communities = {};
     this.height = height;
@@ -39,7 +55,10 @@ export default class Model {
 
     this._chartInterval = null;
 
-    this.lastTimestamp = 0;
+    this.timestamp = 0;
+    this.daysPerSecond = DAYS_PER_SECOND;
+
+    this.presetInProcess = false;
 
     this._passDrawInfoAnimationFrame = null;
     this.relocationUtil = new RelocationUtil(this);
@@ -47,7 +66,7 @@ export default class Model {
     this._setValuesFromStatsToLocal(stats);
 
     // DEBUG
-    window.community = this;
+    window.model = this;
   }
 
   /**
@@ -95,8 +114,9 @@ export default class Model {
     const valInf = this._distributeStats(this.numInfectious, index);
     const valDead = this._distributeStats(this.numDead, index);
     const valImm = this._distributeStats(this.numImmune, index);
+    const valIcu = this._distributeStats(this.numIcu, index);
 
-    return new Stats(valSus, valNonInf, valInf, valDead, valImm);
+    return new Stats(valSus, valNonInf, valInf, valDead, valImm, valIcu);
   }
 
   /**
@@ -110,6 +130,7 @@ export default class Model {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.numIcu = stats.icu;
   }
 
   /**
@@ -122,32 +143,7 @@ export default class Model {
   }
 
   /**
-   * A function to pause the execution of the model.
-   */
-  pauseExecution() {
-    // Cancel animation frame
-    cancelAnimationFrame(this._passDrawInfoAnimationFrame);
-    this._passDrawInfoAnimationFrame = null;
-    // clearInterval(this._chartInterval);
-    // this._chartInterval = null;
-    // Cancel all community intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.pauseExecution());
-  }
-
-  /**
-   * A function to resume the execution of the model.
-   */
-  resumeExecution() {
-    // Resume animationFrame
-    this._animationFunction();
-    // if(this._chartInterval === null) {
-    //   this._chartInterval = setInterval(this.compileStats.bind(this), 500);
-    // }
-    // Resume community intervals/animationFrames
-    Object.values(this.communities).forEach((com) => com.resumeExecution());
-  }
-
-  /**
+   *
    * A function to populate each of the communities in the model.
    */
   populateCommunities() {
@@ -156,16 +152,22 @@ export default class Model {
     }
   }
 
+  reloadPreset() {
+    const {
+      SPACE_BETWEEN_COMMUNITIES: NEW_SPACE_BETWEEN_COMMUNITIES,
+    } = presetsManager.loadPreset();
+    this.spaceBetweenCommunities = NEW_SPACE_BETWEEN_COMMUNITIES;
+  }
+
   /**
    * A function to start execution of the model.
    */
   run() {
     wireSlidersToHandlers(this);
     this.populateCommunities();
-
     this.updateAgentSize(this.getAgentSize(this.stats.sum()));
 
-    this._animationFunction();
+    setInterval(this._animationFunction.bind(this), 50);
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
@@ -174,15 +176,11 @@ export default class Model {
    *
    * @param {number} timestamp The timestamp of the current moment.
    */
-  _animationFunction(timestamp) {
-    let dt = 0;
-    if (this.lastTimestamp && timestamp) {
-      dt = timestamp - this.lastTimestamp;
-    } // The time passed since running the last step.
-    this.lastTimestamp = timestamp;
-
+  _animationFunction() {
+    const dt = 0.050;
+    this.timestamp += dt;
     this.passDrawInfoToAgentChart();
-    Object.values(this.communities).forEach((mod) => mod.step(dt));
+    Object.values(this.communities).forEach((com) => com.step(dt));
     // Check all relocations
     this.relocationUtil.handleAllRelocations();
 
@@ -193,10 +191,6 @@ export default class Model {
    * A function to pass all info to AgentChart to allow drawing the model.
    */
   passDrawInfoToAgentChart() {
-    this._passDrawInfoAnimationFrame = requestAnimationFrame(
-      this._animationFunction.bind(this)
-    );
-
     const allData = Object.values(this.communities)
       .map((com) => com.getDrawInfo())
       .reduce((acc, cur) => ({
@@ -242,11 +236,12 @@ export default class Model {
     }
 
     const oneCommunityWidth = Math.round(
-      (this.width - (widthFactor + 1) * SPACE_BETWEEN_COMMUNITIES) / widthFactor
+      (this.width - (widthFactor + 1) * this.spaceBetweenCommunities) /
+        widthFactor
     );
 
     const oneCommunityHeight = Math.round(
-      (this.height - (heightFactor + 1) * SPACE_BETWEEN_COMMUNITIES) /
+      (this.height - (heightFactor + 1) * this.spaceBetweenCommunities) /
         heightFactor
     );
     let currentX = 0;
@@ -258,15 +253,15 @@ export default class Model {
         (this.numCommunities <= 6 && i % 2 === 0) ||
         (this.numCommunities <= 12 && this.numCommunities >= 7 && i % 3 === 0)
       ) {
-        currentX = SPACE_BETWEEN_COMMUNITIES;
-        currentY = nextY + SPACE_BETWEEN_COMMUNITIES;
+        currentX = this.spaceBetweenCommunities;
+        currentY = nextY + this.spaceBetweenCommunities;
         nextY = currentY + oneCommunityHeight;
       }
       listOfBounds.push(
         new Bounds(currentX, currentX + oneCommunityWidth, currentY, nextY)
       );
       currentX += oneCommunityWidth;
-      currentX += SPACE_BETWEEN_COMMUNITIES;
+      currentX += this.spaceBetweenCommunities;
     }
 
     return listOfBounds;
@@ -290,10 +285,21 @@ export default class Model {
         this.registerRelocation.bind(this)
       );
 
-      this.communities[i]._drawBorderLines(this.borderCtx);
+      if (!this.presetInProcess) {
+        this.updateTransmissionProb(getTransmissionProbability());
+        this.updateAttractionToCenter(getAttractionToCenter());
+        this.updateRepulsionForce(getRepulsionForce());
+        this.updateNonInToImmuneProb(getNonInToImmuneProb());
+        this.updateMinIncubationTime(getMinIncubationTime());
+        this.updateMaxIncubationTime(getMaxIncubationTime());
+        this.updateMinInfectiousTime(getMinInfectiousTime());
+        this.updateMaxInfectiousTime(getMaxInfectiousTime());
+        this.updateMinTimeUntilDead(getMinTimeUntilDead());
+        this.updateMaxTimeUntilDead(getMaxTimeUntilDead());
+        this.updateInfectionRadius(getInfectionRadius());
+      }
 
-      // DEBUG
-      window.model = this;
+      this.communities[i]._drawBorderLines(this.borderCtx);
     }
   }
 
@@ -322,15 +328,21 @@ export default class Model {
             acc.noninfectious + cur.noninfectious,
             acc.infectious + cur.infectious,
             acc.dead + cur.dead,
-            acc.immune + cur.immune
+            acc.immune + cur.immune,
+            acc.icu + cur.icu
           )
       );
 
     const relocationStats = this.relocationUtil.getStats();
     const finalStats = Stats.joinStats(stats, relocationStats);
 
+    let icuCapacity = 0;
+    for (let i = 0; i < this.numCommunities; i++) {
+      icuCapacity += this.communities[i].icuCapacity;
+    }
+
     this._setValuesFromStatsToLocal(finalStats);
-    this.updateStats(finalStats);
+    this.updateStats(finalStats, this.timestamp, icuCapacity);
   }
 
   /**
@@ -341,7 +353,7 @@ export default class Model {
   resetModel(stats) {
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
-
+    this.timestamp = 0;
     for (let i = 0; i < this.numCommunities; i++) {
       const dividedStats = this._createDividedStats(i);
 
@@ -482,6 +494,50 @@ export default class Model {
   updateAttractionToCenter(newValue) {
     Object.values(this.communities).forEach((community) =>
       community.setAttractionToCenter(newValue)
+    );
+  }
+
+  /**
+   * A function to update the probability a person is tested positive in the model.
+   *
+   * @param {number} newValue The new probability.
+   */
+  updateTestedPositiveProbability(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setTestedPositiveProbability(newValue)
+    );
+  }
+
+  /**
+   * A function to update the factor with which the Infection radius is reduced when a person tests positive.
+   *
+   * @param {number} newValue The new factor.
+   */
+  updateInfectionRadiusReductionFactor(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setInfectionRadiusReductionFactor(newValue)
+    );
+  }
+
+  /**
+   * A function to update the probability a person moves to the ICU when tested positive.
+   *
+   * @param {number} newValue The new probability.
+   */
+  updateIcuProbability(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setIcuProbability(newValue)
+    );
+  }
+
+  /**
+   * A function to update the capacity of the ICU in all communities.
+   *
+   * @param {number} newValue The new ICU capacity.
+   */
+  updateIcuCapacity(newValue) {
+    Object.values(this.communities).forEach((community) =>
+      community.setIcuCapacity(newValue)
     );
   }
 }

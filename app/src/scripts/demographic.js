@@ -1,5 +1,11 @@
-import { AGE, MORTALITY_RATE, DEMOGRAPHIC, GENDER } from './CONSTANTS';
-import { getRandomInt } from './util';
+/* eslint-disable import/first */
+require('seedrandom')('hi.', { global: true });
+
+import { getRandomInt, getRandom } from './util';
+import presetsManager from './presetsManager';
+import { GENDERS } from './CONSTANTS';
+
+const { AGE, MORTALITY_RATE, DEMOGRAPHIC } = presetsManager.loadPreset();
 
 /**
  * Sets the age, gender and mortality rate for a given person based on real distirbution data.
@@ -7,7 +13,7 @@ import { getRandomInt } from './util';
  * @param {Person} person the person whose demographic will be assigned.
  */
 export function assignDemographic(person) {
-  const rand = Math.random();
+  const rand = getRandom();
 
   // demographic has 40 people
   // 0-39 are the values
@@ -22,13 +28,15 @@ export function assignDemographic(person) {
     previous = DEMOGRAPHIC[i];
   }
 
-  const age = getRandomInt(AGE[index % 20].min, AGE[index % 20].max);
+  const limit = AGE.length;
+
+  const age = getRandomInt(AGE[index % limit].min, AGE[index % limit].max);
   person.age = age;
 
-  if (index < 20) {
-    person.gender = GENDER.MALE;
+  if (index < limit) {
+    person.gender = GENDERS.MALE;
   } else {
-    person.gender = GENDER.FEMALE;
+    person.gender = GENDERS.FEMALE;
   }
 
   person.mortalityRate = MORTALITY_RATE[index];

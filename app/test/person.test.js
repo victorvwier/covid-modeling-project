@@ -167,4 +167,12 @@ describe('Test move method', () => {
     person1.repel(person2);
     expect(Number.isNaN(person1.accX)).toBe(false);
   });
+
+  test("test repel with different coordinates", () => {
+    const person1 = new Person(TYPES.SUSCEPTIBLE, 3, 4, null);
+    const person2 = new Person(TYPES.SUSCEPTIBLE, 0, 0, null);
+    person1.repel(person2);
+    expect(person1.accX).toBe((3 / 5) * 4 * person1.repulsionForce) &&
+      expect(person1.accY).toBe((4 / 5) * 4 * person1.repulsionForce);
+  })
 });

@@ -1,12 +1,6 @@
-import {
-  PERSON_RADIUS,
-  COLORS,
-  POPULATION_SPEED,
-  TYPES,
-  INFECTION_RADIUS,
-  RELOCATION_STEP_SIZE,
-  REPULSION_FORCE,
-} from './CONSTANTS';
+import presetsManager from './presetsManager';
+import { COLORS, TYPES } from './CONSTANTS';
+import { getRandom } from './util';
 
 /** @class Person describing a person in the model. */
 export default class Person {
@@ -22,14 +16,14 @@ export default class Person {
   constructor(type, x, y, communityId) {
     this.communityId = communityId;
     this.type = type;
-    this.radius = PERSON_RADIUS;
-    this.infectionRadius = INFECTION_RADIUS;
+    this.radius = presetsManager.loadPreset().PERSON_RADIUS;
+    this.infectionRadius = presetsManager.loadPreset().INFECTION_RADIUS;
     this.x = x;
     this.y = y;
-    this.maxSpeed = POPULATION_SPEED;
-    this.repulsionForce = REPULSION_FORCE;
-    this.speedX = 3 * (Math.floor(Math.random() * 2) || -1);
-    this.speedY = 3 * (Math.floor(Math.random() * 2) || -1);
+    this.maxSpeed = presetsManager.loadPreset().POPULATION_SPEED;
+    this.repulsionForce = presetsManager.loadPreset().REPULSION_FORCE;
+    this.speedX = 3 * (Math.floor(getRandom() * 2) || -1);
+    this.speedY = 3 * (Math.floor(getRandom() * 2) || -1);
     this.accX = 0;
     this.accY = 0;
     this.asymptomaticTime = 0;
@@ -44,15 +38,18 @@ export default class Person {
     this.gender = null;
     this.mortalityRate = null;
 
+    this.inIcu = false;
+
     this.relocating = false;
 
-    this.step = RELOCATION_STEP_SIZE;
+    this.step = presetsManager.loadPreset().RELOCATION_STEP_SIZE;
 
     if (type === TYPES.SUSCEPTIBLE) this.color = COLORS.SUSCEPTIBLE;
     else if (type === TYPES.INFECTIOUS) this.color = COLORS.INFECTIOUS;
     else if (type === TYPES.NONINFECTIOUS) this.color = COLORS.NONINFECTIOUS;
     else if (type === TYPES.DEAD) this.color = COLORS.DEAD;
     else if (type === TYPES.IMMUNE) this.color = COLORS.IMMUNE;
+    this.testedPositive = false;
   }
 
   /**
@@ -125,7 +122,7 @@ export default class Person {
    * @param {number} dt The amount of time which passes for this movement.
    */
   move(startX, endX, startY, endY, dt) {
-    this.applyForce(Math.random() - 0.5, Math.random() - 0.5);
+    this.applyForce(getRandom() - 0.5, getRandom() - 0.5);
 
     this.speedX += this.accX * dt;
     this.speedY += this.accY * dt;
@@ -245,13 +242,13 @@ export default class Person {
 
     if (delta.x !== 0) {
       const unitX = delta.x / dist;
-      const vecX = (unitX / dist) * this.repulsionForce * 4;
+      const vecX = (unitX / dist) * this.repulsionForce * 0.04;
       this.applyForce(vecX, 0);
     }
 
     if (delta.y !== 0) {
       const unitY = delta.y / dist;
-      const vecY = (unitY / dist) * this.repulsionForce * 4;
+      const vecY = (unitY / dist) * this.repulsionForce * 0.04;
       this.applyForce(0, vecY);
     }
   }
@@ -263,7 +260,8 @@ export default class Person {
    * @returns {Boolean} A boolean representing if the other person can be infected.
    */
   canInfect(p) {
-    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE;
+    return this.type === TYPES.INFECTIOUS && p.type === TYPES.SUSCEPTIBLE &&
+     Math.sqrt((p.x - this.x) ** 2 + (p.y - this.y) ** 2) <= p.infectionRadius + this.infectionRadius;
   }
 
   /**

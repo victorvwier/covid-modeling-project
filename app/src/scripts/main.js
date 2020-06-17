@@ -1,15 +1,24 @@
 import Stats from './data/stats';
 import Model from './model';
 import Chart from './chart';
+import PdfDownloadService from './pdfDownloadService';
 import AgentChart from './agentChart';
-import { wireReloadButtonToMain } from './DOM/parameters';
+import {
+  wireReloadButtonToMain,
+  wireTimelineButtontoTimeline,
+  wireReloadPresetToMain,
+  wireDownloadDataToMain,
+} from './DOM/parameters';
 import DemographicsChart from './demographicsChart';
+
 import {
   getInitialNumInfectious,
   getInitialNumSusceptible,
   updateTheStatistics,
   getNumCommunities,
 } from './DOM/domValues';
+import {Timeline} from './timeline';
+import { TIMELINE_PARAMETERS } from './CONSTANTS';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -25,14 +34,15 @@ export default class Main {
    * @param {number} width The width of our glCanvas.
    * @param {number} height The height of our glCanvas.
    * @param {number} numSusceptible The initial number of Susceptible people.
-   * @param {*} numNonInfectious The initial number of Non-Infectious people.
-   * @param {*} numInfectious The initial number of Infectious people.
-   * @param {*} numDead The initial number of Dead people.
-   * @param {*} numImmune The initial number of Immune people.
+   * @param {number} numNonInfectious The initial number of Non-Infectious people.
+   * @param {number} numInfectious The initial number of Infectious people.
+   * @param {number} numDead The initial number of Dead people.
+   * @param {number} numImmune The initial number of Immune people.
    */
   constructor(
     context,
     chartContext,
+    timelineCanvas,
     borderCtx,
     demographicsCtx,
     width,
@@ -43,6 +53,7 @@ export default class Main {
     numDead,
     numImmune
   ) {
+    wireDownloadDataToMain(this);
     // Canvas contexts of the graph and chart
     this.chartContext = chartContext;
     this.borderCtx = borderCtx;
@@ -54,6 +65,7 @@ export default class Main {
     this.numImmune = numImmune;
     this.numDead = numDead;
     this.numNonInfectious = numNonInfectious;
+    this.numIcu = 0;
 
     this.numCommunities = getNumCommunities();
 
@@ -62,6 +74,9 @@ export default class Main {
       this.chartContext,
       this.createCurrentStats.bind(this)
     );
+
+    this.timeline = new Timeline(timelineCanvas, this.timelineCallback.bind(this));
+    wireTimelineButtontoTimeline(this.timeline);
     this.demographicsChart = new DemographicsChart(demographicsCtx);
     this.agentView = new AgentChart(context);
     this.model = null;
@@ -69,6 +84,7 @@ export default class Main {
 
     // Wire reload button
     wireReloadButtonToMain(this);
+    wireReloadPresetToMain(this);
 
     // DEBUG
     window.chart = this.chart;
@@ -86,8 +102,23 @@ export default class Main {
       this.numNonInfectious,
       this.numInfectious,
       this.numDead,
-      this.numImmune
+      this.numImmune,
+      this.numIcu
     );
+  }
+
+  /**
+   * A callback for the timeline to set parameters in the model.
+   * @param {TIMELINE_PARAMETERS} timelineParam
+   * @param {*} value 
+   */
+  timelineCallback(timelineParam, value) {
+    if(timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+      this.model.updateRepulsionForce(value);
+    }
+    if(timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+      this.model.updateAttractionToCenter(value);
+    }
   }
 
   // Assume only model calls this one so update chart
@@ -96,26 +127,39 @@ export default class Main {
    *
    * @param {Stats} stats the new stats.
    */
-  receiveNewStatsAndUpdateChart(stats) {
+  receiveNewStatsAndUpdateChart(stats, timestamp, icuCapacity) {
     this.numSusceptible = stats.susceptible;
     this.numNonInfectious = stats.noninfectious;
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.numIcu = stats.icu;
 
-    this.chart.updateValues(this.createCurrentStats());
+    this.chart.updateValues(this.createCurrentStats(), timestamp);
+    this.timeline.update(stats, timestamp);
     updateTheStatistics(
       this.numSusceptible,
       this.numNonInfectious,
       this.numInfectious,
       this.numImmune,
-      this.numDead
+      this.numDead,
+      this.numIcu,
+      icuCapacity
     );
+
+
   }
 
   updateDemographicChart() {
     const population = this.model.getAllPopulation();
     this.demographicsChart.receiveUpdate(population);
+  }
+
+  changePreset() {
+    this.model.presetInProcess = true;
+    this.model.reloadPreset();
+    this.reset();
+    this.model.presetInProcess = false;
   }
 
   /**
@@ -131,12 +175,13 @@ export default class Main {
       stats,
       this.receiveNewStatsAndUpdateChart.bind(this),
       this.updateDemographicChart.bind(this),
-      this.borderCtx
+      this.borderCtx,
     );
   }
 
   /**
    * A function to run the model and the chart.
+   * 
    */
   run() {
     this.chart.drawChart();
@@ -155,6 +200,7 @@ export default class Main {
     this.numNonInfectious = 0;
     this.numImmune = 0;
     this.numDead = 0;
+    this.numIcu = 0;
 
     // Clear the border context
     const { width, height } = this.borderCtx.canvas.getBoundingClientRect();
@@ -169,7 +215,19 @@ export default class Main {
     this.model.setupCommunity();
 
     this.chart.resetChart(this.numSusceptible, this.numInfectious);
-    this.demographicsChart.resetChart(this.createCurrentStats().sum());
+
     this.model.resetModel(this.createCurrentStats());
+
+    const {
+      width1,
+      height2,
+    } = this.demographicsCtx.canvas.getBoundingClientRect();
+    this.demographicsCtx.clearRect(0, 0, width1 * 2, height2 * 2);
+    this.demographicsChart.resetChart(this.createCurrentStats().sum());
+  }
+
+  downloadPdf() {
+    const data = this.chart.getAllDataPoints();
+    PdfDownloadService.createDownloadPdf(data);
   }
 }

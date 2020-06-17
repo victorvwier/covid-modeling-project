@@ -1,19 +1,45 @@
+/* eslint-disable import/first */
+require('seedrandom')('hi.', { global: true });
+
+import presetManager from './scripts/presetsManager';
+import Main from './scripts/main';
 import {
+  createPresetsDropDown,
+  setAttractionToCenter,
+  setNumCommunities,
+  setRepulsionForce,
+} from './scripts/DOM/domValues';
+
+const {
   INITIAL_SUSCEPTIBLE,
   INITIAL_NONINFECTIOUS,
   INITIAL_INFECTIOUS,
   INITIAL_IMMUNE,
   INITIAL_DEAD,
-} from './scripts/CONSTANTS';
-import Main from './scripts/main';
+  ATTRACTION_FORCE,
+  NUM_COMMUNITIES,
+  REPULSION_FORCE,
+} = presetManager.loadPreset();
+
+function setPresetData() {
+  setAttractionToCenter(ATTRACTION_FORCE);
+  setNumCommunities(NUM_COMMUNITIES);
+  setRepulsionForce(REPULSION_FORCE);
+}
 
 /**
  * A function to initialize our program when the page is loaded.
  */
 window.onload = function () {
+  // const seedrandom = require('seedrandom')
+  // const rand = seedrandom('hello', { global: true });
+
+  createPresetsDropDown();
+  setPresetData();
   const glCanvas = document.getElementById('glCanvas');
   const context = glCanvas.getContext('webgl');
   const chartCtx = document.getElementById('chart-canvas').getContext('2d');
+  const timelineCanvas = document.getElementById('timeline-element');
   const demographicsCtx = document
     .getElementById('demographics')
     .getContext('2d');
@@ -28,6 +54,7 @@ window.onload = function () {
   const main = new Main(
     context,
     chartCtx,
+    timelineCanvas,
     borderCtx,
     demographicsCtx,
     glCanvas.width,
