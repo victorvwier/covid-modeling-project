@@ -16,7 +16,6 @@ import {
   setMaxTimeUntilDead,
   setInfectionRadius,
 } from './domValues';
-import { TimelineRuleType } from '../data/timelinerule';
 
 const {
   TRANSMISSION_PROB,
@@ -269,44 +268,44 @@ export function wirePauseButtonToMain(main) {
 
 /**
  * A function binding the addRule button to our main class.
- *
- * @param {Timeline} timeline The corresponding timeline class;
- */
-export function wireTimelineButtontoTimeline(timeline) {
-  document
-    .getElementById('timeline-add-simple-rule')
-    .addEventListener('click', () => {
-      const type = document.getElementById('timelineform-simple-target').value;
-      const start = document.getElementById('timelineform-simple-start').value;
-      const end = document.getElementById('timelineform-simple-end').value;
-      const value = document.getElementById('timelineform-simple-value').value;
-      timeline.addRule(TimelineRuleType.TIME, [
-        type,
-        parseFloat(start),
-        parseFloat(end),
-        parseFloat(value),
-      ]);
-    });
+//  *
+//  * @param {Timeline} timeline The corresponding timeline class;
+//  */
+// export function wireTimelineButtontoTimeline(timeline) {
+//   document
+//     .getElementById('timeline-add-simple-rule')
+//     .addEventListener('click', () => {
+//       const type = document.getElementById('timelineform-simple-target').value;
+//       const start = document.getElementById('timelineform-simple-start').value;
+//       const end = document.getElementById('timelineform-simple-end').value;
+//       const value = document.getElementById('timelineform-simple-value').value;
+//       timeline.addRule(TimelineRuleType.TIME, [
+//         type,
+//         parseFloat(start),
+//         parseFloat(end),
+//         parseFloat(value),
+//       ]);
+//     });
 
-  document
-    .getElementById('timeline-add-threshold-rule')
-    .addEventListener('click', () => {
-      const target = document.getElementById('timelineform-threshold-target')
-        .value;
-      const param = document.getElementById('timelineform-threshold-param')
-        .value;
-      const trigger = document.getElementById('timelineform-threshold-trigger')
-        .value;
-      const value = document.getElementById('timelineform-threshold-value')
-        .value;
-      timeline.addRule(TimelineRuleType.THRESHOLD, [
-        target,
-        param,
-        parseFloat(trigger),
-        parseFloat(value),
-      ]);
-    });
-}
+//   document
+//     .getElementById('timeline-add-threshold-rule')
+//     .addEventListener('click', () => {
+//       const target = document.getElementById('timelineform-threshold-target')
+//         .value;
+//       const param = document.getElementById('timelineform-threshold-param')
+//         .value;
+//       const trigger = document.getElementById('timelineform-threshold-trigger')
+//         .value;
+//       const value = document.getElementById('timelineform-threshold-value')
+//         .value;
+//       timeline.addRule(TimelineRuleType.THRESHOLD, [
+//         target,
+//         param,
+//         parseFloat(trigger),
+//         parseFloat(value),
+//       ]);
+//     });
+// }
 /*
  * A function binding the reload button to our main class.
  *

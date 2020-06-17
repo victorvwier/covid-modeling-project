@@ -70,17 +70,15 @@ export function updateTheStatistics(
   icuCapacity, 
   timestamp
 ) {
-    const icuDIV=document.getElementById('icuDIV');
+  const icuDIV = document.getElementById('icuDIV');
 
-
-  if(numIcu < (0.75 * icuCapacity)){
-    icuDIV.style.backgroundColor="lightgreen";
+  if (numIcu < 0.75 * icuCapacity) {
+    icuDIV.style.backgroundColor = 'lightgreen';
   }
-  if(numIcu >= (0.75 * icuCapacity) && numIcu < icuCapacity){
-    icuDIV.style.backgroundColor="orange";
-  }
-  else if(numIcu >= icuCapacity){
-    icuDIV.style.backgroundColor="red";
+  if (numIcu >= 0.75 * icuCapacity && numIcu < icuCapacity) {
+    icuDIV.style.backgroundColor = 'orange';
+  } else if (numIcu >= icuCapacity) {
+    icuDIV.style.backgroundColor = 'red';
   }
   document.getElementById('s1').innerHTML = `${numSusceptible}`;
   document.getElementById('s2').innerHTML = `${numNonInfectious}`;
@@ -91,125 +89,218 @@ export function updateTheStatistics(
   document.getElementById('time-control-days-display').innerHTML = `Days passed in the model: ${timestamp.toFixed(0)}/${MAXIMUM_DAYS}`
 }
 
+/**
+ * A function to get the value of the attraction to center in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getAttractionToCenter() {
   return parseFloat(document.getElementById('attractionForce').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the attraction to center in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setAttractionToCenter(newValue) {
   document.getElementById('attractionForce').value = newValue;
   document.getElementById('attractionForceOut').value = newValue;
 }
 
+/**
+ * A function to get the value of the repulsion force in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getRepulsionForce() {
   return parseFloat(document.getElementById('repulsionForce').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the repulsion force in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setRepulsionForce(newValue) {
   document.getElementById('repulsionForce').value = newValue;
   document.getElementById('repulsionForceOut').value = newValue;
 }
 
-// updateTransmissionProb
+/**
+ * A function to get the value of the transmission probability in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getTransmissionProbability() {
   return parseFloat(document.getElementById('transmissionProb').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the transmission probability in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setTransmissionProbability(newValue) {
   document.getElementById('transmissionProb').value = newValue;
   document.getElementById('transmissionProbOut').value = newValue;
 }
 
-// updateNonInToImmuneProb
+/**
+ * A function to get the value of the non-infectious to immune probability in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getNonInToImmuneProb() {
   return parseFloat(document.getElementById('nonInToImmuneProb').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the non-infectious to immune probability in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setNonInToImmuneProb(newValue) {
   document.getElementById('nonInToImmuneProb').value = newValue;
   document.getElementById('transmissionProbOut').value = newValue;
 }
 
-// updateMinIncubationTime
+/**
+ * A function to get the value of the minimum incubation time in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getMinIncubationTime() {
   return parseFloat(document.getElementById('minIncubationTime').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the minimum incubation time in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setMinIncubationTime(newValue) {
   document.getElementById('minIncubationTime').value = newValue;
   document.getElementById('minIncubationTimeOut').value = newValue;
 }
 
-// updateMaxIncubationTime
+/**
+ * A function to get the value of the maximum incubation time in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getMaxIncubationTime() {
   return parseFloat(document.getElementById('maxIncubationTime').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the maximum incubation time in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setMaxIncubationTime(newValue) {
   document.getElementById('maxIncubationTime').value = newValue;
   document.getElementById('maxIncubationTimeOut').value = newValue;
 }
 
-// updateMinInfectiousTime
+/**
+ * A function to get the value of the minimum infectious time in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getMinInfectiousTime() {
   return parseFloat(document.getElementById('minInfectiousTime').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the minimum infectious time in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setMinInfectiousTime(newValue) {
   document.getElementById('minInfectiousTime').value = newValue;
   document.getElementById('minInfectiousTimeOut').value = newValue;
 }
 
-// updateMaxInfectiousTime
+/**
+ * A function to get the value of the maximum infectious time in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getMaxInfectiousTime() {
   return parseFloat(document.getElementById('maxInfectiousTime').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the maximum infectious time in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setMaxInfectiousTime(newValue) {
   document.getElementById('maxInfectiousTime').value = newValue;
   document.getElementById('minInfectiousTimeOut').value = newValue;
 }
 
-// updateMinTimeUntilDead
+/**
+ * A function to get the value of the minimum time until dead in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getMinTimeUntilDead() {
   return parseFloat(document.getElementById('minTimeUntilDead').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the minimum time until dead in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setMinTimeUntilDead(newValue) {
   document.getElementById('minTimeUntilDead').value = newValue;
   document.getElementById('minTimeUntilDeadOut').value = newValue;
 }
 
-// updateMaxTimeUntilDead
+/**
+ * A function to get the value of the maximum time until dead in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getMaxTimeUntilDead() {
   return parseFloat(document.getElementById('maxTimeUntilDead').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the maximum time until dead in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setMaxTimeUntilDead(newValue) {
   document.getElementById('maxTimeUntilDead').value = newValue;
   document.getElementById('maxTimeUntilDeadOut').value = newValue;
 }
 
-// updateInfectionRadius
+/**
+ * A function to get the value of the infection radius in the DOM.
+ * 
+ * @returns {number} The value from the DOM.
+ */
 export function getInfectionRadius() {
   return parseFloat(document.getElementById('infectionCircleRadius').value, 10);
 }
 
-// TODO
+/**
+ * A function to set the value of the infection radius in the DOM.
+ * 
+ * @param {number} newValue The new value.
+ */
 export function setInfectionRadius(newValue) {
   document.getElementById('infectionCircleRadius').value = newValue;
   document.getElementById('infectionRadiusOut').value = newValue;
 }
 
+/**
+ * A function to set the options in the presets dropdown menu.
+ */
 export function createPresetsDropDown() {
   const options = `
   <option value="0">Select preset:</option>

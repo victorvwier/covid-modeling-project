@@ -1,6 +1,13 @@
 import JsPdf from 'jspdf';
 
+/** @class PdfDownloadService describing a class to let us downloads pdfs. */
 export default class PdfDownloadService {
+  /**
+   * A function to create a pdf to download.
+   * 
+   * @static
+   * @param {Object} data An object containing the data to be downloaded.
+   */
   static createDownloadPdf(data) {
     const html = this._createHTML(data);
     const sirCanvas = document.getElementById('chart-canvas');
@@ -19,12 +26,25 @@ export default class PdfDownloadService {
     doc.save();
   }
 
+  /**
+   * A function to retrieve the Demographics chart as an image.
+   * 
+   * @static
+   * @returns {Object} An object representing the image.
+   */
   static _getDemographicChartImg() {
     const canvas = document.getElementById('demographics');
     const img = canvas.toDataURL('image/jpeg');
     return img;
   }
 
+  /**
+   * A function to create a piece of HTML that can display the stats.
+   * 
+   * @static
+   * @param {Object} data An object containing all the data for the pdf.
+   * @returns {String} A string containing HTML representing all the raw data per day.
+   */
   static _createHTML(data) {
     return `
     <main>

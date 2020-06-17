@@ -32,8 +32,8 @@
   "ICU_CAPACITY": 2,
 
   "RULES": [
-    { "type": "time", "params": ["soc", 0, 100, 10, 0] },
-    { "type": "threshold", "params": ["atc", "inf", 2, 10, 0] }
+    { "type": "time", "params": ["soc", 0, 100, 10] },
+    { "type": "threshold", "params": ["atc", "inf", 2, 10] }
   ],
 
   "AGE": [
