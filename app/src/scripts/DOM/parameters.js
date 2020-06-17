@@ -250,6 +250,20 @@ export function wireReloadButtonToMain(main) {
   document
     .getElementById('reload')
     .addEventListener('click', () => main.reset());
+  document
+    .getElementById('time-control-reset-button')
+    .addEventListener('click', () => main.reset());
+}
+
+/**
+ * A function binding the pause button to our main class.
+ *
+ * @param {Main} main The instance of the main class to bind our pause button to.
+ */
+export function wirePauseButtonToMain(main) {
+  document
+    .getElementById('time-control-toggle-pause-button')
+    .addEventListener('click', () => main.togglePause());
 }
 
 /**

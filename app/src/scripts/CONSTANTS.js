@@ -1,3 +1,5 @@
+export const MAXIMUM_DAYS = 356;
+
 /**
  * An enum representing the different presets.
  * 

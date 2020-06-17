@@ -7,6 +7,7 @@ import {
   wireReloadButtonToMain,
   wireReloadPresetToMain,
   wireDownloadDataToMain,
+  wirePauseButtonToMain,
 } from './DOM/parameters';
 import DemographicsChart from './demographicsChart';
 import {
@@ -65,7 +66,6 @@ export default class Main {
     this.numDead = numDead;
     this.numNonInfectious = numNonInfectious;
     this.numIcu = 0;
-
     this.numCommunities = getNumCommunities();
 
     // Create chart and model (setup)
@@ -90,6 +90,7 @@ export default class Main {
     // Wire reload button
     wireReloadButtonToMain(this);
     wireReloadPresetToMain(this);
+    wirePauseButtonToMain(this);
 
     // DEBUG
     window.chart = this.chart;
@@ -149,7 +150,8 @@ export default class Main {
       this.numImmune,
       this.numDead,
       this.numIcu,
-      icuCapacity
+      icuCapacity,
+      timestamp
     );
   }
 
@@ -198,6 +200,14 @@ export default class Main {
     this.demographicsChart.drawChart(this.createCurrentStats().sum());
     this.model.setupCommunity();
     this.model.run();
+  }
+
+  /**
+   * A function to pause/resume the model and the chart.
+   */
+  togglePause() {
+    console.log("test");
+    this.model.togglePause();
   }
 
   /**

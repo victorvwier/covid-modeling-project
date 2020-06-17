@@ -547,11 +547,15 @@
             </canvas>
           </div>
         </div>
-
         <div id="model-border-canvases-container">
           <canvas id="glCanvas" width="600px" height="600px"></canvas>
           <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
           <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
+        </div>
+        <div id="time-control-bar">
+          <button id="time-control-toggle-pause-button" class="btn-secondary">Pause/Resume</button>
+          <button id="time-control-reset-button" class="btn-secondary">Reset</button>
+          <span id="time-control-days-display"></span>
         </div>
       </div>
     </main>

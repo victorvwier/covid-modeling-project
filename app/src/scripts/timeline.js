@@ -1,6 +1,6 @@
 import { TimelineRule, TimelineRuleType } from './data/timelinerule';
 import presetsManager from './presetsManager';
-import { TIMELINE_PARAMETERS } from './CONSTANTS';
+import { TIMELINE_PARAMETERS, MAXIMUM_DAYS } from './CONSTANTS';
 
 const RULE_HEIGHT = 40;
 const TIMELINE_X_OFFSET = 170;
@@ -261,7 +261,7 @@ export class Timeline {
    */
   getXforDay(dayNumber) {
     return (
-      (dayNumber / (356 * 2)) * (this.canvas.width - TIMELINE_X_OFFSET) +
+      (dayNumber / (MAXIMUM_DAYS)) * (this.canvas.width - TIMELINE_X_OFFSET) +
       TIMELINE_X_OFFSET
     );
   }

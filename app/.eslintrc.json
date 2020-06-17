@@ -33,6 +33,7 @@
     "prefer-destructuring": "off",
     "no-continue": "off",
     "no-alert": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    "global-require":"off"
   }
 }
