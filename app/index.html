@@ -33,14 +33,13 @@
 
         <button class="accordion">Interaction Parameters</button>
         <div class="panel">
-          <div class="tooltipR" id="t3">??
-            <span class="tooltiptextR">Extent to which agents repel other agents-being socially distant</span>
-          </div>
-          <div class="tooltipR" id="t4">??
-            <span class="tooltiptextR">Extent to which agents are attracted to community center.</span>
-          </div>
           <div class="col-sm">
-            <p>Social Distancing:</p>
+            
+            <div class="tooltipR-PM" id="PMDIV">
+              <p>Social Distancing:</p>
+              <span class="tooltiptextR-PM" id="t8">Extent to which agents repel other agents-being socially distant</span>
+            </div>
+            
             <input
               type="range"
               min="0"
@@ -56,7 +55,12 @@
             <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
           </div>
           <div class="col-sm">
-            <p>Attraction:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p>Attraction:</p>
+              <span class="tooltiptextR-PM" id="t9">Extent to which agents are attracted to community center.</span>
+            </div>
+            
+            
             <input
               type="range"
               min="0"
@@ -474,7 +478,7 @@
           </div>
         </div>
         <div class="tooltipR" id="t2">??
-          <span class="tooltiptextR">Click button to change agent and model behaviour.</span>
+          <span class="tooltiptextR">Click button to change agent and model behaviour & hover over texts to find more info.</span>
         </div>
       </div>
     </main>

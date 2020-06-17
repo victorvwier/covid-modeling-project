@@ -246,7 +246,7 @@ h3 {
 #t2{
   position: relative;
   top:-770px;
-  left:-1030px;
+  left:-1190px;
   opacity: 0.75;
 }
 
@@ -316,6 +316,11 @@ h3 {
   border-width: 5px;
   border-style: solid;
   border-color: transparent black transparent transparent;
+}
+
+#t8{
+  top:-35px;
+  left:140px;
 }
 
 
@@ -389,13 +394,20 @@ h3 {
   visibility: visible;
 }
 
-.tooltipR-PM .tooltiptextR:-PM:after {
+.tooltipR-PM .tooltiptextR-PM::after {
   content: " ";
   position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
   margin-top: -5px;
   border-width: 5px;
   border-style: solid;
   border-color: transparent black transparent transparent;
+}
+
+#t9{
+  top:-35px;
+  left:80px;
 }
 
 
