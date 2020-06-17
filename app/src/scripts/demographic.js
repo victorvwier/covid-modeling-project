@@ -1,6 +1,3 @@
-/* eslint-disable import/first */
-require('seedrandom')('hi.', { global: true });
-
 import { getRandomInt, getRandom } from './util';
 import presetsManager from './presetsManager';
 import { GENDERS } from './CONSTANTS';
