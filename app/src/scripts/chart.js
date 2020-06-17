@@ -76,7 +76,8 @@ export default class Chart {
    *
    * @param {Stats} stats a stats object holding the new values.
    */
-  updateValues(stats) {
+  updateValues(stats, timestamp) {
+    const time = timestamp.toFixed(0);
     this.chart.data.datasets[0].data.push(stats.infectious);
     this.chart.data.datasets[1].data.push(stats.noninfectious);
     this.chart.data.datasets[2].data.push(stats.susceptible);
@@ -90,8 +91,8 @@ export default class Chart {
     this.dead.push(stats.dead);
 
     // What is x?
-    this.chart.data.labels.push(this.x++);
-    this.xValues.push(this.x - 1);
+    this.chart.data.labels.push(time);
+    this.xValues.push(time);
     this.chart.update();
   }
 
