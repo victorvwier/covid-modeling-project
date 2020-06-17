@@ -80,7 +80,7 @@ export class Timeline {
   }
 
   reset() {
-    for(let i = 0; i < this.rules.length; i++) {
+    for (let i = 0; i < this.rules.length; i++) {
       this.rules[i].reset();
     }
   }
@@ -172,26 +172,21 @@ export class Timeline {
   }
 
   drawRule(rule, yOffset) {
-
     // Draw the rule text
-    this.context.font = '14px Roboto';
-      this.context.fillStyle = 'black';
+    this.context.font = rule.active ? 'bold 13px Roboto' : '14px Roboto';
+    this.context.fillStyle = 'black';
 
-      if (rule.active) {
-        this.context.font = 'bold 13px Roboto';
-      }
-
-      this.context.fillText(`${rule.name}`, 0, yOffset + RULE_HEIGHT / 3);
-      this.context.fillText(
-        `Value: ${rule.value}`,
-        0,
-        yOffset + (2.2 * RULE_HEIGHT) / 3
-      );
+    this.context.fillText(`${rule.name}`, 0, yOffset + RULE_HEIGHT / 3);
+    this.context.fillText(
+      `Value: ${rule.value}`,
+      0,
+      yOffset + (2.2 * RULE_HEIGHT) / 3
+    );
 
     // Draw the rule bar
     if (rule.type === TimelineRuleType.TIME) {
       const xCoords = [this.getXforDay(rule.start), this.getXforDay(rule.end)];
-      
+
       this.context.beginPath();
       this.context.rect(
         xCoords[0],
@@ -203,8 +198,8 @@ export class Timeline {
       this.context.fill();
     }
 
-    if(rule.type === TimelineRuleType.THRESHOLD) {
-      for(let i = 0; i < rule.activeHistory.length; i++) {
+    if (rule.type === TimelineRuleType.THRESHOLD) {
+      for (let i = 0; i < rule.activeHistory.length; i++) {
         const xCoord = this.getXforDay(rule.activeHistory[i]);
         this.context.strokeStyle = '#a6a6a6';
         this.context.lineWidth = 1;
