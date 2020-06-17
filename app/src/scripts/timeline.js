@@ -1,7 +1,6 @@
 import { TimelineRule, TimelineRuleType } from './data/timelinerule';
 import presetsManager from './presetsManager';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
-import { setRulesList, clearRulesList } from './DOM/timelineDOM';
 
 const RULE_HEIGHT = 40;
 const TIMELINE_X_OFFSET = 170;
@@ -12,17 +11,19 @@ function getRules() {
 }
 
 export class Timeline {
-  constructor(canvas, setruleCb) {
+  constructor(canvas, setruleCb, clearRulesList, setRulesList) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.rules = [];
     this.setRuleCallback = setruleCb;
+    this.clearRulesList = clearRulesList;
+    this.setRulesList = setRulesList;
   }
 
   changePreset() {
     this.rules = [];
-    clearRulesList();
-    setRulesList(this.toStringList(this.rules), this);
+    this.clearRulesList();
+    this.setRulesList(this.toStringList(this.rules), this);
     this.importPresetRules();
   }
 
@@ -116,8 +117,8 @@ export class Timeline {
 
     if (!found) {
       this.rules.push(rule);
-      clearRulesList();
-      setRulesList(this.toStringList(this.rules), this);
+      this.clearRulesList();
+      this.setRulesList(this.toStringList(this.rules), this);
     }
   }
 
@@ -136,8 +137,8 @@ export class Timeline {
 
   deleteRule(index) {
     this.rules.splice(index, 1);
-    clearRulesList();
-    setRulesList(this.toStringList(this.rules), this);
+    this.clearRulesList();
+    this.setRulesList(this.toStringList(this.rules), this);
   }
 
   redrawTimeline() {
@@ -240,7 +241,7 @@ export class Timeline {
           target = 'attraction to center';
         }
 
-        //const percentVal = rule.value * 100;
+        // const percentVal = rule.value * 100;
 
         returnedString = `${type} Rule: ${target} changed to ${rule.value}% from day ${rule.start} to day ${rule.end}`;
       } else if (rule.type === TimelineRuleType.THRESHOLD) {

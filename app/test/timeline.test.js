@@ -18,7 +18,7 @@ const canvas = {getContext: ()=>{}, width: 600}
   
 test('Simple time based rule', () => {
     const mockCallback = jest.fn(()=> {});
-    const timeline = new Timeline(canvas, mockCallback);
+    const timeline = new Timeline(canvas, mockCallback, ()=>{}, ()=>{});
     timeline.addRule(TimelineRuleType.TIME, [TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER, 1, 100, 100, 0]);
     timeline.enforceRules(stats1, 0);
     timeline.enforceRules(stats1, 1);
@@ -30,7 +30,7 @@ test('Simple time based rule', () => {
 
   test('Simple threshold based rule', () => {
     const mockCallback = jest.fn(()=> {});
-    const timeline = new Timeline(canvas, mockCallback);
+    const timeline = new Timeline(canvas, mockCallback, ()=>{}, ()=>{});
     timeline.addRule(TimelineRuleType.THRESHOLD, [TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER, "icu", 10, 100, 0]);
     timeline.enforceRules(stats1, 0);
     timeline.enforceRules(stats2, 1);
@@ -42,7 +42,7 @@ test('Simple time based rule', () => {
 
   test('Add two rules', () => {
     const mockCallback = jest.fn(()=> {});
-    const timeline = new Timeline(canvas, mockCallback);
+    const timeline = new Timeline(canvas, mockCallback, ()=>{}, ()=>{});
     timeline.addRule(TimelineRuleType.THRESHOLD, [TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER, "icu", 10, 100, 0]);
     timeline.addRule(TimelineRuleType.THRESHOLD, [TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER, "icu", 100, 100, 0]);
     stats2.icu = 99;

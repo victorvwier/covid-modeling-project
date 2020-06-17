@@ -27,12 +27,13 @@ export class TimelineRule {
     rule.end = end;
     rule.value = val;
 
+    let e = null;
     if (target === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
-      rule.oldval = document.getElementById('repulsionForce').value;
+      e = document.getElementById('repulsionForce');
     } else if (target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
-      rule.oldval = document.getElementById('attractionForce').value;
+      e = document.getElementById('attractionForce');
     }
-
+    if(e) { rule.oldval = e.value;} else { rule.oldval = 0;}
     return rule;
   }
 
@@ -42,11 +43,13 @@ export class TimelineRule {
     rule.trigger = trigger;
     rule.value = val;
 
+    let e = null;
     if (target === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
-      rule.oldval = document.getElementById('repulsionForce').value;
+      e = document.getElementById('repulsionForce');
     } else if (target === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
-      rule.oldval = document.getElementById('attractionForce').value;
+      e = document.getElementById('attractionForce');
     }
+    if(e) { rule.oldval = e.value;} else { rule.oldval = 0;}
 
     rule.start = 0;
     rule.end = 0;
@@ -70,9 +73,11 @@ export class TimelineRule {
       }
     } 
 
-    if(this.type === TimelineRuleType.TIME) {
+    else if(this.type === TimelineRuleType.TIME) {
       ret = time <= this.end && time >= this.start;
     }
+
+    else { throw new Error("Wrong type specified"); }
 
     if(ret) {
       this.activeHistory.push(time);

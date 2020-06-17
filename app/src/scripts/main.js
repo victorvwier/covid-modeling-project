@@ -17,7 +17,7 @@ import {
 } from './DOM/domValues';
 import { Timeline } from './timeline';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
-import { wireTimelineButtontoTimeline } from './DOM/timelineDOM';
+import { wireTimelineButtontoTimeline, setRulesList, clearRulesList } from './DOM/timelineDOM';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -76,7 +76,9 @@ export default class Main {
 
     this.timeline = new Timeline(
       timelineCanvas,
-      this.timelineCallback.bind(this)
+      this.timelineCallback.bind(this),
+      clearRulesList, 
+      setRulesList
     );
     this.timeline.importPresetRules();
     wireTimelineButtontoTimeline(this.timeline);
