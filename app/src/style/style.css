@@ -410,4 +410,49 @@ h3 {
   left:80px;
 }
 
+.tooltip-demo {
+  position: relative;
+  display: inline-block;
+  color:black;
+}
+
+.tooltip-demo .tooltiptext-demo {
+  visibility: hidden;
+  width: 600px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: 120%;
+  left: -65%;
+  margin-left: -60px;
+  left:-20px;
+}
+
+.tooltip-demo:hover .tooltiptext-demo {
+  visibility: visible;
+}
+
+.tooltip-demo .tooltiptext-demo::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+#t10{
+  left:150px;
+  top:5px;
+}
+
+
 
