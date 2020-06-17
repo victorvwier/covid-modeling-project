@@ -243,13 +243,6 @@ h3 {
   color: white;
 }
 
-.tooltip {
-  background-color: pink;
-  color:black;
-  display: inline-block;
-  cursor:pointer;
-}
-
 #t2{
   position: relative;
   top:-770px;
@@ -257,11 +250,9 @@ h3 {
   opacity: 0.75;
 }
 
-#t1{
+#PMDIV{
   position: relative;
-  top:80px;
-  left:210px;
-  opacity: 0.75;
+  height:40px;
 }
 
 #t3{
@@ -289,7 +280,16 @@ h3 {
   top:-10px;
   left:200px;
 }
-.tooltip .tooltiptext {
+
+/* RIGHT TOOLTIPS */
+.tooltipR {
+  background-color: pink;
+  color:black;
+  display: inline-block;
+  cursor:pointer;
+}
+
+.tooltipR .tooltiptextR {
   visibility: hidden;
   width: 400px;
   background-color: black;
@@ -303,11 +303,11 @@ h3 {
   z-index: 1;
 }
 
-.tooltip:hover .tooltiptext {
+.tooltipR:hover .tooltiptextR {
   visibility: visible;
 }
 
-.tooltip .tooltiptext::after {
+.tooltipR .tooltiptextR::after {
   content: " ";
   position: absolute;
   top: 50%;
@@ -317,3 +317,85 @@ h3 {
   border-style: solid;
   border-color: transparent black transparent transparent;
 }
+
+
+/* BOTTOM TOOLTIPS */
+.tooltipB {
+  position: relative;
+  display: inline-block;
+  color:black;
+}
+
+.tooltipB .tooltiptextB {
+  visibility: hidden;
+  width: 600px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: 120%;
+  left: -65%;
+  margin-left: -60px;
+}
+
+.tooltipB:hover .tooltiptextB {
+  visibility: visible;
+}
+
+.tooltipB .tooltiptextB::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+/* PARAMETER TOOLTIP IS A RIGHT TOOLTIP WITH A DIFFERENT COLOR THAN MODEL TOOLTIP*/
+.tooltipR-PM {
+  color:black;
+  display: inline-block;
+  cursor:pointer;
+}
+
+.tooltiptextR-PM{
+  width:60px;
+  height:50px;
+}
+
+.tooltipR-PM .tooltiptextR-PM {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position:relative;
+  top:-60px;
+  left:210px;
+  z-index: 1;
+}
+
+.tooltipR-PM:hover .tooltiptextR-PM {
+  visibility: visible;
+}
+
+.tooltipR-PM .tooltiptextR:-PM:after {
+  content: " ";
+  position: absolute;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+
+

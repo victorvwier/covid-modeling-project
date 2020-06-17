@@ -25,18 +25,19 @@
         >&times;</a
       >
       <div id="sliderDIV">
-        <div class="tooltip" id="t1">??
-          <span class="tooltiptext">Click on the categories below and move sliders to adjust respective values.</span>
+        <div class="tooltipR-PM" id="PMDIV">
+          <h2>Parameters</h2>
+          <span class="tooltiptextR-PM">Click on the categories below and move sliders to adjust respective values.</span>
         </div>
-        <h2>Parameters</h2>
+        
 
         <button class="accordion">Interaction Parameters</button>
         <div class="panel">
-          <div class="tooltip" id="t3">??
-            <span class="tooltiptext">Extent to which agents repel other agents-being socially distant</span>
+          <div class="tooltipR" id="t3">??
+            <span class="tooltiptextR">Extent to which agents repel other agents-being socially distant</span>
           </div>
-          <div class="tooltip" id="t4">??
-            <span class="tooltiptext">Extent to which agents are attracted to community center.</span>
+          <div class="tooltipR" id="t4">??
+            <span class="tooltiptextR">Extent to which agents are attracted to community center.</span>
           </div>
           <div class="col-sm">
             <p>Social Distancing:</p>
@@ -75,8 +76,8 @@
 
         <button class="accordion">Agent Parameters</button>
         <div class="panel">
-          <div class="tooltip" id="t5">??
-            <span class="tooltiptext">How contagious an agent is(90% means probably 9/10 will agents get infected on contact)</span>
+          <div class="tooltipR" id="t5">??
+            <span class="tooltiptextR">How contagious an agent is(90% means probably 9/10 will agents get infected on contact)</span>
           </div>
           <div class="col-sm">
             <p>
@@ -449,8 +450,8 @@
           <canvas id="glCanvas" width="600px" height="600px"></canvas>
           <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
           <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
-          <div class="tooltip" id="t6">Hover for info about the model
-            <span class="tooltiptext"> The model shown above is a 
+          <div class="tooltipB" id="t6">Hover for info about the model
+            <span class="tooltiptextB"> The model shown above is a 
               graphical representation of our Agent Based simulation. 
               The dots represent agents which reflect the behaviour of people in 
               real life. They have characteristics like "social distancing" 
@@ -468,12 +469,12 @@
               All agents reside in communities,seperated using white borders-which model real life cities 
               and agents can relocate between different communities which can 
               be seen as agents jumping from one community to another. The model corresponds 
-              exactly with the graph on the left.
+              exactly with the graph on the top left.
                    </span>
           </div>
         </div>
-        <div class="tooltip" id="t2">??
-          <span class="tooltiptext">Click button to change agent and model behaviour.</span>
+        <div class="tooltipR" id="t2">??
+          <span class="tooltiptextR">Click button to change agent and model behaviour.</span>
         </div>
       </div>
     </main>
