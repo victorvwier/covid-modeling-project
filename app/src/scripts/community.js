@@ -494,7 +494,7 @@ export default class Community {
           this.startY,
           this.endY,
           dt * presetsManager.loadPreset().MOVEMENT_TIME_SCALAR
-        ); // TODO: make slider to
+        );
         this.boundingBoxStruct.insert(currentPerson);
       }
     }
