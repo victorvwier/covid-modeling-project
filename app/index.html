@@ -34,7 +34,7 @@
             <input
               type="range"
               min="0"
-              max="1"
+              max="100"
               value="0"
               step="0.05"
               class="slider"
@@ -50,7 +50,7 @@
             <input
               type="range"
               min="0"
-              max="1"
+              max="100"
               value="0"
               step="0.05"
               class="slider"
@@ -91,7 +91,10 @@
               id="InfectionRadiusRedFactor"
             />
             <div class="outputContainer">
-              <output id="InfectionRadiusRedFactorOut" for="InfectionRadiusRedFactor">
+              <output
+                id="InfectionRadiusRedFactorOut"
+                for="InfectionRadiusRedFactor"
+              >
                 3
               </output>
             </div>
@@ -409,6 +412,62 @@
           </div>
         </div>
 
+        <button class="accordion">Add a time-based rule</button>
+        <div class="panel">
+          <div id="timeline-form">
+            <div id="timeline-simple-form">
+              <div id="dropdown-simple-form">
+                <select id="timelineform-simple-target">
+                  <option value="soc">Social distancing</option>
+                  <option value="atc">Attraction to the center</option>
+                </select>
+              </div>
+
+              <div class="slider-container">
+                <div class="slider-title">Time rule is active</div>
+                <div class="new-slider" id="timelineTimeSlider"></div>
+              </div>
+
+              <div class="slider-container">
+                <div class="slider-title">Value</div>
+                <div class="new-slider" id="timelineTimeValueSlider"></div>
+              </div>
+
+              <button id="timeline-add-simple-rule">+</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="accordion">Add a threshold-based rule</button>
+        <div class="panel">
+          <div id="timeline-form">
+            <div id="timeline-threshold-form">
+              <select id="timelineform-threshold-target">
+                <option value="soc">Social distancing</option>
+                <option value="atc">Attraction to the center</option>
+              </select>
+              <select id="timelineform-threshold-param">
+                <option value="inf">Infected people</option>
+                <option value="icu">ICU </option>
+              </select>
+              <label for="timelineform-threshold-trigger">Trigger: </label>
+              <input type="text" id="timelineform-threshold-trigger" />
+              
+              <div class="slider-container">
+                <div class="slider-title">Value</div>
+                <div class="new-slider" id="timelineform-threshold-value"></div>
+              </div>
+
+              <button id="timeline-add-threshold-rule">+</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="accordion">Rules list</button>
+        <div class="panel">
+          <div id="rulesDIV"></div>
+        </div>
+
         <div class="row p-3">
           <button type="button" id="reload" class="btn btn-secondary">
             Reload
@@ -476,9 +535,16 @@
             <h3>Dead</h3>
             <p id="s5"></p>
           </div>
-          <div class="stat" id="icuDIV" style="background-color: green">
+          <div class="stat" id="icuDIV" style="background-color: green;">
             <h3>In ICU</h3>
             <p id="s6"></p>
+          </div>
+        </div>
+        <div id="timeline">
+          <div>
+            <canvas id="timeline-element" width="600" height="50%">
+              Days: 0
+            </canvas>
           </div>
         </div>
         <div id="model-border-canvases-container">
@@ -486,43 +552,10 @@
           <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
           <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
         </div>
-        <div id="timeline">
-          <div>
-            <canvas id="timeline-element" width="1200" height="100%">
-              Days: 0
-            </canvas>
-          </div>
-          <div id="timeline-form">
-            <div id="timeline-simple-form">
-              <select id="timelineform-simple-target">
-                <option value="soc">Social distancing</option>
-                <option value="atc">Attraction to the center</option>
-              </select>
-              <label for="timelineform-simple-start">Start: </label>
-              <input type="text" id="timelineform-simple-start" />
-              <label for="timelineform-simple-end">End: </label>
-              <input type="text" id="timelineform-simple-end" />
-              <label for="timelineform-simple-value">value: </label>
-              <input type="text" id="timelineform-simple-value" />
-              <button id="timeline-add-simple-rule">+</button>
-            </div>
-            <div id="timeline-threshold-form">
-              <select id="timelineform-threshold-target">
-                <option value="soc">Social distancing</option>
-                <option value="atc">Attraction to the center</option>
-              </select>
-              <select id="timelineform-threshold-param">
-                <option value="inf">Infected people</option>
-                <option value="icu">ICU </option>
-              </select>
-              <label for="timelineform-threshold-trigger">Trigger: </label>
-              <input type="text" id="timelineform-threshold-trigger"/>
-              <label for="timelineform-threshold-value">Value: </label>
-              <input type="text" id="timelineform-threshold-value"/>
-              <button id="timeline-add-threshold-rule">+</button>
-            </div>
-            
-          </div>
+        <div id="time-control-bar">
+          <button id="time-control-toggle-pause-button" class="btn-secondary">Pause/Resume</button>
+          <button id="time-control-reset-button" class="btn-secondary">Reset</button>
+          <span id="time-control-days-display"></span>
         </div>
       </div>
     </main>

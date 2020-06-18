@@ -1,3 +1,5 @@
+/* eslint-disable import/first */
+
 import { getRandomInt, getRandom } from './util';
 import presetsManager from './presetsManager';
 import { GENDERS } from './CONSTANTS';

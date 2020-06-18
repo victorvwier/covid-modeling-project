@@ -17,6 +17,8 @@ import {
   getMaxTimeUntilDead,
   getInfectionRadius,
 } from './DOM/domValues';
+import { MAXIMUM_DAYS } from './CONSTANTS';
+import { getRandom } from './util';
 
 const { SPACE_BETWEEN_COMMUNITIES, DAYS_PER_SECOND } = presetsManager.loadPreset();
 
@@ -52,7 +54,7 @@ export default class Model {
     this.updateStats = updateStats;
     this.updateDemographicChart = updateDemographicChart;
     this.borderCtx = borderCtx;
-
+    this.paused = false;
     this._chartInterval = null;
 
     this.timestamp = 0;
@@ -60,7 +62,7 @@ export default class Model {
 
     this.presetInProcess = false;
 
-    this._passDrawInfoAnimationFrame = null;
+    this._mainLoopInterval = null;
     this.relocationUtil = new RelocationUtil(this);
 
     this._setValuesFromStatsToLocal(stats);
@@ -108,6 +110,11 @@ export default class Model {
     return values[index + 1];
   }
 
+  /**
+   * A function to create stats divided over the different communities.
+   * 
+   * @param {number} index The index of the community.
+   */
   _createDividedStats(index) {
     const valSus = this._distributeStats(this.numSusceptible, index);
     const valNonInf = this._distributeStats(this.numNonInfectious, index);
@@ -152,6 +159,9 @@ export default class Model {
     }
   }
 
+  /**
+   * A function to reload the preset used by the model.
+   */
   reloadPreset() {
     const {
       SPACE_BETWEEN_COMMUNITIES: NEW_SPACE_BETWEEN_COMMUNITIES,
@@ -163,11 +173,14 @@ export default class Model {
    * A function to start execution of the model.
    */
   run() {
+    require('seedrandom')('hi.', { global: true });
+    console.log(getRandom());
+    console.log(getRandom());console.log(getRandom());
     wireSlidersToHandlers(this);
     this.populateCommunities();
     this.updateAgentSize(this.getAgentSize(this.stats.sum()));
 
-    setInterval(this._animationFunction.bind(this), 50);
+    this._mainLoopInterval = setInterval(this._animationFunction.bind(this), 50);
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
@@ -177,7 +190,12 @@ export default class Model {
    * @param {number} timestamp The timestamp of the current moment.
    */
   _animationFunction() {
-    const dt = 0.050;
+    if(this.timestamp > MAXIMUM_DAYS){
+      clearInterval(this._mainLoopInterval);
+      clearInterval(this._chartInterval);
+      return;
+    }
+    const dt = 0.050 * DAYS_PER_SECOND;
     this.timestamp += dt;
     this.passDrawInfoToAgentChart();
     Object.values(this.communities).forEach((com) => com.step(dt));
@@ -185,6 +203,22 @@ export default class Model {
     this.relocationUtil.handleAllRelocations();
 
     this.updateDemographicChart();
+  }
+
+  /**
+   * A function to pause/unpause the model;
+   */
+  togglePause() {
+    if(this.paused) {
+      // Unpause
+      this._mainLoopInterval = setInterval(this._animationFunction.bind(this), 50);
+      this._chartInterval = setInterval(this.compileStats.bind(this), 500);
+    } else {
+      // Pause
+      clearInterval(this._mainLoopInterval);
+      clearInterval(this._chartInterval);
+    }
+    this.paused = !this.paused;
   }
 
   /**
@@ -303,6 +337,11 @@ export default class Model {
     }
   }
 
+  /**
+   * A function to get the site an agent should be drawn with.
+   * 
+   * @param {number} population The size of the population.
+   */
   getAgentSize(population) {
     if (population > 2000) {
       return 1.5;
@@ -351,6 +390,9 @@ export default class Model {
    * @param {Stats} stats New initial stats.
    */
   resetModel(stats) {
+    require('seedrandom')('hi.', { global: true });
+    console.log(getRandom());
+    console.log(getRandom());console.log(getRandom());
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
     this.timestamp = 0;
