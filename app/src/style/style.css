@@ -340,7 +340,7 @@ h3 {
   background-color: #cccccc;
   position:relative;
   top:-10px;
-  left:200px;
+  left:285px;
 }
 
 /* RIGHT TOOLTIPS */
@@ -406,7 +406,7 @@ h3 {
   position: absolute;
   z-index: 1;
   top: 120%;
-  left: -65%;
+  left: -500%;
   margin-left: -60px;
 }
 
@@ -491,9 +491,8 @@ h3 {
   position: absolute;
   z-index: 1;
   top: 120%;
-  left: -65%;
+  left: -550%;
   margin-left: -60px;
-  left:-20px;
 }
 
 .tooltip-demo:hover .tooltiptext-demo {
@@ -512,7 +511,7 @@ h3 {
 }
 
 #t10{
-  left:150px;
+  left:320px;
   top:5px;
 }
 
@@ -634,4 +633,9 @@ ul li:hover {
 
 .new-slider {
   width: 90%;
+}
+
+#t11{
+  position:relative;
+  top:-35px;
 }

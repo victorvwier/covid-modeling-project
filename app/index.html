@@ -77,7 +77,11 @@
             </div>
           </div>
           <div class="col-sm">
-            <p>Probability of testing positive:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p>Probability of testing positive:</p>
+              <span class="tooltiptextR-PM" id="t11">Probability infectious agents show symptoms and get tested positive</span>
+            </div>
+
             <input
               type="range"
               min="0"
@@ -525,7 +529,7 @@
         </div>
         <div id="demographics-container">
           <canvas id="demographics" width="600px" height="400px"></canvas>
-          <div class="tooltip-demo" id="t10">Hover for info about the demographics chart.
+          <div class="tooltip-demo" id="t10">About
             <span class="tooltiptext-demo"> Demography is the statistical study of populations, especially human beings.The chart above displays information regarding the current running 
               simulation concerning the infection of males(left) and females(right) of different age ranges.
               The age ranges are on the y axis and the values of the corresponding statistic(infectious,immune etc.) 
@@ -566,7 +570,7 @@
           <canvas id="glCanvas" width="600px" height="600px"></canvas>
           <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
           <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
-          <div class="tooltipB" id="t6">Hover for info about the model
+          <div class="tooltipB" id="t6">About
             <span class="tooltiptextB"> The model shown above is a 
               graphical representation of our Agent Based simulation. 
               The dots represent agents which reflect the behaviour of people in 
@@ -576,10 +580,10 @@
               
               Every agent has a color which is an indication of their current 
               "state" with respect to their infectiousness.The states are as follows
-              Blue-Susceptible
-              Yellow-Non Infectious
-              Red-Infectious
-              Grey-Immune
+              Blue-Susceptible,
+              Yellow-Non Infectious,
+              Red-Infectious,
+              Grey-Immune,
               Black- Dead
 
               All agents reside in communities,seperated using white borders-which model real life cities 
