@@ -23,7 +23,7 @@
   "DAYS_PER_SECOND": 2,
   "NUM_COMMUNITIES": 6,
   "SPACE_BETWEEN_COMMUNITIES": 20,
-  "RELOCATION_PROBABILITY": 0.000045,
+  "RELOCATION_PROBABILITY": 0.000048,
   "RELOCATION_ERROR_MARGIN": 20,
   "RELOCATION_STEP_SIZE": 80,
   "TESTED_POSITIVE_PROBABILITY": 0.5,
@@ -35,7 +35,7 @@
     { "type": "time", "params": ["soc", 60, 119, 100] },
     { "type": "time", "params": ["atc", 60, 119, 0] },
     { "type": "time", "params": ["atc", 0, 50, 45] },
-    { "type": "time", "params": ["atc", 120, 135, 20] },
+    { "type": "time", "params": ["atc", 120, 135, 30] },
     { "type": "time", "params": ["soc", 140, 250, 100] }
   ],
 
