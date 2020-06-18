@@ -134,6 +134,7 @@ export default class Main {
     }
   }
 
+  // eslint-disable-next-line consistent-return
   timelineGetCallback(timelineParam) {
     if (timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
       return getRepulsionForce();
