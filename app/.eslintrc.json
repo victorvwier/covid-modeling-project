@@ -34,6 +34,7 @@
     "no-continue": "off",
     "no-alert": "off",
     "no-restricted-syntax": "off",
-    "global-require":"off"
+    "global-require":"off",
+    "no-unresolved": "off"
   }
 }
