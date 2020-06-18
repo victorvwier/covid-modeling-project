@@ -4,16 +4,18 @@ import JsPdf from 'jspdf';
 export default class PdfDownloadService {
   /**
    * A function to create a pdf to download.
-   * 
+   *
    * @static
    * @param {Object} data An object containing the data to be downloaded.
    */
   static createDownloadPdf(data) {
     const html = this._createHTML(data);
     const sirCanvas = document.getElementById('chart-canvas');
+    this._turnToWhiteBackground(sirCanvas);
     const sirChart = sirCanvas.toDataURL('image/jpeg');
 
     const demographicCanvas = document.getElementById('demographics');
+    this._turnToWhiteBackground(demographicCanvas);
     const demographicChart = demographicCanvas.toDataURL('image/jpeg');
 
     const doc = new JsPdf();
@@ -26,9 +28,26 @@ export default class PdfDownloadService {
     doc.save();
   }
 
+  static _turnToWhiteBackground(canvas) {
+    const ctx = canvas.getContext('2d');
+
+    // change non-opaque pixels to white
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] < 255) {
+        data[i] = 255 - data[i];
+        data[i + 1] = 255 - data[i + 1];
+        data[i + 2] = 255 - data[i + 2];
+        data[i + 3] = 255 - data[i + 3];
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+  }
+
   /**
    * A function to retrieve the Demographics chart as an image.
-   * 
+   *
    * @static
    * @returns {Object} An object representing the image.
    */
@@ -40,7 +59,7 @@ export default class PdfDownloadService {
 
   /**
    * A function to create a piece of HTML that can display the stats.
-   * 
+   *
    * @static
    * @param {Object} data An object containing all the data for the pdf.
    * @returns {String} A string containing HTML representing all the raw data per day.
