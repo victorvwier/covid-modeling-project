@@ -32,8 +32,8 @@
   "ICU_CAPACITY": 2,
 
   "RULES": [
-    { "type": "time", "params": ["soc", 60, 110, 100] },
-    { "type": "time", "params": ["atc", 60, 110, 0] },
+    { "type": "time", "params": ["soc", 60, 119, 100] },
+    { "type": "time", "params": ["atc", 60, 119, 0] },
     { "type": "time", "params": ["atc", 0, 50, 43] },
     { "type": "time", "params": ["atc", 120, 135, 20] },
     { "type": "time", "params": ["soc", 140, 250, 100] }
