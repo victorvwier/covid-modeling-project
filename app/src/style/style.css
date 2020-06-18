@@ -75,6 +75,8 @@ button {
 #timeline {
   display: flex;
   color: black;
+  position:relative;
+  top:-600px;
 }
 
 /* 
@@ -100,6 +102,7 @@ button {
   width: 600px;
   height: 600px;
   position: relative;
+  top:100px;
 }
 
 /* Styling the canvas which overlaps the model canvas so that borders computed in Model.js constructor can be added on top of the communities.  */
@@ -234,6 +237,11 @@ h3 {
 #demographics {
   width: 750px;
   height: 500px;
+}
+
+#demographics-container{
+  position: relative;
+  top:-500px;
 }
 
 .accordion {
@@ -553,6 +561,11 @@ h3 {
 
 #parent > *:first-child {
   margin-top: 0px;
+}
+
+#chart-container{
+  position:relative;
+  top:-150px;
 }
 
 /* Remove margins and padding from the list */
