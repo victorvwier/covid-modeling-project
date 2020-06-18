@@ -251,7 +251,7 @@ export class Timeline {
 
     this.context.fillText(`${rule.name}`, 0, yOffset + RULE_HEIGHT / 3);
     this.context.fillText(
-      `Value: ${rule.value}`,
+      `Value: ${rule.value}%`,
       0,
       yOffset + (2.2 * RULE_HEIGHT) / 3
     );
