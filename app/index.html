@@ -25,12 +25,21 @@
         >&times;</a
       >
       <div id="sliderDIV">
-        <h2>Parameters</h2>
+        <div class="tooltipR-PM" id="PMDIV">
+          <h2>Parameters</h2>
+          <span class="tooltiptextR-PM">Click on the categories below and move sliders to adjust respective values.</span>
+        </div>
+        
 
         <button class="accordion">Interaction Parameters</button>
         <div class="panel">
           <div class="col-sm">
-            <p>Social Distancing:</p>
+            
+            <div class="tooltipR-PM" id="PMDIV">
+              <p>Social Distancing:</p>
+              <span class="tooltiptextR-PM" id="t8">Extent to which agents repel other agents-being socially distant</span>
+            </div>
+            
             <input
               type="range"
               min="0"
@@ -46,7 +55,12 @@
             <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
           </div>
           <div class="col-sm">
-            <p>Attraction:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p>Attraction:</p>
+              <span class="tooltiptextR-PM" id="t9">Extent to which agents are attracted to community center.</span>
+            </div>
+            
+            
             <input
               type="range"
               min="0"
@@ -63,7 +77,11 @@
             </div>
           </div>
           <div class="col-sm">
-            <p>Probability of testing positive:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p>Probability of testing positive:</p>
+              <span class="tooltiptextR-PM" id="t11">Probability infectious agents show symptoms and get tested positive</span>
+            </div>
+
             <input
               type="range"
               min="0"
@@ -511,6 +529,14 @@
         </div>
         <div id="demographics-container">
           <canvas id="demographics" width="600px" height="400px"></canvas>
+          <div class="tooltip-demo" id="t10">About
+            <span class="tooltiptext-demo"> Demography is the statistical study of populations, especially human beings.The chart above displays information regarding the current running 
+              simulation concerning the infection of males(left) and females(right) of different age ranges.
+              The age ranges are on the y axis and the values of the corresponding statistic(infectious,immune etc.) 
+              are on the x-axis. This graph shows the spread of diesease across different age group and shows that 
+              young people are also less likely to die than older people in general.
+            </span>
+          </div>
         </div>
       </div>
       <div id="right-side-container">
@@ -538,6 +564,33 @@
           <div class="stat" id="icuDIV" style="background-color: green;">
             <h3>In ICU</h3>
             <p id="s6"></p>
+          </div>
+        </div>
+        <div id="model-border-canvases-container">
+          <canvas id="glCanvas" width="600px" height="600px"></canvas>
+          <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
+          <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
+          <div class="tooltipB" id="t6">About
+            <span class="tooltiptextB"> The model shown above is a 
+              graphical representation of our Agent Based simulation. 
+              The dots represent agents which reflect the behaviour of people in 
+              real life. They have characteristics like "social distancing" 
+              and "attraction to centre" which you can change to alter the 
+              respective behaviour of the agents.
+              
+              Every agent has a color which is an indication of their current 
+              "state" with respect to their infectiousness.The states are as follows
+              Blue-Susceptible,
+              Yellow-Non Infectious,
+              Red-Infectious,
+              Grey-Immune,
+              Black- Dead
+
+              All agents reside in communities,seperated using white borders-which model real life cities 
+              and agents can relocate between different communities which can 
+              be seen as agents jumping from one community to another. The model corresponds 
+              exactly with the graph on the top left.
+                   </span>
           </div>
         </div>
         <div id="timeline">
