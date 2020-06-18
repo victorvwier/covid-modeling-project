@@ -158,7 +158,6 @@ export default class Main {
     this.numIcu = stats.icu;
 
     this.chart.updateValues(this.createCurrentStats(), timestamp);
-    this.timeline.update(stats, timestamp);
     updateTheStatistics(
       this.numSusceptible,
       this.numNonInfectious,
@@ -177,6 +176,10 @@ export default class Main {
   updateDemographicChart() {
     const population = this.model.getAllPopulation();
     this.demographicsChart.receiveUpdate(population);
+  }
+
+  updateTimeline(stats, timestamp) {
+    this.timeline.update(stats, timestamp);
   }
 
   /**
@@ -203,6 +206,7 @@ export default class Main {
       stats,
       this.receiveNewStatsAndUpdateChart.bind(this),
       this.updateDemographicChart.bind(this),
+      this.updateTimeline.bind(this),
       this.borderCtx
     );
   }
