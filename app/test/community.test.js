@@ -292,7 +292,7 @@ describe('community.js test suite', () => {
     infectiousPerson.destinyImmune = false;
 
     // Mock random to be greater than mortality rate of that person
-    mockRandom(infectiousPerson.mortalityRate + 0.01, true);
+    mockRandom(infectiousPerson.mortalityRate + 0.01); // HERE
 
     // Call method
     community.update(infectiousPerson);

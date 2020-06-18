@@ -13,19 +13,19 @@ function getRules() {
 /** @class Timeline describing a timeline on which rules can be added. */
 
 export class Timeline {
-
   /**
    * Instantiates a timeline.
-   * 
+   *
    * @constructor
    * @param {Object} canvas The canvas the timeline is drawn on.
    * @param {function} setruleCb A callback function to set a rule.
    */
-  constructor(canvas, setruleCb, clearRulesList, setRulesList) {
+  constructor(canvas, setruleCb, getruleCb, clearRulesList, setRulesList) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.rules = [];
     this.setRuleCallback = setruleCb;
+    this.getRuleCallback = getruleCb;
     this.clearRulesList = clearRulesList;
     this.setRulesList = setRulesList;
   }
@@ -85,7 +85,7 @@ export class Timeline {
 
   /**
    * A function to update the timeline.
-   * 
+   *
    * @param {Stats} stats The stats at the current moment.
    * @param {number} time The number representing the current time.
    */
@@ -103,7 +103,7 @@ export class Timeline {
 
   /**
    * A function to add a rule to the timeline.
-   * 
+   *
    * @param {TimelineRuleType} type The type of rule being added.
    * @param {number[]} params An array containing the parameters for the rule.
    */
@@ -130,15 +130,32 @@ export class Timeline {
 
   /**
    * A function to add an existing rule to the timeline.
-   * 
+   *
    * @param {TimelineRule} rule The rule to be added.
    */
   _addRule(rule) {
     let found = false;
     for (let i = 0; i < this.rules.length; i++) {
       if (this.rules[i].target === rule.target) {
-        found = true;
-        this.rules[i] = rule;
+        if (
+          rule.type === TimelineRuleType.TIME &&
+          this.rules[i].type === TimelineRuleType.TIME
+        ) {
+          if (this.overlap(rule, this.rules[i])) {
+            found = true;
+            this.rules[i] = rule;
+          }
+        }
+
+        if (
+          rule.type === TimelineRuleType.THRESHOLD &&
+          this.rules[i].type === TimelineRuleType.THRESHOLD
+        ) {
+          if (rule.value === this.rules[i].value) {
+            found = true;
+            this.rules[i] = rule;
+          }
+        }
       }
     }
 
@@ -149,13 +166,28 @@ export class Timeline {
     }
   }
 
+  overlap(rule1, rule2) {
+    if (rule1.end < rule2.start || rule2.end < rule1.start) {
+      return false;
+    }
+    return true;
+  }
+
   /**
    * A function to enforce all current rules.
-   * 
+   *
    * @param {Stats} stats The current stats.
    * @param {number} time The current timestamp.
    */
   enforceRules(stats, time) {
+    // get slider value for target
+
+    for (let i = 0; i < this.rules.length; i++) {
+      const targ = this.rules[i].target;
+      const previousVal = this.getRuleCallback(targ);
+      this.setRuleCallback(targ, previousVal);
+    }
+
     for (let i = 0; i < this.rules.length; i++) {
       const rule = this.rules[i];
       if (rule.isActive(stats, time)) {
@@ -163,7 +195,6 @@ export class Timeline {
         this.setRuleCallback(rule.target, rule.value);
       } else {
         rule.active = false;
-        this.setRuleCallback(rule.target, 0);
       }
     }
   }
@@ -209,7 +240,7 @@ export class Timeline {
 
   /**
    * A function to draw a rule on the timeline.
-   * 
+   *
    * @param {TimelineRule} rule The rule to be drawn
    * @param {number} yOffset The offset on the y-axis.
    */
@@ -220,7 +251,7 @@ export class Timeline {
 
     this.context.fillText(`${rule.name}`, 0, yOffset + RULE_HEIGHT / 3);
     this.context.fillText(
-      `Value: ${rule.value}`,
+      `Value: ${rule.value}%`,
       0,
       yOffset + (2.2 * RULE_HEIGHT) / 3
     );
@@ -255,13 +286,13 @@ export class Timeline {
 
   /**
    * A function to convert a day number into an x coordingate on the timeline.
-   * 
+   *
    * @param {number} dayNumber The number of the day.
    * @returns {number} The x coordinate on the timeline.
    */
   getXforDay(dayNumber) {
     return (
-      (dayNumber / (MAXIMUM_DAYS)) * (this.canvas.width - TIMELINE_X_OFFSET) +
+      (dayNumber / MAXIMUM_DAYS) * (this.canvas.width - TIMELINE_X_OFFSET) +
       TIMELINE_X_OFFSET
     );
   }
