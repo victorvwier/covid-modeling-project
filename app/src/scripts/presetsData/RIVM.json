@@ -5,13 +5,13 @@
   "INITIAL_IMMUNE": 0,
   "INITIAL_DEAD": 0,
   "REPULSION_FORCE": 0,
-  "ATTRACTION_FORCE": 0.15,
+  "ATTRACTION_FORCE": 1,
   "PERSON_RADIUS": 5,
-  "POPULATION_SPEED": 8,
+  "POPULATION_SPEED": 15,
   "INTERACTION_RANGE": 10,
   "INFECTION_RADIUS": 4,
-  "MOVEMENT_TIME_SCALAR": 8,
-  "TRANSMISSION_PROB": 0.85,
+  "MOVEMENT_TIME_SCALAR": 12,
+  "TRANSMISSION_PROB": 0.95,
   "NONIN_TO_IMMUNE_PROB": 0.0001,
   "TIME_UNTIL_IMMUNE": 7,
   "MIN_INCUBATION_TIME": 3,
@@ -23,7 +23,7 @@
   "DAYS_PER_SECOND": 2,
   "NUM_COMMUNITIES": 6,
   "SPACE_BETWEEN_COMMUNITIES": 20,
-  "RELOCATION_PROBABILITY": 0.00003,
+  "RELOCATION_PROBABILITY": 0.000031,
   "RELOCATION_ERROR_MARGIN": 20,
   "RELOCATION_STEP_SIZE": 80,
   "TESTED_POSITIVE_PROBABILITY": 0.5,
@@ -32,8 +32,11 @@
   "ICU_CAPACITY": 2,
 
   "RULES": [
-    { "type": "time", "params": ["soc", 0, 100, 10] },
-    { "type": "threshold", "params": ["atc", "inf", 2, 10] }
+    { "type": "time", "params": ["soc", 60, 100, 100] },
+    { "type": "time", "params": ["atc", 60, 100, 0] },
+    { "type": "time", "params": ["atc", 0, 40, 33] },
+    { "type": "time", "params": ["atc", 101, 135, 20] },
+    { "type": "time", "params": ["soc", 140, 250, 100] }
   ],
 
   "AGE": [
