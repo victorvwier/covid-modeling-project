@@ -55,6 +55,9 @@ button {
   
   display: flex;
   height: 50px;
+
+  position:relative;
+  top:-580px;
 }
 
 #time-control-days-display {
