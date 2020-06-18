@@ -312,6 +312,10 @@ h3 {
   opacity: 0.75;
 }
 
+.tp{
+  height:3px;
+}
+
 #PMDIV{
   position: relative;
   height:40px;
@@ -381,7 +385,8 @@ h3 {
 }
 
 #t8{
-  top:-35px;
+  position:absolute;
+  top:-20px;
   left:140px;
 }
 
