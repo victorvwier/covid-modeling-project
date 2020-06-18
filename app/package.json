@@ -15,6 +15,7 @@
     "collectCoverageFrom": [
       "**/src/scripts/**/*.js",
       "!**/src/scripts/agentChart.js",
+      "!**/src/scripts/DOM/*",
       "!**/node_modules/**",
       "!**/vendor/**"
     ],
@@ -56,6 +57,8 @@
     "chart.js": "^2.9.3",
     "gl-matrix": "^3.3.0",
     "jspdf": "^1.5.3",
-    "seedrandom": "^3.0.5"
+    "seedrandom": "^3.0.5",
+    "nouislider": "^14.5.0",
+    "wnumb": "^1.2.0"
   }
 }

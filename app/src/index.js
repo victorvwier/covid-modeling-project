@@ -1,5 +1,5 @@
 /* eslint-disable import/first */
-require('seedrandom')('hi.', { global: true });
+
 
 import presetManager from './scripts/presetsManager';
 import Main from './scripts/main';
@@ -9,6 +9,7 @@ import {
   setNumCommunities,
   setRepulsionForce,
 } from './scripts/DOM/domValues';
+import { createSliders } from './scripts/DOM/timelineDOM';
 
 const {
   INITIAL_SUSCEPTIBLE,
@@ -21,6 +22,9 @@ const {
   REPULSION_FORCE,
 } = presetManager.loadPreset();
 
+/**
+ * A function to set all relevant data from the preset into the DOM.
+ */
 function setPresetData() {
   setAttractionToCenter(ATTRACTION_FORCE);
   setNumCommunities(NUM_COMMUNITIES);
@@ -33,7 +37,6 @@ function setPresetData() {
 window.onload = function () {
   // const seedrandom = require('seedrandom')
   // const rand = seedrandom('hello', { global: true });
-
   createPresetsDropDown();
   setPresetData();
   const glCanvas = document.getElementById('glCanvas');
@@ -65,6 +68,6 @@ window.onload = function () {
     INITIAL_DEAD,
     INITIAL_IMMUNE
   );
-
+  createSliders();
   main.run();
 };

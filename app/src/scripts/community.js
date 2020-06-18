@@ -86,6 +86,11 @@ export default class Community {
     // this._drawBorderLines();
   }
 
+  /**
+   * A function to draw the borders of the community on the screen.
+   * 
+   * @param {Object} borderCtx The context of the canvas on which the borders are drawn.
+   */
   _drawBorderLines(borderCtx) {
     // These lines are drawm from the edge coordinates of the model and make up the boundary of the
     // communities which are drawn on a canvas other than the agent canvas and can be drawn
@@ -99,6 +104,9 @@ export default class Community {
     );
   }
 
+  /**
+   * A function to reload the given preset.
+   */
   reloadPreset() {
     this.personRadius = presetsManager.loadPreset().PERSON_RADIUS;
     this.nonInfectiousToImmuneProb = presetsManager.loadPreset().NONIN_TO_IMMUNE_PROB;

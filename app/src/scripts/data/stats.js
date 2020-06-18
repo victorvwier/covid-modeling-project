@@ -1,5 +1,17 @@
 /** @class Stats describing the stats of a community or model. */
 export default class Stats {
+  
+  /**
+   * Instantiates a Stats object.
+   * 
+   * @constructor
+   * @param {number} susceptible The amount of susceptible people.
+   * @param {number} noninfectious The amount of non-infectious people.
+   * @param {number} infectious The amount of infectious people.
+   * @param {number} dead The amount of dead people.
+   * @param {number} immune The amount of immune people.
+   * @param {number} icu The amount of people in the ICU.
+   */
   constructor(susceptible, noninfectious, infectious, dead, immune, icu) {
     this.susceptible = susceptible;
     this.noninfectious = noninfectious;
@@ -42,7 +54,11 @@ export default class Stats {
     );
   }
 
-
+  /**
+   * A function to retrieve the amount of people in the ICU.
+   * 
+   * @returns {number} The amount of people in the ICU.
+   */
   getICUCount(){
     return this.icu;
   }
