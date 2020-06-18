@@ -15,10 +15,16 @@ import {
   getInitialNumSusceptible,
   updateTheStatistics,
   getNumCommunities,
+  getRepulsionForce,
+  getAttractionToCenter,
 } from './DOM/domValues';
 import { Timeline } from './timeline';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
-import { wireTimelineButtontoTimeline, setRulesList, clearRulesList } from './DOM/timelineDOM';
+import {
+  wireTimelineButtontoTimeline,
+  setRulesList,
+  clearRulesList,
+} from './DOM/timelineDOM';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -77,7 +83,8 @@ export default class Main {
     this.timeline = new Timeline(
       timelineCanvas,
       this.timelineCallback.bind(this),
-      clearRulesList, 
+      this.timelineGetCallback,
+      clearRulesList,
       setRulesList
     );
     this.timeline.importPresetRules();
@@ -124,6 +131,15 @@ export default class Main {
     }
     if (timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
       this.model.updateAttractionToCenter(value);
+    }
+  }
+
+  timelineGetCallback(timelineParam) {
+    if (timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+      return getRepulsionForce();
+    }
+    if (timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+      return getAttractionToCenter();
     }
   }
 
@@ -206,7 +222,7 @@ export default class Main {
    * A function to pause/resume the model and the chart.
    */
   togglePause() {
-    console.log("test");
+    console.log('test');
     this.model.togglePause();
   }
 

@@ -20,11 +20,12 @@ export class Timeline {
    * @param {Object} canvas The canvas the timeline is drawn on.
    * @param {function} setruleCb A callback function to set a rule.
    */
-  constructor(canvas, setruleCb, clearRulesList, setRulesList) {
+  constructor(canvas, setruleCb, getruleCb, clearRulesList, setRulesList) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.rules = [];
     this.setRuleCallback = setruleCb;
+    this.getRuleCallback = getruleCb;
     this.clearRulesList = clearRulesList;
     this.setRulesList = setRulesList;
   }
@@ -179,6 +180,14 @@ export class Timeline {
    * @param {number} time The current timestamp.
    */
   enforceRules(stats, time) {
+    // get slider value for target
+
+    for (let i = 0; i < this.rules.length; i++) {
+      const targ = this.rules[i].target;
+      const previousVal = this.getRuleCallback(targ);
+      this.setRuleCallback(targ, previousVal);
+    }
+
     for (let i = 0; i < this.rules.length; i++) {
       const rule = this.rules[i];
       if (rule.isActive(stats, time)) {
@@ -186,7 +195,6 @@ export class Timeline {
         this.setRuleCallback(rule.target, rule.value);
       } else {
         rule.active = false;
-        this.setRuleCallback(rule.target, 0);
       }
     }
   }
