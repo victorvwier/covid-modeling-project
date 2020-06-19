@@ -55,8 +55,6 @@ button {
 
   display: flex;
   height: 50px;
-
-  top: -580px;
 }
 
 #time-control-days-display {
@@ -77,7 +75,6 @@ button {
 #timeline {
   display: flex;
   color: black;
-  top: -600px;
 }
 
 /* 
@@ -104,7 +101,6 @@ button {
   width: 600px;
   height: 600px;
   position: relative;
-  /* top: 100px; */
 }
 
 /* Styling the canvas which overlaps the model canvas so that borders computed in Model.js constructor can be added on top of the communities.  */
@@ -241,11 +237,6 @@ h3 {
   height: 110vh;
 }
 
-/* #demographics-container{
-  position: relative;
-  top:-500px;
-} */
-
 .accordion {
   background-color: #eee;
   color: #444;
@@ -311,7 +302,11 @@ h3 {
   opacity: 0.75;
 }
 
-#PMDIV {
+.tp{
+  height:3px;
+}
+
+#PMDIV{
   position: relative;
   height: 40px;
 }
@@ -379,9 +374,12 @@ h3 {
   border-color: transparent black transparent transparent;
 }
 
-#t8 {
-  top: -35px;
-  left: 140px;
+#t8{
+  position:relative;
+  top:-20px;
+  left:140px;
+  width:400px;
+  height:30px;
 }
 
 /* BOTTOM TOOLTIPS */
@@ -465,9 +463,9 @@ h3 {
   border-color: transparent black transparent transparent;
 }
 
-#t9 {
-  top: -35px;
-  left: 80px;
+#t9{
+  top:-20px;
+  left:80px;
 }
 
 .tooltip-demo {
@@ -512,6 +510,92 @@ h3 {
   left: 320px;
   top: 5px;
 }
+
+#t16{
+  position:relative;
+  left:370px;
+  top:-20px;
+}
+
+#t17{
+  position:relative;
+  top:-20px;
+}
+
+#t18{
+  position:relative;
+  top:-20px;
+}
+
+#t19{
+  position:relative;
+  top:-20px;
+  left:265px;
+}
+
+#t20{
+  position:relative;
+  top:-20px;
+  left:265px;
+}
+
+#t21{
+  position:relative;
+  top:-20px;
+  left:340px;
+}
+
+#t22{
+  position:relative;
+  top:-20px;
+  left:340px;
+}
+
+#t23{
+  position:relative;
+  top:-20px;
+  left:485px;
+}
+
+#t12{
+  position:relative;
+  top:-20px;
+}
+
+#t13{
+  position:relative;
+  top:-20px;
+}
+
+#t14{
+  position:relative;
+  top:-20px;
+}
+
+#t15{
+  position:relative;
+  top:-20px;
+  left:310px;
+}
+
+#t24{
+  position:relative;
+  top:-20px;
+}
+
+#t25{
+  position:relative;
+  top:-20px;
+  left:200px;
+}
+
+#t26{
+  position:relative;
+  top:-20px;
+  left:180px;
+}
+
+
 
 .btn-preset {
   background-color: white;
@@ -560,15 +644,6 @@ h3 {
 #parent > *:first-child {
   margin-top: 0px;
 }
-
-#chart-canvas {
-  width: 50vw;
-}
-
-/* #chart-container {
-  position: relative;
-  top: -150px;
-} */
 
 /* Remove margins and padding from the list */
 ul {
@@ -635,7 +710,7 @@ ul li:hover {
   width: 90%;
 }
 
-#t11 {
-  position: relative;
-  top: -35px;
+#t11{
+  position:relative;
+  top:-20px;
 }
