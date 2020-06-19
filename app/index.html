@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/dafd3ebce7.js"
+      crossorigin="anonymous"
+    ></script>
     <title>COVID-19 MODEL</title>
   </head>
 
@@ -38,7 +42,10 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">Social Distancing:</p>
-              <span class="tooltiptextR-PM" id="t8">Extent to which agents repel other agents-being socially distant</span>
+              <span class="tooltiptextR-PM" id="t8"
+                >Extent to which agents repel other agents-being socially
+                distant</span
+              >
             </div>
 
             <input
@@ -58,7 +65,9 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">Attraction:</p>
-              <span class="tooltiptextR-PM" id="t9">Extent to which agents are attracted to community center.</span>
+              <span class="tooltiptextR-PM" id="t9"
+                >Extent to which agents are attracted to community center.</span
+              >
             </div>
 
             <input
@@ -79,7 +88,10 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">Probability of testing positive:</p>
-              <span class="tooltiptextR-PM" id="t11">Probability infectious agents show symptoms and get tested positive</span>
+              <span class="tooltiptextR-PM" id="t11"
+                >Probability infectious agents show symptoms and get tested
+                positive</span
+              >
             </div>
 
             <input
@@ -100,7 +112,9 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">Infectivity reduction factor:</p>
-              <span class="tooltiptextR-PM" id="t12">Reduces infectivity of a positive tested agent</span>
+              <span class="tooltiptextR-PM" id="t12"
+                >Reduces infectivity of a positive tested agent</span
+              >
             </div>
 
             <input
@@ -124,7 +138,9 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">Probability of moving to ICU:</p>
-              <span class="tooltiptextR-PM" id="t13">Fraction of infected with critical condition</span>
+              <span class="tooltiptextR-PM" id="t13"
+                >Fraction of infected with critical condition</span
+              >
             </div>
 
             <input
@@ -145,7 +161,9 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">ICU capacity per community</p>
-              <span class="tooltiptextR-PM" id="t14">Number of ICU beds available per community</span>
+              <span class="tooltiptextR-PM" id="t14"
+                >Number of ICU beds available per community</span
+              >
             </div>
             <input
               type="range"
@@ -168,8 +186,11 @@
         <div class="panel">
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Probability a collision will result in infection </p>
-              <span class="tooltiptextR-PM" id="t15">After contact with an infectious-chance you will get the disease</span>
+              <p class="tp">Probability a collision will result in infection</p>
+              <span class="tooltiptextR-PM" id="t15"
+                >After contact with an infectious-chance you will get the
+                disease</span
+              >
             </div>
             <input
               type="range"
@@ -188,8 +209,13 @@
           </div>
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Probability a non-infectious agent becomes immune</p>
-              <span class="tooltiptextR-PM" id="t16"> Probability a non-infectious agent becomes directly immune post incubation</span>
+              <p class="tp">
+                Probability a non-infectious agent becomes immune
+              </p>
+              <span class="tooltiptextR-PM" id="t16">
+                Probability a non-infectious agent becomes directly immune post
+                incubation</span
+              >
             </div>
             <input
               type="range"
@@ -226,7 +252,10 @@
             <div class="col-sm">
               <div class="tooltipR-PM" id="PMDIV">
                 <p class="tp">Minimum incubation time</p>
-                <span class="tooltiptextR-PM" id="t17">The time it takes for an agent to start infecting others after infection</span>
+                <span class="tooltiptextR-PM" id="t17"
+                  >The time it takes for an agent to start infecting others
+                  after infection</span
+                >
               </div>
               <input
                 type="range"
@@ -249,7 +278,10 @@
             <div class="col-sm">
               <div class="tooltipR-PM" id="PMDIV">
                 <p class="tp">Maxmimum incubation time</p>
-                <span class="tooltiptextR-PM" id="t18">The max. time it takes for an agent to start infecting others after infection</span>
+                <span class="tooltiptextR-PM" id="t18"
+                  >The max. time it takes for an agent to start infecting others
+                  after infection</span
+                >
               </div>
               <input
                 type="range"
@@ -270,21 +302,24 @@
 
           <div class="row">
             <div class="col-sm">
-
               <div class="tooltipR-PM" id="PMDIV">
                 <p class="tp">Minimum time a patient is infectious</p>
-                <span class="tooltiptextR-PM" id="t19">The min. time for which infectious agents infect others</span>
+                <span class="tooltiptextR-PM" id="t19"
+                  >The min. time for which infectious agents infect others</span
+                >
               </div>
               <p>
-              <input
-                type="range"
-                min="1"
-                max="6"
-                value="5"
-                step="1"
-                class="slider"
-                id="minInfectiousTime"
-              />
+                <input
+                  type="range"
+                  min="1"
+                  max="6"
+                  value="5"
+                  step="1"
+                  class="slider"
+                  id="minInfectiousTime"
+                />
+              </p>
+
               <div class="outputContainer">
                 <output id="minInfectiousTimeOut" for="minInfectiousTime"
                   >5 days</output
@@ -297,7 +332,9 @@
             <div class="col-sm">
               <div class="tooltipR-PM" id="PMDIV">
                 <p class="tp">Maximum time a patient is infectious</p>
-                <span class="tooltiptextR-PM" id="t20">The max. time for which infectious agents infect others</span>
+                <span class="tooltiptextR-PM" id="t20"
+                  >The max. time for which infectious agents infect others</span
+                >
               </div>
               <input
                 type="range"
@@ -320,7 +357,10 @@
             <div class="col-sm">
               <div class="tooltipR-PM" id="PMDIV">
                 <p class="tp">Minimum time from end of incubation to death.</p>
-                <span class="tooltiptextR-PM" id="t21">The min. time needed for an agent to die after they turn infectious</span>
+                <span class="tooltiptextR-PM" id="t21"
+                  >The min. time needed for an agent to die after they turn
+                  infectious</span
+                >
               </div>
               <input
                 type="range"
@@ -343,7 +383,10 @@
             <div class="col-sm">
               <div class="tooltipR-PM" id="PMDIV">
                 <p class="tp">Maximum time from end of incubation to death.</p>
-                <span class="tooltiptextR-PM" id="t22">The max. time until an agent dies after they turn infectious</span>
+                <span class="tooltiptextR-PM" id="t22"
+                  >The max. time until an agent dies after they turn
+                  infectious</span
+                >
               </div>
               <input
                 type="range"
@@ -364,8 +407,13 @@
 
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Circle of infection (how many people one person can infect at once)</p>
-              <span class="tooltiptextR-PM" id="t23">From how far an agent can infect someone</span>
+              <p class="tp">
+                Circle of infection (how many people one person can infect at
+                once)
+              </p>
+              <span class="tooltiptextR-PM" id="t23"
+                >From how far an agent can infect someone</span
+              >
             </div>
             <input
               type="range"
@@ -388,7 +436,10 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">Initial number of susceptibles:</p>
-              <span class="tooltiptextR-PM" id="t24">How many non infectious agents the model starts with(reload after altering)</span>
+              <span class="tooltiptextR-PM" id="t24"
+                >How many non infectious agents the model starts with(reload
+                after altering)</span
+              >
             </div>
             <input
               type="range"
@@ -409,7 +460,10 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">Initial number of infectious:</p>
-              <span class="tooltiptextR-PM" id="t25">How many infectious agents the model starts with(reload after altering)</span>
+              <span class="tooltiptextR-PM" id="t25"
+                >How many infectious agents the model starts with(reload after
+                altering)</span
+              >
             </div>
             <input
               type="range"
@@ -428,7 +482,10 @@
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
               <p class="tp">Number of communities:</p>
-              <span class="tooltiptextR-PM" id="t26">How many communities there are in the model(reload after altering)</span>
+              <span class="tooltiptextR-PM" id="t26"
+                >How many communities there are in the model(reload after
+                altering)</span
+              >
             </div>
             <input
               type="range"
@@ -557,20 +614,15 @@
           <canvas id="chart-canvas" height="400px"></canvas>
         </div>
         <div id="time-control-bar">
-          <button id="time-control-toggle-pause-button" class="btn-secondary">
-            Pause/Resume
+          <button id="time-control-toggle-pause-button">
+            <i class="fas fa-pause" style="font-size: 22px;"></i
+            ><i class="fas fa-play" style="font-size: 19px;"></i>
           </button>
-          <button id="time-control-reset-button" class="btn-secondary">
+          <!-- <button id="time-control-reset-button" class="btn-secondary">
             Reset
-          </button>
-          <span id="time-control-days-display"></span>
-        </div>
-        <div id="time-control-bar">
-          <button id="time-control-toggle-pause-button" class="btn-secondary">
-            Pause/Resume
-          </button>
-          <button id="time-control-reset-button" class="btn-secondary">
-            Reset
+          </button> -->
+          <button id="time-control-reset-button">
+            <i class="fas fa-undo" style="font-size: 22px;"></i>
           </button>
           <span id="time-control-days-display"></span>
         </div>

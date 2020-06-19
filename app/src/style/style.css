@@ -39,6 +39,10 @@ body {
   font-size: 20px;
 }
 
+#chart-canvas {
+  width: 50vw;
+}
+
 button {
   color: white;
   text-align: center;
@@ -52,7 +56,7 @@ button {
 #time-control-bar {
   width: 600px;
   justify-content: center;
-
+  top: -580px;
   display: flex;
   height: 50px;
 }
@@ -75,6 +79,7 @@ button {
 #timeline {
   display: flex;
   color: black;
+  top: -600px;
 }
 
 /* 
@@ -302,11 +307,11 @@ h3 {
   opacity: 0.75;
 }
 
-.tp{
-  height:3px;
+.tp {
+  height: 3px;
 }
 
-#PMDIV{
+#PMDIV {
   position: relative;
   height: 40px;
 }
@@ -374,12 +379,12 @@ h3 {
   border-color: transparent black transparent transparent;
 }
 
-#t8{
-  position:relative;
-  top:-20px;
-  left:140px;
-  width:400px;
-  height:30px;
+#t8 {
+  position: relative;
+  top: -20px;
+  left: 140px;
+  width: 400px;
+  height: 30px;
 }
 
 /* BOTTOM TOOLTIPS */
@@ -463,9 +468,9 @@ h3 {
   border-color: transparent black transparent transparent;
 }
 
-#t9{
-  top:-20px;
-  left:80px;
+#t9 {
+  top: -20px;
+  left: 80px;
 }
 
 .tooltip-demo {
@@ -511,91 +516,89 @@ h3 {
   top: 5px;
 }
 
-#t16{
-  position:relative;
-  left:370px;
-  top:-20px;
+#t16 {
+  position: relative;
+  left: 370px;
+  top: -20px;
 }
 
-#t17{
-  position:relative;
-  top:-20px;
+#t17 {
+  position: relative;
+  top: -20px;
 }
 
-#t18{
-  position:relative;
-  top:-20px;
+#t18 {
+  position: relative;
+  top: -20px;
 }
 
-#t19{
-  position:relative;
-  top:-20px;
-  left:265px;
+#t19 {
+  position: relative;
+  top: -20px;
+  left: 265px;
 }
 
-#t20{
-  position:relative;
-  top:-20px;
-  left:265px;
+#t20 {
+  position: relative;
+  top: -20px;
+  left: 265px;
 }
 
-#t21{
-  position:relative;
-  top:-20px;
-  left:340px;
+#t21 {
+  position: relative;
+  top: -20px;
+  left: 340px;
 }
 
-#t22{
-  position:relative;
-  top:-20px;
-  left:340px;
+#t22 {
+  position: relative;
+  top: -20px;
+  left: 340px;
 }
 
-#t23{
-  position:relative;
-  top:-20px;
-  left:485px;
+#t23 {
+  position: relative;
+  top: -20px;
+  left: 485px;
 }
 
-#t12{
-  position:relative;
-  top:-20px;
+#t12 {
+  position: relative;
+  top: -20px;
 }
 
-#t13{
-  position:relative;
-  top:-20px;
+#t13 {
+  position: relative;
+  top: -20px;
 }
 
-#t14{
-  position:relative;
-  top:-20px;
+#t14 {
+  position: relative;
+  top: -20px;
 }
 
-#t15{
-  position:relative;
-  top:-20px;
-  left:310px;
+#t15 {
+  position: relative;
+  top: -20px;
+  left: 310px;
 }
 
-#t24{
-  position:relative;
-  top:-20px;
+#t24 {
+  position: relative;
+  top: -20px;
 }
 
-#t25{
-  position:relative;
-  top:-20px;
-  left:200px;
+#t25 {
+  position: relative;
+  top: -20px;
+  left: 200px;
 }
 
-#t26{
-  position:relative;
-  top:-20px;
-  left:180px;
+#t26 {
+  position: relative;
+  top: -20px;
+  left: 180px;
 }
-
-
 
 .btn-preset {
   background-color: white;
@@ -710,7 +713,34 @@ ul li:hover {
   width: 90%;
 }
 
-#t11{
-  position:relative;
-  top:-20px;
+#t11 {
+  position: relative;
+  top: -20px;
+}
+
+#time-control-toggle-pause-button {
+  background-color: #05befc;
+  border: 2px solid #009dd1;
+  /* text-align: center; */
+}
+
+#time-control-toggle-pause-button:hover {
+  background-color: #009dd1;
+  color: white;
+}
+
+#time-control-reset-button {
+  background-color: #05befc;
+  border: 2px solid #009dd1;
+  /* text-align: center; */
+}
+
+#time-control-reset-button:hover {
+  background-color: #009dd1;
+  color: white;
+}
+
+.fas {
+  color: white;
+  margin: 4px;
 }

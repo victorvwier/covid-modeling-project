@@ -1,8 +1,8 @@
-export const MAXIMUM_DAYS = 356;
+export const MAXIMUM_DAYS = 365;
 
 /**
  * An enum representing the different presets.
- * 
+ *
  * @enum {String}
  */
 export const PRESET_TYPES = {
@@ -14,7 +14,7 @@ export const PRESET_TYPES = {
 
 /**
  * An enum representing the colors for the different states.
- * 
+ *
  * @enum {String}
  */
 export const COLORS = {
@@ -27,7 +27,7 @@ export const COLORS = {
 
 /**
  * An enum representing the different states.
- * 
+ *
  * @enum {String}
  */
 export const TYPES = {
@@ -40,7 +40,7 @@ export const TYPES = {
 
 /**
  * An enum representing the different genders.
- * 
+ *
  * @enum {String}
  */
 export const GENDERS = {
@@ -50,20 +50,20 @@ export const GENDERS = {
 
 /**
  * An enum representing the different parameters the timeline rules can affect.
- * 
+ *
  * @enum {String}
  */
 export const TIMELINE_PARAMETERS = {
   SOCIAL_DISTANCING: 'soc',
   ATTRACTION_TO_CENTER: 'atc',
-}
+};
 
 /**
  * An enum representing the different stats the timeline rules can trigger on.
- * 
+ *
  * @enum {String}
  */
 export const TIMELINE_THRESHOLDS = {
   INFECTION_COUNT: 'inf',
   ICU_COUNT: 'icu',
-}
+};
