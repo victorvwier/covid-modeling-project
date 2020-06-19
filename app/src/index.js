@@ -1,6 +1,5 @@
 /* eslint-disable import/first */
 
-
 import presetManager from './scripts/presetsManager';
 import Main from './scripts/main';
 import {

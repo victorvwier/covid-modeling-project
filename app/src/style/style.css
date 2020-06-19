@@ -97,6 +97,7 @@ button {
   width: 600px;
   height: 600px;
   position: relative;
+  margin-bottom: 20px;
 }
 
 /* Styling the canvas which overlaps the model canvas so that borders computed in Model.js constructor can be added on top of the communities.  */
@@ -238,7 +239,7 @@ h3 {
   content: '';
   display: table;
   clear: both;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 #demographics {
@@ -339,13 +340,6 @@ h3 {
   top: 10px;
 }
 
-#t6 {
-  background-color: #cccccc;
-  position: relative;
-  top: -10px;
-  left: 285px;
-}
-
 /* RIGHT TOOLTIPS */
 .tooltipR {
   background-color: pink;
@@ -359,7 +353,7 @@ h3 {
   width: 400px;
   background-color: black;
   color: #fff;
-  text-align: center;
+  text-align: left;
   border-radius: 6px;
   padding: 5px 0;
 
@@ -480,14 +474,14 @@ h3 {
 .tooltip-demo {
   position: relative;
   display: inline-block;
-  color: black;
+  color: whitesmoke;
 }
 
 .tooltip-demo .tooltiptext-demo {
   visibility: hidden;
   width: 600px;
-  background-color: black;
-  color: white;
+  /* background-color: black; */
+  color: black;
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
@@ -516,7 +510,24 @@ h3 {
 }
 
 #t10 {
-  left: 320px;
+  position: relative;
+  left: 347px;
+  top: 5px;
+}
+
+#i10 {
+  bottom: 5px;
+  right: -248px;
+}
+
+#i6 {
+  bottom: 5px;
+  right: -248px;
+}
+
+#t6 {
+  position: relative;
+  left: 347px;
   top: 5px;
 }
 
@@ -763,10 +774,10 @@ ul li:hover {
 }
 
 .fa-question-circle {
-  color: black;
+  color: #aaa;
   position: absolute;
-  right: 0px;
-  bottom: 0px;
+  right: 5px;
+  bottom: 5px;
 }
 
 #title-container {

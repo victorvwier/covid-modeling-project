@@ -638,16 +638,9 @@
             An overview of the amount of agents in each state in each age and
             gender category.
           </h5>
-        </div>
-        <div id="gender-label">
-          <h6>Male</h6>
-          <h6>Female</h6>
-        </div>
 
-        <div id="demographics-container">
-          <canvas id="demographics" height="450px"></canvas>
           <div class="tooltip-demo" id="t10">
-            About
+            <i class="fa fa-question-circle" id="i10"></i>
             <span class="tooltiptext-demo">
               Demography is the statistical study of populations, especially
               human beings.The chart above displays information regarding the
@@ -661,18 +654,35 @@
             </span>
           </div>
         </div>
+        <div id="gender-label">
+          <h6>Male</h6>
+          <h6>Female</h6>
+        </div>
+
+        <div id="demographics-container">
+          <canvas id="demographics" height="450px"></canvas>
+          <!-- <div class="tooltip-demo" id="t10">
+            About
+            <span class="tooltiptext-demo">
+              Demography is the statistical study of populations, especially
+              human beings.The chart above displays information regarding the
+              current running simulation concerning the infection of males(left)
+              and females(right) of different age ranges. The age ranges are on
+              the y axis and the values of the corresponding
+              statistic(infectious,immune etc.) are on the x-axis. This graph
+              shows the spread of diesease across different age group and shows
+              that young people are also less likely to die than older people in
+              general.
+            </span>
+          </div> -->
+        </div>
       </div>
       <div id="right-side-container">
         <div id="title-container">
           <h4>Agent-Based Model</h4>
           <h5>The distribution of the population over time.</h5>
-        </div>
-        <div id="model-border-canvases-container">
-          <canvas id="glCanvas" width="600px" height="600px"></canvas>
-          <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
-          <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
           <div class="tooltipB" id="t6">
-            About
+            <i class="fa fa-question-circle" id="i6"></i>
             <span class="tooltiptextB">
               The model shown above is a graphical representation of our Agent
               Based simulation. The dots represent agents which reflect the
@@ -689,6 +699,11 @@
               model corresponds exactly with the graph on the top left.
             </span>
           </div>
+        </div>
+        <div id="model-border-canvases-container">
+          <canvas id="glCanvas" width="600px" height="600px"></canvas>
+          <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
+          <canvas id="BorderCanvas" width="600px" height="600px"></canvas>
         </div>
         <div class="statrow">
           <div class="stat" style="background-color: #05befc;">
