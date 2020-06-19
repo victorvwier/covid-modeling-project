@@ -146,6 +146,7 @@ button {
 #main {
   display: flex;
   flex-direction: row;
+  align-items: start;
   justify-content: space-between;
 }
 
@@ -242,7 +243,7 @@ h3 {
 
 #demographics {
   width: 45vw;
-  height: 110vh;
+  height: 100vh;
 }
 
 .accordion {

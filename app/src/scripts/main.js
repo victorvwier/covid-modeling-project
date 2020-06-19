@@ -227,7 +227,6 @@ export default class Main {
    * A function to pause/resume the model and the chart.
    */
   togglePause() {
-    console.log('test');
     this.model.togglePause();
   }
 

@@ -20,7 +20,10 @@ import {
 import { MAXIMUM_DAYS } from './CONSTANTS';
 import { getRandom } from './util';
 
-const { SPACE_BETWEEN_COMMUNITIES, DAYS_PER_SECOND } = presetsManager.loadPreset();
+const {
+  SPACE_BETWEEN_COMMUNITIES,
+  DAYS_PER_SECOND,
+} = presetsManager.loadPreset();
 
 /** @class Model representing a simulation of one or multiple communities. */
 export default class Model {
@@ -114,7 +117,7 @@ export default class Model {
 
   /**
    * A function to create stats divided over the different communities.
-   * 
+   *
    * @param {number} index The index of the community.
    */
   _createDividedStats(index) {
@@ -176,13 +179,14 @@ export default class Model {
    */
   run() {
     require('seedrandom')('hi.', { global: true });
-    console.log(getRandom());
-    console.log(getRandom());console.log(getRandom());
     wireSlidersToHandlers(this);
     this.populateCommunities();
     this.updateAgentSize(this.getAgentSize(this.stats.sum()));
 
-    this._mainLoopInterval = setInterval(this._animationFunction.bind(this), 50);
+    this._mainLoopInterval = setInterval(
+      this._animationFunction.bind(this),
+      50
+    );
     this._chartInterval = setInterval(this.compileStats.bind(this), 500);
   }
 
@@ -192,18 +196,18 @@ export default class Model {
    * @param {number} timestamp The timestamp of the current moment.
    */
   _animationFunction() {
-    if(this.timestamp > MAXIMUM_DAYS){
+    if (this.timestamp > MAXIMUM_DAYS) {
       clearInterval(this._mainLoopInterval);
       clearInterval(this._chartInterval);
       return;
     }
-    const dt = 0.050 * DAYS_PER_SECOND;
+    const dt = 0.05 * DAYS_PER_SECOND;
     this.timestamp += dt;
     this.passDrawInfoToAgentChart();
     Object.values(this.communities).forEach((com) => com.step(dt));
     // Check all relocations
     this.relocationUtil.handleAllRelocations();
-    
+
     const stats = Object.values(this.communities)
       .map((m) => m.exportStats())
       .reduce(
@@ -220,8 +224,8 @@ export default class Model {
 
     const relocationStats = this.relocationUtil.getStats();
     const finalStats = Stats.joinStats(stats, relocationStats);
-    
-    this.updateTimeline(finalStats, this.timestamp );
+
+    this.updateTimeline(finalStats, this.timestamp);
     this.updateDemographicChart();
   }
 
@@ -229,9 +233,12 @@ export default class Model {
    * A function to pause/unpause the model;
    */
   togglePause() {
-    if(this.paused) {
+    if (this.paused) {
       // Unpause
-      this._mainLoopInterval = setInterval(this._animationFunction.bind(this), 50);
+      this._mainLoopInterval = setInterval(
+        this._animationFunction.bind(this),
+        50
+      );
       this._chartInterval = setInterval(this.compileStats.bind(this), 500);
     } else {
       // Pause
@@ -359,7 +366,7 @@ export default class Model {
 
   /**
    * A function to get the site an agent should be drawn with.
-   * 
+   *
    * @param {number} population The size of the population.
    */
   getAgentSize(population) {
@@ -411,8 +418,6 @@ export default class Model {
    */
   resetModel(stats) {
     require('seedrandom')('hi.', { global: true });
-    console.log(getRandom());
-    console.log(getRandom());console.log(getRandom());
     this._setValuesFromStatsToLocal(stats);
     this.relocationUtil.clearAllRelocationsForReset();
     this.timestamp = 0;
