@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 
-
 import presetManager from './scripts/presetsManager';
+import adjustUi from './scripts/DOM/adjustUi';
 import Main from './scripts/main';
 import {
   createPresetsDropDown,
@@ -70,4 +70,5 @@ window.onload = function () {
   );
   createSliders();
   main.run();
+  adjustUi.makeLeftAndRightPanelSameHeight();
 };

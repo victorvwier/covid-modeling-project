@@ -163,7 +163,7 @@ button {
 #right-side-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   width: 47.6vw;
   background-color: #e0e0e0;
@@ -243,7 +243,6 @@ h3 {
 
 #demographics {
   width: 45vw;
-  height: 100vh;
 }
 
 .accordion {
