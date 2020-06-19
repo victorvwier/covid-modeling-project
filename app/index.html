@@ -78,7 +78,7 @@
           </div>
           <div class="col-sm">
             <div class="tooltipR-PM" id="PMDIV">
-              <p >Probability of testing positive:</p>
+              <p class="tp">Probability of testing positive:</p>
               <span class="tooltiptextR-PM" id="t11">Probability infectious agents show symptoms and get tested positive</span>
             </div>
 
@@ -122,7 +122,11 @@
             </div>
           </div>
           <div class="col-sm">
-            <p>Probability of moving to ICU:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Probability of moving to ICU:</p>
+              <span class="tooltiptextR-PM" id="t13">Fraction of infected with critical condition</span>
+            </div>
+
             <input
               type="range"
               min="0"
@@ -139,7 +143,10 @@
             </div>
           </div>
           <div class="col-sm">
-            <p>ICU capacity:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">ICU capacity per community</p>
+              <span class="tooltiptextR-PM" id="t14">Number of ICU beds available per community</span>
+            </div>
             <input
               type="range"
               min="0"
@@ -160,10 +167,10 @@
         <button class="accordion">Agent Parameters</button>
         <div class="panel">
           <div class="col-sm">
-            <p>
-              Probability a collision will result in infection (transmission
-              probability)
-            </p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Probability a collision will result in infection </p>
+              <span class="tooltiptextR-PM" id="t15">After contact with an infectious-chance you will get the disease</span>
+            </div>
             <input
               type="range"
               min="0.00"
@@ -180,9 +187,10 @@
             </div>
           </div>
           <div class="col-sm">
-            <p>
-              Probability a non-infectious agent becomes immune
-            </p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Probability a non-infectious agent becomes immune</p>
+              <span class="tooltiptextR-PM" id="t16">After contact with an infectious-chance you will get the disease</span>
+            </div>
             <input
               type="range"
               min="0.00"
@@ -216,9 +224,10 @@
 
           <div class="row">
             <div class="col-sm">
-              <p>
-                Minimum incubation time
-              </p>
+              <div class="tooltipR-PM" id="PMDIV">
+                <p class="tp">Minimum incubation time</p>
+                <span class="tooltiptextR-PM" id="t17">The time it takes for an agent to start infecting others after infection</span>
+              </div>
               <input
                 type="range"
                 min="1"
@@ -238,9 +247,10 @@
 
           <div class="row">
             <div class="col-sm">
-              <p>
-                Maxmimum incubation time
-              </p>
+              <div class="tooltipR-PM" id="PMDIV">
+                <p class="tp">Maxmimum incubation time</p>
+                <span class="tooltiptextR-PM" id="t18">The max. time it takes for an agent to start infecting others after infection</span>
+              </div>
               <input
                 type="range"
                 min="8"
@@ -260,9 +270,12 @@
 
           <div class="row">
             <div class="col-sm">
+
+              <div class="tooltipR-PM" id="PMDIV">
+                <p class="tp">Minimum time a patient is infectious</p>
+                <span class="tooltiptextR-PM" id="t18">The min. time for which infectious agents infect others</span>
+              </div>
               <p>
-                Minimum time a patient is infectious
-              </p>
               <input
                 type="range"
                 min="1"
@@ -282,9 +295,10 @@
 
           <div class="row">
             <div class="col-sm">
-              <p>
-                Maximum time a patient is infectious
-              </p>
+              <div class="tooltipR-PM" id="PMDIV">
+                <p class="tp">Maximum time a patient is infectious</p>
+                <span class="tooltiptextR-PM" id="t19">The max. time for which infectious agents infect others</span>
+              </div>
               <input
                 type="range"
                 min="7"
@@ -304,9 +318,10 @@
 
           <div class="row">
             <div class="col-sm">
-              <p>
-                Minimum time from end of incubation to death.
-              </p>
+              <div class="tooltipR-PM" id="PMDIV">
+                <p class="tp">Minimum time from end of incubation to death.</p>
+                <span class="tooltiptextR-PM" id="t20">The min. time needed for an agent to die after they turn infectious</span>
+              </div>
               <input
                 type="range"
                 min="1"
@@ -326,9 +341,10 @@
 
           <div class="row">
             <div class="col-sm">
-              <p>
-                Maximum time from end of incubation to death.
-              </p>
+              <div class="tooltipR-PM" id="PMDIV">
+                <p class="tp">Maximum time from end of incubation to death.</p>
+                <span class="tooltiptextR-PM" id="t21">The max. time until an agent dies after they turn infectious</span>
+              </div>
               <input
                 type="range"
                 min="17"
@@ -347,10 +363,10 @@
           </div>
 
           <div class="col-sm">
-            <p>
-              Circle of infection (how many people one person can infect at
-              once)
-            </p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Circle of infection (how many people one person can infect at once)</p>
+              <span class="tooltiptextR-PM" id="t22">From how far an agent can infect someone</span>
+            </div>
             <input
               type="range"
               min="1"
@@ -370,7 +386,10 @@
         <button class="accordion">Initial Model Setup</button>
         <div class="panel">
           <div class="col-sm">
-            <p>Initial number of susceptibles:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Initial number of susceptibles:</p>
+              <span class="tooltiptextR-PM" id="t23">How many non infectious agents the model starts with(reload after altering)</span>
+            </div>
             <input
               type="range"
               min="100"
@@ -388,7 +407,10 @@
             <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
           </div>
           <div class="col-sm">
-            <p>Initial number of infectious:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Initial number of infectious:</p>
+              <span class="tooltiptextR-PM" id="t24">How many infectious agents the model starts with(reload after altering)</span>
+            </div>
             <input
               type="range"
               min="1"
@@ -404,7 +426,10 @@
             <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
           </div>
           <div class="col-sm">
-            <p>Number of communities:</p>
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Number of communities:</p>
+              <span class="tooltiptextR-PM" id="t25">How many communities there are in the model(reload after altering)</span>
+            </div>
             <input
               type="range"
               min="1"

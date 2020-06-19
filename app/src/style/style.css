@@ -385,9 +385,11 @@ h3 {
 }
 
 #t8{
-  position:absolute;
+  position:relative;
   top:-20px;
   left:140px;
+  width:400px;
+  height:30px;
 }
 
 
@@ -473,7 +475,7 @@ h3 {
 }
 
 #t9{
-  top:-35px;
+  top:-20px;
   left:80px;
 }
 
@@ -518,6 +520,31 @@ h3 {
 #t10{
   left:320px;
   top:5px;
+}
+
+#t12{
+  position:relative;
+  top:-20px;
+}
+
+#t13{
+  position:relative;
+  top:-20px;
+}
+
+#t14{
+  position:relative;
+  top:-20px;
+}
+
+#t15{
+  position:relative;
+  top:20px;
+}
+
+#t23{
+  position:relative;
+  top:20px;
 }
 
 
@@ -642,5 +669,5 @@ ul li:hover {
 
 #t11{
   position:relative;
-  top:-35px;
+  top:-20px;
 }
