@@ -489,8 +489,6 @@ h3 {
   position: absolute;
   z-index: 1;
   top: 120%;
-  left: -550%;
-  margin-left: -60px;
 }
 
 .tooltip-demo:hover .tooltiptext-demo {
@@ -516,14 +514,22 @@ h3 {
 
 #i10 {
   bottom: 5px;
-  right: -248px;
+  right: -370px;
+}
+
+#i10-text {
+  left: 66px;
 }
 
 #i6 {
   bottom: 5px;
-  right: -248px;
+  right: -373px;
 }
 
+#i6-text {
+  bottom: 5px;
+  left: 66px;
+}
 #t6 {
   position: relative;
   left: 347px;
