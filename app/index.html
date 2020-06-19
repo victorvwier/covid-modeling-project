@@ -12,7 +12,7 @@
 
   <body id="mainPage">
     <div class="headerMenu">
-      <div class="headerElement l" style="background-color: #bbb;">
+      <div class="headerElement l">
         <span
           style="font-size: 50px; cursor: pointer; color: white;"
           onclick="openNav()"
@@ -610,6 +610,10 @@
 
     <main id="main">
       <div id="left-panel">
+        <div id="title-container">
+          <h4>Simulation Chart</h4>
+          <h5>The distribution of the population over time.</h5>
+        </div>
         <div id="chart-container">
           <canvas id="chart-canvas" height="400px"></canvas>
         </div>
@@ -626,6 +630,19 @@
           </button>
           <span id="time-control-days-display"></span>
         </div>
+
+        <div id="title-container">
+          <h4>Demographics Chart</h4>
+          <h5>
+            An overview of the amount of agents in each state in each age and
+            gender category.
+          </h5>
+        </div>
+        <div id="gender-label">
+          <h6>Male</h6>
+          <h6>Female</h6>
+        </div>
+
         <div id="demographics-container">
           <canvas id="demographics" height="500px"></canvas>
           <div class="tooltip-demo" id="t10">
@@ -645,6 +662,10 @@
         </div>
       </div>
       <div id="right-side-container">
+        <div id="title-container">
+          <h4>Agent-Based Model</h4>
+          <h5>The distribution of the population over time.</h5>
+        </div>
         <div id="model-border-canvases-container">
           <canvas id="glCanvas" width="600px" height="600px"></canvas>
           <!-- This canvas is used for drawing a border around each community so must have same witdth and height.it is overlapped with the main agent canvas-->
@@ -703,5 +724,11 @@
         </div>
       </div>
     </main>
+    <div class="footer">
+      <p>
+        You're free to use this work however you see fit, including copying it,
+        modifying it, and distributing it on your own site.
+      </p>
+    </div>
   </body>
 </html>

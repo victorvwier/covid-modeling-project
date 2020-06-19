@@ -4,7 +4,7 @@ import { COLORS, TYPES, GENDERS } from './CONSTANTS';
 
 /**
  * A function to retrieve the age from the preset.
- * 
+ *
  * @returns {number} The age.
  */
 function getAge() {
@@ -28,7 +28,7 @@ export default class DemographicsChart {
 
   /**
    * A function to update the chart.
-   * 
+   *
    * @param {Person[]} population An array representing the population.
    */
   receiveUpdate(population) {
@@ -96,7 +96,7 @@ export default class DemographicsChart {
 
   /**
    * A function to get the amount of males in a population.
-   * 
+   *
    * @param {Person[]} population An array representing the population.
    */
   _getMaleCount(population) {
@@ -111,7 +111,7 @@ export default class DemographicsChart {
 
   /**
    * A function to get the amount of females in a population.
-   * 
+   *
    * @param {Person[]} population An array representing the population.
    */
   _getFemaleCount(population) {
@@ -145,7 +145,7 @@ export default class DemographicsChart {
 
   /**
    * A function to reset the chart.
-   * 
+   *
    * @param {number} populationSize The size of the population.
    */
   resetChart(populationSize) {
@@ -243,10 +243,7 @@ export default class DemographicsChart {
           display: false,
         },
         title: {
-          display: true,
-          text: 'Male           Female',
-          position: 'top',
-          fontSize: 24,
+          display: false,
         },
         responsive: false,
         tooltips: { enabled: false },
