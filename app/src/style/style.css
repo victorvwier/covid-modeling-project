@@ -591,7 +591,19 @@ h3 {
 
 #t24{
   position:relative;
-  top:20px;
+  top:-20px;
+}
+
+#t25{
+  position:relative;
+  top:-20px;
+  left:200px;
+}
+
+#t26{
+  position:relative;
+  top:-20px;
+  left:180px;
 }
 
 
