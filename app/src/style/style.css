@@ -52,12 +52,11 @@ button {
 #time-control-bar {
   width: 600px;
   justify-content: center;
-  
+
   display: flex;
   height: 50px;
 
-  position:relative;
-  top:-580px;
+  top: -580px;
 }
 
 #time-control-days-display {
@@ -78,8 +77,7 @@ button {
 #timeline {
   display: flex;
   color: black;
-  position:relative;
-  top:-600px;
+  top: -600px;
 }
 
 /* 
@@ -99,13 +97,14 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 50vw;
 }
 
 #model-border-canvases-container {
   width: 600px;
   height: 600px;
   position: relative;
-  top:100px;
+  /* top: 100px; */
 }
 
 /* Styling the canvas which overlaps the model canvas so that borders computed in Model.js constructor can be added on top of the communities.  */
@@ -163,7 +162,7 @@ button {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  width: 45vw;
+  width: 40vw;
 }
 
 .sidenav {
@@ -238,14 +237,14 @@ h3 {
 }
 
 #demographics {
-  width: 750px;
-  height: 500px;
+  width: 50vw;
+  height: 110vh;
 }
 
-#demographics-container{
+/* #demographics-container{
   position: relative;
   top:-500px;
-}
+} */
 
 .accordion {
   background-color: #eee;
@@ -305,50 +304,50 @@ h3 {
   color: white;
 }
 
-#t2{
+#t2 {
   position: relative;
-  top:-770px;
-  left:-1190px;
+  top: -770px;
+  left: -1190px;
   opacity: 0.75;
 }
 
-#PMDIV{
+#PMDIV {
   position: relative;
-  height:40px;
+  height: 40px;
 }
 
-#t3{
-  position:relative;
-  left:150px;
-  top:25px;
+#t3 {
+  position: relative;
+  left: 150px;
+  top: 25px;
   opacity: 1;
 }
 
-#t4{
-  position:relative;
-  top:115px;
-  left:75px;
+#t4 {
+  position: relative;
+  top: 115px;
+  left: 75px;
 }
 
-#t5{
-  position:relative;
-  left:10px;
-  top:10px;
+#t5 {
+  position: relative;
+  left: 10px;
+  top: 10px;
 }
 
-#t6{
+#t6 {
   background-color: #cccccc;
-  position:relative;
-  top:-10px;
-  left:285px;
+  position: relative;
+  top: -10px;
+  left: 285px;
 }
 
 /* RIGHT TOOLTIPS */
 .tooltipR {
   background-color: pink;
-  color:black;
+  color: black;
   display: inline-block;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .tooltipR .tooltiptextR {
@@ -370,7 +369,7 @@ h3 {
 }
 
 .tooltipR .tooltiptextR::after {
-  content: " ";
+  content: ' ';
   position: absolute;
   top: 50%;
   right: 100%; /* To the left of the tooltip */
@@ -380,17 +379,16 @@ h3 {
   border-color: transparent black transparent transparent;
 }
 
-#t8{
-  top:-35px;
-  left:140px;
+#t8 {
+  top: -35px;
+  left: 140px;
 }
-
 
 /* BOTTOM TOOLTIPS */
 .tooltipB {
   position: relative;
   display: inline-block;
-  color:black;
+  color: black;
 }
 
 .tooltipB .tooltiptextB {
@@ -401,7 +399,7 @@ h3 {
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
-  
+
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
@@ -415,9 +413,9 @@ h3 {
 }
 
 .tooltipB .tooltiptextB::after {
-  content: " ";
+  content: ' ';
   position: absolute;
-  bottom: 100%;  /* At the top of the tooltip */
+  bottom: 100%; /* At the top of the tooltip */
   left: 50%;
   margin-left: -5px;
   border-width: 5px;
@@ -427,14 +425,14 @@ h3 {
 
 /* PARAMETER TOOLTIP IS A RIGHT TOOLTIP WITH A DIFFERENT COLOR THAN MODEL TOOLTIP*/
 .tooltipR-PM {
-  color:black;
+  color: black;
   display: inline-block;
-  cursor:pointer;
+  cursor: pointer;
 }
 
-.tooltiptextR-PM{
-  width:60px;
-  height:50px;
+.tooltiptextR-PM {
+  width: 60px;
+  height: 50px;
 }
 
 .tooltipR-PM .tooltiptextR-PM {
@@ -446,9 +444,9 @@ h3 {
   padding: 5px 0;
 
   /* Position the tooltip */
-  position:relative;
-  top:-60px;
-  left:210px;
+  position: relative;
+  top: -60px;
+  left: 210px;
   z-index: 1;
 }
 
@@ -457,7 +455,7 @@ h3 {
 }
 
 .tooltipR-PM .tooltiptextR-PM::after {
-  content: " ";
+  content: ' ';
   position: absolute;
   top: 50%;
   right: 100%; /* To the left of the tooltip */
@@ -467,15 +465,15 @@ h3 {
   border-color: transparent black transparent transparent;
 }
 
-#t9{
-  top:-35px;
-  left:80px;
+#t9 {
+  top: -35px;
+  left: 80px;
 }
 
 .tooltip-demo {
   position: relative;
   display: inline-block;
-  color:black;
+  color: black;
 }
 
 .tooltip-demo .tooltiptext-demo {
@@ -486,7 +484,7 @@ h3 {
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
-  
+
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
@@ -500,9 +498,9 @@ h3 {
 }
 
 .tooltip-demo .tooltiptext-demo::after {
-  content: " ";
+  content: ' ';
   position: absolute;
-  bottom: 100%;  /* At the top of the tooltip */
+  bottom: 100%; /* At the top of the tooltip */
   left: 50%;
   margin-left: -5px;
   border-width: 5px;
@@ -510,12 +508,10 @@ h3 {
   border-color: transparent transparent black transparent;
 }
 
-#t10{
-  left:320px;
-  top:5px;
+#t10 {
+  left: 320px;
+  top: 5px;
 }
-
-
 
 .btn-preset {
   background-color: white;
@@ -565,10 +561,14 @@ h3 {
   margin-top: 0px;
 }
 
-#chart-container{
-  position:relative;
-  top:-150px;
+#chart-canvas {
+  width: 50vw;
 }
+
+/* #chart-container {
+  position: relative;
+  top: -150px;
+} */
 
 /* Remove margins and padding from the list */
 ul {
@@ -635,7 +635,7 @@ ul li:hover {
   width: 90%;
 }
 
-#t11{
-  position:relative;
-  top:-35px;
+#t11 {
+  position: relative;
+  top: -35px;
 }
