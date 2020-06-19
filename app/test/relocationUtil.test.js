@@ -36,6 +36,7 @@ describe('RelocationUtil tests', () => {
       stats,
       () => {},
       () => {},
+      () => {},
       borderCtxMock
     );
     model.presetInProcess = true;

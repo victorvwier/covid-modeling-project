@@ -15,10 +15,16 @@ import {
   getInitialNumSusceptible,
   updateTheStatistics,
   getNumCommunities,
+  getRepulsionForce,
+  getAttractionToCenter,
 } from './DOM/domValues';
 import { Timeline } from './timeline';
 import { TIMELINE_PARAMETERS } from './CONSTANTS';
-import { wireTimelineButtontoTimeline, setRulesList, clearRulesList } from './DOM/timelineDOM';
+import {
+  wireTimelineButtontoTimeline,
+  setRulesList,
+  clearRulesList,
+} from './DOM/timelineDOM';
 
 // Creates chart and graph internally
 /** @class Main handling all seperate components of our program. */
@@ -77,7 +83,8 @@ export default class Main {
     this.timeline = new Timeline(
       timelineCanvas,
       this.timelineCallback.bind(this),
-      clearRulesList, 
+      this.timelineGetCallback,
+      clearRulesList,
       setRulesList
     );
     this.timeline.importPresetRules();
@@ -127,6 +134,16 @@ export default class Main {
     }
   }
 
+  // eslint-disable-next-line consistent-return
+  timelineGetCallback(timelineParam) {
+    if (timelineParam === TIMELINE_PARAMETERS.SOCIAL_DISTANCING) {
+      return getRepulsionForce();
+    }
+    if (timelineParam === TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER) {
+      return getAttractionToCenter();
+    }
+  }
+
   // Assume only model calls this one so update chart
   /**
    * A function to update the local stats and update the chart with them.
@@ -142,7 +159,6 @@ export default class Main {
     this.numIcu = stats.icu;
 
     this.chart.updateValues(this.createCurrentStats(), timestamp);
-    this.timeline.update(stats, timestamp);
     updateTheStatistics(
       this.numSusceptible,
       this.numNonInfectious,
@@ -161,6 +177,10 @@ export default class Main {
   updateDemographicChart() {
     const population = this.model.getAllPopulation();
     this.demographicsChart.receiveUpdate(population);
+  }
+
+  updateTimeline(stats, timestamp) {
+    this.timeline.update(stats, timestamp);
   }
 
   /**
@@ -187,6 +207,7 @@ export default class Main {
       stats,
       this.receiveNewStatsAndUpdateChart.bind(this),
       this.updateDemographicChart.bind(this),
+      this.updateTimeline.bind(this),
       this.borderCtx
     );
   }
@@ -206,7 +227,7 @@ export default class Main {
    * A function to pause/resume the model and the chart.
    */
   togglePause() {
-    console.log("test");
+    console.log('test');
     this.model.togglePause();
   }
 
