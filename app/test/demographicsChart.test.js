@@ -51,6 +51,7 @@ describe('demographicsChart test', () => {
       new Stats(1, 1, 1, 1, 1),
       () => {},
       () => {},
+      () => {},
       borderCtxMock
     );
     model.presetInProcess = true;

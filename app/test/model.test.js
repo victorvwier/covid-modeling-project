@@ -27,13 +27,14 @@ describe('Community test', () => {
         })),
       },
     };
-    
+
     model = new Model(
       4,
       agentChart,
       width,
       height,
       stats,
+      () => {},
       () => {},
       () => {},
       borderCtxMock

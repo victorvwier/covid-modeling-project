@@ -52,7 +52,7 @@ button {
 #time-control-bar {
   width: 600px;
   justify-content: center;
-  
+
   display: flex;
   height: 50px;
 }
@@ -94,6 +94,7 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 50vw;
 }
 
 #model-border-canvases-container {
@@ -157,7 +158,7 @@ button {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  width: 45vw;
+  width: 40vw;
 }
 
 .sidenav {
@@ -232,8 +233,8 @@ h3 {
 }
 
 #demographics {
-  width: 750px;
-  height: 500px;
+  width: 50vw;
+  height: 110vh;
 }
 
 .accordion {
@@ -294,10 +295,10 @@ h3 {
   color: white;
 }
 
-#t2{
+#t2 {
   position: relative;
-  top:-770px;
-  left:-1190px;
+  top: -770px;
+  left: -1190px;
   opacity: 0.75;
 }
 
@@ -307,41 +308,41 @@ h3 {
 
 #PMDIV{
   position: relative;
-  height:40px;
+  height: 40px;
 }
 
-#t3{
-  position:relative;
-  left:150px;
-  top:25px;
+#t3 {
+  position: relative;
+  left: 150px;
+  top: 25px;
   opacity: 1;
 }
 
-#t4{
-  position:relative;
-  top:115px;
-  left:75px;
+#t4 {
+  position: relative;
+  top: 115px;
+  left: 75px;
 }
 
-#t5{
-  position:relative;
-  left:10px;
-  top:10px;
+#t5 {
+  position: relative;
+  left: 10px;
+  top: 10px;
 }
 
-#t6{
+#t6 {
   background-color: #cccccc;
-  position:relative;
-  top:-10px;
-  left:285px;
+  position: relative;
+  top: -10px;
+  left: 285px;
 }
 
 /* RIGHT TOOLTIPS */
 .tooltipR {
   background-color: pink;
-  color:black;
+  color: black;
   display: inline-block;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .tooltipR .tooltiptextR {
@@ -363,7 +364,7 @@ h3 {
 }
 
 .tooltipR .tooltiptextR::after {
-  content: " ";
+  content: ' ';
   position: absolute;
   top: 50%;
   right: 100%; /* To the left of the tooltip */
@@ -381,12 +382,11 @@ h3 {
   height:30px;
 }
 
-
 /* BOTTOM TOOLTIPS */
 .tooltipB {
   position: relative;
   display: inline-block;
-  color:black;
+  color: black;
 }
 
 .tooltipB .tooltiptextB {
@@ -397,7 +397,7 @@ h3 {
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
-  
+
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
@@ -411,9 +411,9 @@ h3 {
 }
 
 .tooltipB .tooltiptextB::after {
-  content: " ";
+  content: ' ';
   position: absolute;
-  bottom: 100%;  /* At the top of the tooltip */
+  bottom: 100%; /* At the top of the tooltip */
   left: 50%;
   margin-left: -5px;
   border-width: 5px;
@@ -423,14 +423,14 @@ h3 {
 
 /* PARAMETER TOOLTIP IS A RIGHT TOOLTIP WITH A DIFFERENT COLOR THAN MODEL TOOLTIP*/
 .tooltipR-PM {
-  color:black;
+  color: black;
   display: inline-block;
-  cursor:pointer;
+  cursor: pointer;
 }
 
-.tooltiptextR-PM{
-  width:60px;
-  height:50px;
+.tooltiptextR-PM {
+  width: 60px;
+  height: 50px;
 }
 
 .tooltipR-PM .tooltiptextR-PM {
@@ -442,9 +442,9 @@ h3 {
   padding: 5px 0;
 
   /* Position the tooltip */
-  position:relative;
-  top:-60px;
-  left:210px;
+  position: relative;
+  top: -60px;
+  left: 210px;
   z-index: 1;
 }
 
@@ -453,7 +453,7 @@ h3 {
 }
 
 .tooltipR-PM .tooltiptextR-PM::after {
-  content: " ";
+  content: ' ';
   position: absolute;
   top: 50%;
   right: 100%; /* To the left of the tooltip */
@@ -471,7 +471,7 @@ h3 {
 .tooltip-demo {
   position: relative;
   display: inline-block;
-  color:black;
+  color: black;
 }
 
 .tooltip-demo .tooltiptext-demo {
@@ -482,7 +482,7 @@ h3 {
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
-  
+
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
@@ -496,9 +496,9 @@ h3 {
 }
 
 .tooltip-demo .tooltiptext-demo::after {
-  content: " ";
+  content: ' ';
   position: absolute;
-  bottom: 100%;  /* At the top of the tooltip */
+  bottom: 100%; /* At the top of the tooltip */
   left: 50%;
   margin-left: -5px;
   border-width: 5px;
@@ -506,9 +506,9 @@ h3 {
   border-color: transparent transparent black transparent;
 }
 
-#t10{
-  left:320px;
-  top:5px;
+#t10 {
+  left: 320px;
+  top: 5px;
 }
 
 #t16{

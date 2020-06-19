@@ -42,6 +42,7 @@ export default class Model {
     stats,
     updateStats,
     updateDemographicChart,
+    updateTimeline,
     borderCtx
   ) {
     this.spaceBetweenCommunities = SPACE_BETWEEN_COMMUNITIES;
@@ -53,6 +54,7 @@ export default class Model {
     this.agentView = agentView;
     this.updateStats = updateStats;
     this.updateDemographicChart = updateDemographicChart;
+    this.updateTimeline = updateTimeline;
     this.borderCtx = borderCtx;
     this.paused = false;
     this._chartInterval = null;
@@ -201,7 +203,25 @@ export default class Model {
     Object.values(this.communities).forEach((com) => com.step(dt));
     // Check all relocations
     this.relocationUtil.handleAllRelocations();
+    
+    const stats = Object.values(this.communities)
+      .map((m) => m.exportStats())
+      .reduce(
+        (acc, cur) =>
+          new Stats(
+            acc.susceptible + cur.susceptible,
+            acc.noninfectious + cur.noninfectious,
+            acc.infectious + cur.infectious,
+            acc.dead + cur.dead,
+            acc.immune + cur.immune,
+            acc.icu + cur.icu
+          )
+      );
 
+    const relocationStats = this.relocationUtil.getStats();
+    const finalStats = Stats.joinStats(stats, relocationStats);
+    
+    this.updateTimeline(finalStats, this.timestamp );
     this.updateDemographicChart();
   }
 
