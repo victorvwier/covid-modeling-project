@@ -333,7 +333,7 @@ export class Timeline {
           param = 'agents in the ICU';
         }
 
-        returnedString = `${type} Rule: ${target} changed to ${rule.value} when number of ${param} exceeds ${rule.trigger}`;
+        returnedString = `${type} Rule: ${target} changed to ${rule.value}% when number of ${param} exceeds ${rule.trigger}`;
       }
       stringList.push(returnedString);
     }

@@ -514,16 +514,25 @@
         <button class="accordion">Add a time-based rule</button>
         <div class="panel">
           <p>
+            A time-based rule allows you to enforce a certain value for a target
+            parameter a certain period of time in the model.
+          </p>
+          <p>
             Select the interaction parameter you want to add a rule for. Use the
             sliders to select both when you want the rule to be active and the
             value you want this parameter to be during the selected period of
-            time. If the rule is not added, it means that it overlaps with a
-            current rule already in the timeline. First, delete the conflicting
-            rule from the Rules List and then add it again.
+            time. Finally, click the plus button to add the rule to the
+            timeline.
+          </p>
+          <p>
+            If the rule is not added, it means that it overlaps with a current
+            rule already in the timeline. To add the rule,, delete the
+            conflicting rule from the Rules List and then add it again.
           </p>
           <div id="timeline-form">
             <div id="timeline-simple-form">
               <div id="dropdown-simple-form">
+                <p class="select-param-title">Select a target parameter:</p>
                 <select class="select-css" id="timelineform-simple-target">
                   <option value="soc">Social distancing</option>
                   <option value="atc">Attraction to the center</option>
@@ -531,41 +540,81 @@
               </div>
 
               <div class="slider-container rule-slider">
-                <div class="slider-title">Time rule is active</div>
+                <div class="slider-title">Time rule is active:</div>
                 <div class="new-slider" id="timelineTimeSlider"></div>
               </div>
 
               <div class="slider-container rule-slider">
-                <div class="slider-title">Value</div>
+                <div class="slider-title">Value:</div>
                 <div class="new-slider" id="timelineTimeValueSlider"></div>
               </div>
 
-              <button id="timeline-add-simple-rule">+</button>
+              <div class="timeline-add-btn">
+                <button
+                  id="timeline-add-simple-rule"
+                  class="btn btn-secondary2"
+                >
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         <button class="accordion">Add a threshold-based rule</button>
         <div class="panel">
+          <p>
+            A threshold-based rule allows you to enforce a certain value for a
+            target parameter once the value of the trigger parameter reaches a
+            certain threshold in the model.
+          </p>
+          <p>
+            Select the target interaction parameter you want to add a rule for.
+            Next, select the trigger parameter. Use the sliders to select the
+            threshold for the trigger parameter and the value that you want the
+            target value to be when the rule is active. Finally, click the plus
+            button to add the rule to the timeline.
+          </p>
+          <p>
+            If the rule is not added, it means that there already exists a rule
+            in the timeline that has the same target and trigger parameters. To
+            add the rule, delete the conflicting rule from the Rules List and
+            then add it again.
+          </p>
           <div id="timeline-form">
             <div id="timeline-threshold-form">
+              <p class="select-param-title">Select a target parameter:</p>
               <select class="select-css" id="timelineform-threshold-target">
                 <option value="soc">Social distancing</option>
                 <option value="atc">Attraction to the center</option>
               </select>
+              <p class="select-param-title">Select a trigger parameter:</p>
               <select class="select-css" id="timelineform-threshold-param">
                 <option value="inf">Infected people</option>
                 <option value="icu">ICU </option>
               </select>
-              <label for="timelineform-threshold-trigger">Threshold: </label>
-              <input type="text" id="timelineform-threshold-trigger" />
 
-              <div class="slider-container">
-                <div class="slider-title">Value</div>
+              <div class="slider-container rule-slider">
+                <div class="slider-title">Target Value:</div>
                 <div class="new-slider" id="timelineform-threshold-value"></div>
               </div>
 
-              <button id="timeline-add-threshold-rule">+</button>
+              <div class="slider-container rule-slider">
+                <div class="slider-title">Threshold Value:</div>
+                <div
+                  class="new-slider"
+                  id="timelineform-threshold-trigger"
+                ></div>
+              </div>
+
+              <div class="timeline-add-btn">
+                <button
+                  id="timeline-add-threshold-rule"
+                  class="btn btn-secondary2"
+                >
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -574,7 +623,7 @@
         <div class="panel">
           <div class="preset-panel">
             <div class="custom-select" style="width: 250px;">
-              <select id="preset-list"> </select>
+              <select class="select-css" id="preset-list"> </select>
             </div>
 
             <div class="button-div">
