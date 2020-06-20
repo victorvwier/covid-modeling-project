@@ -42,6 +42,76 @@
           >
         </div>
 
+        <button class="accordion">Initial Model Setup</button>
+        <div class="panel">
+          <div class="col-sm">
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Initial number of susceptibles:</p>
+              <span class="tooltiptextR-PM" id="t24"
+                >How many non infectious agents the model starts with(reload
+                after altering)</span
+              >
+            </div>
+            <input
+              type="range"
+              min="100"
+              max="5000"
+              value="100"
+              step="20"
+              class="slider"
+              id="initSusceptible"
+            />
+            <div class="outputContainer">
+              <output id="initSusceptibleCount" for="initSusceptible"
+                >50</output
+              >
+            </div>
+            <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
+          </div>
+          <div class="col-sm">
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Initial number of infectious:</p>
+              <span class="tooltiptextR-PM" id="t25"
+                >How many infectious agents the model starts with(reload after
+                altering)</span
+              >
+            </div>
+            <input
+              type="range"
+              min="1"
+              max="200"
+              value="1"
+              step="5"
+              class="slider"
+              id="initInfectious"
+            />
+            <div class="outputContainer">
+              <output id="initInfectiousCount" for="initInfectious">3</output>
+            </div>
+            <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
+          </div>
+          <div class="col-sm">
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Number of communities:</p>
+              <span class="tooltiptextR-PM" id="t26"
+                >How many communities there are in the model(reload after
+                altering)</span
+              >
+            </div>
+            <input
+              type="range"
+              min="1"
+              max="12"
+              step="1"
+              class="slider"
+              id="numCommunities"
+            />
+            <div class="outputContainer">
+              <output id="numCommunitiesOut" for="numCommunities">4</output>
+            </div>
+          </div>
+        </div>
+
         <button class="accordion">Interaction Parameters</button>
         <div class="panel">
           <div class="col-sm">
@@ -436,89 +506,9 @@
           </div>
         </div>
 
-        <button class="accordion">Initial Model Setup</button>
+        <button class="accordion">Rules list</button>
         <div class="panel">
-          <div class="col-sm">
-            <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Initial number of susceptibles:</p>
-              <span class="tooltiptextR-PM" id="t24"
-                >How many non infectious agents the model starts with(reload
-                after altering)</span
-              >
-            </div>
-            <input
-              type="range"
-              min="100"
-              max="5000"
-              value="100"
-              step="20"
-              class="slider"
-              id="initSusceptible"
-            />
-            <div class="outputContainer">
-              <output id="initSusceptibleCount" for="initSusceptible"
-                >50</output
-              >
-            </div>
-            <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
-          </div>
-          <div class="col-sm">
-            <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Initial number of infectious:</p>
-              <span class="tooltiptextR-PM" id="t25"
-                >How many infectious agents the model starts with(reload after
-                altering)</span
-              >
-            </div>
-            <input
-              type="range"
-              min="1"
-              max="200"
-              value="1"
-              step="5"
-              class="slider"
-              id="initInfectious"
-            />
-            <div class="outputContainer">
-              <output id="initInfectiousCount" for="initInfectious">3</output>
-            </div>
-            <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
-          </div>
-          <div class="col-sm">
-            <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Number of communities:</p>
-              <span class="tooltiptextR-PM" id="t26"
-                >How many communities there are in the model(reload after
-                altering)</span
-              >
-            </div>
-            <input
-              type="range"
-              min="1"
-              max="12"
-              step="1"
-              class="slider"
-              id="numCommunities"
-            />
-            <div class="outputContainer">
-              <output id="numCommunitiesOut" for="numCommunities">4</output>
-            </div>
-          </div>
-        </div>
-
-        <button class="accordion">Presets</button>
-        <div class="panel">
-          <div class="preset-panel">
-            <div class="custom-select" style="width: 250px;">
-              <select id="preset-list"> </select>
-            </div>
-
-            <div class="button-div">
-              <button type="button" id="select" class="btn btn-preset">
-                Select
-              </button>
-            </div>
-          </div>
+          <div id="rulesDIV"></div>
         </div>
 
         <button class="accordion">Add a time-based rule</button>
@@ -532,12 +522,12 @@
                 </select>
               </div>
 
-              <div class="slider-container">
+              <div class="slider-container rule-slider">
                 <div class="slider-title">Time rule is active</div>
                 <div class="new-slider" id="timelineTimeSlider"></div>
               </div>
 
-              <div class="slider-container">
+              <div class="slider-container rule-slider">
                 <div class="slider-title">Value</div>
                 <div class="new-slider" id="timelineTimeValueSlider"></div>
               </div>
@@ -572,9 +562,19 @@
           </div>
         </div>
 
-        <button class="accordion">Rules list</button>
+        <button class="accordion">Presets</button>
         <div class="panel">
-          <div id="rulesDIV"></div>
+          <div class="preset-panel">
+            <div class="custom-select" style="width: 250px;">
+              <select id="preset-list"> </select>
+            </div>
+
+            <div class="button-div">
+              <button type="button" id="select" class="btn btn-preset">
+                Select
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="row p-3">

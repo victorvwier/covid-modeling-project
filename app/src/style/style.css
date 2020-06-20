@@ -938,3 +938,18 @@ h7 {
 .tooltip-icon:hover + .tooltip-text {
   visibility: visible;
 }
+
+.rule-slider {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider-title {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 1rem;
+  font-style: bold;
+}

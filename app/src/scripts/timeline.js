@@ -143,7 +143,7 @@ export class Timeline {
         ) {
           if (this.overlap(rule, this.rules[i])) {
             found = true;
-            this.rules[i] = rule;
+            // this rule cannot be added because it overlaps with a previous rule
           }
         }
 
@@ -151,9 +151,10 @@ export class Timeline {
           rule.type === TimelineRuleType.THRESHOLD &&
           this.rules[i].type === TimelineRuleType.THRESHOLD
         ) {
-          if (rule.value === this.rules[i].value) {
+          if (rule.param === this.rules[i].param) {
             found = true;
-            this.rules[i] = rule;
+            //this.rules[i] = rule;
+            // this rule is the same as a previous rule
           }
         }
       }
