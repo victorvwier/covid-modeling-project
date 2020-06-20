@@ -6,6 +6,7 @@ body {
   background-color: #d9d9d9;
   margin: 0;
   padding-left: 0;
+  overflow-x: hidden;
 }
 
 .headerElement {
@@ -244,6 +245,7 @@ h3 {
 
 .stat {
   float: left;
+  color: whitesmoke;
   text-align: center;
   align-content: center;
   margin: 10px;
