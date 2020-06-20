@@ -4,7 +4,6 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 1em;
   background-color: #d9d9d9;
-  color: white;
   margin: 0;
   padding-left: 0;
 }
@@ -12,6 +11,7 @@ body {
 .headerElement {
   float: left;
   height: 80px;
+  color: whitesmoke;
 }
 
 .l {
@@ -523,7 +523,7 @@ h3 {
   border-color: transparent transparent black transparent;
 }
 
-#t10 {
+/* #t10 {
   position: relative;
   left: 347px;
   top: 5px;
@@ -536,7 +536,7 @@ h3 {
 
 #i10-text {
   left: 4rem;
-}
+} */
 
 #i6 {
   bottom: 5px;
@@ -795,13 +795,6 @@ ul li:hover {
   line-height: 100px;
 }
 
-.fa-question-circle {
-  color: #aaa;
-  position: absolute;
-  right: 5px;
-  bottom: 5px;
-}
-
 #title-container {
   margin-top: 20px;
   position: relative;
@@ -939,4 +932,34 @@ h7 {
 
 #modal-text {
   margin: 40px;
+}
+
+.fa-question-circle {
+  color: #aaa;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 600px;
+  background-color: #aaa;
+  font-weight: 450;
+  opacity: 1;
+  color: whitesmoke;
+  text-align: center;
+  border-radius: 6px;
+  padding: 15px 15px;
+  position: absolute;
+  z-index: 1;
+  right: -300px;
+}
+
+.tooltip-icon {
+  display: inline-block;
+  position: absolute;
+  bottom: 5px;
+  right: 7px;
+}
+
+.tooltip-icon:hover + .tooltip-text {
+  visibility: visible;
 }
