@@ -513,10 +513,18 @@
 
         <button class="accordion">Add a time-based rule</button>
         <div class="panel">
+          <p>
+            Select the interaction parameter you want to add a rule for. Use the
+            sliders to select both when you want the rule to be active and the
+            value you want this parameter to be during the selected period of
+            time. If the rule is not added, it means that it overlaps with a
+            current rule already in the timeline. First, delete the conflicting
+            rule from the Rules List and then add it again.
+          </p>
           <div id="timeline-form">
             <div id="timeline-simple-form">
               <div id="dropdown-simple-form">
-                <select id="timelineform-simple-target">
+                <select class="select-css" id="timelineform-simple-target">
                   <option value="soc">Social distancing</option>
                   <option value="atc">Attraction to the center</option>
                 </select>
@@ -541,15 +549,15 @@
         <div class="panel">
           <div id="timeline-form">
             <div id="timeline-threshold-form">
-              <select id="timelineform-threshold-target">
+              <select class="select-css" id="timelineform-threshold-target">
                 <option value="soc">Social distancing</option>
                 <option value="atc">Attraction to the center</option>
               </select>
-              <select id="timelineform-threshold-param">
+              <select class="select-css" id="timelineform-threshold-param">
                 <option value="inf">Infected people</option>
                 <option value="icu">ICU </option>
               </select>
-              <label for="timelineform-threshold-trigger">Trigger: </label>
+              <label for="timelineform-threshold-trigger">Threshold: </label>
               <input type="text" id="timelineform-threshold-trigger" />
 
               <div class="slider-container">

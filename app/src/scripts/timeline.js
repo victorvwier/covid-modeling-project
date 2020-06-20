@@ -153,8 +153,7 @@ export class Timeline {
         ) {
           if (rule.param === this.rules[i].param) {
             found = true;
-            //this.rules[i] = rule;
-            // this rule is the same as a previous rule
+            // this rule cannot be added because it affects a parameter that already has a threshold rule associated with it and has the same trigger parameter as this rule.
           }
         }
       }
