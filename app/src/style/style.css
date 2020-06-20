@@ -7,7 +7,6 @@ body {
   color: white;
   margin: 0;
   padding-left: 0;
-  overflow-x: hidden;
 }
 
 .headerElement {
@@ -834,21 +833,34 @@ h6 {
   /* color: rgb(109, 109, 109); */
   color: rgb(78, 78, 78);
   font-weight: 650;
-  text-align: center;
+  text-align: left;
   font-size: 24px;
   margin: 0px;
-  margin-left: 40px;
-  margin-right: 60px;
+  /* margin-left: 40px;
+  margin-right: 60px; */
 }
 
-.get-started {
+#get-started-btn {
+  background-color: #fd7e65ff;
+  border: rgb(255, 102, 72);
+  border-radius: 2px;
   position: fixed;
-  right: 0;
-  bottom: 0;
-  width: 10%;
-  background-color: red;
-  color: white;
-  text-align: center;
+  bottom: 100px;
+  right: 0px;
+  font-size: 20px;
+  /* margin-left: 50px; */
+}
+
+#get-started-btn:hover {
+  background-color: rgb(255, 102, 72);
+}
+
+#states-image {
+  width: 60%;
+  align-content: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .modal {
@@ -856,8 +868,8 @@ h6 {
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
+  right: 0;
+  bottom: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
@@ -868,23 +880,39 @@ h6 {
 /* Modal Content */
 .modal-content {
   background-color: #fefefe;
+  color: rgb(78, 78, 78);
+  font-weight: 430px;
   margin: auto;
+  margin: 10%;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 70%;
 }
 
 /* The Close Button */
-.close {
+.modal-close {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
+
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.modal-close:hover,
+.modal-close:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+h7 {
+  font-weight: bold;
+  /* color: rgb(109, 109, 109); */
+  color: rgb(78, 78, 78);
+  font-weight: 650;
+  text-align: left;
+  font-size: 40px;
+  margin: 0px;
+  /* margin-left: 40px;
+  margin-right: 60px; */
 }

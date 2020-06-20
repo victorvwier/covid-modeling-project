@@ -608,34 +608,6 @@
       }
     </script>
 
-    <script>
-      // Get the modal
-      var modal = document.getElementById('myModal');
-
-      // Get the button that opens the modal
-      var btn = document.getElementById('myBtn');
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName('close')[0];
-
-      // When the user clicks the button, open the modal
-      btn.onclick = function () {
-        modal.style.display = 'block';
-      };
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function () {
-        modal.style.display = 'none';
-      };
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = 'none';
-        }
-      };
-    </script>
-
     <main id="main">
       <div id="left-panel">
         <div id="title-container">
@@ -760,16 +732,111 @@
       </div>
     </main>
 
-    <div class="get-started">
-      <p>Footer</p>
-      <button id="myBtn">Open Modal</button>
-      <div id="myModal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <p>Some text in the Modal..</p>
-        </div>
+    <button id="get-started-btn">Get started!</button>
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <h7>Welcome to the Corona Forecast!</h7>
+        <p>
+          Here lies before you an agent-based predictive model for the
+          coronavirus.
+        </p>
+
+        <p>
+          Not sure what that means? On the right side of the screen you'll
+          notice an animation with a bunch of dots running around. This
+          collection of dots represents a given population and each of these
+          dots is called an “agent” and represents a person within a population.
+          By introducing some infected agents to this population, we can model
+          the spread of a virus over time and estimate how it will spread
+          through the population in the future.
+        </p>
+
+        <h6>Data and Parameter Values</h6>
+
+        <p>
+          Our model is based upon the behaviour of the coronavirus, a virus that
+          at the time of the creation of this model is spreading across the
+          world and dramatically changing the way we are living. As this project
+          began in the Netherlands, the population and transmission data is
+          based upon that which is recorded by the United Nations and the RIVM
+          (Rijksinstituut voor Volksgezondheid en Milieu).
+        </p>
+
+        <h6>Agent States</h6>
+
+        <p>The population is divided into five states:</p>
+
+        <ol>
+          <li>Susceptible: an agent that has not been exposed to the virus.</li>
+          <li>
+            Non-infectious: an agent that has been infected, but is in the
+            incubation period.
+          </li>
+          <li>
+            Infectious: an infected agent that has passed the incubation period
+            and can now infect other agents.
+          </li>
+          <li>Immune: an agent that was infected, but is now resistant.</li>
+          <li>Dead: an agent that has been killed as a result of infection.</li>
+        </ol>
+
+        <p>
+          Here is a diagram of how they move between these states throughout the
+          simulation:
+        </p>
+
+        <img src="./public/images/states (2).png" alt="States of the model" id="states-image" />
+
+        <h6>Tuning Model Parameters</h6>
+
+        <p>
+          On the right side of the screen, you can see the model, where agents
+          are moving and interacting. You can tune the epidemic parameters in
+          the side-bar menu to change how the virus spreads throughout the agent
+          population. There are numerous visuals on the page that provide visual
+          feedback on the model. By hovering over the question mark icons next
+          to each visual, you can learn more about what it is showing you.
+        </p>
+
+        <h6>Disclaimer</h6>
+        <p>
+          This application can be used to model the virus behaviour and estimate
+          its spread. By no means is this an accurate model. It simply allows
+          you to see the effect of multiple parameters on the spread of the
+          virus.
+        </p>
       </div>
     </div>
+
+    <script>
+      // Get the modal
+      var modal = document.getElementById('myModal');
+
+      // Get the button that opens the modal
+      var btn = document.getElementById('get-started-btn');
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName('modal-close')[0];
+
+      // When the user clicks the button, open the modal
+      btn.onclick = function () {
+        modal.style.display = 'block';
+      };
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = 'none';
+      };
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      };
+    </script>
+
     <div class="footer">
       <p>
         You're free to use this work however you see fit, including copying it,
