@@ -70,5 +70,5 @@ window.onload = function () {
   );
   createSliders();
   main.run();
-  adjustUi.makeLeftAndRightPanelSameHeight();
+  setTimeout(() => adjustUi.makeLeftAndRightPanelSameHeight(), 500);
 };

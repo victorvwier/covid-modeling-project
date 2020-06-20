@@ -6,6 +6,7 @@ body {
   background-color: #d9d9d9;
   margin: 0;
   padding-left: 0;
+  overflow-x: hidden;
 }
 
 .headerElement {
@@ -243,6 +244,7 @@ h3 {
 
 .stat {
   float: left;
+  color: whitesmoke;
   text-align: center;
   align-content: center;
   margin: 10px;
@@ -520,36 +522,6 @@ h3 {
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent black transparent;
-}
-
-/* #t10 {
-  position: relative;
-  left: 347px;
-  top: 5px;
-}
-
-#i10 {
-  bottom: 5px;
-  right: -20vw;
-}
-
-#i10-text {
-  left: 4rem;
-} */
-
-#i6 {
-  bottom: 5px;
-  right: -373px;
-}
-
-#i6-text {
-  bottom: 5px;
-  left: 66px;
-}
-#t6 {
-  position: relative;
-  left: 347px;
-  top: 5px;
 }
 
 #t16 {
