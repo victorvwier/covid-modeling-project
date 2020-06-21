@@ -42,6 +42,76 @@
           >
         </div>
 
+        <button class="accordion">Initial Model Setup</button>
+        <div class="panel">
+          <div class="col-sm">
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Initial number of susceptibles:</p>
+              <span class="tooltiptextR-PM" id="t24"
+                >How many non infectious agents the model starts with(reload
+                after altering)</span
+              >
+            </div>
+            <input
+              type="range"
+              min="100"
+              max="3000"
+              value="100"
+              step="20"
+              class="slider"
+              id="initSusceptible"
+            />
+            <div class="outputContainer">
+              <output id="initSusceptibleCount" for="initSusceptible"
+                >50</output
+              >
+            </div>
+            <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
+          </div>
+          <div class="col-sm">
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Initial number of infectious:</p>
+              <span class="tooltiptextR-PM" id="t25"
+                >How many infectious agents the model starts with(reload after
+                altering)</span
+              >
+            </div>
+            <input
+              type="range"
+              min="1"
+              max="200"
+              value="1"
+              step="5"
+              class="slider"
+              id="initInfectious"
+            />
+            <div class="outputContainer">
+              <output id="initInfectiousCount" for="initInfectious">3</output>
+            </div>
+            <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
+          </div>
+          <div class="col-sm">
+            <div class="tooltipR-PM" id="PMDIV">
+              <p class="tp">Number of communities:</p>
+              <span class="tooltiptextR-PM" id="t26"
+                >How many communities there are in the model(reload after
+                altering)</span
+              >
+            </div>
+            <input
+              type="range"
+              min="1"
+              max="12"
+              step="1"
+              class="slider"
+              id="numCommunities"
+            />
+            <div class="outputContainer">
+              <output id="numCommunitiesOut" for="numCommunities">4</output>
+            </div>
+          </div>
+        </div>
+
         <button class="accordion">Interaction Parameters</button>
         <div class="panel">
           <div class="col-sm">
@@ -436,72 +506,115 @@
           </div>
         </div>
 
-        <button class="accordion">Initial Model Setup</button>
+        <button class="accordion">Rules list</button>
         <div class="panel">
-          <div class="col-sm">
-            <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Initial number of susceptibles:</p>
-              <span class="tooltiptextR-PM" id="t24"
-                >How many non infectious agents the model starts with(reload
-                after altering)</span
-              >
+          <div id="rulesDIV"></div>
+        </div>
+
+        <button class="accordion">Add a time-based rule</button>
+        <div class="panel">
+          <p>
+            A time-based rule allows you to enforce a certain value for a target
+            parameter a certain period of time in the model.
+          </p>
+          <p>
+            Select the interaction parameter you want to add a rule for. Use the
+            sliders to select both when you want the rule to be active and the
+            value you want this parameter to be during the selected period of
+            time. Finally, click the plus button to add the rule to the
+            timeline.
+          </p>
+          <p>
+            If the rule is not added, it means that it overlaps with a current
+            rule already in the timeline. To add the rule, delete the
+            conflicting rule from the Rules List and then add it again.
+          </p>
+          <div id="timeline-form">
+            <div id="timeline-simple-form">
+              <div id="dropdown-simple-form">
+                <p class="select-param-title">Select a target parameter:</p>
+                <select class="select-css" id="timelineform-simple-target">
+                  <option value="soc">Social distancing</option>
+                  <option value="atc">Attraction to the center</option>
+                </select>
+              </div>
+
+              <div class="slider-container rule-slider">
+                <div class="slider-title">Time rule is active:</div>
+                <div class="new-slider" id="timelineTimeSlider"></div>
+              </div>
+
+              <div class="slider-container rule-slider">
+                <div class="slider-title">Value:</div>
+                <div class="new-slider" id="timelineTimeValueSlider"></div>
+              </div>
+
+              <div class="timeline-add-btn">
+                <button
+                  id="timeline-add-simple-rule"
+                  class="btn btn-secondary2"
+                >
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
             </div>
-            <input
-              type="range"
-              min="100"
-              max="5000"
-              value="100"
-              step="20"
-              class="slider"
-              id="initSusceptible"
-            />
-            <div class="outputContainer">
-              <output id="initSusceptibleCount" for="initSusceptible"
-                >50</output
-              >
-            </div>
-            <!-- <input type="number" id="initSusceptibleCount" name="initSusceptibleCount" min="100" max="500" value="100"> -->
           </div>
-          <div class="col-sm">
-            <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Initial number of infectious:</p>
-              <span class="tooltiptextR-PM" id="t25"
-                >How many infectious agents the model starts with(reload after
-                altering)</span
-              >
-            </div>
-            <input
-              type="range"
-              min="1"
-              max="200"
-              value="1"
-              step="5"
-              class="slider"
-              id="initInfectious"
-            />
-            <div class="outputContainer">
-              <output id="initInfectiousCount" for="initInfectious">3</output>
-            </div>
-            <!-- <input type="number" id="initSymptomaticCount" name="initSymptomaticCount" min="1" max="20" value="1"> -->
-          </div>
-          <div class="col-sm">
-            <div class="tooltipR-PM" id="PMDIV">
-              <p class="tp">Number of communities:</p>
-              <span class="tooltiptextR-PM" id="t26"
-                >How many communities there are in the model(reload after
-                altering)</span
-              >
-            </div>
-            <input
-              type="range"
-              min="1"
-              max="12"
-              step="1"
-              class="slider"
-              id="numCommunities"
-            />
-            <div class="outputContainer">
-              <output id="numCommunitiesOut" for="numCommunities">4</output>
+        </div>
+
+        <button class="accordion">Add a threshold-based rule</button>
+        <div class="panel">
+          <p>
+            A threshold-based rule allows you to enforce a certain value for a
+            target parameter once the value of the trigger parameter reaches a
+            certain threshold in the model.
+          </p>
+          <p>
+            Select the target interaction parameter you want to add a rule for.
+            Next, select the trigger parameter. Use the sliders to select the
+            threshold for the trigger parameter and the value that you want the
+            target value to be when the rule is active. Finally, click the plus
+            button to add the rule to the timeline.
+          </p>
+          <p>
+            If the rule is not added, it means that there already exists a rule
+            in the timeline that has the same target and trigger parameters. To
+            add the rule, delete the conflicting rule from the Rules List and
+            then add it again.
+          </p>
+          <div id="timeline-form">
+            <div id="timeline-threshold-form">
+              <p class="select-param-title">Select a target parameter:</p>
+              <select class="select-css" id="timelineform-threshold-target">
+                <option value="soc">Social distancing</option>
+                <option value="atc">Attraction to the center</option>
+              </select>
+              <p class="select-param-title">Select a trigger parameter:</p>
+              <select class="select-css" id="timelineform-threshold-param">
+                <option value="inf">Infected people</option>
+                <option value="icu">ICU </option>
+              </select>
+
+              <div class="slider-container rule-slider">
+                <div class="slider-title">Target Value:</div>
+                <div class="new-slider" id="timelineform-threshold-value"></div>
+              </div>
+
+              <div class="slider-container rule-slider">
+                <div class="slider-title">Threshold Value:</div>
+                <div
+                  class="new-slider"
+                  id="timelineform-threshold-trigger"
+                ></div>
+              </div>
+
+              <div class="timeline-add-btn">
+                <button
+                  id="timeline-add-threshold-rule"
+                  class="btn btn-secondary2"
+                >
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -510,7 +623,7 @@
         <div class="panel">
           <div class="preset-panel">
             <div class="custom-select" style="width: 250px;">
-              <select id="preset-list"> </select>
+              <select class="select-css" id="preset-list"> </select>
             </div>
 
             <div class="button-div">
@@ -519,62 +632,6 @@
               </button>
             </div>
           </div>
-        </div>
-
-        <button class="accordion">Add a time-based rule</button>
-        <div class="panel">
-          <div id="timeline-form">
-            <div id="timeline-simple-form">
-              <div id="dropdown-simple-form">
-                <select id="timelineform-simple-target">
-                  <option value="soc">Social distancing</option>
-                  <option value="atc">Attraction to the center</option>
-                </select>
-              </div>
-
-              <div class="slider-container">
-                <div class="slider-title">Time rule is active</div>
-                <div class="new-slider" id="timelineTimeSlider"></div>
-              </div>
-
-              <div class="slider-container">
-                <div class="slider-title">Value</div>
-                <div class="new-slider" id="timelineTimeValueSlider"></div>
-              </div>
-
-              <button id="timeline-add-simple-rule">+</button>
-            </div>
-          </div>
-        </div>
-
-        <button class="accordion">Add a threshold-based rule</button>
-        <div class="panel">
-          <div id="timeline-form">
-            <div id="timeline-threshold-form">
-              <select id="timelineform-threshold-target">
-                <option value="soc">Social distancing</option>
-                <option value="atc">Attraction to the center</option>
-              </select>
-              <select id="timelineform-threshold-param">
-                <option value="inf">Infected people</option>
-                <option value="icu">ICU </option>
-              </select>
-              <label for="timelineform-threshold-trigger">Trigger: </label>
-              <input type="text" id="timelineform-threshold-trigger" />
-
-              <div class="slider-container">
-                <div class="slider-title">Value</div>
-                <div class="new-slider" id="timelineform-threshold-value"></div>
-              </div>
-
-              <button id="timeline-add-threshold-rule">+</button>
-            </div>
-          </div>
-        </div>
-
-        <button class="accordion">Rules list</button>
-        <div class="panel">
-          <div id="rulesDIV"></div>
         </div>
 
         <div class="row p-3">
@@ -620,11 +677,19 @@
           <h5>The distribution of the population over the five states.</h5>
           <i class="fa fa-question-circle tooltip-icon"></i>
           <span class="tooltip-text">
-            Stuff about simulation chart, Stuff about simulation chart, Stuff
-            about simulation chart Stuff about simulation chart, Stuff about
-            simulation chart, Stuff about simulation chart Stuff about
-            simulation chart Stuff about simulation chart Stuff about simulation
-            chart
+            As the model runs, the proportion of agents in each state changes,
+            which can be seen in this chart. As the time increases, you will
+            notice that the amount of susceptible agents (represented by the
+            blue colour) begins to decrease, while the number of infectious
+            agents (represented by the red colour) increases. The number of
+            agents is displayed on the vertical axis and the day number of the
+            simulation is displayed on the horizontal axis. The model runs for a
+            total of 365 days (one year), after which it stops. You can use the
+            legend above the chart to see which colour corresponds to which
+            state. Also, using the buttons below the chart, you can either pause
+            or play the model (left button), or you can restart it (right
+            button). Finally, under the chart you can see how many days have
+            passed in the model.
           </span>
         </div>
         <div id="chart-container">
@@ -633,7 +698,7 @@
         <div id="time-control-bar">
           <button id="time-control-toggle-pause-button">
             <i class="fas fa-pause" style="font-size: 22px;"></i
-            ><i class="fas fa-play" style="font-size: 19px;"></i>
+            ><i class="fas fa-play" style="font-size: 17px;"></i>
           </button>
           <button id="time-control-reset-button">
             <i class="fas fa-undo" style="font-size: 22px;"></i>
@@ -651,13 +716,15 @@
           <i class="fa fa-question-circle tooltip-icon"></i>
           <span class="tooltip-text">
             Demography is the statistical study of populations, especially human
-            beings.The chart above displays information regarding the current
-            running simulation concerning the infection of males(left) and
-            females(right) of different age ranges. The age ranges are on the y
-            axis and the values of the corresponding statistic(infectious,immune
-            etc.) are on the x-axis. This graph shows the spread of diesease
-            across different age group and shows that young people are also less
-            likely to die than older people in general.
+            beings. Every single agent in the model is assigned an age and
+            gender, which affects their chance of survival if they become
+            infected. This chart displays the amount of agents in each state,
+            divided by age and gender. The statistics regarding the current
+            males is on the left half of the chart, while that of the females is
+            on the right. The age ranges are on the vertical axis. This chart
+            shows the spread of infection across different age group and
+            demostrates trends found in coronavirus data, most notably that
+            older, male patiests have the highest mortality rate.
           </span>
         </div>
         <div id="gender-label">
@@ -673,24 +740,25 @@
         <div id="title-container">
           <h4>Agent-Based Model</h4>
           <h5>
-            The canvas in which agents interact with each other over time. All
-            visual feedback is based upon this model.
+            The model in which agents interact with each other over time and
+            demostrate how the coronavirus spreads.
           </h5>
           <i class="fa fa-question-circle tooltip-icon"></i>
           <span class="tooltip-text">
-            The model shown above is a graphical representation of our Agent
-            Based simulation. The dots represent agents which reflect the
+            The agent-based model is a graphical representation of our
+            agent-based simulation. The dots represent agents, which reflect the
             behaviour of people in real life. They have characteristics like
-            "social distancing" and "attraction to centre" which you can change
-            to alter the respective behaviour of the agents. Every agent has a
-            color which is an indication of their current "state" with respect
-            to their infectiousness.The states are as follows Blue-Susceptible,
-            Yellow-Non Infectious, Red-Infectious, Grey-Immune, Black- Dead All
-            agents reside in communities,seperated using white borders-which
-            model real life cities and agents can relocate between different
-            communities which can be seen as agents jumping from one community
-            to another. The model corresponds exactly with the graph on the top
-            left.
+            "social distancing" and "attraction to the centre of the model"
+            which you can change to alter the respective behaviour of the
+            agents. Every agent has a color which is an indication of their
+            current state. You can click on the red "Get started!" button to
+            learn more about these states and how agents move between them. All
+            agents reside in communities, seperated using white borders. These
+            communities model real life cities and agents can relocate between
+            different communities, which can be seen as agents jumping from one
+            community to another. To learn more about the model parameters and
+            to test out how different values in these parameters affect the
+            behaviour of agents in the model, check out the Parameter Menu.
           </span>
         </div>
         <div id="model-border-canvases-container">
@@ -732,10 +800,24 @@
           </h5>
           <i class="fa fa-question-circle tooltip-icon"></i>
           <span class="tooltip-text">
-            parameter timeline stuff, parameter timeline stuff, parameter
-            timeline stuff parameter timeline stuff, parameter timeline stuff,
-            parameter timeline stuff parameter timeline stuff, parameter
-            timeline stuff, parameter timeline stuff
+            When the pandemic first began, different countries took different
+            stances on which policies to implement to slow the spread of the
+            coronavirus. One policy that became very common was social
+            distancing, which is where people actively avoid close contact with
+            one another. Once restrictions are lifted, people might meet up
+            again at central locations. These are behaviours that are seen at
+            different points of time, which is what this timeline is for. In the
+            Parameter Menu, you can add time-based rules, where the value of
+            social distancing or an agent's attraction to the center can be
+            different values over different periods of time. Another rule you
+            can create in the Parameter Menu is a threshold-based rule. For
+            these rules, you can enforce that once the number of infectious
+            agents, or the number of agents in the ICU has surpassed a certain
+            threshold, a certain social distancing or attraction value can
+            become active. In the timeline, the white vertical line represents
+            how far the model has been running and you can also see a list of
+            the rules that are in place. If a rule is active, you will see the
+            title of the rule become darker.
           </span>
         </div>
         <div id="timeline">
