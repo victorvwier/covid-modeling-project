@@ -70,5 +70,8 @@ window.onload = function () {
   );
   createSliders();
   main.run();
-  setTimeout(() => adjustUi.makeLeftAndRightPanelSameHeight(), 500);
+  setTimeout(() => {
+    adjustUi.makeLeftAndRightPanelSameHeight();
+    adjustUi.fixTooltipsOverflowing();
+  }, 500);
 };
