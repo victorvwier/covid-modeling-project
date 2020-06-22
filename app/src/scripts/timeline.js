@@ -163,6 +163,7 @@ export class Timeline {
           if (this.overlap(rule, this.rules[i])) {
             found = true;
             // this rule cannot be added because it overlaps with a previous rule
+            throw new Error("This rule cannot be added because it overlaps with a previous rule.");
           }
         }
 
@@ -173,6 +174,7 @@ export class Timeline {
           if (rule.param === this.rules[i].param) {
             found = true;
             // this rule cannot be added because it affects a parameter that already has a threshold rule associated with it and has the same trigger parameter as this rule.
+            throw new Error("This rule cannot be added because it affects a parameter that already has a threshold rule associated with it and has the same trigger parameter as this rule.");
           }
         }
       }

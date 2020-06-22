@@ -96,12 +96,17 @@ export function wireTimelineButtontoTimeline(timeline) {
       const start = getTimelineTimeSliderValues()[0];
       const end = getTimelineTimeSliderValues()[1];
       const value = getTimelineTimeValueSliderValues();
-      timeline.addRule(TimelineRuleType.TIME, [
-        type,
-        parseFloat(start),
-        parseFloat(end),
-        parseFloat(value),
-      ]);
+      try {
+        timeline.addRule(TimelineRuleType.TIME, [
+          type,
+          parseFloat(start),
+          parseFloat(end),
+          parseFloat(value),
+        ]);
+        document.getElementById('timelineform-simple-feedback').innerHTML = '';
+      } catch (e) {
+        document.getElementById('timelineform-simple-feedback').innerHTML = e;
+      }
     });
 
   document
@@ -113,12 +118,21 @@ export function wireTimelineButtontoTimeline(timeline) {
         .value;
       const trigger = getTimelineThresholdTriggerSliderValues();
       const value = getTimelineThresholdValueSliderValues();
-      timeline.addRule(TimelineRuleType.THRESHOLD, [
-        target,
-        param,
-        parseFloat(trigger),
-        parseFloat(value),
-      ]);
+
+      try {
+        timeline.addRule(TimelineRuleType.THRESHOLD, [
+          target,
+          param,
+          parseFloat(trigger),
+          parseFloat(value),
+        ]);
+        document.getElementById('timelineform-threshold-feedback').innerHTML =
+          '';
+      } catch (e) {
+        document.getElementById(
+          'timelineform-threshold-feedback'
+        ).innerHTML = e;
+      }
     });
 }
 

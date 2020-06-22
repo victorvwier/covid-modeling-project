@@ -129,6 +129,10 @@ button {
   top: -600px;
 }
 
+.errormsg {
+  color: #fd7e65;
+}
+
 #model-border-canvases-container {
   width: 600px;
   height: 600px;

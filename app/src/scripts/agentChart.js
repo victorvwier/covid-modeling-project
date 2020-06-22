@@ -30,7 +30,7 @@ export const vSource = `
 
     void main() {
       gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-      gl_PointSize = uPointSize;
+      gl_PointSize = uPointSize * 1.35;
       vColor = aVertexColor;
     }
   `;
