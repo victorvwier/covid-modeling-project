@@ -240,6 +240,7 @@ export default class Main {
     this.demographicsChart.drawChart(this.createCurrentStats().sum());
     this.model.setupCommunity();
     this.model.run();
+    this.reset();
   }
 
   /**
