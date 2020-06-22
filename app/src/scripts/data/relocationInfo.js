@@ -18,6 +18,7 @@ under the License.
 */
 
 import presetsManager from '../presetsManager';
+import { TYPES } from '../CONSTANTS';
 
 /** @class RelocationInfo describing all relevant information of a person relocating. */
 export default class RelocationInfo {
@@ -34,6 +35,9 @@ export default class RelocationInfo {
     this.destination = destination;
     this.destId = destId;
     this.distDiffMargin = presetsManager.loadPreset().RELOCATION_ERROR_MARGIN;
+    if (person.type === TYPES.INFECTIOUS) {
+      console.log(person.age);
+    }
   }
 
   /**
