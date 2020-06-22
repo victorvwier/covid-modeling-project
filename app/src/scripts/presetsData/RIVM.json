@@ -35,8 +35,9 @@
     { "type": "time", "params": ["soc", 60, 139, 100] },
     { "type": "time", "params": ["atc", 60, 119, 0] },
     { "type": "time", "params": ["atc", 0, 50, 25] },
-    { "type": "time", "params": ["atc", 170, 185, 30] },
-    { "type": "time", "params": ["soc", 140, 250, 100] }
+    { "type": "time", "params": ["atc", 150, 167, 30] },
+    { "type": "time", "params": ["soc", 170, 250, 90] },
+    { "type": "time", "params": ["soc", 251, 350, 80] }
   ],
 
   "AGE": [
