@@ -18,7 +18,7 @@ under the License.
 */
 
 /* eslint-disable import/first */
-
+import './scripts/lib/fontAwesomeIcons';
 import presetManager from './scripts/presetsManager';
 import adjustUi from './scripts/DOM/adjustUi';
 import Main from './scripts/main';
