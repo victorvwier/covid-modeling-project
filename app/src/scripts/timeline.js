@@ -143,7 +143,7 @@ export class Timeline {
         ) {
           if (this.overlap(rule, this.rules[i])) {
             found = true;
-            // this rule cannot be added because it overlaps with a previous rule
+            this.rules[i] = rule;
           }
         }
 
@@ -151,9 +151,9 @@ export class Timeline {
           rule.type === TimelineRuleType.THRESHOLD &&
           this.rules[i].type === TimelineRuleType.THRESHOLD
         ) {
-          if (rule.param === this.rules[i].param) {
+          if (rule.value === this.rules[i].value) {
             found = true;
-            // this rule cannot be added because it affects a parameter that already has a threshold rule associated with it and has the same trigger parameter as this rule.
+            this.rules[i] = rule;
           }
         }
       }
@@ -333,7 +333,7 @@ export class Timeline {
           param = 'agents in the ICU';
         }
 
-        returnedString = `${type} Rule: ${target} changed to ${rule.value}% when number of ${param} exceeds ${rule.trigger}`;
+        returnedString = `${type} Rule: ${target} changed to ${rule.value} when number of ${param} exceeds ${rule.trigger}`;
       }
       stringList.push(returnedString);
     }
