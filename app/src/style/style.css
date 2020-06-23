@@ -478,7 +478,7 @@ h3 {
 
 .tooltipR-PM .tooltiptextR-PM {
   visibility: hidden;
-  background-color: black;
+  background-color: #aaa;
   color: #fff;
   text-align: center;
   border-radius: 6px;
