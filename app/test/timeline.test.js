@@ -95,7 +95,7 @@ describe('TimelineRule tests', () => {
       0,
     ]);
     timeline.addRule(TimelineRuleType.THRESHOLD, [
-      TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER,
+      TIMELINE_PARAMETERS.SOCIAL_DISTANCING,
       'icu',
       100,
       100,
@@ -106,7 +106,7 @@ describe('TimelineRule tests', () => {
     stats2.icu += 1;
     timeline.enforceRules(stats2, 1);
     expect(mockCallback.mock.calls[0][0]).toBe('atc');
-    expect(mockCallback.mock.calls[1][0]).toBe('atc');
+    expect(mockCallback.mock.calls[1][0]).toBe('soc');
   });
 
   test('Add the same rule twice', () => {
@@ -124,6 +124,7 @@ describe('TimelineRule tests', () => {
       100,
       100
     );
+    
     const rule2 = TimelineRule.newSimpleRule(
       TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER,
       0,
@@ -131,7 +132,9 @@ describe('TimelineRule tests', () => {
       100
     );
     timeline._addRule(rule1);
-    timeline._addRule(rule2);
+    expect(() => {timeline._addRule(rule2)}).toThrow(
+      Error
+    );
     expect(timeline.rules.length).toBe(1);
   });
 
@@ -191,10 +194,10 @@ describe('TimelineRule tests', () => {
     timeline._addRule(rule2);
 
     expect(timeline.toStringList()[0]).toBe(
-      'Threshold Rule: attraction to center changed to 100 when number of agents in the ICU exceeds 10'
+      'Threshold Rule: attraction to center changed to 100% when number of agents in the ICU exceeds 10'
     );
     expect(timeline.toStringList()[1]).toBe(
-      'Threshold Rule: social distancing changed to 100 when number of agents in the ICU exceeds 10'
+      'Threshold Rule: social distancing changed to 100% when number of agents in the ICU exceeds 10'
     );
   });
   test('import presets', () => {
@@ -209,7 +212,7 @@ describe('TimelineRule tests', () => {
     timeline.importPresetRules();
     timeline.rules.length = 2;
     expect(timeline.toStringList()[0]).toBe(
-      'Time Rule: social distancing changed to 100% from day 60 to day 119'
+      'Time Rule: social distancing changed to 100% from day 60 to day 139'
     );
   });
 
