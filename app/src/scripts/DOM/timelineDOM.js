@@ -1,3 +1,22 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import 'nouislider/distribute/nouislider.css'; // Import styles
 import wNumb from 'wnumb';
 import noUiSlider from 'nouislider';
@@ -44,7 +63,8 @@ export function createDualSliders(id, min, max) {
 export function createSliders() {
   createDualSliders('timelineTimeSlider', 0, 365);
   createSingleSlider('timelineTimeValueSlider', 0, 0, 100);
-  createSingleSlider('timelineform-threshold-value', 0 , 0, 100);
+  createSingleSlider('timelineform-threshold-value', 0, 0, 100);
+  createSingleSlider('timelineform-threshold-trigger', 0, 0, 200);
 }
 
 // index 0 and index 1
@@ -53,15 +73,19 @@ export function getTimelineTimeSliderValues() {
 }
 
 export function getTimelineTimeValueSliderValues() {
-  return (
-    document.getElementById('timelineTimeValueSlider').noUiSlider.get()
-  );
+  return document.getElementById('timelineTimeValueSlider').noUiSlider.get();
 }
 
 export function getTimelineThresholdValueSliderValues() {
-  return (
-    document.getElementById('timelineform-threshold-value').noUiSlider.get()
-  );
+  return document
+    .getElementById('timelineform-threshold-value')
+    .noUiSlider.get();
+}
+
+export function getTimelineThresholdTriggerSliderValues() {
+  return document
+    .getElementById('timelineform-threshold-trigger')
+    .noUiSlider.get();
 }
 
 export function wireTimelineButtontoTimeline(timeline) {
@@ -72,12 +96,17 @@ export function wireTimelineButtontoTimeline(timeline) {
       const start = getTimelineTimeSliderValues()[0];
       const end = getTimelineTimeSliderValues()[1];
       const value = getTimelineTimeValueSliderValues();
-      timeline.addRule(TimelineRuleType.TIME, [
-        type,
-        parseFloat(start),
-        parseFloat(end),
-        parseFloat(value),
-      ]);
+      try {
+        timeline.addRule(TimelineRuleType.TIME, [
+          type,
+          parseFloat(start),
+          parseFloat(end),
+          parseFloat(value),
+        ]);
+        document.getElementById('timelineform-simple-feedback').innerHTML = '';
+      } catch (e) {
+        document.getElementById('timelineform-simple-feedback').innerHTML = e;
+      }
     });
 
   document
@@ -87,15 +116,23 @@ export function wireTimelineButtontoTimeline(timeline) {
         .value;
       const param = document.getElementById('timelineform-threshold-param')
         .value;
-      const trigger = document.getElementById('timelineform-threshold-trigger')
-        .value;
+      const trigger = getTimelineThresholdTriggerSliderValues();
       const value = getTimelineThresholdValueSliderValues();
-      timeline.addRule(TimelineRuleType.THRESHOLD, [
-        target,
-        param,
-        parseFloat(trigger),
-        parseFloat(value),
-      ]);
+
+      try {
+        timeline.addRule(TimelineRuleType.THRESHOLD, [
+          target,
+          param,
+          parseFloat(trigger),
+          parseFloat(value),
+        ]);
+        document.getElementById('timelineform-threshold-feedback').innerHTML =
+          '';
+      } catch (e) {
+        document.getElementById(
+          'timelineform-threshold-feedback'
+        ).innerHTML = e;
+      }
     });
 }
 
