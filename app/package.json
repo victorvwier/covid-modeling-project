@@ -11,6 +11,9 @@
     "lint": "eslint ."
   },
   "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/src/scripts/lib/*"
+    ],
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/src/scripts/**/*.js",
