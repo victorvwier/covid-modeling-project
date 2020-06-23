@@ -11,9 +11,14 @@
     "lint": "eslint ."
   },
   "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/src/scripts/lib/fontAwesomeIcons.js"
+    ],
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/src/scripts/**/*.js",
+      "**/src/scripts/data/*.js",
+      "**/src/scripts/*.js",
+      "**/src/scripts/DOM/*.js",
       "!**/src/scripts/agentChart.js",
       "!**/src/scripts/DOM/*",
       "!**/node_modules/**",
