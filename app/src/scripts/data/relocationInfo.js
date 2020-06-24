@@ -35,9 +35,6 @@ export default class RelocationInfo {
     this.destination = destination;
     this.destId = destId;
     this.distDiffMargin = presetsManager.loadPreset().RELOCATION_ERROR_MARGIN;
-    if (person.type === TYPES.INFECTIOUS) {
-      console.log(person.age);
-    }
   }
 
   /**
