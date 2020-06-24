@@ -66,6 +66,11 @@ describe('Community test', () => {
     model.populateCommunities();
   });
 
+  test('togglePause should make isPaused false', () => {
+    model.togglePause();
+    expect(model.paused).toBe(true);
+  });
+
   // test('_animationFunction should make new dt if both timestamp and lasttimestamp exist', () => {
   //   const oldLastTimeStamp = 1;
   //   const thisTimeStamp = 2;
