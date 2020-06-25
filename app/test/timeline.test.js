@@ -1,3 +1,22 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import {
   TimelineRuleType,
   TimelineRule,
@@ -76,7 +95,7 @@ describe('TimelineRule tests', () => {
       0,
     ]);
     timeline.addRule(TimelineRuleType.THRESHOLD, [
-      TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER,
+      TIMELINE_PARAMETERS.SOCIAL_DISTANCING,
       'icu',
       100,
       100,
@@ -87,7 +106,7 @@ describe('TimelineRule tests', () => {
     stats2.icu += 1;
     timeline.enforceRules(stats2, 1);
     expect(mockCallback.mock.calls[0][0]).toBe('atc');
-    expect(mockCallback.mock.calls[1][0]).toBe('atc');
+    expect(mockCallback.mock.calls[1][0]).toBe('soc');
   });
 
   test('Add the same rule twice', () => {
@@ -105,6 +124,7 @@ describe('TimelineRule tests', () => {
       100,
       100
     );
+    
     const rule2 = TimelineRule.newSimpleRule(
       TIMELINE_PARAMETERS.ATTRACTION_TO_CENTER,
       0,
@@ -112,7 +132,9 @@ describe('TimelineRule tests', () => {
       100
     );
     timeline._addRule(rule1);
-    timeline._addRule(rule2);
+    expect(() => {timeline._addRule(rule2)}).toThrow(
+      Error
+    );
     expect(timeline.rules.length).toBe(1);
   });
 
@@ -172,10 +194,10 @@ describe('TimelineRule tests', () => {
     timeline._addRule(rule2);
 
     expect(timeline.toStringList()[0]).toBe(
-      'Threshold Rule: attraction to center changed to 100 when number of agents in the ICU exceeds 10'
+      'Threshold Rule: attraction to center changed to 100% when number of agents in the ICU exceeds 10'
     );
     expect(timeline.toStringList()[1]).toBe(
-      'Threshold Rule: social distancing changed to 100 when number of agents in the ICU exceeds 10'
+      'Threshold Rule: social distancing changed to 100% when number of agents in the ICU exceeds 10'
     );
   });
   test('import presets', () => {
@@ -190,7 +212,7 @@ describe('TimelineRule tests', () => {
     timeline.importPresetRules();
     timeline.rules.length = 2;
     expect(timeline.toStringList()[0]).toBe(
-      'Time Rule: social distancing changed to 100% from day 60 to day 119'
+      'Time Rule: social distancing changed to 100% from day 60 to day 139'
     );
   });
 

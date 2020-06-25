@@ -1,10 +1,29 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import Chart from 'chart.js';
 import presetsManager from './presetsManager';
 import { COLORS, TYPES, GENDERS } from './CONSTANTS';
 
 /**
  * A function to retrieve the age from the preset.
- * 
+ *
  * @returns {number} The age.
  */
 function getAge() {
@@ -28,7 +47,7 @@ export default class DemographicsChart {
 
   /**
    * A function to update the chart.
-   * 
+   *
    * @param {Person[]} population An array representing the population.
    */
   receiveUpdate(population) {
@@ -96,7 +115,7 @@ export default class DemographicsChart {
 
   /**
    * A function to get the amount of males in a population.
-   * 
+   *
    * @param {Person[]} population An array representing the population.
    */
   _getMaleCount(population) {
@@ -111,7 +130,7 @@ export default class DemographicsChart {
 
   /**
    * A function to get the amount of females in a population.
-   * 
+   *
    * @param {Person[]} population An array representing the population.
    */
   _getFemaleCount(population) {
@@ -145,7 +164,7 @@ export default class DemographicsChart {
 
   /**
    * A function to reset the chart.
-   * 
+   *
    * @param {number} populationSize The size of the population.
    */
   resetChart(populationSize) {
@@ -243,10 +262,7 @@ export default class DemographicsChart {
           display: false,
         },
         title: {
-          display: true,
-          text: 'Male           Female',
-          position: 'top',
-          fontSize: 24,
+          display: false,
         },
         responsive: false,
         tooltips: { enabled: false },

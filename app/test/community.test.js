@@ -1,3 +1,22 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import Community from '../src/scripts/community';
 import Stats from '../src/scripts/data/stats';
 import Person from '../src/scripts/person';
@@ -15,6 +34,19 @@ describe('community.js test suite', () => {
   const realMath = global.Math;
 
   afterEach(() => resetGlobalRandom(realMath));
+
+  // getDrawInfo, updatePopulation, interactPopulation, update, step
+
+  test('step should throw an error if dt < 0', () => {
+    const community = new Community(
+      1,
+      new Bounds(0, 100, 0, 100),
+      new Stats(0, 0, 0, 0, 0),
+      () => {}
+    );
+
+    expect(() => community.step(-20)).toThrow();
+  });
 
   // test('interactPopulation should increase symptomaticcount', () => {
   //   const stats = new Stats(1, 0, 1, 0, 0);
@@ -36,26 +68,26 @@ describe('community.js test suite', () => {
   //   expect(community.numSusceptible).toBe(oldSusceptible - 1);
   // });
 
-  // test('getDrawInfo should not do anything if all existing are susceptible', () => {
-  //   const stats = new Stats(1, 0, 0, 0, 0);
-  //   const bounds = new Bounds(0, 100, 0, 100);
-  //   const community = new Community(1, bounds, stats, null);
+  test('getDrawInfo should not do anything if all existing are susceptible', () => {
+    const stats = new Stats(1, 0, 0, 0, 0);
+    const bounds = new Bounds(0, 100, 0, 100);
+    const community = new Community(1, bounds, stats, null);
 
-  //   community.populateCanvas();
-  //   const info = community.getDrawInfo();
+    community.populateCanvas();
+    const info = community.getDrawInfo();
 
-  //   const colors = [
-  //     parseInt(COLORS.SUSCEPTIBLE.slice(1, 3), 16) / 255.0,
-  //     parseInt(COLORS.SUSCEPTIBLE.slice(3, 5), 16) / 255.0,
-  //     parseInt(COLORS.SUSCEPTIBLE.slice(5, 7), 16) / 255.0,
-  //     1,
-  //   ];
-  //   const positions = [community.population[0].x, community.population[0].y];
+    const colors = [
+      parseInt(COLORS.SUSCEPTIBLE.slice(1, 3), 16) / 255.0,
+      parseInt(COLORS.SUSCEPTIBLE.slice(3, 5), 16) / 255.0,
+      parseInt(COLORS.SUSCEPTIBLE.slice(5, 7), 16) / 255.0,
+      1,
+    ];
+    const positions = [community.population[0].x, community.population[0].y];
 
-  //   expect(info.colors).toEqual(colors) &&
-  //     expect(info.positions).toEqual(positions) &&
-  //     expect(info.count).toBe(1);
-  // });
+    expect(info.colors).toEqual(colors) &&
+      expect(info.positions).toEqual(positions) &&
+      expect(info.count).toBe(1);
+  });
 
   test('updatePopulation should change speed if person not dead', () => {
     const stats = new Stats(1, 0, 0, 0, 0);
