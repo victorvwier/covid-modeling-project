@@ -1,33 +1,30 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import Person from './person';
 import { getRandom, gaussianRand } from './util';
-
 import { assignDemographic } from './demographic';
-
-import {
-  PERSON_RADIUS,
-  POPULATION_SPEED,
-  INFECTION_RADIUS,
-  TYPES,
-  NONIN_TO_IMMUNE_PROB,
-  COLORS,
-  TRANSMISSION_PROB,
-  MIN_INCUBATION_TIME,
-  MAX_INCUBATION_TIME,
-  MIN_INFECTIOUS_TIME,
-  MAX_INFECTIOUS_TIME,
-  MIN_TIME_UNTIL_DEAD,
-  MAX_TIME_UNTIL_DEAD,
-  DAYS_PER_SECOND,
-  REPULSION_FORCE,
-  ATTRACTION_FORCE,
-  RELOCATION_PROBABILITY,
-  MOVEMENT_TIME_SCALAR,
-  RELOCATION_ERROR_MARGIN,
-  INTERACTION_RANGE,
-} from './CONSTANTS';
+import presetsManager from './presetsManager';
 import Stats from './data/stats';
 import BoundingBoxStructure from './boundingBox';
 import Coordinate from './data/coordinate';
+import { TYPES, COLORS } from './CONSTANTS';
 
 /** @class Community describing a single community within the model. */
 export default class Community {
@@ -64,25 +61,32 @@ export default class Community {
     this.numNonInfectious = stats.noninfectious;
     this.numImmune = stats.immune;
     this.numDead = stats.dead;
+    this.icuCount = stats.icu;
 
-    this.nonInfectiousToImmuneProb = NONIN_TO_IMMUNE_PROB;
-    this.infectionRadius = INFECTION_RADIUS;
-    this.personRadius = PERSON_RADIUS;
-    this.transmissionProb = TRANSMISSION_PROB;
-    this.repulsionForce = REPULSION_FORCE;
-    this.attractionToCenter = ATTRACTION_FORCE;
-    this.minIncubationTime = MIN_INCUBATION_TIME;
-    this.maxIncubationTime = MAX_INCUBATION_TIME;
+    this.nonInfectiousToImmuneProb = presetsManager.loadPreset().NONIN_TO_IMMUNE_PROB;
+    this.infectionRadius = presetsManager.loadPreset().INFECTION_RADIUS;
+    this.personRadius = presetsManager.loadPreset().PERSON_RADIUS;
+    this.transmissionProb = presetsManager.loadPreset().TRANSMISSION_PROB;
+    this.repulsionForce = presetsManager.loadPreset().REPULSION_FORCE;
+    this.attractionToCenter = presetsManager.loadPreset().ATTRACTION_FORCE;
 
-    this.minInfectiousTime = MIN_INFECTIOUS_TIME;
-    this.maxInfectiousTime = MAX_INFECTIOUS_TIME;
+    this.minIncubationTime = presetsManager.loadPreset().MIN_INCUBATION_TIME;
+    this.maxIncubationTime = presetsManager.loadPreset().MAX_INCUBATION_TIME;
 
-    this.minTimeUntilDead = MIN_TIME_UNTIL_DEAD;
-    this.maxTimeUntilDead = MAX_TIME_UNTIL_DEAD;
+    this.minInfectiousTime = presetsManager.loadPreset().MIN_INFECTIOUS_TIME;
+    this.maxInfectiousTime = presetsManager.loadPreset().MAX_INFECTIOUS_TIME;
 
-    this.maxSpeed = POPULATION_SPEED;
-    this.daysPerSecond = DAYS_PER_SECOND;
-    this.relocationProbability = RELOCATION_PROBABILITY;
+    this.minTimeUntilDead = presetsManager.loadPreset().MIN_TIME_UNTIL_DEAD;
+    this.maxTimeUntilDead = presetsManager.loadPreset().MAX_TIME_UNTIL_DEAD;
+
+    this.maxSpeed = presetsManager.loadPreset().POPULATION_SPEED;
+    this.daysPerSecond = presetsManager.loadPreset().DAYS_PER_SECOND;
+    this.relocationProbability = presetsManager.loadPreset().RELOCATION_PROBABILITY;
+
+    this.testedPositiveProbability = presetsManager.loadPreset().TESTED_POSITIVE_PROBABILITY;
+    this.infectionRadiusReductionFactor = presetsManager.loadPreset().INFECTION_RADIUS_REDUCTION_FACTOR;
+    this.icuProbability = presetsManager.loadPreset().ICU_PROBABILITY;
+    this.icuCapacity = presetsManager.loadPreset().ICU_CAPACITY;
 
     this.totalPopulation =
       this.numSusceptible +
@@ -96,12 +100,16 @@ export default class Community {
       this.endX,
       this.startY,
       this.endY,
-      INFECTION_RADIUS
+      presetsManager.loadPreset().INFECTION_RADIUS
     );
-
     // this._drawBorderLines();
   }
 
+  /**
+   * A function to draw the borders of the community on the screen.
+   * 
+   * @param {Object} borderCtx The context of the canvas on which the borders are drawn.
+   */
   _drawBorderLines(borderCtx) {
     // These lines are drawm from the edge coordinates of the model and make up the boundary of the
     // communities which are drawn on a canvas other than the agent canvas and can be drawn
@@ -113,6 +121,27 @@ export default class Community {
       this.endX - this.startX,
       this.endY - this.startY
     );
+  }
+
+  /**
+   * A function to reload the given preset.
+   */
+  reloadPreset() {
+    this.personRadius = presetsManager.loadPreset().PERSON_RADIUS;
+    this.nonInfectiousToImmuneProb = presetsManager.loadPreset().NONIN_TO_IMMUNE_PROB;
+    this.infectionRadius = presetsManager.loadPreset().INFECTION_RADIUS;
+    this.transmissionProb = presetsManager.loadPreset().TRANSMISSION_PROB;
+    this.repulsionForce = presetsManager.loadPreset().REPULSION_FORCE;
+    this.attractionToCenter = presetsManager.loadPreset().ATTRACTION_FORCE;
+    this.minIncubationTime = presetsManager.loadPreset().MIN_INCUBATION_TIME;
+    this.maxIncubationTime = presetsManager.loadPreset().MAX_INCUBATION_TIME;
+    this.minInfectiousTime = presetsManager.loadPreset().MIN_INFECTIOUS_TIME;
+    this.maxInfectiousTime = presetsManager.loadPreset().MAX_INFECTIOUS_TIME;
+    this.minTimeUntilDead = presetsManager.loadPreset().MIN_TIME_UNTIL_DEAD;
+    this.maxTimeUntilDead = presetsManager.loadPreset().MAX_TIME_UNTIL_DEAD;
+    this.maxSpeed = presetsManager.loadPreset().POPULATION_SPEED;
+    this.daysPerSecond = presetsManager.loadPreset().DAYS_PER_SECOND;
+    this.relocationProbability = presetsManager.loadPreset().RELOCATION_PROBABILITY;
   }
 
   /**
@@ -145,6 +174,10 @@ export default class Community {
     this.population = this.population.filter((p) => p !== person);
 
     this.boundingBoxStruct.remove(person);
+
+    if (person.inIcu) {
+      this.icuCount--;
+    }
 
     switch (person.type) {
       case TYPES.SUSCEPTIBLE:
@@ -188,6 +221,10 @@ export default class Community {
     this.boundingBoxStruct.insert(person);
 
     this.population.push(person);
+
+    if (person.inIcu) {
+      this.icuCount++;
+    }
 
     switch (person.type) {
       case TYPES.SUSCEPTIBLE:
@@ -303,6 +340,42 @@ export default class Community {
   }
 
   /**
+   * A function to set the probability an Infectious person tests positive in this community.
+   *
+   * @param {number} newValue The new probability for testing positive.
+   */
+  setTestedPositiveProbability(newValue) {
+    this.testedPositiveProbability = newValue;
+  }
+
+  /**
+   * A function to set the factor by which the infection radius of a tested person is reduced.
+   *
+   * @param {number} newValue The new reduction factor.
+   */
+  setInfectionRadiusReductionFactor(newValue) {
+    this.infectionRadiusReductionFactor = newValue;
+  }
+
+  /**
+   * A function to set the probabilty a tested person moves to the ICU.
+   *
+   * @param {number} newValue The new probability of a person moving to the ICU.
+   */
+  setIcuProbability(newValue) {
+    this.icuProbability = newValue;
+  }
+
+  /**
+   * A function to set the capacity of the ICU for this community.
+   *
+   * @param {number} newValue The new capacity of the ICU.
+   */
+  setIcuCapacity(newValue) {
+    this.icuCapacity = newValue;
+  }
+
+  /**
    * Method used to update the stats in main
    */
   exportStats() {
@@ -311,7 +384,8 @@ export default class Community {
       this.numNonInfectious,
       this.numInfectious,
       this.numDead,
-      this.numImmune
+      this.numImmune,
+      this.icuCount
     );
     return stats;
   }
@@ -322,8 +396,8 @@ export default class Community {
    * @param {number} newValue The new radius.
    */
   updateRadius(newValue) {
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].radius = newValue;
+    for (const person of this.population) {
+      person.radius = newValue;
     }
   }
 
@@ -340,9 +414,9 @@ export default class Community {
       this.endY,
       newValue
     );
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].infectionRadius = newValue;
-      this.boundingBoxStruct.insert(this.population[i]);
+    for (const person of this.population) {
+      person.infectionRadius = newValue;
+      this.boundingBoxStruct.insert(person);
     }
   }
 
@@ -352,8 +426,8 @@ export default class Community {
    * @param {number} newValue The new repulsion force.
    */
   updateRepulsionForce(newValue) {
-    for (let i = 0; i < this.totalPopulation; i++) {
-      this.population[i].repulsionForce = newValue;
+    for (const person of this.population) {
+      person.repulsionForce = newValue;
     }
   }
 
@@ -400,13 +474,13 @@ export default class Community {
     const positions = [];
     const colors = [];
     let count = 0;
-    for (let i = 0; i < this.totalPopulation; i++) {
-      if (!(this.population[i].type === TYPES.DEAD)) {
-        positions.push(this.population[i].x);
-        positions.push(this.population[i].y);
-        colors.push(parseInt(this.population[i].color.slice(1, 3), 16) / 255.0);
-        colors.push(parseInt(this.population[i].color.slice(3, 5), 16) / 255.0);
-        colors.push(parseInt(this.population[i].color.slice(5, 7), 16) / 255.0);
+    for (const person of this.population) {
+      if (!(person.type === TYPES.DEAD)) {
+        positions.push(person.x);
+        positions.push(person.y);
+        colors.push(parseInt(person.color.slice(1, 3), 16) / 255.0);
+        colors.push(parseInt(person.color.slice(3, 5), 16) / 255.0);
+        colors.push(parseInt(person.color.slice(5, 7), 16) / 255.0);
         colors.push(1);
         count++;
       }
@@ -429,7 +503,10 @@ export default class Community {
       const currentPerson = this.population[i];
       this.update(currentPerson, dt);
 
-      if (Math.random() < RELOCATION_PROBABILITY && !currentPerson.relocating) {
+      if (
+        getRandom() < presetsManager.loadPreset().RELOCATION_PROBABILITY &&
+        !currentPerson.relocating
+      ) {
         if (currentPerson.type !== TYPES.DEAD) {
           this.registerRelocation(currentPerson);
           currentPerson.relocating = true;
@@ -443,8 +520,8 @@ export default class Community {
           this.endX,
           this.startY,
           this.endY,
-          dt * MOVEMENT_TIME_SCALAR
-        ); // TODO: make slider to
+          dt * presetsManager.loadPreset().MOVEMENT_TIME_SCALAR
+        );
         this.boundingBoxStruct.insert(currentPerson);
       }
     }
@@ -456,6 +533,7 @@ export default class Community {
    * @returns {Coordinate} A random coordinate within this model and the margin of error for relocation
    */
   getRandomPoint() {
+    const { RELOCATION_ERROR_MARGIN } = presetsManager.loadPreset();
     return new Coordinate(
       getRandom(
         this.startX + RELOCATION_ERROR_MARGIN,
@@ -477,7 +555,7 @@ export default class Community {
     for (let i = 0; i < this.totalPopulation; i += 1) {
       const met = this.boundingBoxStruct.query(
         this.population[i],
-        INTERACTION_RANGE
+        presetsManager.loadPreset().INTERACTION_RANGE
       );
       for (let j = 0; j < met.length; j += 1) {
         // Social distancing
@@ -485,10 +563,10 @@ export default class Community {
         this.population[i].repel(met[j]);
         // }
 
-        // Infection
+        // Infection-once an agent is infected there is a chance they will be tested positive.
         if (
           this.population[i].canInfect(met[j]) &&
-          Math.random() <= this.transmissionProb * dt
+          getRandom() <= this.transmissionProb * dt
         ) {
           met[j].startIncubation();
           met[j].setIncubationPeriod(
@@ -512,7 +590,7 @@ export default class Community {
     if (person.type === TYPES.NONINFECTIOUS) {
       person.incubationTime += dt;
       if (person.incubationTime >= person.incubationPeriod) {
-        if (Math.random() < this.nonInfectiousToImmuneProb) {
+        if (getRandom() < this.nonInfectiousToImmuneProb) {
           person.becomesImmune();
           this.numNonInfectious -= 1;
           this.numImmune += 1;
@@ -524,7 +602,7 @@ export default class Community {
       }
     } else if (person.type === TYPES.INFECTIOUS) {
       if (!person.destinyDead && !person.destinyImmune) {
-        if (person.mortalityRate > 0 && Math.random() <= person.mortalityRate) {
+        if (person.mortalityRate > 0 && getRandom() <= person.mortalityRate) {
           person.destinyDead = true;
           person.setInfectiousPeriod(
             gaussianRand(this.minTimeUntilDead, this.maxTimeUntilDead)
@@ -535,6 +613,24 @@ export default class Community {
             gaussianRand(this.minInfectiousTime, this.maxInfectiousTime)
           );
         }
+
+        // testing
+        if (getRandom() <= this.testedPositiveProbability) {
+          person.testedPositive = true;
+          person.infectionRadius /= this.infectionRadiusReductionFactor;
+        }
+        // ICU
+        if (getRandom() <= this.icuProbability && person.mortalityRate > 0) {
+          person.inIcu = true;
+          if (this.icuCount >= this.icuCapacity) {
+            person.type = TYPES.DEAD;
+            person.color = COLORS.DEAD;
+            this.numInfectious -= 1;
+            this.numDead += 1;
+          } else {
+            this.icuCount += 1;
+          }
+        }
       } else if (person.destinyImmune) {
         person.infectiousTime += dt;
         if (person.infectiousTime >= person.infectiousPeriod) {
@@ -542,6 +638,9 @@ export default class Community {
           person.color = COLORS.IMMUNE;
           this.numInfectious -= 1;
           this.numImmune += 1;
+          if (person.inIcu) {
+            this.icuCount -= 1;
+          }
         }
       } else {
         person.infectiousTime += dt;
@@ -551,6 +650,9 @@ export default class Community {
           person.color = COLORS.DEAD;
           this.numInfectious -= 1;
           this.numDead += 1;
+          if (person.inIcu) {
+            this.icuCount -= 1;
+          }
         }
       }
     }
@@ -562,7 +664,10 @@ export default class Community {
    * @param {number} dt The timestep for which to step.
    */
   step(dt) {
-    const daysPassed = (dt / 1000) * this.daysPerSecond;
+    if (dt < 0) {
+      throw Error("Can't go back in time");
+    }
+    const daysPassed = dt;
     this.updatePopulation(daysPassed);
     this.interactPopulation(daysPassed);
   }
@@ -600,8 +705,8 @@ export default class Community {
     forceY /= maxDistance;
 
     person.applyForce(
-      this.attractionToCenter * forceX,
-      this.attractionToCenter * forceY
+      (this.attractionToCenter * forceX) / 100,
+      (this.attractionToCenter * forceY) / 100
     );
   }
 
@@ -617,6 +722,7 @@ export default class Community {
     this.numInfectious = stats.infectious;
     this.numImmune = stats.immune;
     this.numNonInfectious = stats.noninfectious;
+    this.icuCount = stats.icu;
     this.numDead = stats.dead;
     this.totalPopulation = stats.susceptible + stats.infectious;
 

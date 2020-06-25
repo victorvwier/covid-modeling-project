@@ -1,6 +1,36 @@
-import Chart from 'chart.js';
-import { GENDERS, AGE, TYPES, COLORS } from './CONSTANTS';
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
+import Chart from 'chart.js';
+import presetsManager from './presetsManager';
+import { COLORS, TYPES, GENDERS } from './CONSTANTS';
+
+/**
+ * A function to retrieve the age from the preset.
+ *
+ * @returns {number} The age.
+ */
+function getAge() {
+  return presetsManager.loadPreset().AGE;
+}
+
+/** @class DemographicsChart describing the chart displaying the different demographics. */
 export default class DemographicsChart {
   /**
    * Constructor for the demograpgics chart
@@ -9,12 +39,17 @@ export default class DemographicsChart {
   constructor(ctx) {
     this.demographicChart = null;
     this.ctx = ctx;
-    this.labels = AGE.map((val) => this._formatLabel(val.min, val.max));
+    this.labels = getAge().map((val) => this._formatLabel(val.min, val.max));
 
     // DEBUG
     window.demographic = this;
   }
 
+  /**
+   * A function to update the chart.
+   *
+   * @param {Person[]} population An array representing the population.
+   */
   receiveUpdate(population) {
     // Do logic
     // num dead per age per gender
@@ -78,6 +113,11 @@ export default class DemographicsChart {
     this.demographicChart.update();
   }
 
+  /**
+   * A function to get the amount of males in a population.
+   *
+   * @param {Person[]} population An array representing the population.
+   */
   _getMaleCount(population) {
     let maleCount = 0;
     for (let i = 0; i < population.length; i++) {
@@ -88,6 +128,11 @@ export default class DemographicsChart {
     return maleCount;
   }
 
+  /**
+   * A function to get the amount of females in a population.
+   *
+   * @param {Person[]} population An array representing the population.
+   */
   _getFemaleCount(population) {
     let femaleCount = 0;
     for (let i = 0; i < population.length; i++) {
@@ -117,8 +162,14 @@ export default class DemographicsChart {
     return label.split(' - ').map((item) => parseInt(item, 10));
   }
 
+  /**
+   * A function to reset the chart.
+   *
+   * @param {number} populationSize The size of the population.
+   */
   resetChart(populationSize) {
     this.demographicChart.destroy();
+    this.labels = getAge().map((val) => this._formatLabel(val.min, val.max));
     this.drawChart(populationSize);
   }
 
@@ -211,10 +262,7 @@ export default class DemographicsChart {
           display: false,
         },
         title: {
-          display: true,
-          text: 'M.           F.',
-          position: 'top',
-          fontSize: 24,
+          display: false,
         },
         responsive: false,
         tooltips: { enabled: false },
@@ -222,6 +270,10 @@ export default class DemographicsChart {
         scales: {
           xAxes: [
             {
+              scaleLabel: {
+                display: true,
+                labelString: 'Number of people',
+              },
               stacked: true,
               ticks: {
                 beginAtZero: true,
@@ -234,6 +286,10 @@ export default class DemographicsChart {
           ],
           yAxes: [
             {
+              scaleLabel: {
+                display: true,
+                labelString: 'Age category',
+              },
               stacked: true,
               ticks: {
                 callback: (value) => (value < 0 ? -value : value),

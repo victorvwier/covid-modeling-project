@@ -1,3 +1,22 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import Model from '../src/scripts/model';
 import RelocationUtil from '../src/scripts/relocationUtil';
 import AgentChart from '../src/scripts/agentChart';
@@ -9,7 +28,7 @@ jest.mock('../src/scripts/agentChart');
 //   .default;
 
 describe('Community test', () => {
-  let community;
+  let model;
   let relocationUtil;
   const width = 100;
   const height = 100;
@@ -27,7 +46,8 @@ describe('Community test', () => {
         })),
       },
     };
-    community = new Model(
+
+    model = new Model(
       4,
       agentChart,
       width,
@@ -35,40 +55,56 @@ describe('Community test', () => {
       stats,
       () => {},
       () => {},
+      () => {},
       borderCtxMock
     );
-    relocationUtil = new RelocationUtil(community);
-    community.relocationUtil = relocationUtil;
+    model.presetInProcess = true;
+    relocationUtil = new RelocationUtil(model);
+    model.relocationUtil = relocationUtil;
 
-    community.setupCommunity();
-    community.populateCommunities();
+    model.setupCommunity();
+    model.populateCommunities();
   });
 
-  test('_animationFunction should make new dt if both timestamp and lasttimestamp exist', () => {
-    const oldLastTimeStamp = 1;
-    const thisTimeStamp = 2;
-    community.lastTimestamp = oldLastTimeStamp;
-    community._animationFunction(thisTimeStamp);
-    expect(community.lastTimestamp).toBe(thisTimeStamp);
+  test('togglePause should make isPaused false', () => {
+    model.togglePause();
+    expect(model.paused).toBe(true);
   });
 
-  test('_animationFunction should not make new dt if either timestamp and lasttimestamp do not exist', () => {
-    const thisTimeStamp = 2;
-    community.lastTimestamp = null;
-    community._animationFunction(thisTimeStamp);
-    expect(community.lastTimestamp).toBe(thisTimeStamp);
+  test('togglePause should create intervals', () => {
+    model.paused = true;
+    model._mainLoopInterval = null;
+    model._chartInterval = null;
+    model.togglePause();
+    expect(model.paused).toBe(false) &&
+      expect(model._mainLoopInterval !== null) &&
+      expect(model._chartInterval !== null);
   });
+  // test('_animationFunction should make new dt if both timestamp and lasttimestamp exist', () => {
+  //   const oldLastTimeStamp = 1;
+  //   const thisTimeStamp = 2;
+  //   community.lastTimestamp = oldLastTimeStamp;
+  //   community._animationFunction(thisTimeStamp);
+  //   expect(community.lastTimestamp).toBe(thisTimeStamp);
+  // });
+
+  // test('_animationFunction should not make new dt if either timestamp and lasttimestamp do not exist', () => {
+  //   const thisTimeStamp = 2;
+  //   community.lastTimestamp = null;
+  //   community._animationFunction(thisTimeStamp);
+  //   expect(community.lastTimestamp).toBe(thisTimeStamp);
+  // });
 
   test('getAgentSize should return 1.5 if the population is over 2000', () => {
-    expect(community.getAgentSize(2500)).toEqual(1.5);
+    expect(model.getAgentSize(2500)).toEqual(1.5);
   });
   test('getAgentSize should return 2.5 if the population is over 1000', () => {
-    expect(community.getAgentSize(1500)).toEqual(2.5);
+    expect(model.getAgentSize(1500)).toEqual(2.5);
   });
   test('getAgentSize should return 3.5 if the population is over 600', () => {
-    expect(community.getAgentSize(700)).toEqual(3.5);
+    expect(model.getAgentSize(700)).toEqual(3.5);
   });
   test('getAgentSize should return 1.5 if the population is over 200', () => {
-    expect(community.getAgentSize(100)).toEqual(5);
+    expect(model.getAgentSize(100)).toEqual(5);
   });
 });

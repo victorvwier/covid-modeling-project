@@ -1,3 +1,22 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import BoundingBoxStructure, {
   Column,
   BoundingBox,
@@ -213,11 +232,7 @@ describe('Bounding box test suite', () => {
     struct.insert(person8);
     struct.insert(person9);
     const query = struct.query(person2, 5.9).sort();
-    const expected = [person1,
-      person3,
-      person4,
-      person5,
-      person6,].sort();
+    const expected = [person1, person3, person4, person5, person6].sort();
     expect(query).toStrictEqual(expected);
   });
 
@@ -276,13 +291,7 @@ describe('Bounding box test suite', () => {
     struct.insert(person8);
     struct.insert(person9);
     const query = struct.query(person8, 5.9).sort();
-    const expected = [
-      person4,
-      person5,
-      person6,
-      person7,
-      person9,
-    ].sort();
+    const expected = [person4, person5, person6, person7, person9].sort();
     expect(query).toStrictEqual(expected);
   });
 
@@ -303,5 +312,31 @@ describe('Bounding box test suite', () => {
     const lengthBefore = boundingBox.people.length;
     boundingBox.remove(1);
     expect(boundingBox.people.length).toBe(lengthBefore);
+  });
+
+  test('Column constructor throws error if end and start are switched', () => {
+    expect(() => {
+      Column(10, 5, 1);
+    }).toThrow();
+  });
+
+  test('BoundingBoxStructure throws error if x end and start are switched', () => {
+    expect(() => {
+      BoundingBoxStructure(10, 0, 0, 10, 1);
+    }).toThrow();
+  });
+
+  test('BoundingBoxStructure throws error if y end and start are switched', () => {
+    expect(() => {
+      BoundingBoxStructure(0, 10, 10, 0, 1);
+    }).toThrow();
+  });
+
+  test('query errors on undefined range', () => {
+    const struct = new BoundingBoxStructure(0, 10, 0, 10, 1);
+    const person = new Person(TYPES.SUSCEPTIBLE, 5, 5, 0);
+    expect(() => {
+      struct.query(person, undefined);
+    }).toThrow();
   });
 });

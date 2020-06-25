@@ -13,8 +13,11 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/src/scripts/**/*.js",
+      "**/src/scripts/data/*.js",
+      "**/src/scripts/*.js",
+      "**/src/scripts/DOM/*.js",
       "!**/src/scripts/agentChart.js",
+      "!**/src/scripts/DOM/*",
       "!**/node_modules/**",
       "!**/vendor/**"
     ],
@@ -49,11 +52,16 @@
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
+    "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "chart.js": "^2.9.3",
-    "gl-matrix": "^3.3.0"
+    "font-awesome": "^4.7.0",
+    "gl-matrix": "^3.3.0",
+    "jspdf": "^1.5.3",
+    "nouislider": "^14.5.0",
+    "seedrandom": "^3.0.5",
+    "wnumb": "^1.2.0"
   }
 }

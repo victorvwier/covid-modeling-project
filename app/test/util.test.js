@@ -17,20 +17,11 @@ specific language governing permissions and limitations
 under the License.
 */
 
-import Stats from '../src/scripts/data/stats';
+import { getRandomIntExceptForValue } from '../src/scripts/util';
 
-describe('Stats tests', () => {
-  const stats = new Stats(1, 1, 1, 1, 1, 1);
-  const statsOther = new Stats(1, 1, 1, 1, 1, 1);
-  const statsJoin = new Stats(2, 2, 2, 2, 2, 2);
-
-  test('Test stats sum method', () => {
-    const sum = 5;
-
-    expect(stats.sum()).toBe(sum);
-  });
-
-  test('Test joinStats method', () => {
-    expect(Stats.joinStats(stats, statsOther)).toEqual(statsJoin);
+describe('util tests', () => {
+  test('should ', () => {
+    const rand = getRandomIntExceptForValue(0, 2, [1]);
+    expect(rand === 0 || rand === 2);
   });
 });

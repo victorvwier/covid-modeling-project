@@ -1,7 +1,26 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import { getRandomIntExceptForValue } from './util';
-import { TYPES } from './CONSTANTS';
 import RelocationInfo from './data/relocationInfo';
 import Stats from './data/stats';
+import { TYPES } from './CONSTANTS';
 
 /** @class RelocationUtil handling relocating people. */
 export default class RelocationUtil {
@@ -26,15 +45,11 @@ export default class RelocationUtil {
       const relocation = this.relocations[i];
       relocation.takeStep();
       if (relocation.hasArrived()) {
-        this.model.pauseExecution();
-
         relocation.person.relocating = false;
         this.model.communities[relocation.destId].handlePersonJoining(
           relocation.person
         );
         this._removeRelocationInfo(relocation);
-
-        this.model.resumeExecution();
       }
     }
   }
@@ -45,8 +60,6 @@ export default class RelocationUtil {
    * @param {Person} person The person to start relocating.
    */
   insertRelocation(person) {
-    // Pause
-    this.model.pauseExecution();
     // Move person
 
     const sourceId = person.communityId;
@@ -77,8 +90,6 @@ export default class RelocationUtil {
 
     // Do it via this
     this.relocations.push(new RelocationInfo(person, distCoords, destId));
-    // Resume
-    this.model.resumeExecution();
   }
 
   /**
@@ -113,8 +124,12 @@ export default class RelocationUtil {
    * @throws If a person of an invalid type is found.
    */
   getStats() {
-    const stats = new Stats(0, 0, 0, 0, 0);
+    const stats = new Stats(0, 0, 0, 0, 0, 0);
     this.relocations.forEach(({ person }) => {
+      if(person.inIcu) {
+        stats.icu++;
+      }
+      
       switch (person.type) {
         case TYPES.SUSCEPTIBLE:
           stats.susceptible++;

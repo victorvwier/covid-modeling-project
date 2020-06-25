@@ -1,3 +1,22 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import RelocationInfo from '../src/scripts/data/relocationInfo';
 import RelocationUtil from '../src/scripts/relocationUtil';
 import Model from '../src/scripts/model';
@@ -6,9 +25,10 @@ import AgentChart from '../src/scripts/agentChart';
 import Person from '../src/scripts/person';
 
 jest.mock('../src/scripts/agentChart.js');
+jest.mock('../src/scripts/DOM/domValues.js');
 
 describe('RelocationUtil tests', () => {
-  const stats = new Stats(1, 1, 1, 1, 1);
+  const stats = new Stats(1, 1, 1, 1, 1, 1);
   let model;
   const width = 100;
   const height = 100;
@@ -35,8 +55,10 @@ describe('RelocationUtil tests', () => {
       stats,
       () => {},
       () => {},
+      () => {},
       borderCtxMock
     );
+    model.presetInProcess = true;
     model.setupCommunity();
 
     model.populateCommunities();
@@ -102,13 +124,16 @@ describe('RelocationUtil tests', () => {
       );
     });
 
+    relocationUtil.relocations[0].person.inIcu = true;
+
     expect(relocationUtil.getStats()).toEqual(
       new Stats(
         stats.susceptible,
         stats.noninfectious,
         stats.infectious,
         stats.immune,
-        stats.dead
+        stats.dead,
+        stats.icu
       )
     );
   });
@@ -118,5 +143,11 @@ describe('RelocationUtil tests', () => {
       new RelocationInfo(new Person('bla', 1, 1, 1), null, 1)
     );
     expect(() => relocationUtil.getStats()).toThrow(Error);
+  });
+
+  test('clearAllRelocationsForReset should empty relocation array', () => {
+    relocationUtil.relocations.push(5);
+    relocationUtil.clearAllRelocationsForReset();
+    expect(relocationUtil.relocations).toStrictEqual([]);
   });
 });

@@ -1,3 +1,22 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
 import ChartJS from 'chart.js';
 import { COLORS } from './CONSTANTS';
 
@@ -22,6 +41,25 @@ export default class Chart {
     this.immune = [];
     this.dead = [];
     this.xValues = [];
+  }
+
+  /**
+   * A function to retrieve all the data represented in the chart.
+   * 
+   * @returns {Object} An object containing all data in the chart.
+   */
+  getAllDataPoints() {
+    const data = {};
+    for (let i = 0; i < this.xValues.length; i++) {
+      data[this.xValues[i]] = {
+        susceptible: this.susceptible[i],
+        infectious: this.infectious[i],
+        noninfectious: this.noninfectious[i],
+        immune: this.immune[i],
+        dead: this.dead[i],
+      };
+    }
+    return data;
   }
 
   /**
@@ -57,20 +95,23 @@ export default class Chart {
    *
    * @param {Stats} stats a stats object holding the new values.
    */
-  updateValues(stats) {
-    this.chart.data.datasets[0].data.push(stats.susceptible);
-    this.susceptible.push(stats.susceptible);
+  updateValues(stats, timestamp) {
+    const time = timestamp.toFixed(0);
+    this.chart.data.datasets[0].data.push(stats.infectious);
     this.chart.data.datasets[1].data.push(stats.noninfectious);
-    this.noninfectious.push(stats.noninfectious);
-    this.chart.data.datasets[2].data.push(stats.infectious);
-    this.infectious.push(stats.infectious);
+    this.chart.data.datasets[2].data.push(stats.susceptible);
     this.chart.data.datasets[3].data.push(stats.immune);
-    this.immune.push(stats.immune);
     this.chart.data.datasets[4].data.push(stats.dead);
+
+    this.noninfectious.push(stats.noninfectious);
+    this.infectious.push(stats.infectious);
+    this.susceptible.push(stats.susceptible);
+    this.immune.push(stats.immune);
     this.dead.push(stats.dead);
+
     // What is x?
-    this.chart.data.labels.push(this.x++);
-    this.xValues.push(this.x - 1);
+    this.chart.data.labels.push(time);
+    this.xValues.push(time);
     this.chart.update();
   }
 
@@ -84,51 +125,59 @@ export default class Chart {
         labels: this.xValues,
         datasets: [
           {
-            label: 'Susceptible',
+            label: 'Infectious',
             fill: true,
-            backgroundColor: COLORS.SUSCEPTIBLE,
-            pointBackgroundColor: COLORS.SUSCEPTIBLE,
-            borderColor: COLORS.SUSCEPTIBLE,
-            pointHighlightStroke: COLORS.SUSCEPTIBLE,
-            borderCapStyle: 'square',
-            lineCap: 'square',
-            data: this.susceptible,
+            backgroundColor: COLORS.INFECTIOUS,
+            pointBackgroundColor: COLORS.INFECTIOUS,
+            pointHighlightStroke: COLORS.INFECTIOUS,
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
             pointStyle: 'line',
+            data: this.infectious,
+            lineTension: 0.1,
+            borderColor: 'rgba(0, 0, 0, 0.0)',
+            pointRadius: 0.0,
           },
           {
             label: 'Non-Infectious',
             fill: true,
             backgroundColor: COLORS.NONINFECTIOUS,
             pointBackgroundColor: COLORS.NONINFECTIOUS,
-            borderColor: COLORS.NONINFECTIOUS,
             pointHighlightStroke: COLORS.NONINFECTIOUS,
-            borderCapStyle: 'square',
-            lineCap: 'square',
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
             pointStyle: 'line',
             data: this.noninfectious,
+            lineTension: 0.1,
+            borderColor: 'rgba(0, 0, 0, 0.0)',
+            pointRadius: 0.0,
           },
           {
-            label: 'Infectious',
+            label: 'Susceptible',
             fill: true,
-            backgroundColor: COLORS.INFECTIOUS,
-            pointBackgroundColor: COLORS.INFECTIOUS,
-            borderColor: COLORS.INFECTIOUS,
-            pointHighlightStroke: COLORS.INFECTIOUS,
-            borderCapStyle: 'square',
-            lineCap: 'square',
+            backgroundColor: COLORS.SUSCEPTIBLE,
+            pointBackgroundColor: COLORS.SUSCEPTIBLE,
+            pointHighlightStroke: COLORS.SUSCEPTIBLE,
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
+            data: this.susceptible,
             pointStyle: 'line',
-            data: this.infectious,
+            lineTension: 0.1,
+            borderColor: 'rgba(0, 0, 0, 0.0)',
+            pointRadius: 0.0,
           },
           {
             label: 'Immune',
             fill: true,
             backgroundColor: COLORS.IMMUNE,
             pointBackgroundColor: COLORS.IMMUNE,
-            borderColor: COLORS.IMMUNE,
             pointHighlightStroke: COLORS.IMMUNE,
-            borderCapStyle: 'square',
-            lineCap: 'square',
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
             pointStyle: 'line',
+            lineTension: 0.1,
+            borderColor: 'rgba(0, 0, 0, 0.0)',
+            pointRadius: 0.0,
             data: this.immune,
           },
           {
@@ -136,12 +185,14 @@ export default class Chart {
             fill: true,
             backgroundColor: COLORS.DEAD,
             pointBackgroundColor: COLORS.DEAD,
-            borderColor: COLORS.DEAD,
             pointHighlightStroke: COLORS.DEAD,
-            borderCapStyle: 'square',
-            lineCap: 'square',
+            borderCapStyle: 'butt',
+            lineCap: 'butt',
+            pointRadius: 0.0,
             pointStyle: 'line',
             data: this.dead,
+            lineTension: 0.1,
+            borderColor: 'rgba(0, 0, 0, 0.0)',
           },
         ],
       },
@@ -167,7 +218,8 @@ export default class Chart {
           ],
         },
         animation: {
-          duration: 750,
+          duration: 0,
+          easing: 'linear',
         },
       },
     });

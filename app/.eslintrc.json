@@ -32,6 +32,9 @@
     "no-unused-expressions": "off",
     "prefer-destructuring": "off",
     "no-continue": "off",
-    "no-alert": "off"
+    "no-alert": "off",
+    "no-restricted-syntax": "off",
+    "global-require":"off",
+    "no-unresolved": "off"
   }
 }
