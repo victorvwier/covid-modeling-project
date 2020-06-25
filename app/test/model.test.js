@@ -71,6 +71,15 @@ describe('Community test', () => {
     expect(model.paused).toBe(true);
   });
 
+  test('togglePause should create intervals', () => {
+    model.paused = true;
+    model._mainLoopInterval = null;
+    model._chartInterval = null;
+    model.togglePause();
+    expect(model.paused).toBe(false) &&
+      expect(model._mainLoopInterval !== null) &&
+      expect(model._chartInterval !== null);
+  });
   // test('_animationFunction should make new dt if both timestamp and lasttimestamp exist', () => {
   //   const oldLastTimeStamp = 1;
   //   const thisTimeStamp = 2;
